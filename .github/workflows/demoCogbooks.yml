@@ -41,7 +41,7 @@ jobs:
 
     - id: file_changes
       uses: trilom/file-changes-action@v1.2.4
-    - run: echo steps.file_changes_output_files
+    - run: echo ${{ steps.file_changes_output_files }}
 
 
     # - name: Run cogbooks on test files
