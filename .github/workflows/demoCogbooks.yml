@@ -31,7 +31,11 @@ jobs:
         fetch-depth: 0
     # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
     - name: Run cogbooks on changed files
-      run: cogbooks "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" --force
+      # run: echo "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})"
+      run: |
+        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+          cogbooks ${changed_file} --force;
+        done
 
     # - name: get updated and new files (take 2)
     #   id: files
@@ -41,14 +45,8 @@ jobs:
     #       cogbooks ${changed_file} --force;
     #     done
 
-    # - id: file_changes
-    #   uses: trilom/file-changes-action@v1.2.4
-    # - run: echo ${{ steps.file_changes_output_files }}
-
-
-    # - name: Run cogbooks on test files
+    # - name: Run cogbooks on single file
     #   run: cogbooks AudioSignalBasics.md --force
-
 
     # - name: commit files
     #   run: |
