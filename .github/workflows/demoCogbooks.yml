@@ -27,26 +27,23 @@ jobs:
         pip install cogbooks
 
     - name: get files in all commits since last push --> store in env var CHANGED_FILES
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
     - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
-    
+
     - name: Run cogbooks on test files
       run: cogbooks AudioSignalBasics.md --force
-      
+
     - name: commit files
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
         git commit -m "auto-updated student notebooks" -a
-      
+
     - name: push changed files
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main 
-      
-        
-
+        branch: main
