@@ -31,16 +31,18 @@ jobs:
     #     fetch-depth: 0
     # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
 
-    - id: files
-      uses: jitterbit/get-changed-files@v1
+    # - name: get updated and new files (take 2)
+    #   id: files
+    #   uses: jitterbit/get-changed-files@v1
     # - run: |
     #     for changed_file in ${{ steps.files.outputs.all }}; do
     #       cogbooks ${changed_file} --force;
     #     done
-    - run: |
-        for changed_file in ${{ steps.files.outputs.all }}; do
-          echo "Do something with this ${changed_file}"
-        done
+
+    - id: file_changes
+      uses: trilom/file-changes-action@v1.2.4
+    - run: echo steps.file_changes_output_files
+
 
     # - name: Run cogbooks on test files
     #   run: cogbooks AudioSignalBasics.md --force
