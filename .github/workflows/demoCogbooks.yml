@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +36,7 @@ jobs:
       uses: jitterbit/get-changed-files@v1
     - run: |
         for changed_file in ${{ steps.files.outputs.all }}; do
-          cogbooks ${changed_file} --force
+          cogbooks ${changed_file} --force;
         done
 
     # - name: Run cogbooks on test files
