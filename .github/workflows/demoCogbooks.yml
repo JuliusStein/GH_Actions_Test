@@ -30,7 +30,8 @@ jobs:
       with:
         fetch-depth: 0
     # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
-    - run: echo "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})"
+    - name: Run cogbooks on changed files
+      run: cogbooks "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" --force
 
     # - name: get updated and new files (take 2)
     #   id: files
