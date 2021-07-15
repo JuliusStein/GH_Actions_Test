@@ -25,11 +25,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install cogbooks
 
-    # - name: get files in all commits since last push --> store in env var CHANGED_FILES
-    #   uses: actions/checkout@v2
-    #   with:
-    #     fetch-depth: 0
-    # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
+    - name: Get files in all commits since last push
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
 
     # - name: get updated and new files (take 2)
     #   id: files
@@ -39,9 +39,9 @@ jobs:
     #       cogbooks ${changed_file} --force;
     #     done
 
-    - id: file_changes
-      uses: trilom/file-changes-action@v1.2.4
-    - run: echo ${{ steps.file_changes_output_files }}
+    # - id: file_changes
+    #   uses: trilom/file-changes-action@v1.2.4
+    # - run: echo ${{ steps.file_changes_output_files }}
 
 
     # - name: Run cogbooks on test files
