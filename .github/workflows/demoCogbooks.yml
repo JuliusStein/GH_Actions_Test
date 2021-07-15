@@ -39,13 +39,13 @@ jobs:
     #       cogbooks ${changed_file} --force;
     #     done
 
-    - id: file_changes
-      uses: trilom/file-changes-action@v1.2.4
-    - run: echo ${{ steps.file_changes_output_files }}
+    # - id: file_changes
+    #   uses: trilom/file-changes-action@v1.2.4
+    # - run: echo ${{ steps.file_changes_output_files }}
 
 
-    # - name: Run cogbooks on test files
-    #   run: cogbooks AudioSignalBasics.md --force
+    - name: Run cogbooks on test files
+      run: cogbooks AudioSignalBasics.md --force
 
     - name: commit files
       run: |
