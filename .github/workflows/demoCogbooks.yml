@@ -30,13 +30,16 @@ jobs:
     #   with:
     #     fetch-depth: 0
     # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
-    
-    - name: Run cogbooks on changed files
-      id: files
+
+    - id: files
       uses: jitterbit/get-changed-files@v1
+    # - run: |
+    #     for changed_file in ${{ steps.files.outputs.all }}; do
+    #       cogbooks ${changed_file} --force;
+    #     done
     - run: |
         for changed_file in ${{ steps.files.outputs.all }}; do
-          cogbooks ${changed_file} --force;
+          echo "Do something with this ${changed_file}"
         done
 
     # - name: Run cogbooks on test files
