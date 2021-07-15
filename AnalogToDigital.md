@@ -23,7 +23,7 @@ jupyter:
 
 # Exercises: Analog to Digital Encoding
 
-# MEANINGLESS CHANGE TO CAUSE DIFF - -
+# MEANINGLESS CHANGE TO CAUSE DIFF - - -
 
 ```python
 import numpy as np
