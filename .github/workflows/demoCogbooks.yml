@@ -48,14 +48,14 @@ jobs:
     # - name: Run cogbooks on single file
     #   run: cogbooks AudioSignalBasics.md --force
 
-    - name: commit files
+    - name: Commit files
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
         git diff-index --quiet HEAD || git commit -m "auto-updated student notebooks" -a
 
-    - name: push changed files
+    - name: Push changed files
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
