@@ -1,0 +1,814 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Multivariable Calculus: Partial Derivatives &amp; Gradients &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Chain Rule" href="Chain_Rule.html" />
+    <link rel="prev" title="Introduction to Single-Variable Calculus" href="Intro_Calc.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multivariable Calculus: Partial Derivatives &amp; Gradients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#What-is-a-Partial-Derivative?">What is a Partial Derivative?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Taking-a-Derivative-Along-Any-Direction-Using-the-Gradient">Taking a Derivative Along <em>Any</em> Direction Using the Gradient</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Properties-of-the-Gradient">Properties of the Gradient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-the-Gradient">Visualizing the Gradient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Minimizing-a-Function-Using-Gradient-Descent">Minimizing a Function Using Gradient Descent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Autodifferentiation-with-Multivariable-Functions">Autodifferentiation with Multivariable Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Multivariable Calculus: Partial Derivatives &amp; Gradients</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/Multivariable_Calculus.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Multivariable-Calculus:-Partial-Derivatives-&amp;-Gradients">
+<h1>Multivariable Calculus: Partial Derivatives &amp; Gradients<a class="headerlink" href="#Multivariable-Calculus:-Partial-Derivatives-&-Gradients" title="Permalink to this headline">¶</a></h1>
+<p>This section introduces some concepts from multivariable calculus that will supplement your understanding of gradient descent, which we will also introduce. Namely, this section will provide an explanation of partial derivatives and gradients, extending the idea of the derivative to multivariable functions. We will not need an intimate understanding of gradients moving forward with this course. That being said, it is useful to at least have a cursory understanding of it. Ultimately, however, as
+you develop a more sophisticated understanding of machine learning, you will want to have a firm grasp on gradients. Since the gradient also pops up all over the place in physics and math, there are many online resources that you can turn to for dedicated lessons on this topic.</p>
+<div class="section" id="What-is-a-Partial-Derivative?">
+<h2>What is a Partial Derivative?<a class="headerlink" href="#What-is-a-Partial-Derivative?" title="Permalink to this headline">¶</a></h2>
+<p>If you are comfortable with taking the derivative of a function of a single variable, then partial derivatives are pretty straightforward. Suppose we have a function that depends on two variables:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x,y) = 2x^2 + xy.
+\end{equation}</div><p>The graph of <span class="math notranslate nohighlight">\(f(x,y)\)</span> would look like a sloping valley, as depicted below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/multivar_sloping-valley.png" alt="Plot of f(x,y)" width=400>
+</p>
+</div><p>We can walk anywhere along the horizontal plane (in the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> directions), and the value of <span class="math notranslate nohighlight">\(f(x,y)\)</span> tells us our altitude at that point on the valley’s surface.</p>
+<p>Now, if this were a single-variable function, the derivative would tell us the instantaneous slope of that function at any and all points. But that is when we can only move along <em>one</em> axis (when <span class="math notranslate nohighlight">\(f\)</span> depends on <em>one</em> variable only). If you were asked stood in a valley and asked “what is the slope of where you are standing?”, it would be natural to respond “in which direction do you mean”? Perhaps the valley is flat along the direction you are facing, whereas the valley slopes upward
+towards your right (and thus downward to your left). Once we are dealing with functions depending on more than one variable, we must specify the <em>direction</em> along which we are taking our derivative. This is where partial derivatives come into play.</p>
+<p>The <strong>partial derivative of</strong> <span class="math notranslate nohighlight">\(f(x,y)\)</span> <strong>with respect to</strong> <span class="math notranslate nohighlight">\(x\)</span>, denoted <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span>, gives us the slope of <span class="math notranslate nohighlight">\(f(x,y)\)</span> <strong>along the</strong> <span class="math notranslate nohighlight">\(x\)</span><strong>-direction</strong>. To accomplish this, we simply take the derivative of <span class="math notranslate nohighlight">\(f(x,y)\)</span> as if <span class="math notranslate nohighlight">\(x\)</span> was the <em>only</em> variable that <span class="math notranslate nohighlight">\(f(x,y)\)</span> depended on (i.e. as if <span class="math notranslate nohighlight">\(y\)</span> were a constant, like the number <span class="math notranslate nohighlight">\(3\)</span>). For our earlier <span class="math notranslate nohighlight">\(f(x,y)\)</span>, we can compute the partial derivative with respect to
+<span class="math notranslate nohighlight">\(x\)</span> as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\partial f(x,y)}{\partial x} = 4x + y.
+\end{equation}</div><p>Notice that, just as the derivative of <span class="math notranslate nohighlight">\(3x\)</span> is <span class="math notranslate nohighlight">\(3\)</span>, the partial derivative of the <span class="math notranslate nohighlight">\(xy\)</span> term with respect to <span class="math notranslate nohighlight">\(x\)</span> is <span class="math notranslate nohighlight">\(y\)</span>. Furthermore, observe that <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span> is itself a function of both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. This means that the slope of <span class="math notranslate nohighlight">\(f\)</span> along the <span class="math notranslate nohighlight">\(x\)</span>-direction depends on <em>both</em> <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. This should make intuitive sense - if I ask you what the slope of the valley is along the <span class="math notranslate nohighlight">\(x\)</span>-direction, your
+answer should typically depend on <em>where</em> in the valley you are standing.</p>
+<p>There is nothing special about <span class="math notranslate nohighlight">\(x\)</span>, and so we can also ask for the slope of <span class="math notranslate nohighlight">\(f(x,y)\)</span> along the <span class="math notranslate nohighlight">\(y\)</span>-axis (i.e. take the derivative as if <span class="math notranslate nohighlight">\(y\)</span> was the only variable):</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\partial f(x,y)}{\partial y} = x.
+\end{equation}</div><p>The <span class="math notranslate nohighlight">\(2x^2\)</span> term did not involve <span class="math notranslate nohighlight">\(y\)</span> at all, so its partial derivative with respect to <span class="math notranslate nohighlight">\(y\)</span> is <span class="math notranslate nohighlight">\(0\)</span> (just as the derivative of <span class="math notranslate nohighlight">\(2\)</span> with respect to <span class="math notranslate nohighlight">\(y\)</span> is <span class="math notranslate nohighlight">\(0\)</span>). It turns out that, in this example, <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial y}\)</span> is only a function of <span class="math notranslate nohighlight">\(x\)</span> - I can tell you the slope of <span class="math notranslate nohighlight">\(f(x,y)\)</span> in the <span class="math notranslate nohighlight">\(y\)</span> direction by <em>only</em> knowing where I stand along the <span class="math notranslate nohighlight">\(x\)</span> axis. It should be emphasized that this is merely a feature of this
+specific function we are working with and will not be generally true.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Finding Partial Derivatives</strong></p>
+<p>Find the derivative with respect to each of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span> of the following function:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x,y,z) = 2x^2 - 3xy + z^3.
+\end{equation}</div><p>These are denoted as <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span>, <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial y}\)</span>, and <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial z}\)</span>, respectively. Which variables, if any, does each partial derivative depend on?</p>
+</div>
+</div>
+<div class="section" id="Taking-a-Derivative-Along-Any-Direction-Using-the-Gradient">
+<h2>Taking a Derivative Along <em>Any</em> Direction Using the Gradient<a class="headerlink" href="#Taking-a-Derivative-Along-Any-Direction-Using-the-Gradient" title="Permalink to this headline">¶</a></h2>
+<p>Finally, and we can’t give this the full treatment it deserves, what if we want to take the derivative of <span class="math notranslate nohighlight">\(f(x,y)\)</span> along some <em>other</em> direction? Say, we are facing <span class="math notranslate nohighlight">\(45^\circ\)</span> between the <span class="math notranslate nohighlight">\(+x\)</span> and <span class="math notranslate nohighlight">\(+y\)</span> directions, and we want to know the slope of <span class="math notranslate nohighlight">\(f(x,y)\)</span> along <em>this</em> direction. This is where the <strong>gradient</strong> comes into play. In short, the gradient of <span class="math notranslate nohighlight">\(f(x,y)\)</span> is the <strong>vector containing all of the partial derivatives of</strong> <span class="math notranslate nohighlight">\(f(x,y)\)</span>. In other words, <strong>the
+gradient of</strong> <span class="math notranslate nohighlight">\(f(x,y)\)</span> <strong>is a vector whose components are the functions</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla} f(x,y) = \begin{bmatrix} \frac{\partial f(x,y)}{\partial x} &amp; \frac{\partial f(x,y)}{\partial y} \end{bmatrix}.
+\end{equation}</div><p>For example, the gradient of our function <span class="math notranslate nohighlight">\(f(x,y)=2x^2+xy\)</span> would be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla} f(x,y) = \begin{bmatrix} 4x+y &amp; x \end{bmatrix}.
+\end{equation}</div><p>In the same way that we must plug in values for <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> in order to evaluate <span class="math notranslate nohighlight">\(f(x,y)\)</span>, we must do the same to evaluate the vector <span class="math notranslate nohighlight">\(\vec{\nabla} f(x,y)\)</span>. Evaluating the gradient at the point, say, <span class="math notranslate nohighlight">\((x=1,y=2)\)</span>, we find <span class="math notranslate nohighlight">\(\vec{\nabla} f(1,2) = \begin{bmatrix} 6 &amp; 1 \end{bmatrix}\)</span>.</p>
+<p>Please note that <span class="math notranslate nohighlight">\(f\)</span> could have been a function of <span class="math notranslate nohighlight">\(N\)</span> variables rather than <span class="math notranslate nohighlight">\(2\)</span>; the definition of the gradient extends trivially as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla} f(x_1, x_2, \dots, x_N)=\begin{bmatrix} \frac{\partial f}{\partial x_1} &amp; \frac{\partial f}{\partial x_2} &amp; \cdots &amp; \frac{\partial f}{\partial x_N} \end{bmatrix}.
+\end{equation}</div><div class="section" id="Properties-of-the-Gradient">
+<h3>Properties of the Gradient<a class="headerlink" href="#Properties-of-the-Gradient" title="Permalink to this headline">¶</a></h3>
+<p>The gradient has a few very important properties that will drive our later applications of it. It will be helpful to be familiar with the <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html#The-Dot-Product">dot product</a> before proceeding. Finally, for notational brevity, we will write <span class="math notranslate nohighlight">\(f\)</span> to refer to a multivariable function <span class="math notranslate nohighlight">\(f(x_1,\dots,x_N)\)</span> of <span class="math notranslate nohighlight">\(N\)</span> variables as all the following concepts can be applied in <span class="math notranslate nohighlight">\(N\)</span> dimensions.</p>
+<p>Start by noticing that the dot product of <span class="math notranslate nohighlight">\(\vec{\nabla} f(x,y)\)</span> and <span class="math notranslate nohighlight">\(\hat{x}\)</span> yields <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span>. Thus taking the dot product of the gradient of <span class="math notranslate nohighlight">\(f(x,y)\)</span> with the <span class="math notranslate nohighlight">\(x\)</span>-unit vector returns the <em>derivative of</em> <span class="math notranslate nohighlight">\(f(x,y)\)</span> <em>along the</em> <span class="math notranslate nohighlight">\(x\)</span><em>-direction</em>. This generalizes to the important property:</p>
+<ul class="simple">
+<li><p>The dot product of <span class="math notranslate nohighlight">\(\hat{u}\)</span> with <span class="math notranslate nohighlight">\(\vec{\nabla} f\)</span> returns the derivative of <span class="math notranslate nohighlight">\(f\)</span> along the direction of <span class="math notranslate nohighlight">\(\hat{u}\)</span>. We denote this “directional derivative” as <span class="math notranslate nohighlight">\(\vec{\nabla}_{\hat{u}}f\triangleq\hat{u}\cdot\vec{\nabla}f\)</span>.</p></li>
+</ul>
+<p>We can use this fact to prove the second important property about the gradient:</p>
+<ul class="simple">
+<li><p>The gradient <span class="math notranslate nohighlight">\(\vec{\nabla} f\)</span> points in the direction of steepest ascent of <span class="math notranslate nohighlight">\(f\)</span> for any and all points.</p></li>
+</ul>
+<p>To see this, consider an <span class="math notranslate nohighlight">\(N\)</span>-D unit vector <span class="math notranslate nohighlight">\(\hat{u}\)</span> that points in the direction of steepest ascent of <span class="math notranslate nohighlight">\(f\)</span> evaluated at a point <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span>. We can find the instantaneous slope at <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span> in the direction of <span class="math notranslate nohighlight">\(\hat{u}\)</span> by taking the dot product with the gradient <span class="math notranslate nohighlight">\(\vec{\nabla}f\)</span> evaluated at the point <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span>, <span class="math notranslate nohighlight">\(\vec{\nabla}f(\boldsymbol{p})\)</span>.</p>
+<p>However, we know the dot product is related to the angle between <span class="math notranslate nohighlight">\(\hat{u}\)</span> and <span class="math notranslate nohighlight">\(\vec{\nabla}f(\boldsymbol{p})\)</span> by</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla}_{\hat{u}}f(\boldsymbol{p})=\hat{u}\cdot\vec{\nabla}f(\boldsymbol{p})=\lVert\hat{u}\rVert\big\lVert\vec{\nabla}f(\boldsymbol{p})\big\rVert\cos\theta=\big\lVert\vec{\nabla}f(\boldsymbol{p})\big\rVert\cos\theta.
+\end{equation}</div><p>Now, we assumed that <span class="math notranslate nohighlight">\(\hat{u}\)</span> points in the direction of steepest ascent, which means that the instantaneous slope at <span class="math notranslate nohighlight">\(\hat{p}\)</span> in the direction of <span class="math notranslate nohighlight">\(\hat{u}\)</span> must be maximal. Since <span class="math notranslate nohighlight">\(\vec{\nabla}_{\hat{u}}f(\boldsymbol{p})\)</span> is this instantaneous slope, we then know that <span class="math notranslate nohighlight">\(\lVert\vec{\nabla}f(\boldsymbol{p})\rVert\cos\theta\)</span> must be maximal. But <span class="math notranslate nohighlight">\(\cos\theta\)</span> is maximized for <span class="math notranslate nohighlight">\(\theta=0\)</span>, i.e. when <span class="math notranslate nohighlight">\(\hat{u}\)</span> and <span class="math notranslate nohighlight">\(\vec{\nabla}f(\boldsymbol{p})\)</span>
+are aligned, meaning that <span class="math notranslate nohighlight">\(\vec{\nabla}f(\boldsymbol{p})\)</span> itself points in the direction of steepest ascent relative to the point <span class="math notranslate nohighlight">\(\boldsymbol{p}\)</span>!</p>
+<p>Because of these two properties, the gradient is an extremely useful tool. We can take the derivative of <span class="math notranslate nohighlight">\(f(x,y)\)</span> along an arbitrary direction by writing down the unit vector that points in the desired direction and taking the dot product with the gradient.</p>
+<p>Say we wanted to find the derivative of <span class="math notranslate nohighlight">\(f(x,y)=2x^2+xy\)</span> along a line pointing <span class="math notranslate nohighlight">\(45^\circ\)</span> between the positive <span class="math notranslate nohighlight">\(x\)</span> and positive <span class="math notranslate nohighlight">\(y\)</span> directions. One way to visualize this is using a plane along this direction, slicing through <span class="math notranslate nohighlight">\(f(x,y)\)</span>:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/multivar_intersection.png" alt="Viewing an enhanced tree-view of your test suite">
+</p>
+</div><p>We can write the unit vector that points in the desired direction as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\hat{u} = \begin{bmatrix} \frac{1}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} \end{bmatrix}.
+\end{equation}</div><p>Check that this vector does indeed have a magnitude of 1. And so <strong>the derivative of</strong> <span class="math notranslate nohighlight">\(f(x,y)\)</span> <strong>along the</strong> <span class="math notranslate nohighlight">\(\hat{u}\)</span> <strong>direction</strong> is given by</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla}_\hat{u} f(x,y) = \hat{u} \cdot \vec{\nabla} f(x,y) = \begin{bmatrix} \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} \end{bmatrix} \cdot \begin{bmatrix} 4x+y \\ x \end{bmatrix} = \frac{4x+y}{\sqrt{2}} + \frac{x}{\sqrt{2}} = \frac{5x+y}{\sqrt{2}}.
+\end{equation}</div><p>Thus, the function <span class="math notranslate nohighlight">\(\frac{5x+y}{\sqrt{2}}\)</span> tells us the slope of <span class="math notranslate nohighlight">\(f(x,y)\)</span> when we are standing at the point <span class="math notranslate nohighlight">\((x,y)\)</span>, facing in the <span class="math notranslate nohighlight">\(\hat{u}\)</span> direction. This derivative can be visualized as</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/multivar_directional_deriv.png" alt="Desired plane intersecting the function">
+</p>
+</div><p>To visualize the gradient, we can think of placing an arrow at every point in the valley directed in the direction of steepest ascent.</p>
+<p>For <span class="math notranslate nohighlight">\(f(x,y)=2x^2+xy\)</span>, this can be visualized as on the left. The length of each arrow is proportional to the magnitude of the instantaneous slope in the direction of greatest ascent at that point.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/multivar_gradient_plot.png" alt="Gradient visualized using arrows">
+</p>
+</div><p>The function on the right was chosen to better illustrate the change in the direction of the gradient at varying values of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. From here it becomes clear: just as if you were standing in a valley, the direction of steepest ascent depends first and foremost on where you are standing.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Applying the Gradient</strong></p>
+<p>Find the derivative of <span class="math notranslate nohighlight">\(f(x,y) = 4xy + y^3\)</span> along a line pointing <span class="math notranslate nohighlight">\(30^\circ\)</span> along the <span class="math notranslate nohighlight">\(-x\)</span> and <span class="math notranslate nohighlight">\(+y\)</span> directions (<span class="math notranslate nohighlight">\(150^\circ\)</span> along the <span class="math notranslate nohighlight">\(+x\)</span> and <span class="math notranslate nohighlight">\(+y\)</span> directions). First find <span class="math notranslate nohighlight">\(\vec{\nabla} f(x,y)\)</span> and <span class="math notranslate nohighlight">\(\hat{u}\)</span> and then use these vectors to find the slope of <span class="math notranslate nohighlight">\(f\)</span> in the <span class="math notranslate nohighlight">\(\hat{u}\)</span> direction.</p>
+</div>
+</div>
+<div class="section" id="Visualizing-the-Gradient">
+<h3>Visualizing the Gradient<a class="headerlink" href="#Visualizing-the-Gradient" title="Permalink to this headline">¶</a></h3>
+<p>The following code generates a surface plot of the function <span class="math notranslate nohighlight">\(f(x,y) = 2x^2 + xy\)</span> and a quiver plot of <span class="math notranslate nohighlight">\(\vec{\nabla}f(x,y)=\begin{bmatrix}4x+y &amp; x\end{bmatrix}\)</span>. Run the code in a Jupyter Notebook to see the plot. Change the line <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">X</span> <span class="pre">**</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">X</span> <span class="pre">*</span> <span class="pre">Y</span></code> to plot some of the other functions we have discussed; note that you should use MyGrad functions (e.g. <code class="docutils literal notranslate"><span class="pre">mg.exp</span></code> and <code class="docutils literal notranslate"><span class="pre">mg.cos</span></code>) if needed.</p>
+<p>Imagine that you are standing at some point on the surface; notice that the derivative of <span class="math notranslate nohighlight">\(f\)</span>, or the slope of the graph where you’re standing, is different depending on the direction you are facing. For example, at the point <span class="math notranslate nohighlight">\((0,0)\)</span>, if you are facing the <span class="math notranslate nohighlight">\(+x\)</span> direction the slope is nearly flat, whereas facing the <span class="math notranslate nohighlight">\(+y\)</span> direction there is a very large slope. The gradient of <span class="math notranslate nohighlight">\(f\)</span>, or <span class="math notranslate nohighlight">\(\vec{\nabla} f\)</span>, points in the direction of steepest ascent for the point it
+is evaluated at.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">mygrad</span> <span class="k">as</span> <span class="nn">mg</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">axes3d</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+
+<span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">*</span><span class="n">_range</span><span class="p">),</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">*</span><span class="n">_range</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">###</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">X</span> <span class="o">*</span> <span class="n">Y</span>
+<span class="c1">###</span>
+
+<span class="c1"># compute the ∂Z/∂X and ∂Z/∂Y at the</span>
+<span class="c1"># sampled points in X and Y</span>
+<span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="n">_cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;GnBu&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Surface Plot of $f(x,y)=2x^2+xy$&quot;</span><span class="p">)</span>
+
+<span class="c1"># get underlying numpy arrays for plotting</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">grad</span><span class="p">[::</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">grad</span><span class="p">[::</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">data</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">data</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">data</span>
+<span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">Z</span><span class="p">[::</span><span class="mi">20</span><span class="p">,</span> <span class="p">::</span><span class="mi">20</span><span class="p">],</span> <span class="n">Z</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="c1"># reduce the sampling for the quiver plot so that arrows are distinuishable</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">X</span><span class="p">[::</span><span class="mi">20</span><span class="p">],</span> <span class="n">Y</span><span class="p">[::</span><span class="mi">20</span><span class="p">],</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">surf</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">_cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.colorbar.Colorbar at 0x164937eeda0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Multivariable_Calculus_10_1.png" src="../_images/Math_Materials_Multivariable_Calculus_10_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Minimizing-a-Function-Using-Gradient-Descent">
+<h3>Minimizing a Function Using Gradient Descent<a class="headerlink" href="#Minimizing-a-Function-Using-Gradient-Descent" title="Permalink to this headline">¶</a></h3>
+<p>If <span class="math notranslate nohighlight">\(\vec{\nabla} f\)</span> points in the direction of steepest ascent for a given point, then <span class="math notranslate nohighlight">\(- \vec{\nabla} f\)</span> points in the direction of steepest <em>descent</em>. As we will see, this is exactly the information we need to find a minimum of a function when analytic methods fail.</p>
+<p>The analytical method for finding the extrema of a function <span class="math notranslate nohighlight">\(f\)</span> involves setting each partial derivative of the function equal to zero, much like the extrema of a single-variable function are found where the derivative is <span class="math notranslate nohighlight">\(0\)</span>. We run into problems, however, when there is no solution to <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}=0\)</span>, for some variable <span class="math notranslate nohighlight">\(x\)</span>. Take the single-variable function <span class="math notranslate nohighlight">\(f(x)=\frac{1}{2}x^2 + e^{-x}\)</span>, which can be visualized as</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/multivar_singlevar_plot.png" alt="Gradient visualized using arrows" width=600>
+</p>
+</div><p>The derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> is <span class="math notranslate nohighlight">\(x-e^{-x}\)</span>. Unfortunately, there is no solution in terms of standard functions when we set <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span> equal to <span class="math notranslate nohighlight">\(0\)</span>, but the plot of <span class="math notranslate nohighlight">\(f(x)\)</span> shows that there is indeed a minimum around <span class="math notranslate nohighlight">\(x=0.56\)</span>. In this case, it is necessary to use a numerical method to find the extrema.</p>
+<p>This is where the gradient comes into play. Starting at any point along our function, we can compute <span class="math notranslate nohighlight">\(\vec{\nabla} f\)</span> to find the instantaneous slope along the direction of steepest ascent at this point. If we want to minimize our function, we ought to move in the opposite direction of the gradient: the direction of greatest <em>descent</em>. We can begin to step towards the location of our minimum by subtracting the gradient of <span class="math notranslate nohighlight">\(f(x)\)</span> at location <span class="math notranslate nohighlight">\(x\)</span> from the value <span class="math notranslate nohighlight">\(x\)</span> itself,
+making <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Intro_Calc.html#Uses-for-the-Derivative">linear approximations</a> of our function in order to move to a location closer to the minimum. It is important to note that a linear approximation is good for a small region around <span class="math notranslate nohighlight">\(x\)</span>, but diverges greatly from the function outside of that region. Since the gradient itself can be quite large, we will often need to scale it down, such that we walk in the same direction, but take a much smaller
+step.</p>
+<p>Let’s consider a starting location of <span class="math notranslate nohighlight">\(x=-1\)</span> for our function <span class="math notranslate nohighlight">\(f(x)\)</span>. The gradient of our single-variable function is simply the derivative, or <span class="math notranslate nohighlight">\(\vec{\nabla} f(x)=x-e^{-x}\)</span>. Evaluating the gradient at <span class="math notranslate nohighlight">\(x=-1\)</span>, we have that <span class="math notranslate nohighlight">\(\vec{\nabla} f(-1)=-3.72\)</span>. We can subtract this from our current <span class="math notranslate nohighlight">\(x\)</span>-value to arrive at our new location of</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+x_\text{new}=x_\text{old}-\vec{\nabla} f(x_\text{old})=-1-(-3.72)=2.72.
+\end{equation}</div><p>We will continue this process iteratively, and now find the gradient at our new location as <span class="math notranslate nohighlight">\(\vec{\nabla} f(2.72)=2.65\)</span>. Taking our next step, we arrive at</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+x_\text{new}=x_\text{old}-\vec{\nabla} f(x_\text{old})=2.72-2.65=0.07.
+\end{equation}</div><p>Although we originally overshot it, subsequent iterations of this will lead us closer and closer to the minimum around <span class="math notranslate nohighlight">\(x=0.56\)</span>.</p>
+<p>We can also see this process work for our previous multivariable example <span class="math notranslate nohighlight">\(f(x,y) = 2x^2 + xy\)</span>, which has a “valley” of minima at <span class="math notranslate nohighlight">\(x=0\)</span> for all values of <span class="math notranslate nohighlight">\(y\)</span>. Recall that <span class="math notranslate nohighlight">\(\vec{\nabla} f(x,y) = \begin{bmatrix} 4x+y &amp; x \end{bmatrix}\)</span>. Starting (somewhat arbitrarily) at the point <span class="math notranslate nohighlight">\((x=1,y=2)\)</span>, we have that <span class="math notranslate nohighlight">\(\vec{\nabla} f(1,2) = \begin{bmatrix} 6 &amp; 1 \end{bmatrix}\)</span>. We can subtract each partial derivative in the gradient from its corresponding current <span class="math notranslate nohighlight">\(x\)</span>-
+or <span class="math notranslate nohighlight">\(y\)</span>-value,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix} x_\text{new} \\ y_\text{new} \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \end{bmatrix} - \begin{bmatrix} 6 \\ 1 \end{bmatrix} = \begin{bmatrix} -5 \\ 1 \end{bmatrix}.
+\end{equation}</div><p>Unfortunately, we’ve gone strayed pretty far from the minima at <span class="math notranslate nohighlight">\(x=0\)</span>, because our gradient was relatively large. To accommodate this, we can scale our gradient down by multiplying it with a small, positive scalar; since scalar multiplication has the affect of changing the length of a vector, while maintaining its direction, this will allow us to modify the size of the steps we take.</p>
+<p>Let’s take another step, by first evaluating the gradient at <span class="math notranslate nohighlight">\((x,y)_\text{new}\)</span> as <span class="math notranslate nohighlight">\(\vec{\nabla} f(-5,1) = \begin{bmatrix} -19 &amp; -5 \end{bmatrix}\)</span>. Before subtracting off the gradient, however, we will multiply our gradient by <span class="math notranslate nohighlight">\(0.1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix} x_\text{new} \\ y_\text{new} \end{bmatrix} = \begin{bmatrix} -5 \\ 1 \end{bmatrix} - 0.1 \begin{bmatrix} -19 \\ -5 \end{bmatrix} = \begin{bmatrix} -5 \\ 1 \end{bmatrix} - \begin{bmatrix}-1.9 \\ -0.5 \end{bmatrix} = \begin{bmatrix} -3.1 \\ 1.5 \end{bmatrix}.
+\end{equation}</div><p>Clearly we have made better progress when we first scaled our gradient; we see that <span class="math notranslate nohighlight">\(x_\text{new}\)</span> is now slightly closer to <span class="math notranslate nohighlight">\(x=0\)</span>, as opposed to much farther from it. Check that had we not scaled our gradient down, this step would have taken us to the point <span class="math notranslate nohighlight">\((x=14,y=6)\)</span>, quite far from the minima. Without scaling down the gradient, we tend to take big steps back and forth and fail to effectively narrow in on a specific minimum. This makes sense mathematically as well: remember
+that we are simply making linear approximations, which are only valid in small intervals surrounding the point we evaluate at.</p>
+<p>This iterative process of finding the minimum of a function numerically is known as <strong>gradient descent</strong>, which has the following general form for functions of <span class="math notranslate nohighlight">\(n\)</span> variables</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix}_\text{new} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix}_\text{old} - \delta \vec{\nabla} f (x_{1_\text{old}}, x_{2_\text{old}}, \cdots, x_{N_\text{old}}),
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\vec{\nabla} f (x_{1_\text{old}}, x_{2_\text{old}}, \cdots, x_{N_\text{old}})\)</span> is the gradient of <span class="math notranslate nohighlight">\(f\)</span> evaluated at <span class="math notranslate nohighlight">\(\begin{bmatrix} x_1 &amp; x_2 &amp; \cdots &amp; x_N \end{bmatrix}_\text{old}\)</span> and <span class="math notranslate nohighlight">\(\delta\)</span> is a small, positive, real number called the <strong>step size</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Stepping Through Gradient Descent</strong></p>
+<p>Re-do the first two steps of gradient descent by hand for <span class="math notranslate nohighlight">\(f(x,y) = 2x^2 + xy\)</span> with a step size of <span class="math notranslate nohighlight">\(\delta=0.1\)</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Programming Single-Variable Gradient Descent</strong></p>
+<p>Write a program that performs gradient descent on the function <span class="math notranslate nohighlight">\(f(x)=\frac{1}{2}x^2 + e^{-x}\)</span>. Your program should take a starting coordinate <span class="math notranslate nohighlight">\(x\)</span> and a number of iterations <span class="math notranslate nohighlight">\(n\)</span>. Try running your algorithm for a few hundred iterations to see if you end up near the minimum around <span class="math notranslate nohighlight">\(x=0.56\)</span>. Experiment with <span class="math notranslate nohighlight">\(\delta\)</span> to see if there is a value that is small enough to avoid overshooting the minimum but large enough to efficiently narrow in on it (avoiding an excessive
+number of iterations).</p>
+</div>
+</div>
+<div class="section" id="Autodifferentiation-with-Multivariable-Functions">
+<h3>Autodifferentiation with Multivariable Functions<a class="headerlink" href="#Autodifferentiation-with-Multivariable-Functions" title="Permalink to this headline">¶</a></h3>
+<p>Autodifferentiation libraries, like MyGrad, can be used to compute the partial derivatives of multivariable functions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using mygrad to compute the derivatives of a multivariable function</span>
+
+<span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># stores ∂f/∂x @ x=3, y=4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">16.</span><span class="p">)</span>
+
+<span class="c1"># stores ∂f/∂y @ x=3, y=4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the chosen <span class="math notranslate nohighlight">\(f(x,y)\)</span>, we know that <span class="math notranslate nohighlight">\(\vec{\nabla}f=\begin{bmatrix}4x+y &amp; x\end{bmatrix}\)</span>. Evaluating <span class="math notranslate nohighlight">\(\vec{\nabla}f\)</span> at <span class="math notranslate nohighlight">\((x=3,y=4)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla}f(3,4)=\begin{bmatrix}4(3)+4 \\ 3\end{bmatrix}=\begin{bmatrix}16 \\ 3\end{bmatrix}.
+\end{equation}</div><p>We can now see that <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> stores <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\big|_{x=3,y=4}\)</span> and <code class="docutils literal notranslate"><span class="pre">y.grad</span></code> stores <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial y}\big|_{x=3,y=4}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Programming Multivariable Gradient Descent</strong></p>
+<p>Write a program that performs gradient descent on the function <span class="math notranslate nohighlight">\(f(x, y)=2x^2 + 4y^2 + e^{-3x} + 3e^{-2y}\)</span>. Your program should take starting coordinates <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> and a number of iterations <span class="math notranslate nohighlight">\(n\)</span>. Try running your algorithm for a few hundred iterations to see if you end up near the minimum around <span class="math notranslate nohighlight">\(x=0.3026, y=0.3629\)</span>. Experiment with <span class="math notranslate nohighlight">\(\delta\)</span> to see if there is a value that is small enough to avoid overshooting the minimum but large enough to efficiently
+narrow in on it (avoiding an excessive number of iterations).</p>
+<p><em>Warning</em>: Make sure that when you are updating the value of <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>s, you perform the update to <code class="docutils literal notranslate"><span class="pre">Tensor.data</span></code> and not to the <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> itself, to avoid back-propagating through the operation.</p>
+</div>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Finding Partial Derivatives: Solution</strong></p>
+<p><span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x} = 4x - 3y\)</span>; The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> depends on both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(\frac{\partial f}{\partial y} = -3x\)</span>; The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(y\)</span> depends on only <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(\frac{\partial f}{\partial z} = 3z^2\)</span>; The partial derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(z\)</span> depends on only <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<p><strong>Applying the Gradient: Solution</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}\vec{\nabla}_\hat{u} f(x,y) = \hat{u} \cdot \vec{\nabla} f(x,y) = \begin{bmatrix} \frac{-\sqrt{3}}{2} \\ \frac{1}{2} \end{bmatrix} \cdot \begin{bmatrix} 4y \\ 4x+3y^2 \end{bmatrix} = \frac{-4y\sqrt{3}}{2} + \frac{4x+3y^2}{2} = \frac{4x+3y^2-4y\sqrt{3}}{2}\end{equation}</div><p><strong>Stepping Through Gradient Descent: Solution</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}\begin{bmatrix} x_0 \\ y_0 \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}\end{equation}</div><div class="math notranslate nohighlight">
+\begin{equation}\begin{bmatrix} x_1 \\ y_1 \end{bmatrix} = \begin{bmatrix} x_0 \\ y_0 \end{bmatrix} - \delta \vec{\nabla} f(x_0,y_0) = \begin{bmatrix} 1 \\ 2 \end{bmatrix} - 0.1\cdot \vec{\nabla} f(1,2) = \begin{bmatrix} 1 \\ 2 \end{bmatrix} - 0.1\begin{bmatrix} 6 \\ 1 \end{bmatrix} = \begin{bmatrix} 0.4 \\ 1.9 \end{bmatrix}\end{equation}</div><div class="math notranslate nohighlight">
+\begin{equation}\begin{bmatrix} x_2 \\ y_2 \end{bmatrix} = \begin{bmatrix} x_1 \\ y_1 \end{bmatrix} - \delta \vec{\nabla} f(x_1,y_1) = \begin{bmatrix} 0.4 \\ 1.9 \end{bmatrix} - 0.1\cdot \vec{\nabla} f(0.4,1.9) = \begin{bmatrix} 0.4 \\ 1.9 \end{bmatrix} - 0.1\begin{bmatrix} 3.5 \\ 0.4 \end{bmatrix} = \begin{bmatrix} 0.05 \\ 1.86 \end{bmatrix}\end{equation}</div><p>Notice that we approach the minima around <span class="math notranslate nohighlight">\(x=0\)</span> for <span class="math notranslate nohighlight">\(y\)</span> between <span class="math notranslate nohighlight">\(-2\)</span> and <span class="math notranslate nohighlight">\(2\)</span> much faster without overshooting it by scaling our steps down by a factor of <span class="math notranslate nohighlight">\(\delta\)</span>.</p>
+<p><strong>Programming Single-Variable Gradient Descent: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># perform gradient descent on our function given</span>
+<span class="c1"># a starting value of x_start for n iterations</span>
+<span class="k">def</span> <span class="nf">grad_descent</span><span class="p">(</span><span class="n">x_start</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="c1"># defining the gradient of our function</span>
+    <span class="k">def</span> <span class="nf">grad</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="c1"># df/dx @ the values in `x`</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># step size; experiment with this value</span>
+    <span class="n">x_old</span> <span class="o">=</span> <span class="n">x_start</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="n">x_old</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">grad</span><span class="p">(</span><span class="n">x_old</span><span class="p">)</span>
+        <span class="n">x_old</span> <span class="o">=</span> <span class="n">x_new</span>
+    <span class="k">return</span> <span class="n">x_new</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">grad_descent</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="mf">0.5671432904097823</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">grad_descent</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="mf">0.5671432904097842</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">grad_descent</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="mf">0.5671432904097842</span>
+</pre></div>
+</div>
+<p><strong>Programming Multivariable Gradient Descent: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># perform gradient descent on our function</span>
+<span class="c1"># given starting values of x_start and y_start for n iterations</span>
+<span class="k">def</span> <span class="nf">multi_grad_descent</span><span class="p">(</span><span class="n">x_start</span><span class="p">,</span> <span class="n">y_start</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+
+    <span class="c1"># convert x and y to Tensors so that</span>
+    <span class="c1"># we can compute their partial derivatives</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># defining our function; we use MyGrad operations</span>
+    <span class="c1"># instead of NumPy so that we can compute derivatives</span>
+    <span class="c1"># through these functions</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+
+
+    <span class="c1"># step size; experiment with this value</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="c1"># calculating the gradient and updating the parameters</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">z</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span> <span class="c1"># x.grad stores ∂f/∂x @ current x and y value</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span> <span class="c1"># y.grad stores ∂f/∂x @ current x and y value</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">multi_grad_descent</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="o">-</span><span class="mi">53</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">8.399999999999999</span><span class="p">,</span> <span class="mf">6.506783131740139e+45</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">multi_grad_descent</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="o">-</span><span class="mi">53</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">0.3051864919697653</span><span class="p">,</span> <span class="mf">3.331472963450944e+39</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">multi_grad_descent</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="o">-</span><span class="mi">53</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">0.30257801761441566</span><span class="p">,</span> <span class="mf">0.3629306788831116</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Chain_Rule.html" class="btn btn-neutral float-right" title="Chain Rule" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Intro_Calc.html" class="btn btn-neutral float-left" title="Introduction to Single-Variable Calculus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

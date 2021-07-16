@@ -1,0 +1,1049 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Encoding Text Documents to Numerical Representations &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Encoding Text Documents to Numerical Representations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/BagOfWords.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Encoding-Text-Documents-to-Numerical-Representations">
+<h1>Encoding Text Documents to Numerical Representations<a class="headerlink" href="#Encoding-Text-Documents-to-Numerical-Representations" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook, we will implement methods that allow us to ascribe text documents numerical representations (a.k.a encodings). This will permit us to perform quantitative analysis on text documents and correspond this analysis to qualitative conclusions. E.g. two documents whose encodings have a small distance between them are likely to discuss similar subject matters.</p>
+<p>Arriving at methods for giving text documents numerical encodings will enable us to apply some of the powerful analysis and machine learning techniques that we learned during the Vision portion of the program.</p>
+<p>Central to this encoding process is the observation that simply using <strong>a “bag of words” approach - eschewing word-order and simply accounting for the word-contents of documents -</strong> is often times sufficient for performing quantitative document comparisons.</p>
+<p>The encoding arrived at by counting up the words in a document is aptly called the <strong>term-frequency</strong> descriptor of the document.</p>
+<p>We will see that there is plenty of nuance to how we will encode our documents. The way in which we construct our vocabulary, normalize our text documents before processing them, and provide weighting to our document descriptors will greatly impact our natural language processing (NLP) capabilities.</p>
+<div class="section" id="Removing-Punctuation-(Quickly)">
+<h2>Removing Punctuation (Quickly)<a class="headerlink" href="#Removing-Punctuation-(Quickly)" title="Permalink to this headline">¶</a></h2>
+<p>A straight-forward way to remove punctuation from a corpus would be to loop through all various punctuation (which is available, conveniently, in the built-in <code class="docutils literal notranslate"><span class="pre">string</span></code> module), and replace each punctuation character:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">string</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span>
+<span class="s1">&#39;!&quot;#$%&amp;</span><span class="se">\&#39;</span><span class="s1">()*+,-./:;&lt;=&gt;?@[</span><span class="se">\\</span><span class="s1">]^_`{|}~&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">string</span>
+
+<span class="c1"># removing punctuation by simply iterating over each punctuation mark</span>
+<span class="c1"># and replacing all occurrences of it in a string with &quot;&quot;</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">:</span>
+    <span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That being said, a much faster method of replacing punctuation is to make use of Python’s “<a class="reference external" href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>” (abbreviated as “regex” or “re”) capabilities. Python has a built-in regex module, <code class="docutils literal notranslate"><span class="pre">re</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">string</span>
+
+<span class="c1"># this creates a regular expression that identifies all punctuation character</span>
+<span class="c1"># don&#39;t include this in `strip_punc`, otherwise you will re-compile this expression</span>
+<span class="c1"># every time you call the function</span>
+<span class="n">punc_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">strip_punc</span><span class="p">(</span><span class="n">corpus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Removes all punctuation from a string.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        corpus : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            the corpus with all punctuation removed&quot;&quot;&quot;</span>
+    <span class="c1"># substitute all punctuation marks with &quot;&quot;</span>
+    <span class="k">return</span> <span class="n">punc_regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">corpus</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_punc</span><span class="p">(</span><span class="s2">&quot;moo. meow! cat? cow~&quot;</span><span class="p">)</span>
+<span class="go">&#39;moo meow cat cow&#39;</span>
+</pre></div>
+</div>
+<div class="section" id="Computing-the-term-frequency-descriptor-for-one-document">
+<h3>Computing the term-frequency descriptor for one document<a class="headerlink" href="#Computing-the-term-frequency-descriptor-for-one-document" title="Permalink to this headline">¶</a></h3>
+<p>Let’s dive into the process of computing the <strong>term-frequency descriptor</strong> for a document. Let’s start with a simple example. Given the document:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span> <span class="n">document</span><span class="p">:</span>
+<span class="s2">&quot;Apples rule. Apples are the best. Truly, they are. Truly... Truly&quot;</span>
+</pre></div>
+</div>
+<p>Remove all punctuation and lowercase each word the document, and then ‘tokenize’ it; i.e. create a list/tuple containing each word as it occurs in the document:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Document</span> <span class="o">-&gt;</span> <span class="n">remove</span> <span class="n">punctuation</span> <span class="ow">and</span> <span class="n">lowercase</span> <span class="o">-&gt;</span> <span class="n">tokenize</span><span class="p">:</span>
+
+<span class="p">[</span><span class="s1">&#39;apples&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;rule&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;apples&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;are&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;the&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;best&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;truly&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;they&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;are&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;truly&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;truly&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Then, create <strong>the term-frequency descriptor for the document</strong>; this stores how many times each word occurs in the document, using alphabetical ordering for the document. For instance. Given the document “Bad apple seed. Bad apple.” The tf-descriptor is a length-3 array (make it be of floats, not ints):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">index</span> <span class="n">proceeds</span> <span class="ow">in</span> <span class="n">alphabetical</span> <span class="n">order</span>
+<span class="o">------------------------------------</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;apple&quot;</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;bad&quot;</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;seed&quot;</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Bad apple seed. Bad apple.&quot;</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">([</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Notice that we’re counting the actual number of times each word appears in the document (e.g., “apple” appears 2 times) versus just indicating that “apple” appeared at least once. This is why the overall approach is called <strong>“bag of words”</strong>. The (sorted) <strong>set</strong> of words occuring in the example is {‘apple’, ‘bad’, ‘seed’}. But the (sorted) <strong>bag</strong> of words is {‘apple’, ‘apple’, ‘bad’, ‘bad’, ‘seed’}, since a mathematical “bag” (or multiset) is a set in which items can be contained more than
+once.</p>
+<p>Compute the <strong>term-frequency descriptor</strong> (TF descriptor) for the document</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Apples rule. Apples are the best. Truly, they are. Truly... Truly&quot;</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Verify by hand that the descriptor you produced is correct.</p>
+</div>
+<div class="section" id="Creating-TF-descriptors-for-multiple-documents-using-bag-of-words">
+<h3>Creating TF-descriptors for multiple documents using bag of words<a class="headerlink" href="#Creating-TF-descriptors-for-multiple-documents-using-bag-of-words" title="Permalink to this headline">¶</a></h3>
+<p>Suppose we have two documents:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">doc_1</span> <span class="o">=</span> <span class="s2">&quot;I am a dog.&quot;</span>
+<span class="n">doc_2</span> <span class="o">=</span> <span class="s2">&quot;I am a cat!&quot;</span>
+</pre></div>
+</div>
+<p>If we use the code from the previous section to produce TF descriptors for both of these documents, we would obviously get:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;I am a dog.&quot;</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+<span class="s2">&quot;I am a cat!&quot;</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>They would have identical descriptors when they clearly shouldn’t! We need to adapt our indexing scheme so that we index (alphabetically) according to the words contained in <strong>all</strong> documents under consideration. I.e.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">index</span> <span class="n">proceeds</span> <span class="ow">in</span> <span class="n">alphabetical</span> <span class="n">order</span>
+<span class="o">------------------------------------</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;a&quot;</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;am&quot;</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;cat&quot;</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;dog&quot;</span>
+<span class="n">tf</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">count</span> <span class="n">of</span> <span class="s2">&quot;I&quot;</span>
+</pre></div>
+</div>
+<p>In this way, we can see that our two documents differ only by one word!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;I am a dog.&quot;</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+<span class="s2">&quot;I am a cat!&quot;</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Thus we want to index our TF descriptors based on the combined <strong>vocabulary</strong>, i.e. the set of unique words that occur across all of our documents.</p>
+<p>We need to be able to take in multiple documents, construct the vocabulary for this collection of documents, and then use the vocabulary to produce the TF descriptor for each document. Thus each document will get its own TF descriptor, whose indexing is based on one universal set of possible words.</p>
+<p>First, create a function, <code class="docutils literal notranslate"><span class="pre">to_counter</span></code>, that accepts a document (i.e a string) and: 1. removes all punctuation from the document 2. lower-cases the document 3. tokenizes the document 4. <strong>returns</strong> a <code class="docutils literal notranslate"><span class="pre">word</span> <span class="pre">-&gt;</span> <span class="pre">count</span></code> mapping for the document (using <code class="docutils literal notranslate"><span class="pre">collections.Counter</span></code>)</p>
+<p>Make sure to write a good docstring!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_counter(doc):
+    &quot;&quot;&quot;
+    Produce word-count of document, removing all punctuation
+    and making all the characters lower-cased.
+
+    Parameters
+    ----------
+    doc : str
+
+    Returns
+    -------
+    collections.Counter
+        lower-cased word -&gt; count&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Verify that:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">to_counter</span><span class="p">(</span><span class="s2">&quot;I am a dog.&quot;</span><span class="p">)</span>
+<span class="go">Counter({&#39;a&#39;: 1, &#39;am&#39;: 1, &#39;dog&#39;: 1, &#39;i&#39;: 1})</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now that we can produce the word-counter for each one of our documents, we want to construct our <strong>vocabulary</strong> for the entire corpus. Create a function <code class="docutils literal notranslate"><span class="pre">to_vocab</span></code>, <strong>which takes in an iterable of counter instances</strong> (e.g a list of the word-counts for each document), and returns an alphabetically sorted list of all of the unique words across those documents.</p>
+<p><cite>Python’s built-in ``set`</cite> object &lt;<a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_III_Sets_and_More.html">https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_III_Sets_and_More.html</a>&gt;`__ is an excellent utility for getting only the unique elements in a sequence.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_vocab(counters):
+    &quot;&quot;&quot;
+    Takes in an iterable of multiple counters, and returns a sorted list of unique words
+    accumulated across all the counters
+
+    [word_counter0, word_counter1, ...] -&gt; sorted list of unique words
+
+    Parameters
+    ----------
+    counters : Iterable[collections.Counter]
+        An iterable containing {word -&gt; count} counters for respective
+        documents.
+
+    Returns
+    -------
+    List[str]
+        An alphabetically-sorted list of all of the unique words in `counters`&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Verify that</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">count1</span> <span class="o">=</span> <span class="n">to_counter</span><span class="p">(</span><span class="s2">&quot;I am a dog.&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count2</span> <span class="o">=</span> <span class="n">to_counter</span><span class="p">(</span><span class="s2">&quot;I am a cat!&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_vocab</span><span class="p">([</span><span class="n">count1</span><span class="p">,</span> <span class="n">count2</span><span class="p">])</span>
+<span class="go">[&#39;a&#39;, &#39;am&#39;, &#39;cat&#39;, &#39;dog&#39;, &#39;i&#39;]</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now that we have our <strong>vocabulary</strong> (ordered alphabetically for indexing) and the <strong>word-counts</strong> for each one of our documents, we can create our TF descriptors!</p>
+<p>Write a function <code class="docutils literal notranslate"><span class="pre">to_tf</span></code>, which takes in a document’s word-counts (as a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> instance) and the vocabulary for all relevant documents, and returns the TF descriptor as an array of floats (although its entries will be integer-valued) for that document.</p>
+<p>Hint: what happens when you access an entry from a counter using a key that it hasn’t seen yet? What gets returned? Is this useful behavior for us?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Use your functions to produce the descriptors for the documents</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doc_1</span> <span class="o">=</span> <span class="s2">&quot;I am a dog.&quot;</span>
+<span class="n">doc_2</span> <span class="o">=</span> <span class="s2">&quot;I am a cat!&quot;</span>
+<span class="n">doc_3</span> <span class="o">=</span> <span class="s2">&quot;I am not a dog&quot;</span>
+<span class="n">doc_4</span> <span class="o">=</span> <span class="s2">&quot;I am not a cat, am I!?!&quot;</span>
+</pre></div>
+</div>
+<p>There are 6 unique words used among these documents. Thus your vocabulary should have a length of 6, as should each of the document’s TF descriptors. Use <code class="docutils literal notranslate"><span class="pre">numpy.vstack</span></code> to create a (4, 6) array of the descriptors for these four documents.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>doc_1 = &quot;I am a dog.&quot;
+doc_2 = &quot;I am a cat!&quot;
+doc_3 = &quot;I am not a dog&quot;
+doc_4 = &quot;I am not a cat, am I!?!&quot;
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Refining-our-bag-of-words">
+<h3>Refining our bag of words<a class="headerlink" href="#Refining-our-bag-of-words" title="Permalink to this headline">¶</a></h3>
+<p>We see that our vocabulary is what determines the dimensionality of our descriptors. This may grow to be needlessly large; simply because an article uses the word mayonnaise once to convey a metaphor means that all of our descriptors must accommodate yet another feature dimension (dedicated to counting how many times “mayonnaise” occurs in a document).</p>
+<p>Of course, we are free to restrict our vocabulary as we see fit. Let’s modify <code class="docutils literal notranslate"><span class="pre">to_vocab</span></code> such that we can choose to only retain the <span class="math notranslate nohighlight">\(k\)</span> most popular terms across all documents. Make this an optional argument, such that the default behavior of <code class="docutils literal notranslate"><span class="pre">to_vocab</span></code> matches what it was before (i.e. to retain all the words). Your code should work even if <span class="math notranslate nohighlight">\(k\)</span> is larger than the number of possible words in your vocabulary.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_vocab(counters, k=None):
+    &quot;&quot;&quot;
+    Convert a collection of counters to a sorted list of the top-k most common words
+
+    Parameters
+    ----------
+    counters : Sequence[collections.Counter]
+        A list of counters; each one is a word tally for a document
+
+    k : Optional[int]
+        If specified, only the top-k words are returned
+
+    Returns
+    -------
+    List[str]
+        A sorted list of the unique strings.&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Generate the vocabulary using the four documents from the last example, but using <span class="math notranslate nohighlight">\(k=2\)</span>. What words are in the vocabulary? Also, verify that using <span class="math notranslate nohighlight">\(k=6\)</span> and <span class="math notranslate nohighlight">\(k=\)</span><code class="docutils literal notranslate"><span class="pre">None</span></code> yields the same results.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>doc_1 = &quot;I am a dog.&quot;
+doc_2 = &quot;I am a cat!&quot;
+doc_3 = &quot;I am not a dog&quot;
+doc_4 = &quot;I am not a cat, am I!?!&quot;
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The most common words aren’t very meaningful. In fact this is essentially always the case - <a class="reference external" href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf’s law</a> effectively reveals that the “substantial” words in written documents occupy represent a scant fraction of the document’s words.</p>
+<p>The following code will open and read the wikipedia text file located in the <code class="docutils literal notranslate"><span class="pre">Week3/</span></code> directory, and assign the resulting string to the variable <code class="docutils literal notranslate"><span class="pre">wiki</span></code>.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">wiki</span></code> as the sole document to construct the vocabulary (keep in mind that <code class="docutils literal notranslate"><span class="pre">to_vocab</span></code> expects to receive <em>an iterable</em>, e.g. a list, of word-counts), using the top-50 most common words. Print the resulting vocabulary. What do you notice about them? Are they very descriptive? Discuss with your neighbors.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>path_to_wikipedia = &quot;../language_model/dat/wikipedia2text-extracted.txt&quot;
+with open(path_to_wikipedia, &quot;rb&quot;) as f:
+    wiki = f.read().decode()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>As we had surmised above, the majority of these words are simply the “glue” that holds together the meaningful content of the articles. These are known as “stop-words”. Not only would these words inflate the dimensionality of our descriptors, they are so common that they would also completely dominate the descriptors! The meaningful words in an article is likely out numbered substantially by stop-words, thus our descriptor would chiefly be informed by these.</p>
+<p>Update <code class="docutils literal notranslate"><span class="pre">to_vocab</span></code> to accept an arbitrary sequence (e.g. list) of so-called “stop-words”, which are eliminated from the bag before the top-k are returned. As a default, assume there are no stop-words.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_vocab(counters, k=None, stop_words=tuple()):
+    &quot;&quot;&quot;
+    [word, word, ...] -&gt; sorted list of top-k unique words
+    Excludes words included in `stop_words`
+
+    Parameters
+    ----------
+    counters : Iterable[Iterable[str]]
+
+    k : Optional[int]
+        If specified, only the top-k words are returned
+
+    stop_words : Collection[str]
+        A collection of words to be ignored when populating the vocabulary
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following code block reads in the stop-words the MySQL uses and saves them to a <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">set</span></code>. Take a look at them. How many stop words are there in this collection?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>with open(&quot;./dat/stopwords.txt&quot;, &#39;r&#39;) as r:
+    stops = []
+    for line in r:
+        stops += [i.strip() for i in line.split(&#39;\t&#39;)]
+</pre></div>
+</div>
+</div>
+<p>Now reassemble the wikipedia bag of words, retaining the 50 most common words, but ignoring those words that are in the provided stop-words</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Using-Our-Refined-Vocabulary-to-Compute-TF-descriptors">
+<h3>Using Our Refined Vocabulary to Compute TF descriptors<a class="headerlink" href="#Using-Our-Refined-Vocabulary-to-Compute-TF-descriptors" title="Permalink to this headline">¶</a></h3>
+<p>We now have the ability to refine our vocabulary such that we ignore certain “stop” words (common “glue” words that don’t add meaning to a document), and such that we only consider the top-<span class="math notranslate nohighlight">\(k\)</span> most popular words. This will make our TF descriptors both shorter and more discerning.</p>
+<p>Compute the TF descriptors for the 4-documents from above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doc_1</span> <span class="o">=</span> <span class="s2">&quot;I am a dog.&quot;</span>
+<span class="n">doc_2</span> <span class="o">=</span> <span class="s2">&quot;I am a cat!&quot;</span>
+<span class="n">doc_3</span> <span class="o">=</span> <span class="s2">&quot;I am not a dog&quot;</span>
+<span class="n">doc_4</span> <span class="o">=</span> <span class="s2">&quot;I am not a cat, am I!?!</span>
+</pre></div>
+</div>
+<p>but utilize the MySQL stop words.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>doc_1 = &quot;I am a dog&quot;
+doc_2 = &quot;I am a cat!&quot;
+doc_3 = &quot;I am not a dog?&quot;
+doc_4 = &quot;I am not a cat, am I!?!&quot;
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Although the stop words were simplified, notice what happened - we can no longer identify negation! doc_1 and doc_3 have identical descriptors!</p>
+<p>We have to keep in mind that our bag of words methodology already eliminates any semblance of word ordering within our documents, so we would not be able to discern what is being negated, to begin with.</p>
+<p>We also could never have distinguished “Ryan is taller than Megan” from “Megan is taller than Ryan”! Clearly there is a coarseness that we must accept as part of the simplicity that is the bag of words.</p>
+</div>
+</div>
+<div class="section" id="Providing-weights-for-terms:-Computing-term-frequency-instead-of-term-count">
+<h2>Providing weights for terms: Computing term-frequency instead of term-count<a class="headerlink" href="#Providing-weights-for-terms:-Computing-term-frequency-instead-of-term-count" title="Permalink to this headline">¶</a></h2>
+<p>Another major issue that we must face how to scale our descriptors - currently, long documents will have much longer higher-magnitude descriptor vectors than will shorter ones, since the longer documents have more words. Documents should not necessarily be weighted more heavily simply because they are longer.</p>
+<p>We can easily address this issue by normalizing our term-frequency descriptors such that their components reflect <strong>per-document frequency</strong> of the terms, rather than <strong>per-document count</strong> of the terms.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_{t,d} \rightarrow f_{t,d} = \frac{c_{t,d}}{\sum_{t' \in \text{vocab}}c_{t',d}}
+\end{equation}</div><p>Where <span class="math notranslate nohighlight">\(c_{t,d}\)</span> is the count of term <span class="math notranslate nohighlight">\(t\)</span> within document <span class="math notranslate nohighlight">\(d\)</span>, for each <span class="math notranslate nohighlight">\(t\)</span> in our vocabulary. Therefore <span class="math notranslate nohighlight">\(f_{t,d}\)</span> represents the <em>frequency</em> with which term <span class="math notranslate nohighlight">\(t\)</span> occurs within document <span class="math notranslate nohighlight">\(d\)</span>. The denominator</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{t'}c_{t',d}
+\end{equation}</div><p>represents the sum of the counts of all the terms in document <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<p>Update your <code class="docutils literal notranslate"><span class="pre">to_tf</span></code> code to incorporate this normalization.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_tf(counter, vocab):
+    &quot;&quot;&quot;
+    Parameters
+    ----------
+    counter : collections.Counter
+        The word -&gt; count mapping for a document.
+    vocab : Sequence[str]
+        Ordered list of words that we care about.
+
+    Returns
+    -------
+    numpy.ndarray
+        The TF descriptor for the document, whose components represent
+        the frequency with which each term in the vocab occurs
+        in the given document.&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Computing-Inverse-Document-Frequency">
+<h3>Computing Inverse Document Frequency<a class="headerlink" href="#Computing-Inverse-Document-Frequency" title="Permalink to this headline">¶</a></h3>
+<p>The last major consideration we will take in the formulation of this numerical encoding is the “inverse document frequency” of terms. Although we are able to remove stop words from our vocabulary, we would like to express the fact that <strong>a term that appears in all documents, in roughly equal proportions, holds no power to distinguish our documents from one another</strong>. The contrapositive of this statement is that <strong>words that appear infrequently across documents, but frequently in a few documents
+serve as good markers for those documents - those terms should be weighted heavily in the descriptors.</strong> Towards this end: let <span class="math notranslate nohighlight">\(N\)</span> be the number of documents we are working with, in total, and <span class="math notranslate nohighlight">\(n_{t}\)</span> be the total number of documents in which the term <span class="math notranslate nohighlight">\(t\)</span> appears (<span class="math notranslate nohighlight">\(t\)</span> must be in our vocabulary). Then the <strong>inverse document frequency</strong> (IDF) of term <span class="math notranslate nohighlight">\(t\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\log_{10}{\frac{N}{n_{t}}}
+\end{equation}</div><p>We want to compute the IDF for each term in our vocabulary.</p>
+<p>Assume we are working with the documents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doc</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;apple strawberry&quot;</span>
+<span class="n">doc</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;apple blueberry&quot;</span>
+</pre></div>
+</div>
+<p>Then our vocabulary, in order, is: <code class="docutils literal notranslate"><span class="pre">apple,</span> <span class="pre">blueberry,</span> <span class="pre">strawberry</span></code></p>
+<p>And the array of IDF values for these words is: <span class="math">\begin{equation}
+[\log_{10}{\frac{2}{2}}, \log_{10}{\frac{2}{1}}, \log_{10}{\frac{2}{1}}]
+\end{equation}</span></p>
+<p>Write a function that takes the ordered vocabulary and a list containing the word-count (as a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> instance) for each document, and produces an array of the idf values for all of the terms. What might the purpose of the <span class="math notranslate nohighlight">\(\log\)</span> function be here? What does it do, in terms of scaling? Discuss with a neighbor.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def to_idf(vocab, counters):
+    &quot;&quot;&quot;
+    Given the vocabulary, and the word-counts for each document, computes
+    the inverse document frequency (IDF) for each term in the vocabulary.
+
+    Parameters
+    ----------
+    vocab : Sequence[str]
+        Ordered list of words that we care about.
+
+    counters : Iterable[collections.Counter]
+        The word -&gt; count mapping for each document.
+
+    Returns
+    -------
+    numpy.ndarray
+        An array whose entries correspond to those in `vocab`, storing
+        the IDF for each term `t`:
+                           log10(N / nt)
+        Where `N` is the number of documents, and `nt` is the number of
+        documents in which the term `t` occurs.
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>It is important to realize that the IDF array is the same shape as each of our descriptors - <span class="math notranslate nohighlight">\((N_{t},)\)</span>, where <span class="math notranslate nohighlight">\(N_{t}\)</span> is the number of terms in our vocabulary.</p>
+<p><strong>Thus we can multiply our IDF vector with each of our term-frequency (TF) descriptors.</strong></p>
+<p>This weighting scheme, known as <strong>term-frequency inverse-document-frequency (TF-IDF)</strong>, is an extremely popular approach for creating a numerical encoding for documents, such that they have relational features amongst one another (where appropriate).</p>
+<p>Compute the TF-IDF descriptors for the following documents, excluding stop words from the vocabulary.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doc_1</span> <span class="o">=</span> <span class="s2">&quot;Apple cider is delicious.&quot;</span>
+<span class="n">doc_2</span> <span class="o">=</span> <span class="s2">&quot;A recipe for apple cider, using apple.&quot;</span>
+<span class="n">doc_3</span> <span class="o">=</span> <span class="s2">&quot;Donuts are delicious&quot;</span>
+<span class="n">doc_4</span> <span class="o">=</span> <span class="s2">&quot;Apple cider donuts, anyone? Donuts?&quot;</span>
+</pre></div>
+</div>
+<p>You should get the results:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vocab</span>
+<span class="go">[&#39;apple&#39;, &#39;cider&#39;, &#39;delicious&#39;, &#39;donuts&#39;, &#39;recipe&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tfs</span>
+<span class="go">array([[ 0.33333333,  0.33333333,  0.33333333,  0.        ,  0.        ],</span>
+<span class="go">       [ 0.5       ,  0.25      ,  0.        ,  0.        ,  0.25      ],</span>
+<span class="go">       [ 0.        ,  0.        ,  0.5       ,  0.5       ,  0.        ],</span>
+<span class="go">       [ 0.25      ,  0.25      ,  0.        ,  0.5       ,  0.        ]])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">idf</span>
+<span class="go">array([ 0.12493874,  0.12493874,  0.30103   ,  0.30103   ,  0.60205999])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_idf</span>
+<span class="go">array([[ 0.04164625,  0.04164625,  0.10034333,  0.        ,  0.        ],</span>
+<span class="go">       [ 0.06246937,  0.03123468,  0.        ,  0.        ,  0.150515  ],</span>
+<span class="go">       [ 0.        ,  0.        ,  0.150515  ,  0.150515  ,  0.        ],</span>
+<span class="go">       [ 0.03123468,  0.03123468,  0.        ,  0.150515  ,  0.        ]])</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>doc_1 = &quot;Apple cider is delicious.&quot;
+doc_2 = &quot;A recipe for apple cider, using apple.&quot;
+doc_3 = &quot;Donuts are delicious&quot;
+doc_4 = &quot;Apple cider donuts, anyone? Donuts?&quot;
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Applying-our-encoding">
+<h2>Applying our encoding<a class="headerlink" href="#Applying-our-encoding" title="Permalink to this headline">¶</a></h2>
+<p>Having adapted our collection of documents into a set of consistent-length descriptor vectors via bag-of-words with TF-IDF weighting, we can begin to apply familiar analysis and machine learning techniques to NLP problems!</p>
+<p>Let’s begin by doing a simple distance measurement to assess document similarity. Rather than use Euclidean distance, we will use “cosine-similarity” to measure the distance between our descriptor vectors:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\cos{\theta} = \frac{\vec{x} \cdot \vec{y}}{\lVert \vec{x} \rVert \lVert \vec{y} \rVert}
+\end{equation}</div><p>Where <span class="math notranslate nohighlight">\(\lVert \vec{x} \rVert = \sqrt{x_0^2 + x_1^2 + ...}\)</span>, which is the magnitude of <span class="math notranslate nohighlight">\(\vec{x}\)</span>. <span class="math notranslate nohighlight">\(\vec{x} \cdot \vec{y}\)</span> is the <em>dot product</em> of the two vectors.</p>
+<p>This measures the angle, <span class="math notranslate nohighlight">\(\theta\)</span>, formed between our two descriptor vectors in our document feature space. We have the expectation that similar documents will have closely-aligned descriptor vectors.</p>
+<p>You can compute the cosine-similarity between all rows of a 2D array via:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
+<span class="c1"># compute cosine-similarity between all pairs of rows of `x`</span>
+<span class="n">cos_sim</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Given the documents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doc_1</span> <span class="o">=</span> <span class="s2">&quot;Cogworks students learn about artificial intelligence in the form of audio processing, face recognition, and natural language processing.&quot;</span>
+
+<span class="n">doc_2</span> <span class="o">=</span> <span class="s2">&quot;Some people think CogWorks is a intense, but these students are simply passionate about artificial intelligence.&quot;</span>
+
+<span class="n">doc_3</span> <span class="o">=</span> <span class="s2">&quot;Racecar students are learning about autonomous racing.&quot;</span>
+
+<span class="n">doc_4</span> <span class="o">=</span> <span class="s2">&quot;UAV kids are learning about autonomous aerial vehicles!&quot;</span>
+
+<span class="n">doc_5</span> <span class="o">=</span> <span class="s2">&quot;DC and Marvel Universes have longed challenged each other in the realm of superheroes.&quot;</span>
+
+<span class="n">doc_6</span> <span class="o">=</span> <span class="s2">&quot;Super Heroes produced by DC include Batman, Flash, the Green Lantern and Superman.&quot;</span>
+
+<span class="n">doc_7</span> <span class="o">=</span> <span class="s2">&quot;Super Heroes produced by Marvel include Hulk, Thor, Spiderman, and Wolverine.&quot;</span>
+</pre></div>
+</div>
+<p>Use a vocabulary with the stop-words removed, and compute TF-IDF descriptors for the 7 documents. Then compute the cosine-similarity between all pairs of these documents. Use <code class="docutils literal notranslate"><span class="pre">np.round(cos_sim,</span> <span class="pre">3)</span></code> to print out the resulting 2D array out to only 3 decimal places. Which documents most resemble one another?</p>
+<p>You can visualize the resulting matrix using matplotlib using the <code class="docutils literal notranslate"><span class="pre">ax.imshow()</span></code> function</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>doc_1 = &quot;Cogworks students learn about artificial intelligence in the form of audio processing, face recognition, and natural language processing.&quot;
+
+doc_2 = &quot;Some people think CogWorks is a intense, but these students are simply passionate about artificial intelligence.&quot;
+
+doc_3 = &quot;Racecar students are learning about autonomous racing.&quot;
+
+doc_4 = &quot;UAV kids are learning about autonomous aerial vehicles!&quot;
+
+doc_5 = &quot;DC and Marvel Universes have long challenged each other in the realm of superheroes.&quot;
+
+doc_6 = &quot;Super Heroes produced by DC include Batman, Flash, the Green Lantern and Superman.&quot;
+
+doc_7 = &quot;Super Heroes produced by Marvel include Hulk, Thor, Spiderman, and Wolverine.&quot;
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h1>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h1>
+<p>In summary, we seek a method for giving documents numerical descriptors (arrays of numbers) such that they can be summarized and compared quantitatively. We identify a <strong>vocabulary</strong>: an alphabetically sorted list of words that occur in our documents. We typically filter from the vocabulary common <strong>stop-words</strong>, such as “a” and “the”, which proliferate our documents yet convey little meaning. We also typically retain only the <span class="math notranslate nohighlight">\(k\)</span> most common words across our documents. This will help
+limit the dimensionality of our descriptors.</p>
+<p>With our vocabulary in-hand, each document, <span class="math notranslate nohighlight">\(d\)</span>, can be ascribed a <strong>term-frequency</strong> descriptor:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f_{t,d} = \frac{c_{t,d}}{\sum_{t' \in vocab}c_{t',d}}
+\end{equation}</div><p>for each term <span class="math notranslate nohighlight">\(t\)</span> in our alphabetically-ordered vocabulary. <span class="math notranslate nohighlight">\(c_{t,d}\)</span> is the <em>count</em> of term <span class="math notranslate nohighlight">\(t\)</span> in that document. This gives us a numerical description of the word-content of the document.</p>
+<p>We can weigh more heavily those terms that help us distinguish between documents, by computing the <strong>inverse document-frequency (IDF)</strong> for each term <span class="math notranslate nohighlight">\(t\)</span> in our vocabulary:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\log_{10}{\frac{N}{n_{t}}}
+\end{equation}</div><p>Where <span class="math notranslate nohighlight">\(N\)</span> is the number of words in our vocabulary, and <span class="math notranslate nohighlight">\(n_{t}\)</span> is the total number of documents in which the term <span class="math notranslate nohighlight">\(t\)</span> appears.</p>
+<p>Thus the TF-IDF descriptor for a document <span class="math notranslate nohighlight">\(d\)</span> is given by an array storing:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f_{t,d} \times \log_{10}{\frac{N}{n_{t}}}
+\end{equation}</div><p>for each <span class="math notranslate nohighlight">\(t\)</span> in our vocabulary, in alphabetical order.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

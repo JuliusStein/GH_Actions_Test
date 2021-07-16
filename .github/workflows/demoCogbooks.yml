@@ -29,13 +29,16 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    # - run: echo "CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})" >> $GITHUB_ENV
     - name: Run cogbooks on changed files
       # run: echo "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})"
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-          cogbooks ${changed_file} --force;
+          echo "${changed_file} was updated.";
         done
+      # run: |
+      #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+      #     cogbooks ${changed_file} --force;
+      #   done
 
     # - name: get updated and new files (take 2)
     #   id: files

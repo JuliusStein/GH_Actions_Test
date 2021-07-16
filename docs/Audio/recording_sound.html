@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: recording sound, Category: Section" name="description" />
+<meta content="analog, digital, pcm, pulse code modulation, sample rate, bit depth, nyquist" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Microphones: Recording Sound as an Analog Signal &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Digitizing an Analog Signal" href="digitizing_signals.html" />
+    <link rel="prev" title="Exercises: Basics of Sound Waves" href="Exercises/AudioSignalBasics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Microphones: Recording Sound as an Analog Signal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Electric-Fields-and-Volts">Electric Fields and Volts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#The-Workings-of-a-Dynamic-Microphone">The Workings of a Dynamic Microphone</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Microphones: Recording Sound as an Analog Signal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Audio/recording_sound.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Microphones:-Recording-Sound-as-an-Analog-Signal">
+<h1>Microphones: Recording Sound as an Analog Signal<a class="headerlink" href="#Microphones:-Recording-Sound-as-an-Analog-Signal" title="Permalink to this headline">¶</a></h1>
+<p>With a basic understanding of the physics behind sound waves and the phenomenology of hearing under our belts, it’s time for us to learn how a sound wave can be recorded as an electrical signal and how this signal can be encoded and stored in a computer. By the time we are done with this section, we will have a newfound understanding of the inner workings of digital audio files that we are familiar with, like mp3s.</p>
+<p>This is a particularly important section for grounding the analysis and coding that we will be doing for our song-recognition project in a meaningful context. Digital audio files serve as the practical starting point for all of our work in this project. While it was tempting to simply begin this entire module with mp3 files in hand, doing so would have placed us on flimsy ground. Indeed, what is the point of any of this work if the starting point is “a magical computer file that makes music
+happen”? Instead, we want to have a clear understanding of how the audio files on our computers connect us to the original sound waves that were recorded.</p>
+<p>A sound wave is a type of <strong>signal</strong>, which broadly means that it is a phenomenon that carries information about an event. In particular, a sound wave is an example of an <strong>analog signal</strong> because the wave’s fluctuations in air pressure are a <strong>continuously varying quantity</strong> (at least at the macroscopic scale of an eardrum or a microphone). The familiar <strong>microphone</strong> is a device that converts the continuous temporal fluctuations in air pressure of a sound wave to corresponding continuous
+fluctuations in electrical activity in a wire. Thus a microphone produces <strong>an analog electrical signal</strong> that manifests in concert with the sound wave being recorded.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/pressure_to_voltage.png" alt="A microphone translates temporal oscillations of air pressure to oscillations in voltage" width="700">
+</p>
+</div><div class="section" id="Electric-Fields-and-Volts">
+<h2>Electric Fields and Volts<a class="headerlink" href="#Electric-Fields-and-Volts" title="Permalink to this headline">¶</a></h2>
+<p>We need to briefly cover some basics about electricity.</p>
+<p>An <strong>electric field</strong>, denoted as <span class="math notranslate nohighlight">\(\vec{E}\)</span>, is a physical entity that is responsible for mediating interactions between charged particles. It can be handy to draw an analogy to the familiar gravitational field here: in the same way that a gravitational field exerts a force on anything with mass that is in its midst, an electric field exerts a force on all charged matter (electrons and protons) in its presence. Furthermore, just as any object with mass has its own gravitational field,
+every charged particle has its own electric field. An electric field is a vector quantity whose direction corresponds to the direction of the force that the field exerts on a positively-charged particle (the direction of the force is flipped when the field acts on a negatively-charged particle).</p>
+<p>The electric field is relevant to our discussion because <strong>it is the impetus that drives electrical current through the wires of a circuit</strong>. For example, when you connect a battery to a circuit, an electric field rapidly proliferates through the wire and exerts a force on the charged particles within, creating a proverbial pathway for some of the electrons to flow away from one terminal of the battery and towards the other. This slow march of electrons along the wire is driven by the electric
+field of the battery, and the electrons push one another along with their own electric fields. We typically measure the strength of this impetus over a segment of wire in terms of <strong>volts</strong>, which carries units of energy (joules) per unit charge (coulomb); the electric field has units of volts per meter. A device known as a <strong>voltmeter</strong> can be used to measure this on a circuit, and its continuous readout is how we measure our <strong>analog electrical signal</strong>. (There are a lot of details that we
+simply must sweep under the rug here, but hopefully enough of the essential information has been salvaged that the reader can still follow along.)</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/efield_overview.png" alt="An electric field exerts a force on charged matter" width="600">
+</p>
+</div><p>In the cartoon below – depicting the conversion of fluctuations in pressure to fluctuations in volts - the alternation in volts between positive and negative values corresponds to an electric field changing its direction in time. Accordingly, a positive readout from a voltmeter indicates an impetus for a current to flow in one direction, whereas a negative readout indicates an impetus for it to flow in the opposite direction.</p>
+</div>
+<div class="section" id="The-Workings-of-a-Dynamic-Microphone">
+<h2>The Workings of a Dynamic Microphone<a class="headerlink" href="#The-Workings-of-a-Dynamic-Microphone" title="Permalink to this headline">¶</a></h2>
+<p>How, then, does a microphone translate the fluctuations in air pressure of a sound wave to a corresponding electrical signal carried by a circuit and measured by a voltmeter? Below is a crude diagram of the operation of a <strong>dynamic microphone</strong>. Please note that the depiction of the circuit in this diagram has been simplified to a single wire, which is not accurate.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/mic_diagram.png" alt="A breakdown of how a dynamic microphone works" width="800">
+</p>
+</div><p>The operating principle behind this microphone is as follows. A propagating sound wave crashes up against a diaphragm in the head of the microphone. The cascades of compressed and rarefied air cause the diaphragm to oscillate back and forth in concert with the temporal variations of the sound wave, not unlike how an eardrum is rattled. Next is the critical piece of the process that generates the electrical signal; we will tap directly into the fundamental laws of electricity and magnetism to
+pull this off (it’s absolutely wonderful)…</p>
+<p>Attached to the microphone’s diaphragm is a wire coiled around a permanent magnet, like a bar magnet with a north pole on one end and a south pole on the other end. From the perspective of the oscillating coil of wire, the strength of the magnetic field emanating from its center is oscillating in time. For example, as the coil is pushed away from the magnet, the strength of the magnetic field at its center coil grows weaker. One of the four fundamental laws of electricity and magnetism,
+<strong>Faraday’s Law</strong>, observes that a time-varying magnetic field <span class="math notranslate nohighlight">\(\big( \frac{\partial\vec{B}}{\partial t} \big)\)</span> induces a winding electric field <span class="math notranslate nohighlight">\(\big( \vec{\nabla} \times \vec{E} \big)\)</span>. Thus, from the perspective of the coil, the diminishing magnetic field induces a concentric electric field that permeates space amidst the winding wire. As detailed earlier, this electric field exerts a force on the electrons present in the wire, causing a current to flow along the wire, and the
+strength of this impetus is measurable by a voltmeter. <strong>This marks the creation of the analog electrical signal carried by the microphone’s wire</strong>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/induction_diagram.png" alt="Depiction of Faraday's Law of Induction in action" width="800">
+</p>
+</div><p>Since the diaphragm is undulating back and forth in concert with the fluctuations of the sound wave, when the coil is pulled in the opposite direction towards the magnet, the magnetic field relative to the coil begins to grow in strength. In other words, <span class="math notranslate nohighlight">\(\frac{\partial \vec{B}}{\partial t}\)</span> has flipped sign. This implies that the coil now experiences an electric field winding in the opposite direction. This also means that voltmeter will register a measurement of the opposite sign than
+before.</p>
+<p>Incredibly, <em>we have successfully coupled the temporal fluctuations in air pressure from the impinging sound wave to corresponding variations in an electric field, which produces an analog electrical signal carried by a wire in the microphone</em>. A segment of compressed air will push the microphone’s diaphragm inwards, registering a positive readout on a voltmeter attached to the microphone, whereas a rarefaction will register a negative readout. Thus, <strong>our microphone will translate the pattern
+and frequency of a sound wave’s pressure oscillations to corresponding fluctuations in an analog electrical signal</strong>.</p>
+<p>Furthermore, the amplitude of the sound wave affects the rate and extent to which the coil is displaced; this impacts the rate of change of the magnetic field (relative to the coil), which is proportional to the strength of the induced electric field, and <em>that</em> is directly proportional to the amplitude of the voltmeter’s readout. So, <strong>the variations in amplitude of the sound wave impinging on the microphone will be translated to corresponding variations in amplitude of the analog electrical
+signal</strong>. It must be noted, however, that the ability of a microphone’s diaphragm to faithfully (i.e. linearly) respond to the oscillations of air pressure is limited by the material properties of the diaphragm. There will inevitably be intervals of sound frequencies and amplitudes that are not translated over to the electrical signal by the microphone.</p>
+<p>The fact that we leveraged one of the fundamental laws of electricity and magnetism to change the modality of the information that is carried by a sound wave is truly a thing of beauty. This is a strategy that is employed time and time again in the world of audio technology. For instance, the principles laid out here also explain the operation of a loud speaker, where the electric signal is used to drive vibrations in a diaphragm, which pushes air and creates a sound wave.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>A microphone is used to translate the continuous variations in air pressure associated with a sound wave to corresponding fluctuations in an electric field within a wire, which is the impetus for creating an electrical current. This constitutes an analog electric signal that conveys both the frequencies and amplitudes of pressure variations that were carried by the sound wave.</p>
+<p>In a dynamic microphone, this transition in modality – from air to electricity – is achieved by exploiting our knowledge of the laws electricity and magnetism. Specifically, Faraday’s Law prescribes a mechanism by which we can use a magnet to induce an electric field, which serves as the impetus for creating electrical activity in a wire. The microphone is designed to intimately couple the vibrations from the air to variations in the induced electric field, which can then be recorded over a wire
+by a voltmeter.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Aside (Weird Science!)</strong>:</p>
+<p>The astute reader may have raised an eyebrow when they were asked to assume the perspective of the coil in order to “see” the magnet moving back and forth. Indeed, this wiggling magnet seems to have played an awfully critical role in our microphone, since it is the progenitor of the winding electric field that creates a current in the microphone’s wire, and thus is responsible for the analog electrical signal. If we <em>hadn’t</em> taken care to view the coil as being fixed, and instead assumed that
+the magnet was staying still (indeed, the magnet <em>is</em> stationary relative to the microphone and the rest of the world), then there is no time-varying magnetic field <span class="math notranslate nohighlight">\(\big( \frac{\partial\vec{B}}{\partial t} = \vec{0} \big)\)</span> and thus no induced electric field… uh oh.</p>
+<p>We can explain this away by reading about magnetic fields in any physics textbook: a magnetic field will exert a force on any <em>moving</em> charged particle in its midst. If we view the magnet as being stationary then the coil is certainly wiggling, and thus the electrons in the coil are moving relative to the magnetic field, which means that they experience a force from the magnetic field. <em>This</em> force, then, can be attributed as the impetus for the electrical signal produced by microphone.</p>
+<p>But this <em>sucks</em>! From the first perspective, Faraday’s law predicts the existence of an induced electric field, which produces our electrical signal. And yet, from the second perspective there is no electric field and it is a magnetic force that drives the signal. What in the world is going on here?</p>
+<p>Indeed, Einstein thought that this sucked too. This unsatisfactory inconsistency across perspectives (or, <em>reference frames</em>) spurred him to develop what is now famously known as the “special theory of relativity”. It, in part, proposed that, like <a class="reference external" href="https://en.wikipedia.org/wiki/Blind_men_and_an_elephant">the parable of the blind men and the elephant</a>, electric fields and magnetic fields are actually intertwined descriptions of a single physical phenomenon. With the proper relativistic
+description, a unified <strong>electromagnetic field</strong> can be used to provide a cogent description of the operating principles of our dynamic microphone that holds up from any perspective.</p>
+<p>Yay! Things are beautiful again!</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="digitizing_signals.html" class="btn btn-neutral float-right" title="Digitizing an Analog Signal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Exercises/AudioSignalBasics.html" class="btn btn-neutral float-left" title="Exercises: Basics of Sound Waves" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

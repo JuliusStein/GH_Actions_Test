@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction to MyGrad &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction to MyGrad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/MyGradIntroduction.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Introduction-to-MyGrad">
+<h1>Introduction to MyGrad<a class="headerlink" href="#Introduction-to-MyGrad" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introducing-MyGrad:-Computing-the-Slope-of-a-Simple-Function">
+<h2>Introducing MyGrad: Computing the Slope of a Simple Function<a class="headerlink" href="#Introducing-MyGrad:-Computing-the-Slope-of-a-Simple-Function" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://mygrad.readthedocs.io/en/latest/index.html">mygrad</a> is a so-called “automatic differentiation” (a.k.a “autograd”) numerical library. This means that <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> is able to calculate results from mathematical functions, and then evaluate the <em>derivatives</em> (slopes) of those functions. Note that <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> cannot compute analytical derivatives (i.e. the function that describes the derivative at all points). <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> can only find the derivative evaluated at specified values.</p>
+<p>Let’s consider an exceedingly-simple function, <span class="math notranslate nohighlight">\(f(x) = 2x + 1\)</span>. This is a line with a slope of 2. Thus the derivative of this function should be <span class="math notranslate nohighlight">\(2\)</span> for all values of <span class="math notranslate nohighlight">\(x\)</span>. I.e. <span class="math notranslate nohighlight">\(\frac{df(x)}{dx} = 2\)</span>. Let’s see that <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> can produce this result.</p>
+<p>First we specify the point, <span class="math notranslate nohighlight">\(x\)</span>, at which we want to evaluate this function. Let’s use <span class="math notranslate nohighlight">\(x = 5.0\)</span>, and compute <span class="math notranslate nohighlight">\(f(5.0)\)</span>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>%matplotlib notebook
+
+# run me
+import mygrad as mg
+
+# computing: f = 2x + 1, at x = 5.0
+x = mg.Tensor(5.0)
+f = 2*x + 1
+f
+</pre></div>
+</div>
+</div>
+<p>In computing <span class="math notranslate nohighlight">\(f(5.0)\)</span>, <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> constructed a computational graph that tracks all of the numerical inputs and mathematical operations that were responsible for producing this result. Let’s visualize the computational graph that is associated with <span class="math notranslate nohighlight">\(f(5.0)\)</span>:</p>
+<p><img alt="title" src="../../_images/mygrad_graph.png" /></p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> stores this computational graph, it knows how <span class="math notranslate nohighlight">\(f\)</span> <em>depends</em> on <span class="math notranslate nohighlight">\(x\)</span>. This permits <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> to answer the question:</p>
+<blockquote>
+<div><p>“if I increase <span class="math notranslate nohighlight">\(x\)</span> slightly (infinitesimally) above <span class="math notranslate nohighlight">\(5.0\)</span>, by what proportion will <span class="math notranslate nohighlight">\(f\)</span> change?</p>
+</div></blockquote>
+<p>or, equivalently:</p>
+<blockquote>
+<div><p>“holding all other variables fixed, what is the slope of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(x=5\)</span>?</p>
+</div></blockquote>
+<p>also equivalently, and more concisely:</p>
+<blockquote>
+<div><p>“What is <span class="math notranslate nohighlight">\(\frac{df}{dx}\Bigr\rvert_{x = 5.0}\)</span>?”</p>
+</div></blockquote>
+<p>This computational graph is tied specifically to the the terminal node of the graph, <code class="docutils literal notranslate"><span class="pre">f</span></code>. Let’s see that the “creator” of <code class="docutils literal notranslate"><span class="pre">f</span></code> is an instance of mygrad’s <code class="docutils literal notranslate"><span class="pre">Add</span></code> class, as depicted above. Evaluate the attribute <code class="docutils literal notranslate"><span class="pre">f.creator</span></code> in the cell below (as it is just an attribute, and not a method, you don’t need to “call” it - no parentheses needed):</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>We want to compute the derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span>; in <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> we do this by invoking <code class="docutils literal notranslate"><span class="pre">f.backward()</span></code>. This says: &gt;“Starting with <code class="docutils literal notranslate"><span class="pre">f</span></code> traverse (backwards) through the graph and compute all the derivatives of <span class="math notranslate nohighlight">\(f\)</span> with respect to any tensor in the graph.”</p>
+<p>The values of these derivatives will be stored in <code class="docutils literal notranslate"><span class="pre">&lt;var&gt;.grad</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;var&gt;</span></code> is any tensor in the graph. Thus <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> will store the value <span class="math notranslate nohighlight">\(\frac{df}{dx}\Bigr\rvert_{x = 5.0}\)</span>. Remind yourself, what should this value be?</p>
+<p>Invoke <code class="docutils literal notranslate"><span class="pre">f.backward()</span></code> and then inspect <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> (which, like <code class="docutils literal notranslate"><span class="pre">&lt;var&gt;.creator</span></code>, is an attribute). Note that <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> returns a numpy array, not a mygrad tensor.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># trigger back-propagation and check df/dx
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>This leads us to a very important practical note: <strong>once you have invoked back-propagation, MyGrad will automatically flush the computational graph involved, removing all</strong> <code class="docutils literal notranslate"><span class="pre">creator</span></code> <strong>references. If a tensor in the computational graph is then involved in another mathematical operation, its gradient will be set to None, to avoid unwittingly accumulating gradients</strong>.</p>
+<p>Print <code class="docutils literal notranslate"><span class="pre">f.creator</span></code> now - is it the same as before calling <code class="docutils literal notranslate"><span class="pre">backward</span></code>? Check that the gradients of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code> are not <code class="docutils literal notranslate"><span class="pre">None</span></code>, then multiply <code class="docutils literal notranslate"><span class="pre">f</span></code> by <code class="docutils literal notranslate"><span class="pre">2</span></code>. What are the gradients of <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">x</span></code> now? Add <code class="docutils literal notranslate"><span class="pre">3</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span></code>, and once again check the gradients.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What should <span class="math notranslate nohighlight">\(\frac{df}{dx}\Bigr\rvert_{x = -10.0}\)</span> be? Verify your intuition using <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>, re-doing the steps from above.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># computing: f = 2x + 1, at x = -10.0 and checking df/dx
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>One more interesting observation: after invoking back-propagation, inspect what <code class="docutils literal notranslate"><span class="pre">f.grad</span></code> is. This represents <span class="math notranslate nohighlight">\(\frac{df}{df}\)</span>, or:</p>
+<blockquote>
+<div><p>“if I increase <span class="math notranslate nohighlight">\(f\)</span> slightly (infinitesimally) above its present value, by what proportion will <span class="math notranslate nohighlight">\(f\)</span> change?</p>
+</div></blockquote>
+<p>Given this description of <span class="math notranslate nohighlight">\(\frac{df}{df}\)</span>, does the value for <code class="docutils literal notranslate"><span class="pre">f.grad</span></code> that you see make sense? Chat with a neighbor about this.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h3>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h3>
+<p>We have been introduced to <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>, an auto-differentiation library. We saw that this library allows us to perform numerical calculations, and it stores a so-called computational graph that describes that that calculation. This permits <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> to compute the derivatives of the terminal variable in that graph with respect to all of the other variables in that graph. It does this using the process of “back-propagation”.</p>
+</div>
+</div>
+<div class="section" id="Understanding-MyGrad’s-Tensor">
+<h2>Understanding MyGrad’s Tensor<a class="headerlink" href="#Understanding-MyGrad’s-Tensor" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mygrad</span></code> has a <code class="docutils literal notranslate"><span class="pre">`Tensor</span></code> &lt;<a class="reference external" href="https://mygrad.readthedocs.io/en/latest/tensor.html">https://mygrad.readthedocs.io/en/latest/tensor.html</a>&gt;`__ object, which is nearly identical to NumPy’s array; it: - stores data in an <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AccessingDataAlongMultipleDimensions.html">N-dimensional array-like patterns</a> - supports both <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html">basic and advanced indexing</a> - performs computations over arrays of numbers intuitively and
+efficiently, by leveraging <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorization</a> - supports numpy’s semantics of <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Broadcasting.html">broadcasting</a> operations between tensors of different shapes</p>
+<p>Then how do numpy and mygrad differ? Whereas numpy simply performs a computation as necessary and stores no information about which arrays participate in it, as we saw above, mygrad keeps track of the computational graph that its tensors participate in. This is what permits mygrad to perform auto-differentiation (via back-propagation), which is the central purpose of mygrad.</p>
+<p>In the cell below, work through <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/IntroducingTheNDarray.html">this section of PLYMI</a>, but convert <em>all</em> of the numpy functions and objects to mygrad objects. E.g. instead of <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span></code>, write <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">mygrad</span> <span class="pre">as</span> <span class="pre">mg</span></code>, and so on.</p>
+<p>You can use multiple cells for this to help organize your code</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># &gt;&gt;&gt; import numpy as np
+# &gt;&gt;&gt; x = np.arange(9)
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># # An ND-array belongs to the type `numpy.ndarray`
+# &gt;&gt;&gt; type(x)
+# numpy.ndarray
+
+# &gt;&gt;&gt; isinstance(x, np.ndarray)
+# True
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># &gt;&gt;&gt; x = x.reshape(3,3)
+# &gt;&gt;&gt; x
+# array([[0, 1, 2],
+#        [3, 4, 5],
+#        [6, 7, 8]])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># &gt;&gt;&gt; np.power(x, 2)  # can also be calculated using the shorthand: x**2
+# array([[ 0,  1,  4],
+#        [ 9, 16, 25],
+#        [36, 49, 64]], dtype=int32)
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># &gt;&gt;&gt; np.mean(x, axis=1)
+# array([ 1.,  4.,  7.])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>For the following cell, try using a numpy-array, <code class="docutils literal notranslate"><span class="pre">np.array([0.,</span> <span class="pre">1.,</span> <span class="pre">2.])</span></code>, as the exponential for the tensor <code class="docutils literal notranslate"><span class="pre">x</span></code>. It might be surprising that this works! What might the value be of using a numpy-array within a computational graph as opposed to a mygrad tensor? Talk to your neighbors about this and consult with an instructor.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># &gt;&gt;&gt; x ** np.array([0., 1., 2.])
+# array([[  1.,   1.,   4.],
+#        [  1.,   4.,  25.],
+#        [  1.,   7.,  64.]])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>One distinct difference between numpy and mygrad is that, whereas you can access individual numbers from a numpy-array:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># returns an integer</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>indexing into a <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> will <em>always</em> return a <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># returns a 0-dimensional Tensor</span>
+<span class="go">Tensor(2)</span>
+</pre></div>
+</div>
+<p>This is because mygrad has to be able to track all of the elements in all of the Tensors to reliable calculate derivatives for the computational graph. If you want to access the number, you can call <code class="docutils literal notranslate"><span class="pre">.item()</span></code> on a 0-dimensional Tensor (or a 0-dimensional numpy array):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>Read through the <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/tensor.html">documentation for mygrad’s Tensor</a>. Among the other details provided there, take note: what does <code class="docutils literal notranslate"><span class="pre">Tensor.data</span></code> store?</p>
+</div>
+<div class="section" id="Computing-Many-Derivatives-at-Once">
+<h2>Computing Many Derivatives at Once<a class="headerlink" href="#Computing-Many-Derivatives-at-Once" title="Permalink to this headline">¶</a></h2>
+<p>Compute <span class="math notranslate nohighlight">\(f(x) = 2x + 1\)</span> on the domain <span class="math notranslate nohighlight">\([-1, 1]\)</span> sampling this domain evenly using <span class="math notranslate nohighlight">\(10\)</span> points. Use a <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> function instead of a numpy function (hint: many of the numpy creation functions such as <code class="docutils literal notranslate"><span class="pre">arange</span></code> and <code class="docutils literal notranslate"><span class="pre">linspace</span></code> are replicated in <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>, but they return tensors instead of arrays)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Invoke back-propagation to compute the derivatives of <span class="math notranslate nohighlight">\(f\)</span>. What type of object is of <code class="docutils literal notranslate"><span class="pre">x.grad</span></code>? What is the shape of <code class="docutils literal notranslate"><span class="pre">x.grad</span></code>. Discuss with your neighbor the following questions:</p>
+<ul class="simple">
+<li><p>what does each element of <code class="docutils literal notranslate"><span class="pre">x</span></code> represent?</p></li>
+<li><p>what does each element of <code class="docutils literal notranslate"><span class="pre">f</span></code> represent?</p></li>
+<li><p>what does each element of <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> represent?</p></li>
+</ul>
+<p><em>SOLUTION HERE</em></p>
+<p>Plot <span class="math notranslate nohighlight">\(f(x) = x^2\)</span> on the domain <span class="math notranslate nohighlight">\([-1, 1]\)</span>, sampling this domain evenly using <span class="math notranslate nohighlight">\(1,000\)</span> points. In the same figure, plot <span class="math notranslate nohighlight">\(\frac{df}{dx}\)</span>. It is suggested to <strong>plot the underlying data</strong> of each tensor; plotting a tensor itself after calling <code class="docutils literal notranslate"><span class="pre">backward</span></code> will null its gradients (i.e. set <code class="docutils literal notranslate"><span class="pre">&lt;var&gt;.grad</span> <span class="pre">=</span> <span class="pre">None</span></code>).</p>
+<p>Before you render your plot: what should the value of <span class="math notranslate nohighlight">\(\frac{df}{dx}\)</span> be at <span class="math notranslate nohighlight">\(x=0\)</span> (what is the slope of <span class="math notranslate nohighlight">\(x^2\)</span> at the origin?).</p>
+<p>What <em>sign</em> should <span class="math notranslate nohighlight">\(\frac{df}{dx}\)</span> have for <span class="math notranslate nohighlight">\(x &lt; 0\)</span>? For <span class="math notranslate nohighlight">\(0 &lt; x\)</span>?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>%matplotlib notebook
+import matplotlib.pyplot as plt
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Reflecting on this plot, what is the slope of <span class="math notranslate nohighlight">\(f(x)\)</span> at <span class="math notranslate nohighlight">\(x=-1\)</span>?. Does this plot reaffirm your interpretation of what <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> represents for when <code class="docutils literal notranslate"><span class="pre">x</span></code> stores many numbers? Discuss with a neighbor. Flag an instructor if no one is quite sure.</p>
+<p>If you have not taken calculus before, can you deduce what the functional form is of <span class="math notranslate nohighlight">\(\frac{df}{dx}\)</span>, for <span class="math notranslate nohighlight">\(f(x) = x^2\)</span>?</p>
+<p><em>SOLUTION HERE</em></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

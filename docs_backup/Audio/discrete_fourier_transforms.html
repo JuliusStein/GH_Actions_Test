@@ -1,0 +1,1162 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Discrete Fourier Transforms, Category: Section" name="description" />
+<meta content="frequency decomposition, signal processing, fft, dft" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Discrete Fourier Transform (DFT) &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exercises: Basics of DFTs" href="Exercises/BasicsOfDFT.html" />
+    <link rel="prev" title="Decomposing Audio Signals: Fourier Analysis" href="fourier_analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Discrete Fourier Transform (DFT)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#The-Details-of-Sampling">The Details of Sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#The-Details-of-the-Discrete-Fourier-Transform">The Details of the Discrete Fourier Transform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Symmetry-Among-Fourier-Coefficients-of-Real-Valued-Data">Symmetry Among Fourier Coefficients of Real-Valued Data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#The-Inverse-Discrete-Fourier-Transform-(IDFT)">The Inverse Discrete Fourier Transform (IDFT)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Connecting-Complex-Valued-and-Real-Valued-Fourier-Coefficients">Connecting Complex-Valued and Real-Valued Fourier Coefficients</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Fast-Fourier-Transforms">Fast Fourier Transforms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#DFTs-Are-Slow">DFTs Are Slow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#FFTs-Are-Fast">FFTs Are Fast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Using-NumPy-to-Perform-FFTs">Using NumPy to Perform FFTs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Summary">Summary</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#The-DFT">The DFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-IDFT">The IDFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Fast Fourier Transforms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Code-for-Reproducing-Figures">Code for Reproducing Figures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Type-I-DFT-Sampling">Type-I DFT Sampling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>The Discrete Fourier Transform (DFT)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Audio/discrete_fourier_transforms.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>The Floor Operator</strong>:</p>
+<p>This section will regularly make use of the so-called floor operator, <span class="math notranslate nohighlight">\(\lfloor \; \rfloor\)</span>. Recall that the floor operator takes in a number and returns the nearest integer that precedes it; e.g.</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+&amp;\lfloor 3.8 \rfloor = 3 \\
+&amp;\lfloor 10 \rfloor = 10 \\
+&amp;\lfloor -2.1 \rfloor = -2 \\
+\end{align}</div><p>In Python, you can simply call <code class="docutils literal notranslate"><span class="pre">int</span></code> on a number to obtain the floor of that number.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="mf">3.8</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="The-Discrete-Fourier-Transform-(DFT)">
+<h1>The Discrete Fourier Transform (DFT)<a class="headerlink" href="#The-Discrete-Fourier-Transform-(DFT)" title="Permalink to this headline">¶</a></h1>
+<p>As discussed earlier, we are not interested in working with a continuous function <span class="math notranslate nohighlight">\(f(t)\)</span>, which is akin to an analog signal. Rather we want to describe our finite set of audio samples in terms of representative sinusoids. We will now learn to leverage the <strong>discrete Fourier transform (DFT)</strong> to accomplish this feat – we will finally be able to compute values for these sinusoids’ parameters.</p>
+<p>The DFT enables us to perform the transformation <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>, where <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> are samples taken from the function <span class="math notranslate nohighlight">\(f(t)\)</span>. This transformation is specified by the following equation</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_k = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{T}t_n}};\quad k = 0, \dots, N-1
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(t_n\)</span> are the locations where we sampled the function <span class="math notranslate nohighlight">\(f(t)\)</span>; i.e. <span class="math notranslate nohighlight">\(y_n = f(t_n)\)</span>.</p>
+<p>We will take some time to make clear the particular details of <span class="math notranslate nohighlight">\(t_n\)</span> and <span class="math notranslate nohighlight">\(T\)</span> so that the equation for the DFT is valid. Next, we will take our time to dissect the DFT and how to perform it (its appearance in this introduction is meant to give us clear view of our destination from the get-go – don’t worry if it doesn’t make sense yet). From there, we will be sure to connect this sum of complex-valued exponentials back to a sum of real-valued sinusoids, so that we have a firm grasp on
+how these mathematics correspond to the real world.</p>
+<p>This section will wrap up with a brief discussion of the ubiquitous fast Fourier transform (FFT), along with an introduction to functions for performing Fourier analysis in Python via NumPy.</p>
+<div class="section" id="The-Details-of-Sampling">
+<h2>The Details of Sampling<a class="headerlink" href="#The-Details-of-Sampling" title="Permalink to this headline">¶</a></h2>
+<p>In order to perform a proper DFT, it is imperative that we establish the appropriate system for extracting our samples. The formulation for the DFT depends sensitively on this sampling scheme and departing from it will result in a “corrupt” set of Fourier coefficients.</p>
+<p>It is assumed that our <span class="math notranslate nohighlight">\(N\)</span> samples, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>, were taken from a function <span class="math notranslate nohighlight">\(f(t)\)</span> at evenly-spaced intervals over <span class="math notranslate nohighlight">\(t \in [0, T)\)</span>. In other words, <span class="math notranslate nohighlight">\(y_n = f(t_n)\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]
+\end{equation}</div><p>This process is depicted below for extracting <span class="math notranslate nohighlight">\(N=5\)</span> samples over the interval <span class="math notranslate nohighlight">\([0, T)\)</span></p>
+<div style="text-align: center">
+<p>
+<img src="../_images/DFT_sampling.png" alt="Illustration of the sampling process associated with a type-1 DFT" width="500">
+</p>
+</div><p>Note that the endpoint of this segment, <span class="math notranslate nohighlight">\(T\)</span>, is <em>not</em> included among the samples.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Note</strong>:</p>
+<p>There are different “types” of discrete Fourier transforms, which differ based on the sampling scheme that is used to obtain the values <span class="math notranslate nohighlight">\((y_n = f(t_n))_{n=0}^{N-1}\)</span>. The sampling scheme that we are using, <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]\)</span>, defines what is known as a <strong>type-1 discrete Fourier transform</strong>. We will work exclusively with type-1 DFTs in this course.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Type-1 DFT Sampling</strong></p>
+<p>Write a Python function, <code class="docutils literal notranslate"><span class="pre">dft_sample_points</span></code>, that takes in two arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code> (a <code class="docutils literal notranslate"><span class="pre">float</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> (an <code class="docutils literal notranslate"><span class="pre">int</span></code>)</p></li>
+</ul>
+<p>and returns a NumPy array with the values <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]\)</span></p>
+</div>
+</div>
+<div class="section" id="The-Details-of-the-Discrete-Fourier-Transform">
+<h2>The Details of the Discrete Fourier Transform<a class="headerlink" href="#The-Details-of-the-Discrete-Fourier-Transform" title="Permalink to this headline">¶</a></h2>
+<p><strong>The DFT allows us to transform our data into Fourier coefficients</strong>, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>, via the following equation</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_k = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{T}t_n}};\quad k = 0, \dots, N-1
+\end{equation}</div><p>We want to compute <span class="math notranslate nohighlight">\(c_k\)</span> for each of the <span class="math notranslate nohighlight">\(N\)</span> values of <span class="math notranslate nohighlight">\(k\)</span> – this equation permits us to do just that.</p>
+<p>Keep in mind that we will have access to both <span class="math notranslate nohighlight">\((t_n)_{n=0}^{N-1}\)</span> and <span class="math notranslate nohighlight">\((y_n = f(t_n))_{n=0}^{N-1}\)</span>, as these are the times and measurements associated with our audio samples respectively. We also know <span class="math notranslate nohighlight">\(T\)</span>, the duration of the analog signal that we sampled. Finally, <span class="math notranslate nohighlight">\(k\)</span> is simply an integer among <span class="math notranslate nohighlight">\(0, \dots, N-1\)</span> that is fixed according to whether we are computing <span class="math notranslate nohighlight">\(c_0, c_1, \dots\)</span> or <span class="math notranslate nohighlight">\(c_{N-1}\)</span>. From these values, we have everything that we need to compute
+the Fourier coefficients! (You will be asked to write a Python function that performs the DFT in the section of exercises that follows this page).</p>
+<p>So, if we had <span class="math notranslate nohighlight">\(N=10\)</span> samples that we wanted to perform a DFT on, this would mean that we would compute <span class="math notranslate nohighlight">\(N=10\)</span> Fourier coefficients: <span class="math notranslate nohighlight">\(|c_0|, |c_1|, \dots, |c_9|\)</span>. The <span class="math notranslate nohighlight">\(k^\text{th}\)</span> coefficient is associated with a sinusoid that oscillates with a frequency of <span class="math notranslate nohighlight">\(\frac{k}{T}\)</span>, and it tells us how “prominent” that sinusoid is in representing our data. (This is actually only true for <span class="math notranslate nohighlight">\(0 \leq k \leq \big\lfloor \frac{N}{2} \big\rfloor + 1\)</span>; we will discuss this
+further, shortly).</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Time Complexity of the DFT</strong></p>
+<p><strong>Note that this is a particularly important reading comprehension question. The reader is strongly encouraged to work through it and then to read through its solution at the bottom of this page.</strong></p>
+<p>Read this brief <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures.html#Describing-Algorithm-Complexity">introduction to runtime complexity and “big-O” notation</a>. Based on this reading and the formula for the DFT, what is the time complexity associated with</p>
+<ul class="simple">
+<li><p>computing the value for a single Fourier coefficient</p></li>
+<li><p>computing all <span class="math notranslate nohighlight">\(N\)</span> Fourier coefficients</p></li>
+</ul>
+<p>That is, how does the time required to compute these quantities scale with the number of samples, <span class="math notranslate nohighlight">\(N\)</span>, that we are transforming? It may help to think about the DFT in terms of an algorithm where each sum is a for-loop: how many for-loops would you have to do, and how long is each loop, in terms of <span class="math notranslate nohighlight">\(N\)</span>?</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Dehumanizing the DFT</strong></p>
+<p>In the preceding paragraph, we described the relevant quantities associated with the DFT in terms of familiar audio concepts: <span class="math notranslate nohighlight">\((t_n)_{n=0}^{N-1}\)</span> are the times where we sample the analog signal <span class="math notranslate nohighlight">\(f(t)\)</span> – this was all for pedagogical purposes. As emphasized previously, the DFT has no inherent connection to audio processing – it is a purely mathematical process, which is not derived from any physical laws or systems.</p>
+<p>Referring back to the <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/discrete_fourier_transforms.html#The-Details-of-Sampling">Details of Sampling</a> section, rewrite the equation for the DFT without relying on the quantities <span class="math notranslate nohighlight">\(t_n\)</span> and <span class="math notranslate nohighlight">\(T\)</span>, using integers in their stead. That is, show that we don’t need any “physical” values, like these times, to compute the DFT.</p>
+</div>
+<div class="section" id="Symmetry-Among-Fourier-Coefficients-of-Real-Valued-Data">
+<h3>Symmetry Among Fourier Coefficients of Real-Valued Data<a class="headerlink" href="#Symmetry-Among-Fourier-Coefficients-of-Real-Valued-Data" title="Permalink to this headline">¶</a></h3>
+<p>When performing a DFT on real-valued samples, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \in \mathbb{R}\)</span>, there is a special symmetry that emerge among the Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_{N-k} = c^*_{k};\;\; 1 \leq k &lt; \frac{N}{2}
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(c^*_{k}\)</span> is the complex conjugate of <span class="math notranslate nohighlight">\(c_{k}\)</span>.</p>
+<p>For example, if we perform a DFT on <span class="math notranslate nohighlight">\(N=10\)</span> samples and compute that, e.g., <span class="math notranslate nohighlight">\(c_2 = 1 + 3i\)</span>, then we can immediately conclude that <span class="math notranslate nohighlight">\(c_{10-2} = c_8 = c^*_2 = 1 - 3i\)</span>. Thus we only need to compute <span class="math notranslate nohighlight">\((c_k)_{k=0}^{5}\)</span> and then we obtain <span class="math notranslate nohighlight">\((c_k)_{k=6}^{9}\)</span> “for free” via simple complex conjugation: <span class="math notranslate nohighlight">\(c_6 = c^*_4,\; c_7 = c^*_3 \; c_8 = c^*_2,\; c_9 = c^*_1\)</span>.</p>
+<p>If we have <span class="math notranslate nohighlight">\(N_{\mathrm{even}}\)</span> samples to transform, then we need only compute <span class="math notranslate nohighlight">\(\frac{N_\mathrm{even}}{2} + 1\)</span> coefficients using the DFT. For <span class="math notranslate nohighlight">\(N_{\mathrm{odd}}\)</span> samples, we need to compute <span class="math notranslate nohighlight">\(\frac{N_\mathrm{odd} + 1}{2}\)</span> coefficients before we can leverage this symmetry to populate the remaining Fourier coefficients.</p>
+<p>These cases can be summarized succinctly using the “floor” operator, <span class="math notranslate nohighlight">\(\lfloor \; \rfloor\)</span>: assuming that <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \in \mathbb{R}\)</span>, then <strong>we only need to compute the first</strong> <span class="math notranslate nohighlight">\(\big\lfloor \frac{N}{2} \big\rfloor + 1\)</span> <strong>Fourier coefficients (starting from</strong> <span class="math notranslate nohighlight">\(k=0\)</span> <strong>) using the DFT, regardless of whether</strong> <span class="math notranslate nohighlight">\(N\)</span> <strong>is an even or odd number</strong>. Beyond this, we can leverage the <span class="math notranslate nohighlight">\(c_{N-k} = c^*_{k}\)</span> symmetry to compute the rest of the Fourier coefficients for
+<span class="math notranslate nohighlight">\(k = \big\lfloor \frac{N}{2} \big\rfloor + 1, \dots, N-1\)</span>.</p>
+<div class="line-block">
+<div class="line">These details are important because this is the standard behavior for numerical code that performs DFTs on real-valued data.</div>
+<div class="line">For instance, the NumPy function <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code>, when fed <span class="math notranslate nohighlight">\(N\)</span> real-valued samples to transform, will only return <span class="math notranslate nohighlight">\(\big\lfloor \frac{N}{2} \big\rfloor + 1\)</span> Fourier coefficients - the present discussion explains why this is. (We will be discussing <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code> shortly).</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Note</strong>:</p>
+<p>In Python, <span class="math notranslate nohighlight">\(\big\lfloor \frac{N}{2} \big\rfloor + 1\)</span> is computed by <code class="docutils literal notranslate"><span class="pre">int(N</span> <span class="pre">/</span> <span class="pre">2)</span> <span class="pre">+</span> <span class="pre">1</span></code>, or, equivalently, by <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">//</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">//</span></code> is known as the “floor-divide” operator.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Proving the Symmetry Among Fourier Coefficients of Real-Valued Data</strong></p>
+<p>(This is just an exercise in mathematical manipulations; it is not essential for your understanding of the material afoot. Feel free to skip it.)</p>
+<p>A number, <span class="math notranslate nohighlight">\(x\)</span>, is real-valued if and only if <span class="math notranslate nohighlight">\(x^* = x\)</span>. Use this fact, along with the following properties of complex conjugation:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(z_1 + z_2)^* = z^*_1 + z^*_2\\
+(z_1 z_2)^* = z^*_1 z^*_2\\
+(e^z)^* = e^{z^*}
+\end{equation}</div><p>to prove that <span class="math notranslate nohighlight">\(c_k = c^*_{N-k};\;\; 1 \leq k &lt; \frac{N}{2}\)</span> for a type-I DFT of real-valued data.</p>
+<p>(Hint: It is useful to recall that <span class="math notranslate nohighlight">\(e^{i 2\pi n} = 1\)</span> for any integer <span class="math notranslate nohighlight">\(n\)</span>.)</p>
+<p>(Hint: Write down the equation for <span class="math notranslate nohighlight">\(c_{N-k}\)</span> and manipulate this equation using the provided properties/observations until it matches that of <span class="math notranslate nohighlight">\(c^*_k\)</span>.)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Performing a DFT By Hand</strong></p>
+<p>Given the sequence of <span class="math notranslate nohighlight">\(N=4\)</span> samples, <span class="math notranslate nohighlight">\(y_0 = 1.25,\; y_1 = 0.75,\; y_2 = 0.25,\; y_3 = -1.25\)</span>, compute all <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span> by hand.</p>
+<p>Recall that we can substitute <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T\)</span> in the DFT equation such that <span class="math notranslate nohighlight">\(t_n\)</span> and <span class="math notranslate nohighlight">\(T\)</span> no longer appear in the equation; i.e. we don’t need to know where the samples were taken, only that there are <span class="math notranslate nohighlight">\(N=4\)</span> of them, to complete the DFT.</p>
+</div>
+</div>
+</div>
+<div class="section" id="The-Inverse-Discrete-Fourier-Transform-(IDFT)">
+<h2>The Inverse Discrete Fourier Transform (IDFT)<a class="headerlink" href="#The-Inverse-Discrete-Fourier-Transform-(IDFT)" title="Permalink to this headline">¶</a></h2>
+<p>The DFT provides us with an ability to transform a sequence of samples into a corresponding values of Fourier coefficients: <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>. Hence the <strong>inverse discrete Fourier transform (IDFT)</strong> is how we can convert our Fourier coefficients back to the original sequence of data: <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1} \rightarrow (y_n)_{n=0}^{N-1}\)</span>. The equation for the IDFT is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y_n = \frac{1}{N}\sum_{k=0}^{N-1}{c_{k}e^{i 2\pi\frac{k}{T}t_n}};\;\; n \in [0, 1, \dots, N-1]
+\end{equation}</div><p>The DFT and IDFT are exact inverses of one another; there is no loss of information going on as we transform back and forth between <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span> and <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> – they are complete representations of one another</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Performing the IDFT By Hand</strong></p>
+<p>Given the <span class="math notranslate nohighlight">\(N=4\)</span> complex-valued Fourier coefficients <span class="math notranslate nohighlight">\(c_0 = 1,\; c_1 = 1 - 2i,\; c_2 = 2,\; c_3 = 1 + 2i\)</span>, compute <span class="math notranslate nohighlight">\((y_n)_{n=0}^3\)</span> by hand using the inverse discrete Fourier transform.</p>
+</div>
+<div class="section" id="Connecting-Complex-Valued-and-Real-Valued-Fourier-Coefficients">
+<h3>Connecting Complex-Valued and Real-Valued Fourier Coefficients<a class="headerlink" href="#Connecting-Complex-Valued-and-Real-Valued-Fourier-Coefficients" title="Permalink to this headline">¶</a></h3>
+<p>Our introduction to Fourier analysis showed that we could represent a function as a sum of real value sinusoids: <span class="math notranslate nohighlight">\(f(t) = \frac{a_0}{2} + \sum_{k=1}^{\infty}{a_{k}\cos\big(2\pi\frac{k}{T}t - \varphi_k\big)}\)</span>, (with <span class="math notranslate nohighlight">\(t \in [0, T)\)</span>) and that this can be rewritten as a sum of complex-valued exponentials for convenience; i.e <span class="math notranslate nohighlight">\(f(t) = \sum_{k=-\infty}^{\infty}{c_{k}e^{i 2\pi\frac{k}{T}t}}\)</span>. The equation for the DFT is derived from this latter form.</p>
+<p>Let’s see that the complex values <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1} \in \mathbb{C}\)</span> arrived at from the DFT are still intimately connected to parameters of real-valued sinusoids. This will enable us to arrive at a clear interpretation for how each Fourier coefficient <span class="math notranslate nohighlight">\(|c_k|\)</span> pertains to measuring the magnitude, or importance, of each sinusoid in the Fourier representation of our data.</p>
+<p>Let’s start by manipulating the <span class="math notranslate nohighlight">\(k^\text{th}\)</span> and <span class="math notranslate nohighlight">\((N-k)^\text{th}\)</span> term in the IDFT, for any <span class="math notranslate nohighlight">\(1 \leq k &lt; \frac{N}{2}\)</span></p>
+<div class="math notranslate nohighlight">
+\begin{align}
+c_{k}e^{i 2\pi\frac{k}{T}t_n} + c_{N-k}e^{i 2\pi\frac{N-k}{T}t_n} &amp;= c_{k}e^{i 2\pi\frac{k}{N}n} + c^*_{k}e^{i 2\pi\frac{N-k}{N}n} \\
+&amp;= c_{k}e^{i 2\pi\frac{k}{N}n} + c^*_{k}\Big(e^{-i 2\pi\frac{k}{N}n}e^{i 2\pi n}\Big) \\
+&amp;= c_{k}e^{i 2\pi\frac{k}{N}n} + c^*_{k}e^{-i 2\pi\frac{k}{N}n} \\
+&amp;= \frac{|a_{k}|}{2}e^{-i \varphi_k'}e^{i 2\pi\frac{k}{N}n} + \frac{|a_{k}|}{2}e^{i \varphi_k'}e^{-i 2\pi\frac{k}{N}n} &amp;&amp; c_{k}\triangleq \frac{|a_{k}|}{2}e^{-i \varphi_k'} \\
+&amp;= \frac{|a_{k}|}{2}\Big(e^{i \left(2\pi\frac{k}{N}n - \varphi_k'\right)} + e^{-i \left(2\pi\frac{k}{N}n - \varphi_k'\right)}\Big)\\
+&amp;= |a_{k}|\cos{\bigg(2\pi\frac{k}{N}n - \varphi_k'\bigg)} &amp;&amp; \cos{x} = \frac{1}{2}\big(e^{ix} + e^{-ix}\big)
+\end{align}</div><p><strong>Thus we can rewrite the IDFT in terms of real-valued sinusoids</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y_n = \frac{1}{N}\sum_{k=0}^{N-1}{c_{k}e^{i 2\pi\frac{k}{T}t_n}} = \sum_{k=0}^{\lfloor N / 2 \rfloor}{|a_{k}|\cos{\bigg(2\pi\frac{k}{T}t_n - \varphi_k'\bigg)}};\;\; n \in [0, 1, \dots, N-1]
+\end{equation}</div><p>where,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+|a_k| = \left\{
+\begin{array}{lll}
+2\frac{|c_k|}{N}, \quad &amp; 1 \leq k &lt; \frac{N}{2}\\
+\frac{|c_k|}{N}, \quad &amp; k = 0\; \mathrm{or}\; k=\frac{N_{\mathrm{even}}}{2}
+\end{array}\right.
+\end{equation}</div><p>with the <span class="math notranslate nohighlight">\(k=\frac{N_{\mathrm{even}}}{2}\)</span> case only applying when <span class="math notranslate nohighlight">\(N\)</span> is an even number, and where for <span class="math notranslate nohighlight">\(c_k = a + bi\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi'_k = \arctan_2(-b,a)
+\end{equation}</div><p>for <span class="math notranslate nohighlight">\(k = 0, \dots, \lfloor N / 2 \rfloor\)</span>.</p>
+<p>See that we have arrived at concise relationships that enable us to rewrite our IDFT as a sum of real-valued sinusoids, where each sinusoid is sampled at <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]\)</span>. This reveals that, when performing a DFT on <span class="math notranslate nohighlight">\(N\)</span> samples, only the sinusoids of frequencies <span class="math notranslate nohighlight">\(\frac{0}{T}, \frac{1}{T}, \frac{2}{T}, \dots, \frac{\lfloor N / 2 \rfloor}{T}\)</span>, “contribute” to the Fourier spectrum representation of our data. Therefore, when we perform a DFT of our
+<span class="math notranslate nohighlight">\(N\)</span> samples of real-valued data, we need only compute the first <span class="math notranslate nohighlight">\(\lfloor N / 2 \rfloor + 1\)</span> Fourier coefficients (<span class="math notranslate nohighlight">\(|c_k|\)</span>) to fully determine the Fourier spectrum for our data.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Converting</strong> <span class="math notranslate nohighlight">\(c_k\)</span> <strong>to</strong> <span class="math notranslate nohighlight">\(a_k\)</span></p>
+<p>Based on the relationships between <span class="math notranslate nohighlight">\(c_k\)</span> and <span class="math notranslate nohighlight">\(|a_k|\)</span> and <span class="math notranslate nohighlight">\(\varphi'_k\)</span> just discussed, write a Python function, <code class="docutils literal notranslate"><span class="pre">fourier_complex_to_real</span></code>, which accepts:</p>
+<ul class="simple">
+<li><p>A length-<span class="math notranslate nohighlight">\(\lfloor N / 2 \rfloor + 1\)</span> array of complex-valued Fourier coefficients <span class="math notranslate nohighlight">\((c_k)_{k=0}^{\lfloor N / 2 \rfloor}\)</span></p></li>
+<li><p>The number of samples that were transformed, <span class="math notranslate nohighlight">\(N\)</span></p></li>
+</ul>
+<p>and returns a tuple of:</p>
+<ul class="simple">
+<li><p>corresponding sinusoidal amplitudes, <span class="math notranslate nohighlight">\((|a_k|)_{k=0}^{\lfloor N / 2 \rfloor}\)</span>, as a length-<span class="math notranslate nohighlight">\(\lfloor N / 2 \rfloor + 1\)</span> array</p></li>
+<li><p>corresponding sinusoidal phase shifts, <span class="math notranslate nohighlight">\((\varphi'_k)_{k=0}^{\lfloor N / 2 \rfloor}\)</span>, as a length-<span class="math notranslate nohighlight">\(\lfloor N / 2 \rfloor + 1\)</span> array</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="Fast-Fourier-Transforms">
+<h2>Fast Fourier Transforms<a class="headerlink" href="#Fast-Fourier-Transforms" title="Permalink to this headline">¶</a></h2>
+<p>This final section on discrete Fourier transforms will familiarize us with one of the most important algorithms ever invented: the fast Fourier transform (FFT). The FFT is an algorithm that produces the <em>exact same transformation</em> as the DFT, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>, but it involves far fewer computational steps. Where the DFT requires <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span> operations to produce the <span class="math notranslate nohighlight">\(N\)</span> Fourier coefficients, the FFT only requires
+<span class="math notranslate nohighlight">\(\mathcal{O}(N \log_2{ N})\)</span> operations. Without the FFT, the techniques of Fourier would not be able to play such a critical role in digital media (among other areas of technology).</p>
+<p>We will briefly reflect on just how much faster <span class="math notranslate nohighlight">\(\mathcal{O}(N \log_2{ N})\)</span> is than <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span>, and then we will see how to perform FFTs using NumPy.</p>
+<div class="section" id="DFTs-Are-Slow">
+<h3>DFTs Are Slow<a class="headerlink" href="#DFTs-Are-Slow" title="Permalink to this headline">¶</a></h3>
+<p>The reading comprehension question “Time Complexity of the DFT” led us through the process of assessing how the number of computations involved in transforming <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span> grows with the size of our data, <span class="math notranslate nohighlight">\(N\)</span>. Our analysis concluded that the DFT scales quadratically with the size of our data; i.e. it scales as <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span>. This means that DFTs are <em>very slow</em> to run on computers.</p>
+<p>Let’s motivate this whining – we will estimate how long it would take a modern computer to perform a DFT on a three minute song, which was sampled at the standard <span class="math notranslate nohighlight">\(44,100\;\mathrm{Hz}\)</span>. At the time of writing, a high-end processor has a clock speed of about <span class="math notranslate nohighlight">\(4\times10^9\;\mathrm{Hz}\)</span> (or, <span class="math notranslate nohighlight">\(4\;\mathrm{GHz}\)</span>). This means that this processor can complete roughly <span class="math notranslate nohighlight">\(4\times10^9\)</span> operations per second. A three minute song sampled at <span class="math notranslate nohighlight">\(44,100\;\mathrm{Hz}\)</span> consists of</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+180 \;\mathrm{seconds}\times 44,100\frac{\mathrm{samples}}{\mathrm{second}} = 7.938\times 10^6\;\mathrm{samples}.
+\end{equation}</div><p>As we established, the DFT requires <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span> operations to complete, meaning that the CPU will have to perform approximately <span class="math notranslate nohighlight">\((7.938\times 10^6)^2 \approx 6\times 10^{13}\)</span> operations to perform the DFT on this song. Thus we can estimate that a <span class="math notranslate nohighlight">\(4\;\mathrm{GHz}\)</span> CPU would take roughly</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{6\times 10^{13} \mathrm{operations}}{4\times10^9\frac{ \mathrm{operations}}{\mathrm{second}}} = 15,000\; \mathrm{seconds} \approx 4\;\mathrm{hours}
+\end{equation}</div><p>to perform a DFT on a three minute song! DFTs and IDFTs are being performed <em>all of the time</em> to compress and decompress the electronic media on our devices; fortunately, there is an algorithm known as the “fast Fourier transform”, which produces the exact same results, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span>, as the DFT, yet is <em>much</em> faster. (The IDFT has a “fast” counterpart as well).</p>
+</div>
+<div class="section" id="FFTs-Are-Fast">
+<h3>FFTs Are Fast<a class="headerlink" href="#FFTs-Are-Fast" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">Cooley-Tukey algorithm</a> is perhaps the most common way that the FFT is presented. This algorithm recognizes that the DFT of a length-<span class="math notranslate nohighlight">\(N\)</span> sequence of data can be decomposed into DFTs into two length-<span class="math notranslate nohighlight">\(\frac{N}{2}\)</span> interleaved subsequences of the data. A periodicity in the complex exponentials can be exploited such that each sub-DFT’s <span class="math notranslate nohighlight">\(\frac{N}{2}\)</span> Fourier coefficients can be recombined to produce the
+original <span class="math notranslate nohighlight">\(N\)</span> coefficients of the full DFT (the precise mathematics for a simple case of this is laid out <a class="reference external" href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm#The_radix-2_DIT_case">here</a>). Thus, instead of performing <span class="math notranslate nohighlight">\(N^2\)</span> operations for the DFT of the full sequence of data, we can perform two DFTs, each on <span class="math notranslate nohighlight">\(N/2\)</span> samples to produce <span class="math notranslate nohighlight">\(N/2\)</span> Fourier coefficients, costing <span class="math notranslate nohighlight">\(\big(\frac{N}{2}\big)^2 + \big(\frac{N}{2}\big)^2 = \frac{N^2}{2}\)</span> operations
+instead. This is a minor speedup, but we can continue to divide our work up in this way to reap tremendous benefits…</p>
+<p>We can reduce the number of operations even more by continuing in this fashion and breaking down each of the two sub-DFTs into its own two interleaved DFTs and noting that we can exploit the same periodicity as before so that we can “share” their coefficients. Then we can break <em>those</em> DFTs down… we proceed recursively until we are taking DFTs of single numbers, which is trivially: <span class="math notranslate nohighlight">\(c_0 = y_0 e^{-i 2 \pi \frac{0}{1}0} = y_0\)</span>. This is the “base case” for this recursive algorithm.</p>
+<p>This so-called “divide and conquer” approach leads us to produce <span class="math notranslate nohighlight">\(\log_2{ N}\)</span> levels of subsequences (two length-<span class="math notranslate nohighlight">\(\frac{N}{2}\)</span> subsequences, then four length-<span class="math notranslate nohighlight">\(\frac{N}{4}\)</span> subsequences, down to <span class="math notranslate nohighlight">\(\log_2{ N}\)</span> length-<span class="math notranslate nohighlight">\(1\)</span> subsequences), where each level requires <span class="math notranslate nohighlight">\(\mathcal{O}(N)\)</span> operations to produce the necessary coefficients for the level above. Thus the overall time complexity for this algorithm is <span class="math notranslate nohighlight">\(\mathcal{O}(N \log_2{ N})\)</span>.</p>
+<p>Just how much faster is the FFT than the DFT in practice? Returning to our example of computing the Fourier coefficients for a three minute song, we saw that (assuming a sampling rate of <span class="math notranslate nohighlight">\(44,100\;\mathrm{Hz}\)</span>) we would be processing <span class="math notranslate nohighlight">\(N = 7.938\times 10^6\)</span> samples; this means that the FFT would need to perform <span class="math notranslate nohighlight">\(N \log_2{ N} \approx 1.8 \times 10^8\)</span> operations. Thus we can estimate that a <span class="math notranslate nohighlight">\(4\;\mathrm{GHz}\)</span> CPU would take roughly:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{1.8 \times 10^8 \mathrm{operations}}{4\times10^9\frac{ \mathrm{operations}}{\mathrm{second}}} = 0.045\; \mathrm{seconds}
+\end{equation}</div><p><strong>This is over</strong> <span class="math notranslate nohighlight">\(300,000\times\)</span> <strong>faster than the DFT!</strong> Hours turned to tens of milliseconds is the difference between the methods of Fourier being forever relegated to the pages of textbooks and their constant utilization in modern technology.</p>
+<p>A NumPy-based implementation of a special case of the Cooley-Tukey algorithm – that assumes <span class="math notranslate nohighlight">\(N\)</span> is a power of <span class="math notranslate nohighlight">\(2\)</span> – is included below for educational purposes. Note that this is not the code that we want to use to perform an FFT on general data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">restricted_fft</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Performs an fft on `y` using the Cooley-Turkey algorithm.</span>
+<span class="sd">    Note that this is restricted such that `len(y)` must be a power</span>
+<span class="sd">    of 2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : numpy.ndarray, shape-(N, )</span>
+<span class="sd">        The N samples to be transformed. N must be a power of 2.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape-(N, )</span>
+<span class="sd">        The N Fourier coefficients for `y`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># base case: DFT([y]) = [y]</span>
+        <span class="k">return</span> <span class="n">y</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">N</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;N must be a power of 2, got {N}&quot;</span><span class="p">)</span>
+
+    <span class="n">even</span> <span class="o">=</span> <span class="n">restricted_fft</span><span class="p">(</span><span class="n">y</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">odd</span> <span class="o">=</span> <span class="n">restricted_fft</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">twiddle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">even</span> <span class="o">+</span> <span class="n">twiddle</span> <span class="o">*</span> <span class="n">odd</span><span class="p">,</span> <span class="n">even</span> <span class="o">-</span> <span class="n">twiddle</span> <span class="o">*</span> <span class="n">odd</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Conspiracy (The Truth is Out There)</strong>:</p>
+<p>The fast Fourier transform was first derived by Carl Friedrich Gauss in an unpublished work in 1805. Obviously this far predates the existence of computers, <em>but it even precedes Fourier’s 1822 paper that proposed Fourier transforms</em>. <a class="reference external" href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Career_and_achievements">Gauss was incredible</a>. I think he might have been an alien who came to Earth to help mankind.</p>
+</div>
+</div>
+<div class="section" id="Using-NumPy-to-Perform-FFTs">
+<h3>Using NumPy to Perform FFTs<a class="headerlink" href="#Using-NumPy-to-Perform-FFTs" title="Permalink to this headline">¶</a></h3>
+<p>NumPy provides a <a class="reference external" href="https://numpy.org/doc/stable/reference/routines.fft.html">collection of functions that perform FFTs and their inverses</a>. The following functions are the ones relevant to our discussion. For our purposes, we will be making use of <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy.fft.irfft</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code>: FFT on real-valued data:</p></li>
+</ul>
+<blockquote>
+<div><p>Performs an FFT, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{\lfloor N/2 \rfloor}\)</span>, on a sequence of <span class="math notranslate nohighlight">\(N\)</span> samples of data, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>, and returns <span class="math notranslate nohighlight">\(\lfloor N/2 \rfloor + 1\)</span> complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{\lfloor N/2 \rfloor}\)</span>. <strong>The samples</strong> <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> <strong>are assumed to be real-valued.</strong></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using `np.fft.rfft` to transform real data to complex-valued</span>
+<span class="c1"># Fourier coefficients</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">])</span>  <span class="c1"># shape-(4,); real-values</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="c1"># returns shape-(4//2 + 1,) = shape-(3,); complex-values</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="mf">2.j</span><span class="p">,</span> <span class="mf">2.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">])</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy.fft.irfft</span></code>: Inverse-FFT on Fourier coefficients back to real-valued data</p></li>
+</ul>
+<blockquote>
+<div><p>Performs an inverse-FFT, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{\lfloor N/2 \rfloor} \rightarrow (y_n)_{n=0}^{N-1}\)</span>, on a sequence of <span class="math notranslate nohighlight">\(\lfloor N/2 \rfloor + 1\)</span> complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{\lfloor N/2 \rfloor}\)</span>, and returns <span class="math notranslate nohighlight">\(N\)</span> <strong>real-valued</strong> samples of data, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using `np.fft.irfft` to transform complex-valued Fourier</span>
+<span class="c1"># coefficients back to real data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="mf">2.j</span><span class="p">,</span> <span class="mf">2.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">])</span>  <span class="c1"># shape-(3,) = shape-(4//2 + 1,)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>   <span class="c1"># returns shape-(4,); real-values</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">1.25</span><span class="p">,</span>  <span class="mf">0.75</span><span class="p">,</span>  <span class="mf">0.25</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">])</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy.fft.fft</span></code>: FFT on generic (real-valued or complex-valued) data</p></li>
+</ul>
+<blockquote>
+<div><p>Performs an FFT, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>, on a sequence of <span class="math notranslate nohighlight">\(N\)</span> samples of data, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>, and returns <span class="math notranslate nohighlight">\(N\)</span> complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span>. There is no restriction on whether <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> are real-valued of complex-valued.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using `np.fft.fft` to transform real or complex-valued data</span>
+<span class="c1"># to complex-valued Fourier coefficients</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">])</span>  <span class="c1"># shape-(4,)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>  <span class="c1"># returns shape-(4,)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="mf">2.j</span><span class="p">,</span> <span class="mf">2.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">+</span><span class="mf">2.j</span><span class="p">])</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy.fft.ifft</span></code>: Inverse-FFT on Fouier coefficients back to generic data</p></li>
+</ul>
+<blockquote>
+<div><p>Performs an inverse-FFT, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1} \rightarrow (y_n)_{n=0}^{N-1}\)</span>, on a sequence of <span class="math notranslate nohighlight">\(N\)</span> complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span>, and returns <span class="math notranslate nohighlight">\(N\)</span> <strong>complex-valued</strong> samples of data, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using `np.fft.ifft` to transform complex-valued Fourier coefficients to</span>
+<span class="c1"># complex-valued data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="mf">2.j</span><span class="p">,</span> <span class="mf">2.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="mf">1.</span><span class="o">+</span><span class="mf">2.j</span><span class="p">])</span>  <span class="c1"># shape-(4,)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>  <span class="c1"># returns shape-(4,)</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">1.25</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>  <span class="mf">0.75</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>  <span class="mf">0.25</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="o">+</span><span class="mf">0.j</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Computing the Fourier Spectrum of Data</strong></p>
+<p><em>This is the most important reading comprehension question in this section. Please take time to complete it on your own and then carefully review the solution provided below to ensure that all aspects of it make sure.</em></p>
+<p>Given the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(t) = 2\sin\big({2\pi \;(1\;\mathrm{Hz})\;t}\big) + 3\sin\big({2\pi\; (4\;\mathrm{Hz})\; t}\big) + 1\sin\big({2\pi\; (16\;\mathrm{Hz})\; t}\big)
+\end{equation}</div><p>extract <span class="math notranslate nohighlight">\(N=100\)</span> samples, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{99}\)</span>, from this function over a time-interval <span class="math notranslate nohighlight">\(T=2\;\mathrm{seconds}\)</span>. Use <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code> to obtain the complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{50}\)</span>, for this data.</p>
+<p>Then, compute the corresponding real-valued Fourier coefficients, <span class="math notranslate nohighlight">\((|a_k|)_{k=0}^{50}\)</span>, and plot the the Fourier spectrum, <span class="math notranslate nohighlight">\(|a_k|\)</span> vs <span class="math notranslate nohighlight">\(\nu_k=\frac{k}{T}\)</span> for this data. It is recommended that you use <a class="reference external" href="https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.pyplot.stem.html">matplotlib’s stem plot</a> to do this.</p>
+<p>Include comments in your code that explain the concepts that are being invoked during the computation. Indicate physics units, e.g. seconds and Hz, in your comments where appropriate. Take care to label the axes of your plots; your <span class="math notranslate nohighlight">\(x\)</span>-axis should have units of Hz. (Your <span class="math notranslate nohighlight">\(y\)</span>-axis carries the same units as your data, which could be volts if we assume that we are taking measurements from a microphone; here we are working with unitless data).</p>
+<p>How many peaks do you see in your Fourier spectrum and where are they positioned? Do these results make sense based on the function, <span class="math notranslate nohighlight">\(f(t)\)</span>, from which our data was derived? If your peaks seem to be located at unexpected frequencies: did you take care to convert <span class="math notranslate nohighlight">\(k\)</span> to <span class="math notranslate nohighlight">\(\nu_k\)</span>?</p>
+<p>What should the phase-shift, <span class="math notranslate nohighlight">\(\varphi'_k\)</span>, for each of the peaks be equal to?</p>
+</div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
+<p>The discrete Fourier transform enables us to represent a sequence of data in terms of sinusoids of different frequencies. It is derived from the Fourier series, which renders such a description for continuous functions.</p>
+<p>If we think of <span class="math notranslate nohighlight">\(f(t)\)</span> as representing our <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/recording_sound.html">analog audio signal</a>, then <span class="math notranslate nohighlight">\((y_n = f(t_n))_{n=0}^{N-1}\)</span> are our <span class="math notranslate nohighlight">\(N\)</span> <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/digitizing_signals.html#">discrete audio samples</a> recorded at times <span class="math notranslate nohighlight">\((t_n)_{n=0}^{N-1}\)</span> over some time interval <span class="math notranslate nohighlight">\(T\)</span>. Ultimately, we want to describe our data <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> in terms of <span class="math notranslate nohighlight">\((|a_k|)_{k=0}^{\lfloor N/2 \rfloor}\)</span>, which are the
+amplitudes of sinusoids of corresponding frequencies <span class="math notranslate nohighlight">\(\big(\nu_k = \frac{k}{T}\big)_{k=0}^{\lfloor N/2 \rfloor}\)</span>. These amplitudes convey the relative prominence of the <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/physics-of-sound.html#Quantifying-Sound:-Pure-Tones">pure tone frequencies</a> that <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/physics-of-sound.html#Realistic-Sounds-and-the-Principle-of-Superposition">constitute our sound wave</a>; that is, these amplitudes can tell us what notes are being
+played in the audio clip.</p>
+<div class="section" id="The-DFT">
+<h3>The DFT<a class="headerlink" href="#The-DFT" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>discrete Fourier transform (DFT)</strong> enables us to perform the transformation <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1} \rightarrow (c_k)_{k=0}^{N-1}\)</span>, where <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> are samples taken from function <span class="math notranslate nohighlight">\(f(t)\)</span> at <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]\)</span> (this specific sampling scheme is associated with a type-1 DFT). <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span> are the <strong>complex-valued Fourier coefficients</strong> for our data. This transformation is specified by the following equation</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_k = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{T}t_n}} = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{N}n}}\;\;\; k = 0, \dots, N-1
+\end{equation}</div><p>Thus, for <span class="math notranslate nohighlight">\(N\)</span> samples of data, we compute <span class="math notranslate nohighlight">\(N\)</span> complex-valued coefficients – the DFT has a <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span> <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures.html#Describing-Algorithm-Complexity">time complexity</a>.</p>
+<p>When <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span> are strictly real values, which will be true for all of our work, a symmetry emerges among the coefficients:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_{N-k} = c^*_{k};\;\; 1 \leq k &lt; \frac{N}{2}
+\end{equation}</div><p>Therefore we need only compute <span class="math notranslate nohighlight">\(\big\lfloor \frac{N}{2} \big\rfloor + 1\)</span> (in Python, <code class="docutils literal notranslate"><span class="pre">N//2</span> <span class="pre">+</span> <span class="pre">1</span></code>) coefficients to fully determine the Fourier coefficients for our real-valued data.</p>
+</div>
+<div class="section" id="The-IDFT">
+<h3>The IDFT<a class="headerlink" href="#The-IDFT" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>inverse Fourier transform (IDFT)</strong> converts the complex-valued Fourier coefficients back to the sampled data: <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1} \rightarrow (y_n)_{n=0}^{N-1}\)</span>. It should be noted that the DFT and IDFT are exact inverses of one another - no information is lost by these transformations.</p>
+<p>The IDFT, associated with Fourier coefficients of real-valued data, reveals the interpretation of <span class="math notranslate nohighlight">\((c_k)_{k=0}^{\left\lfloor \frac{N}{2} \right\rfloor}\)</span>: <strong>these encode the amplitudes,</strong> <span class="math notranslate nohighlight">\((|a_k|)_{k=0}^{\left\lfloor \frac{N}{2} \right\rfloor}\)</span>, <strong>and phase-shifts,</strong> <span class="math notranslate nohighlight">\((\varphi'_k)_{k=0}^{\left\lfloor \frac{N}{2} \right\rfloor}\)</span><strong>, of real-valued sinusoids, each of which oscillates with a frequency of</strong> <span class="math notranslate nohighlight">\(\nu_k = \frac{k}{T}\)</span>. This transformation is given by</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y_n = \frac{1}{N}\sum_{k=0}^{N-1}{c_{k}e^{i 2\pi\frac{k}{T}t_n}} = \sum_{k=0}^{\lfloor N / 2 \rfloor}{|a_{k}|\cos{(2\pi\frac{k}{T}t_n - \varphi_k')}};\;\; n \in [0, 1, \dots, N-1]
+\end{equation}</div><p>where,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+|a_k| = \left\{
+\begin{array}{lll}
+2\frac{|c_k|}{N}, \quad &amp; 1 \leq k &lt; \frac{N}{2}\\
+\frac{|c_k|}{N}, \quad &amp; k = 0\; \mathrm{or}\; k=\frac{N_{\mathrm{even}}}{2}
+\end{array}\right.
+\end{equation}</div><p>with the <span class="math notranslate nohighlight">\(k=\frac{N_{\mathrm{even}}}{2}\)</span> case only applying when <span class="math notranslate nohighlight">\(N\)</span> is an even number, and where for <span class="math notranslate nohighlight">\(c_k = a + bi\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi'_k = \arctan_2(-b,a)
+\end{equation}</div><p>for <span class="math notranslate nohighlight">\(k = 0, \dots, \lfloor N / 2 \rfloor\)</span>.</p>
+<p>Plotting <span class="math notranslate nohighlight">\(|a_k|\)</span> vs <span class="math notranslate nohighlight">\(\frac{k}{T}\)</span> reveals the <strong>Fourier spectrum</strong> of our data: this displays which of the sinusoids – oscillating with respective frequencies <span class="math notranslate nohighlight">\(\frac{0}{T},\;\frac{1}{T},\dots,\;\frac{\lfloor N/2 \rfloor}{T}\)</span> – contribute most prominently to representing our data <span class="math notranslate nohighlight">\((y_n)_{n=0}^{N-1}\)</span>.</p>
+</div>
+<div class="section" id="id1">
+<h3>Fast Fourier Transforms<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>fast fourier transform (FFT)</strong> and its inverse (IFFT) perform the <em>exact same</em> transformations as the DFT and IDFT, respectively. Algorithmically, however, these leverage shared computations between coefficients such that performing a transformation on <span class="math notranslate nohighlight">\(N\)</span> samples of data to compute <span class="math notranslate nohighlight">\(N\)</span> complex-valued Fourier coefficients is a <span class="math notranslate nohighlight">\(\mathcal{O}(N \log_2 N)\)</span> computation, and not a <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span> one. In practice, this is a massive speedup; we estimated that it would
+take a modern CPU approximately <span class="math notranslate nohighlight">\(4\)</span> hours to perform a DFT on a 3 minute song (sampled at <span class="math notranslate nohighlight">\(44,100\;\mathrm{Hz}\)</span>), whereas an FFT would only take <span class="math notranslate nohighlight">\(0.045\)</span> seconds.</p>
+<p>NumPy provides us with a <a class="reference external" href="https://numpy.org/doc/stable/reference/routines.fft.html">suite of functions for performing FFTs</a>. In particular, we will want to use <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code>, and its inverse <code class="docutils literal notranslate"><span class="pre">numpy.fft.irfft</span></code>, since we will be working with real-valued data. Note that, as stated above, because these functions are working exclusively with real-valued samples, they naturally operate using only <span class="math notranslate nohighlight">\(\lfloor N/2 \rfloor + 1\)</span> complex-valued coefficients.</p>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Type-1 DFT Sampling: Solution</strong></p>
+<p>Write a Python function, <code class="docutils literal notranslate"><span class="pre">dft_sample_points</span></code>, that takes in two arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code> (a <code class="docutils literal notranslate"><span class="pre">float</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> (an <code class="docutils literal notranslate"><span class="pre">int</span></code>)</p></li>
+</ul>
+<p>and returns a NumPy array with the values <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T;\; n \in [0, 1, \dots, N-1]\)</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">dft_sample_points</span><span class="p">(</span><span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># numpy.arange(N) returns array([0, 1, ..., N - 1])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">/</span> <span class="n">N</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Time Complexity of the DFT: Solution</strong></p>
+<p>What is the time complexity associated with</p>
+<ul class="simple">
+<li><p>computing a single value Fourier coefficient</p></li>
+<li><p>computing all <span class="math notranslate nohighlight">\(N\)</span> Fourier coefficients</p></li>
+</ul>
+<p>That is, how does the time required to compute these quantities scale with the number of samples that we are transforming, <span class="math notranslate nohighlight">\(N\)</span>?</p>
+<blockquote>
+<div><p>The equation for computing a single Fourier coefficient involves computing a sum of <span class="math notranslate nohighlight">\(N\)</span> terms (i.e. we would need to do a loop with <span class="math notranslate nohighlight">\(N\)</span> iterations in our code), thus the associated time complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(N)\)</span> - it scales <em>linearly</em> with our number of samples</p>
+</div></blockquote>
+<blockquote>
+<div><p>The number of coefficients that we have to compute is <span class="math notranslate nohighlight">\(N\)</span>, and, as we just established, associated with each coefficient is an <span class="math notranslate nohighlight">\(\mathcal{O}(N)\)</span> computation. In terms of code, we would need nested loops: the outer-loop goes over <span class="math notranslate nohighlight">\(N\)</span> values of <span class="math notranslate nohighlight">\(k\)</span>, and the inner-loop iterates over <span class="math notranslate nohighlight">\(N\)</span> values of <span class="math notranslate nohighlight">\(n\)</span>. <strong>Thus the problem of performing a DFT, and computing all</strong> <span class="math notranslate nohighlight">\(N\)</span> <strong>Fourier coefficients, is an</strong> <span class="math notranslate nohighlight">\(\mathcal{O}(N^2)\)</span> <strong>computation</strong>: it scales
+quadratically with <span class="math notranslate nohighlight">\(N\)</span>. Consider that, if we double <span class="math notranslate nohighlight">\(N\)</span>, then we have to compute twice as many Fourier coefficients and each coefficient involves a summation over twice as many terms, thus doubling <span class="math notranslate nohighlight">\(N\)</span> leads to a quadrupling in the amount of computations required; hence the quadratic scaling.</p>
+</div></blockquote>
+<p><strong>Dehumanizing the DFT: Solution</strong></p>
+<p>Referring back to the “Details of Sampling” section, rewrite the equation for the DFT without relying on the quantities <span class="math notranslate nohighlight">\(t_n\)</span> and <span class="math notranslate nohighlight">\(T\)</span>. That is, show that we don’t need any “physical” values, like these times, to compute the DFT.</p>
+<blockquote>
+<div><p>We can see that <span class="math notranslate nohighlight">\(t_n\)</span> can be rewritten using the relationship <span class="math notranslate nohighlight">\(t_n = \frac{n}{N}T\)</span>, thus we can rewrite the DFT as</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_k = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{T}t_n}} = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{N}n}}\;\;\; k = 0, \dots, N-1
+\end{equation}
+
+ See that we truly only need access to :math:`(y_n)_{n=0}^{N-1}` to compute each :math:`c_k` (the length of this sequence gives tells us what :math:`N` is). Math doesn’t care about time!</div><p><strong>Proving the Symmetry Among Fourier Coefficients of Real-Valued Data: Solution</strong></p>
+<p>A number, <span class="math notranslate nohighlight">\(x\)</span>, is real-valued if and only if <span class="math notranslate nohighlight">\(x^* = x\)</span>. Use this fact, along with the following properties of complex conjugation:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(z_1 + z_2)^* = z^*_1 + z^*_2\\
+(z_1 z_2)^* = z^*_1 z^*_2\\
+(e^z)^* = e^{z^*}
+\end{equation}</div><p>to prove that <span class="math notranslate nohighlight">\(c_k = c^*_{N-k};\;\; 1 \leq k &lt; \frac{N}{2}\)</span> for a type-I DFT of real-valued data.</p>
+<p>(Hint: It is also useful to recall that <span class="math notranslate nohighlight">\(e^{2\pi i n} = 1\)</span> for any integer <span class="math notranslate nohighlight">\(n\)</span>.)</p>
+<p>(Hint: Write down the equation for <span class="math notranslate nohighlight">\(c_{N-k}\)</span> and manipulate this equation until it matches that of <span class="math notranslate nohighlight">\(c^*_k\)</span>.)</p>
+<blockquote>
+<div><p>Here is the derivation:</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\begin{align}
+c_{N-k}  &amp; = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{N - k}{T}t_n}} \\
+&amp; = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{N - k}{N}n}} \\
+&amp; = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{-k}{N}n} e^{i 2 \pi n}} \\
+&amp; = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{N}n}} &amp;&amp; e^{i 2 \pi n} = 1 \\
+&amp; = \sum_{n=0}^{N-1}{y_n \Big(e^{i 2 \pi \frac{k}{N}n}}\Big)^* \\
+&amp; = \sum_{n=0}^{N-1}{y_n^* \Big(e^{i 2 \pi \frac{k}{N}n}}\Big)^* &amp;&amp; y_n = y^*_n \\
+&amp; = \sum_{n=0}^{N-1}{\Big(y_n e^{i 2 \pi \frac{k}{N}n}\Big)^*} &amp;&amp; (z_1 z_2)^* = z_1^* z_2^* \\
+&amp; = \Bigg(\sum_{n=0}^{N-1}{y_n e^{i 2 \pi \frac{k}{N}n}\Bigg)^*} &amp;&amp; (z_1 + z_2)^* = z_1^* + z_2^* \\
+&amp; = c_k^*
+\end{align}</div><p><strong>Performing a DFT By Hand: Solution</strong></p>
+<p>Given the sequence of <span class="math notranslate nohighlight">\(N=4\)</span> samples, <span class="math notranslate nohighlight">\(y_0 = 1.25,\; y_1 = 0.75,\; y_2 = 0.25,\; y_3 = -1.25\)</span>, compute all <span class="math notranslate nohighlight">\((c_k)_{k=0}^{N-1}\)</span> by hand.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+c_k = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{T}t_n}} = \sum_{n=0}^{N-1}{y_n e^{-i 2 \pi \frac{k}{N}n}}\;\;\; k = 0, \dots, N-1
+\end{equation}</div><div class="math notranslate nohighlight">
+\begin{align}
+c_0 &amp;= 1.25 e^{-i 2 \pi \frac{0}{4}0} + 0.75 e^{-i 2 \pi \frac{0}{4}1} + 0.25 e^{-i 2 \pi \frac{0}{4}2} + -1.25 e^{-i 2 \pi \frac{0}{4}3} \\
+&amp;= 1.25 + 0.75 + 0.25 + -1.25 \\
+&amp;= 1
+\end{align}</div><div class="math notranslate nohighlight">
+\begin{align}
+c_1 &amp;= 1.25 e^{-i 2 \pi \frac{1}{4}0} + 0.75 e^{-i 2 \pi \frac{1}{4}1} + 0.25 e^{-i 2 \pi \frac{1}{4}2} + -1.25 e^{-i 2 \pi \frac{1}{4}3} \\
+&amp;= 1.25 (1 + 0i) + 0.75 (0 - 1i) + 0.25 (-1 + 0i) + -1.25 (0 + 1i) \\
+&amp;= 1 - 2 i
+\end{align}</div><div class="math notranslate nohighlight">
+\begin{align}
+c_2 &amp;= 1.25 e^{-i 2 \pi \frac{2}{4}0} + 0.75 e^{-i 2 \pi \frac{2}{4}1} + 0.25 e^{-i 2 \pi \frac{2}{4}2} + -1.25 e^{-i 2 \pi \frac{2}{4}3} \\
+&amp;= 1.25 (1 + 0i) + 0.75 (-1 + 0i) + 0.25 (1 + 0i) + -1.25 (-1 + 0i) \\
+&amp;= 2
+\end{align}</div><p>Since <span class="math notranslate nohighlight">\((y)_{n=0}^4 \in \mathbb{R}\)</span>, we know that <span class="math notranslate nohighlight">\(c_{N-k} = c_k^*\)</span> for <span class="math notranslate nohighlight">\(1 \leq k &lt; \frac{N}{2}\)</span>, thus <span class="math">\begin{align}
+c_{4-1} = c_3 &= c_{1}^* \\
+&= (1 - 2i)^* \\
+&= 1 + 2i
+\end{align}</span></p>
+<p>You could also carry out the full DFT summation for <span class="math notranslate nohighlight">\(k=3\)</span> to arrive at this same answer.</p>
+<p><strong>Performing the IDFT By Hand: Solution</strong></p>
+<p>Given the <span class="math notranslate nohighlight">\(N=4\)</span> complex-valued Fourier coefficients <span class="math notranslate nohighlight">\(c_0 = 1,\; c_1 = 1 - 2i,\; c_2 = 2,\; c_3 = 1 + 2i\)</span>, compute <span class="math notranslate nohighlight">\((y_n)_{n=0}^3\)</span> by hand using the inverse discrete Fourier transform.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y_n = \frac{1}{N}\sum_{k=0}^{N-1}{c_{k}e^{i 2\pi\frac{k}{T}t_n}} = \frac{1}{N}\sum_{k=0}^{N-1}{c_{k}e^{i 2\pi\frac{k}{N}n}};\;\; n \in [0, 1, \dots, N-1]
+\end{equation}</div><div class="math notranslate nohighlight">
+\begin{align}
+c_0 &amp;= \frac{1}{4}(1 e^{i 2 \pi \frac{0}{4}0} + (1 - 2i) e^{i 2 \pi \frac{0}{4}1} + (2) e^{i 2 \pi \frac{0}{4}2} + (1 + 2i) e^{i 2 \pi \frac{0}{4}3}) \\
+&amp;= \frac{1}{4}(1 + (1 - 2i) + 2 + (1 + 2i)) \\
+&amp;= 1.25
+\end{align}</div><div class="math notranslate nohighlight">
+\begin{align}
+y_1 &amp;= \frac{1}{4}(1 e^{i 2 \pi \frac{1}{4}0} + (1 - 2i) e^{i 2 \pi \frac{1}{4}1} + (2) e^{i 2 \pi \frac{1}{4}2} + (1 + 2i) e^{i 2 \pi \frac{1}{4}3}) \\
+&amp;= \frac{1}{4}(1 + (1 - 2i)(i) + 2 + (1 + 2i)(-i)) \\
+&amp;= 0.75
+\end{align}</div><div class="math notranslate nohighlight">
+\begin{align}
+y_2 &amp;= \frac{1}{4}(1 e^{i 2 \pi \frac{2}{4}0} + (1 - 2i) e^{i 2 \pi \frac{2}{4}1} + (2) e^{i 2 \pi \frac{2}{4}2} + (1 + 2i) e^{i 2 \pi \frac{2}{4}3}) \\
+&amp;= \frac{1}{4}(1 + (1 - 2i)(-1) + 2(1) + (1 + 2i)(-1)) \\
+&amp;= 0.25
+\end{align}</div><div class="math notranslate nohighlight">
+\begin{align}
+y_3 &amp;= \frac{1}{4}(1 e^{i 2 \pi \frac{3}{4}0} + (1 - 2i) e^{i 2 \pi \frac{3}{4}1} + (2) e^{i 2 \pi \frac{3}{4}2} + (1 + 2i) e^{i 2 \pi \frac{3}{4}3}) \\
+&amp;= \frac{1}{4}(1 + (1 - 2i)(-i) + 2(-1) + (1 + 2i)(-i)) \\
+&amp;= -1.25
+\end{align}</div><p>Note that this matches the exact inverse of the prior reading comprehension question.</p>
+<p><strong>Converting</strong> <span class="math notranslate nohighlight">\(c_k\)</span> <strong>to</strong> <span class="math notranslate nohighlight">\(a_k\)</span><strong>: Solution</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">fourier_complex_to_real</span><span class="p">(</span><span class="n">complex_coeffs</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts complex-valued Fourier coefficients (of</span>
+<span class="sd">    real-valued data) to the associated amplitudes and</span>
+<span class="sd">    phase-shifts of the real-valued sinusoids</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    complex_coeffs : numpy.ndarray, shape-(N//2 + 1,)</span>
+<span class="sd">        The complex valued Fourier coefficients for k=0, 1, ...</span>
+
+<span class="sd">    N : int</span>
+<span class="sd">        The number of samples that the DFT was performed on.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[numpy.ndarray, numpy.ndarray]</span>
+<span class="sd">        (amplitudes, phase-shifts)</span>
+<span class="sd">        Two real-valued, shape-(N//2 + 1,) arrays</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">complex_coeffs</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+
+    <span class="c1"># |a_k| = 2 |c_k| / N for all k except for</span>
+    <span class="c1"># k=0 and k=N/2 (only if N is even)</span>
+    <span class="c1"># where |a_k| = |c_k| / N</span>
+    <span class="n">amplitudes</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">N</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)]</span> <span class="o">*=</span> <span class="mi">2</span>
+
+    <span class="n">phases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">complex_coeffs</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">complex_coeffs</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">phases</span>
+
+</pre></div>
+</div>
+</div>
+<p><strong>Computing the Fourier Spectrum of Data: Solution</strong></p>
+<p>Given the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(t) = 2\sin({2\pi \;(1\;\mathrm{Hz})\;t}) + 3\sin({2\pi\; (4\;\mathrm{Hz})\; t}) + 1\sin({2\pi\; (16\;\mathrm{Hz})\; t})
+\end{equation}</div><p>extract <span class="math notranslate nohighlight">\(N=100\)</span> samples, <span class="math notranslate nohighlight">\((y_n)_{n=0}^{99}\)</span>, from this function over a time-interval <span class="math notranslate nohighlight">\(T=2\;\mathrm{seconds}\)</span>. Use <code class="docutils literal notranslate"><span class="pre">numpy.fft.rfft</span></code> to obtain the complex-valued Fourier coefficients, <span class="math notranslate nohighlight">\((c_k)_{k=0}^{50}\)</span>, for this data.</p>
+<p>Then, compute the corresponding real-valued Fourier coefficients, <span class="math notranslate nohighlight">\((|a_k|)_{k=0}^{50}\)</span>, and plot the the Fourier spectrum, <span class="math notranslate nohighlight">\(|a_k|\)</span> vs <span class="math notranslate nohighlight">\(\nu_k=\frac{k}{T}\)</span> for this data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#`dft_sample_points` is from the &quot;Type-1 DFT Sampling&quot; reading comprehension</span>
+<span class="c1"># `fourier_complex_to_real` is from the &quot;Converting  c_k  to  a_k&quot; reading comprehension</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># units: seconds</span>
+
+
+<span class="c1"># sample at t_n = n/N * T; n = 0, 1, ..., N-1</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">dft_sample_points</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+<span class="c1"># evaluate function at sampled times</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+<span class="c1"># perform FFT on real-valued data</span>
+<span class="n">ck</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="c1"># N//2 + 1 complex-valued coeffs</span>
+
+
+<span class="c1"># convert each c_k to |a_k| and phi_k</span>
+<span class="n">amps</span><span class="p">,</span> <span class="n">phases</span> <span class="o">=</span> <span class="n">fourier_complex_to_real</span><span class="p">(</span><span class="n">ck</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+<span class="c1"># k=0, 1, ..., N//2 -&gt; freq=0/T, 1/T, ..., (N//2)/T</span>
+<span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ck</span><span class="p">))</span> <span class="o">/</span> <span class="n">T</span>  <span class="c1"># convert k to freq (Hz)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="c1"># plot |a_k| vs freq</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">amps</span><span class="p">,</span> <span class="n">use_line_collection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\nu_k$ [Hz]&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|a_k|$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Audio_discrete_fourier_transforms_52_0.png" src="../_images/Audio_discrete_fourier_transforms_52_0.png" />
+</div>
+</div>
+<p>How many peaks do you see in your Fourier spectrum and where are they positioned? Do these results make sense based on the function, <span class="math notranslate nohighlight">\(f(t)\)</span>, from which our data was derived?</p>
+<blockquote>
+<div><p>Our data is derived from a superposition of three sinusoids of frequencies <span class="math notranslate nohighlight">\(1\;\mathrm{Hz}\)</span>, <span class="math notranslate nohighlight">\(4\;\mathrm{Hz}\)</span>, and <span class="math notranslate nohighlight">\(16\;\mathrm{Hz}\)</span>, respectively. Thus our Fourier spectrum of our data should reveal exactly this: all of the Fourier coefficients, <span class="math notranslate nohighlight">\(|a_k|\)</span>, should be zero except for those that correspond to those three frequencies – <span class="math notranslate nohighlight">\(|a_2|\)</span>, <span class="math notranslate nohighlight">\(|a_8|\)</span>, and <span class="math notranslate nohighlight">\(|a_{32}|\)</span> – and those amplitudes should each be <span class="math notranslate nohighlight">\(2.0\)</span>, <span class="math notranslate nohighlight">\(3.0\)</span>, <span class="math notranslate nohighlight">\(1.0\)</span>, in
+accordance with the amplitudes involved in the superposition seen in <span class="math notranslate nohighlight">\(f(t)\)</span>.</p>
+</div></blockquote>
+<p>What should the phase-shift, <span class="math notranslate nohighlight">\(\varphi'_k\)</span>, for each of the peaks be equal to?</p>
+<blockquote>
+<div><p>Our Fourier series is written in terms of cosines, but <span class="math notranslate nohighlight">\(f(t)\)</span> is a superpositions of sines. Thus the phase shifts associated with the prominent frequencies must shift cosine into sine. Since <span class="math notranslate nohighlight">\(\cos{(t - \pi/2)} = \sin{(t)}\)</span>, we expect that <span class="math notranslate nohighlight">\(\varphi'_2 = \varphi'_8 = \varphi'_{32} = \pi/2\)</span>.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># check that each phase-shift is pi / 2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">phases</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">),],</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Code-for-Reproducing-Figures">
+<h2>Code for Reproducing Figures<a class="headerlink" href="#Code-for-Reproducing-Figures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Type-I-DFT-Sampling">
+<h3>Type-I DFT Sampling<a class="headerlink" href="#Type-I-DFT-Sampling" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">7</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">1.2</span>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">/</span> <span class="n">N</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$f(t)$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span>
+    <span class="n">times</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">,</span>
+    <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot;ro&quot;</span><span class="p">,</span>
+    <span class="n">linefmt</span><span class="o">=</span><span class="s2">&quot;r--&quot;</span><span class="p">,</span>
+    <span class="n">basefmt</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span>
+    <span class="n">use_line_collection</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\frac{0}{5}T$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\frac{1}{5}T$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\frac{2}{5}T$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\frac{3}{5}T$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\frac{4}{5}T$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$T$&quot;</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Extracting $N=5$ samples&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Exercises/BasicsOfDFT.html" class="btn btn-neutral float-right" title="Exercises: Basics of DFTs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="fourier_analysis.html" class="btn btn-neutral float-left" title="Decomposing Audio Signals: Fourier Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

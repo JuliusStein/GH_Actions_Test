@@ -1,0 +1,1028 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Language Models &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Language Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/LanguageModels.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Language-Models">
+<h1>Language Models<a class="headerlink" href="#Language-Models" title="Permalink to this headline">¶</a></h1>
+<p>This notebook explores using character-level n-grams to model language. We will learn how to train models by analyzing a body of text, and then use them for a fun task: generating new language in the style of a model.</p>
+<p>A brief review of Python strings: recall that strings are sequence-objects. This means that they behave like tuples: they support indexing/slicing and can be iterated over (which occurs character-by-character). Naturally, the length of a string reflects the number of characters in a string. Special characters, like the line-break <code class="docutils literal notranslate"><span class="pre">\n</span></code>, is a single character.</p>
+<p>Python provides excellent, efficient string-methods. Initialize some string, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">&quot;moo&quot;</span></code>. And then use tab-completing (<code class="docutils literal notranslate"><span class="pre">x.&lt;tab&gt;</span></code>) to view the list of built-in string methods. Be sure to make use of these whenever appropriate. Here are a couple of useful resources for working with strings:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/tutorial/introduction.html#strings">Basic tutorial for working with strings</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#string-methods">List of string methods</a></p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import time
+import numpy as np
+%matplotlib notebook
+import matplotlib.pyplot as plt
+</pre></div>
+</div>
+</div>
+<p>We will need to make use of this <code class="docutils literal notranslate"><span class="pre">unzip</span></code> function. Try playing with this function to help build your intuition for it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def unzip(pairs):
+    &quot;&quot;&quot;
+    &quot;unzips&quot; of groups of items into separate tuples.
+
+    Example: pairs = [(&quot;a&quot;, 1), (&quot;b&quot;, 2), ...] --&gt; ((&quot;a&quot;, &quot;b&quot;, ...), (1, 2, ...))
+
+    Parameters
+    ----------
+    pairs : Iterable[Tuple[Any, ...]]
+        An iterable of the form ((a0, b0, c0, ...), (a1, b1, c1, ...))
+
+    Returns
+    -------
+    Tuple[Tuples[Any, ...], ...]
+       A tuple containing the &quot;unzipped&quot; contents of `pairs`; i.e.
+       ((a0, a1, ...), (b0, b1, ...), (c0, c1), ...)
+    &quot;&quot;&quot;
+    return tuple(zip(*pairs))
+</pre></div>
+</div>
+</div>
+<div class="section" id="Section-1:-Most-frequent-letters-(in-English)">
+<h2>Section 1: Most frequent letters (in English)<a class="headerlink" href="#Section-1:-Most-frequent-letters-(in-English)" title="Permalink to this headline">¶</a></h2>
+<p>Ever wonder why the bonus round of Wheel of Fortune automatically gives the contestant the letters R, S, T, L, N, and E (before letting them choose an additional 3 consonants and 1 vowel)? Or wonder why the letters J, X, Q, and Z are worth so much in Scrabble?</p>
+<p>Let’s find out by analyzing a particular corpus of English text: Wikipedia. Thanks to Evan Jones for providing a clean text-only version of top Wikipedia articles (based on the Wikipedia “release version” project): <a class="reference external" href="http://www.evanjones.ca/software/wikipedia2text.html">http://www.evanjones.ca/software/wikipedia2text.html</a></p>
+<p>Load the entire contents of “wikipedia2text-extracted.txt” into a single string. Because some of these articles contain non-<a class="reference external" href="http://www.asciitable.com/">ASCII</a> characters (for instance, some Chinese characters), you will need to open the file in binary-read mode: <code class="docutils literal notranslate"><span class="pre">mode='rb'</span></code>. Instead of reading in a typical string, this will read in a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> object, which is simply your machine’s memory-encoding for the characters. To make a long story short, you can simply call the method <code class="docutils literal notranslate"><span class="pre">decode</span></code>
+on this bytes-instance to decode the bytes into a familiar string. E.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_wikipedia</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># decoding the bytes into a string</span>
+    <span class="n">wikipedia</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After decoding from bytes to a string, <strong>make all of the characters in the string lowercase</strong> (you do not need a for-loop for this!)</p>
+<p>Confirm that there are over 63 million characters total, in the string.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Print out the first 500 characters of text.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="1.1-Count-letters-in-text">
+<h3>1.1 Count letters in text<a class="headerlink" href="#1.1-Count-letters-in-text" title="Permalink to this headline">¶</a></h3>
+<p>We want to count the occurence of every letter-character in our corpus. First, count up the occurence of every character (including punctuation and special characters, like <code class="docutils literal notranslate"><span class="pre">\n</span></code>).</p>
+<p>Hint: Python has a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> object in its <code class="docutils literal notranslate"><span class="pre">collections</span></code> module. You should be able to produce the count for every character in the file in one line. This should take roughly 5 seconds. Using a for-loop will take roughly 10x longer!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now we want a list of character-count tuples sorted in descending order of count. However, we want to filter out all of the non-letter characters. Thus our list should have a length of 26 (since we cast all of the letters to be lower-case):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="mi">6091134</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="mi">4456786</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">4365050</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="mi">3866921</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="mi">3740382</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="mi">3676394</span><span class="p">),</span>
+ <span class="o">...</span>
+</pre></div>
+</div>
+<p>Note that a simple way to access all lowercase letters in the English alphabet, other than typing out each character manually, is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span>
+<span class="go">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span>
+</pre></div>
+</div>
+<p>If you made use of the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class, then there is a nice instance-method that you can make use of that takes care of sorting the character-count tuples so that the most-common occurences come first. You will need to filter out the non-letter characters.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Create a variable called <code class="docutils literal notranslate"><span class="pre">freqs</span></code>, which is also a list of tuples, but instead containing character-count pairs, it contains character-frequency pairs. <strong>Frequency is the ratio of the letter-count to the total number of letters (not characters) in the corpus</strong>. It should end up looking something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="mf">0.12081350306248849</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="mf">0.088397321263964282</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mf">0.0865778000521603</span><span class="p">),</span>
+ <span class="o">...</span>
+ <span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="mf">0.0010429083984244488</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>You should <strong>not</strong> iterate over the entire corpus to get the total letter count.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Confirm that the frequencies total to 1 (within numerical precision).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>print(sum(freq for _, freq in freqs))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1.2-Plot-letter-frequency-histogram">
+<h3>1.2 Plot letter frequency histogram<a class="headerlink" href="#1.2-Plot-letter-frequency-histogram" title="Permalink to this headline">¶</a></h3>
+<p>Using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Look up the documentation for <code class="docutils literal notranslate"><span class="pre">ax.bar</span></code> (use shift-tab in your Jupyter notebook!) to plot a bar-graph of the characters and their frequencies. The x-axis should order the characters in decreasing frequency.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ax.set_xticks</span></code> to specify the sequence of x-tick values to use on the plot (i.e. [0, 26) ), and use <code class="docutils literal notranslate"><span class="pre">ax.set_xticklabels</span></code> to provide the custom labels for the ticks along the x-axis (i.e. ‘e’, ‘t’, ‘a’ …)</p>
+<p>Be sure to provide a title and a descriptive label for the y-axis.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Section-2:-Most-frequent-words-(in-English)">
+<h2>Section 2: Most frequent words (in English)<a class="headerlink" href="#Section-2:-Most-frequent-words-(in-English)" title="Permalink to this headline">¶</a></h2>
+<p>Let’s move up a level from characters and look at the distribution the English words. Returning to the full wikipedia corpus, which we have stored as a lower-cased string. Let’s tokenize the corpus: separating the string into individual words.</p>
+<div class="section" id="2.1-(Simple)-Tokenization">
+<h3>2.1 (Simple) Tokenization<a class="headerlink" href="#2.1-(Simple)-Tokenization" title="Permalink to this headline">¶</a></h3>
+<p>For now we’ll just apply a simple tokenization scheme: splitting our string on any whitespace (spaces, tabs, newlines, etc.) characters.</p>
+<p>Without using a for-loop, produce a list of the “tokens” from the corpus, and print out the first 10 tokens along with the total number of tokens.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>As you did above with characters, count the occurences of all of the different words.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Finally, display the top 20 most-common words and their associated occurences.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What do you notice about this list? Do you see any people, places, or other distinguishing words in towards the top of this list? Can you discern anything about the content of the articles from these words (other than the fact that they predominantly contain English)?</p>
+<p>These abundant “glue” words, <strong>referred to as “stop words” in NLP applications</strong>, are ubiquitous to modern English. They provide the necessary glue needed for a coherent grammar, but do not provide actual meaning to text. Often, we will want to filter them out, so that we can get at the “meaningful” words in a corpus.</p>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Stop_words">https://en.wikipedia.org/wiki/Stop_words</a> for more details.</p>
+</div>
+</div>
+<div class="section" id="3-Creating-an-n-gram-language-model">
+<h2>3 Creating an n-gram language model<a class="headerlink" href="#3-Creating-an-n-gram-language-model" title="Permalink to this headline">¶</a></h2>
+<p>An <strong>n-gram</strong> is a contiguous sequence of n characters from a piece of text. For example <code class="docutils literal notranslate"><span class="pre">&quot;cat</span> <span class="pre">in&quot;</span></code> is a <span class="math notranslate nohighlight">\(6\)</span>-gram, <code class="docutils literal notranslate"><span class="pre">&quot;th&quot;</span></code> is a <span class="math notranslate nohighlight">\(2\)</span>-gram, etc..</p>
+<p>Inspired by Yoav Goldberg blog, which in turn was inspired by a <a class="reference external" href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">post from Andrej Karpathy</a> that you saw in the Perspective on Machine Learning module, we will train our own n-gram language model.</p>
+<p><strong>Character-based n-gram language models aim to guess the next letter based on seeing the previous (n-1) letters.</strong> (The assumption that the probability of seeing a letter only depends on a certain finite number of previous letters is an example of a Markov assumption. See <a class="reference external" href="https://en.wikipedia.org/wiki/Markov_property">https://en.wikipedia.org/wiki/Markov_property</a> for more information.)</p>
+<p>Just as we did above, we will want to take a counter of <code class="docutils literal notranslate"><span class="pre">letter</span> <span class="pre">-&gt;</span> <span class="pre">count</span></code> pairs, and convert them to <code class="docutils literal notranslate"><span class="pre">letter</span> <span class="pre">-&gt;</span> <span class="pre">frequency</span></code> pairs. Using your code from earlier as reference, provide the body for the following function. Do <strong>not</strong> filter any characters this time.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def normalize(counter):
+    &quot;&quot;&quot; Convert a `letter -&gt; count` counter to a list
+   of (letter, frequency) pairs, sorted in descending order of
+   frequency.
+
+    Parameters
+    -----------
+    counter : collections.Counter
+        letter -&gt; count
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+       A list of tuples - (letter, frequency) pairs in order
+       of descending-frequency
+
+    Examples
+    --------
+    &gt;&gt;&gt; from collections import Counter
+    &gt;&gt;&gt; letter_count = Counter({&quot;a&quot;: 1, &quot;b&quot;: 3})
+    &gt;&gt;&gt; letter_count
+    Counter({&#39;a&#39;: 1, &#39;b&#39;: 3})
+
+    &gt;&gt;&gt; normalize(letter_count)
+    [(&#39;b&#39;, 0.75), (&#39;a&#39;, 0.25)]
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>In the following, we will want to make some serious use of Python’s <code class="docutils literal notranslate"><span class="pre">collections</span></code> module. Not only do we want to use the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class again, we also will want to use a <a class="reference external" href="http://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_III_Sets_and_More.html#Default-Dictionary">defaultdict</a>.</p>
+<p>Now we’ll create the function to actually analyze the n-grams (a length-n sequence of characters) that occur in a text: - For each distinct sequence of n-1 characters, we will keep a tally of the character that follows that sequence. - After counting is done, we’ll normalize the counts for each history to convert to frequencies, which we can interpret as probabilities. - At the beginning of a document we’ll pad the text with a dummy character, “~”, so that we can always have a sequence of length
+n-1.</p>
+<p>Here’s an illustration of the process for analyzing the text “cacao” in terms of 3-grams:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;~~&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;~~&quot;</span><span class="p">][</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;~c&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;~c&quot;</span><span class="p">][</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;ca&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;ca&quot;</span><span class="p">][</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;ac&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;ac&quot;</span><span class="p">][</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;ca&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;ca&quot;</span><span class="p">][</span><span class="s2">&quot;o&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;ao&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exists</span><span class="o">.</span> <span class="n">End</span> <span class="n">process</span>
+</pre></div>
+</div>
+<p>Here’s an illustration of the process for analyzing the text “cacao” in terms of 4-grams:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;~~~&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;~~~&quot;</span><span class="p">][</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;~~c&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;~~c&quot;</span><span class="p">][</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;~ca&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;~ca&quot;</span><span class="p">][</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;cac&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;cac&quot;</span><span class="p">][</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;aca&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="ow">is</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">increment</span> <span class="n">counts</span><span class="p">[</span><span class="s2">&quot;aca&quot;</span><span class="p">][</span><span class="s2">&quot;o&quot;</span><span class="p">]</span>
+<span class="n">history</span> <span class="ow">is</span> <span class="s2">&quot;cao&quot;</span><span class="p">,</span> <span class="nb">next</span> <span class="n">char</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exists</span><span class="o">.</span> <span class="n">End</span> <span class="n">process</span>
+</pre></div>
+</div>
+<p>Thus our “model” simply keeps track of all length-(n-1) histories in a given text, and the counts of the various characters that follow each history</p>
+<p>So we will want to our model to be a default dictionary, whose default value is an empty <code class="docutils literal notranslate"><span class="pre">Counter</span></code> instance. Thus any time we encounter a new history, our model will create an empty counter for that history.</p>
+<p>I.e. <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">defaultdict(Counter)</span></code>. Thus <code class="docutils literal notranslate"><span class="pre">model[history]</span></code> will return the counter for that history. You can then update that counter with the character that comes after that history: <code class="docutils literal notranslate"><span class="pre">model[history][char]</span> <span class="pre">+=</span> <span class="pre">1</span></code></p>
+<p>To “train” our language model is to simply populate its counters for all of the histories in a given text. Complete the following <code class="docutils literal notranslate"><span class="pre">train_lm</span></code> function</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from collections import defaultdict
+
+def train_lm(text, n):
+    &quot;&quot;&quot; Train character-based n-gram language model.
+
+    This will learn: given a sequence of n-1 characters, what the probability
+    distribution is for the n-th character in the sequence.
+
+    For example if we train on the text:
+        text = &quot;cacao&quot;
+
+    Using a n-gram size of n=3, then the following dict would be returned.
+    See that we *normalize* each of the counts for a given history
+
+        {&#39;ac&#39;: [(&#39;a&#39;, 1.0)],
+         &#39;ca&#39;: [(&#39;c&#39;, 0.5), (&#39;o&#39;, 0.5)],
+         &#39;~c&#39;: [(&#39;a&#39;, 1.0)],
+         &#39;~~&#39;: [(&#39;c&#39;, 1.0)]}
+
+    Tildas (&quot;~&quot;) are used for padding the history when necessary, so that it&#39;s
+    possible to estimate the probability of a seeing a character when there
+    aren&#39;t (n - 1) previous characters of history available.
+
+    So, according to this text we trained on, if you see the sequence &#39;ac&#39;,
+    our model predicts that the next character should be &#39;a&#39; 100% of the time.
+
+    For generating the padding, recall that Python allows you to generate
+    repeated sequences easily:
+       `&quot;p&quot; * 4` returns `&quot;pppp&quot;`
+
+    Parameters
+    -----------
+    text: str
+        A string (doesn&#39;t need to be lowercased).
+    n: int
+        The length of n-gram to analyze.
+
+    Returns
+    -------
+    Dict[str, List[Tuple[str, float]]]
+      {n-1 history -&gt; [(letter, normalized count), ...]}
+    A dict that maps histories (strings of length (n-1)) to lists of (char, prob)
+    pairs, where prob is the probability (i.e frequency) of char appearing after
+    that specific history.
+
+    Examples
+    --------
+    &gt;&gt;&gt; train_lm(&quot;cacao&quot;, 3)
+    {&#39;ac&#39;: [(&#39;a&#39;, 1.0)],
+     &#39;ca&#39;: [(&#39;c&#39;, 0.5), (&#39;o&#39;, 0.5)],
+     &#39;~c&#39;: [(&#39;a&#39;, 1.0)],
+     &#39;~~&#39;: [(&#39;c&#39;, 1.0)]}
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Test train_lm() on “cacao”, using n=3. You should get the same result as in the docstring.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now let’s test our function on more serious example: a small snippet of text from “The Cat in the Hat” by Dr. Seuss.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>text = &quot;&quot;&quot;The sun did not shine, it was too wet to play,
+so we sat in the house all that cold, cold wet day.
+I sat there with Sally. We sat here we two
+and we said &#39;How we wish we had something to do.&#39;&quot;&quot;&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following should show a probability of 1.0 for the letter “T”, since that’s the only starting letter that the model has ever seen (i.e., with no history, indicated by “~~”).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>lm3[&quot;~~&quot;]
+</pre></div>
+</div>
+</div>
+<p>Similarly, the following should show a probability of 1.0 for “h”, since that’s the only letter the model has seen after a history of “~T”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>lm3[&quot;~T&quot;]
+</pre></div>
+</div>
+</div>
+<p>This last example should give a probability distribution of the characters “e”, “a”, ” “, and”i“, since those four characters all were observed to follow”th” in the text (with “e” occurring most often).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>lm3[&quot;th&quot;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="4-Generating-text">
+<h2>4 Generating text<a class="headerlink" href="#4-Generating-text" title="Permalink to this headline">¶</a></h2>
+<p>A fun thing to do with language models is to generate random text in the style of the model by generating letters using the learned probability distributions.</p>
+<p>First we’ll create a function to randomly draw a single letter given a particular history, based on the probabilities stored in our language model.</p>
+<p>Hint: <code class="docutils literal notranslate"><span class="pre">np.random.choice(choices,</span> <span class="pre">p=probabilities)</span></code> will return an element from choices according to the specified probabilities. For example, <code class="docutils literal notranslate"><span class="pre">np.random.choice([&quot;a&quot;,</span> <span class="pre">&quot;b&quot;],</span> <span class="pre">[0.25,</span> <span class="pre">0.75])</span></code> will return an “a” 25% of the time and a “b” 75% of the time.</p>
+<p>Complete the following function. You will want to make use of the <code class="docutils literal notranslate"><span class="pre">unzip</span></code> function defined above to perform the following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[(char0,</span> <span class="pre">prob0),</span> <span class="pre">(char1,</span> <span class="pre">prob1),</span> <span class="pre">...]</span> <span class="pre">-&gt;</span> <span class="pre">((char0,</span> <span class="pre">char1,</span> <span class="pre">...),</span> <span class="pre">(prob0,</span> <span class="pre">prob1,</span> <span class="pre">...))</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def generate_letter(lm, history):
+    &quot;&quot;&quot; Randomly picks letter according to probability distribution associated with
+    the specified history, as stored in your language model.
+
+    Note: returns dummy character &quot;~&quot; if history not found in model.
+
+    Parameters
+    ----------
+    lm: Dict[str, List[Tuple[str, float]]]
+        The n-gram language model.
+        I.e. the dictionary: history -&gt; [(char, freq), ...]
+
+    history: str
+        A string of length (n-1) to use as context/history for generating
+        the next character.
+
+    Returns
+    -------
+    str
+        The predicted character. &#39;~&#39; if history is not in language model.
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following should generate “e”, “a”, ” “, or”i“, since those are the only four characters that followed”th“.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># draw from `generate_letter` 100 times, keep only the unique outcomes
+set(generate_letter(lm3, &quot;th&quot;) for i in range(100))
+</pre></div>
+</div>
+</div>
+<p>The following generates several possible next characters to get a sense of the distribution. “e” should appear more frequently than the other characters on average since it has a higher probability of following “th”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[generate_letter(lm3, &quot;th&quot;) for i in range(10)]
+</pre></div>
+</div>
+</div>
+<p>Finally, we’ll generate whole sequences of text according to the language model. The approach will be to start with no history ((n - 1) “~”s), generate a random letter, update the history, and repeat. In our example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">history</span> <span class="s2">&quot;~~&quot;</span> <span class="n">will</span> <span class="n">generate</span> <span class="s1">&#39;T&#39;</span> <span class="p">(</span><span class="n">since</span> <span class="n">only</span> <span class="n">one</span> <span class="n">possibility</span><span class="p">)</span>
+<span class="n">history</span> <span class="s2">&quot;~T&quot;</span> <span class="n">will</span> <span class="n">generate</span> <span class="s1">&#39;h&#39;</span> <span class="p">(</span><span class="n">since</span> <span class="n">only</span> <span class="n">one</span> <span class="n">possibility</span><span class="p">)</span>
+<span class="n">history</span> <span class="s2">&quot;Th&quot;</span> <span class="n">will</span> <span class="n">generate</span> <span class="s1">&#39;e&#39;</span> <span class="p">(</span><span class="n">since</span> <span class="n">only</span> <span class="n">one</span> <span class="n">possibility</span><span class="p">)</span>
+<span class="n">history</span> <span class="s2">&quot;he&quot;</span> <span class="n">could</span> <span class="n">generate</span> <span class="s1">&#39;r&#39;</span> <span class="p">(</span><span class="n">out</span> <span class="n">of</span> <span class="n">multiple</span> <span class="n">possibilities</span><span class="p">)</span>
+<span class="n">history</span> <span class="s2">&quot;er&quot;</span> <span class="n">will</span> <span class="n">generate</span> <span class="s1">&#39;e&#39;</span> <span class="p">(</span><span class="n">since</span> <span class="n">only</span> <span class="n">one</span> <span class="n">possibility</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and so on. The text generated so far would be “There”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def generate_text(lm, n, nletters=100):
+    &quot;&quot;&quot; Randomly generates `nletters` of text by drawing from
+    the probability distributions stored in a n-gram language model
+    `lm`.
+
+    Parameters
+    ----------
+    lm: Dict[str, List[Tuple[str, float]]]
+        The n-gram language model.
+        I.e. the dictionary: history -&gt; [(char, freq), ...]
+    n: int
+        Order of n-gram model.
+    nletters: int
+        Number of letters to randomly generate.
+
+    Returns
+    -------
+    str
+        Model-generated text.
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following will generate 40 characters according to the 3-gram language model trained on the beginning of “The Cat in the Hat”. It won’t be very pretty… partly because of the short history length and also the small amount of training data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>print(generate_text(lm3, 3, 40))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="5-Generating-“Shakespeare”">
+<h2>5 Generating “Shakespeare”<a class="headerlink" href="#5-Generating-“Shakespeare”" title="Permalink to this headline">¶</a></h2>
+<p>Lastly, we’ll have some fun trying to generate text in the style of Shakespeare.</p>
+<p>The next cell loads in Andrej Karpathy’s shakespeare_input.txt file.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>path_to_shakespeare = &quot;./dat/shakespeare_input.txt&quot;
+with open(path_to_shakespeare, &quot;r&quot;) as f:
+    shakespeare = f.read()
+print(str(len(shakespeare)) + &quot; character(s)&quot;)
+chars = set(shakespeare)
+print(f&quot;&#39;~&#39; is a good pad character: {&#39;~&#39; not in chars}&quot;)
+</pre></div>
+</div>
+</div>
+<p>Now experiment with training models for various values of n (e.g., 3, 5, and 11) and generate some text (maybe 500 characters or so). You should find the 3-gram model to be a very bad speller; the 5-gram model a better speller, but not making much sense; and the 11-gram model looking pretty good (which is amazing considering the simplicity of the model).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>print(generate_text(lm3, 3, 500))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>print(generate_text(lm5, 5, 500))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>print(generate_text(lm11, 11, 500))
+</pre></div>
+</div>
+</div>
+<p>Idea for bonus fun: find some other text on the Internet to train models on, e.g., song lyrics, books from a particular author, etc.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

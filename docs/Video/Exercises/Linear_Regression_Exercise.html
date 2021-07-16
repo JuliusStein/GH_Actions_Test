@@ -1,0 +1,1511 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercises: Fitting a Linear Model with Gradient Descent &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Where is the “Learning” in All of This?" href="../What_Does_Learning_Mean.html" />
+    <link rel="prev" title="Automatic Differentiation" href="../Automatic_Differentiation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../vision.html">Vision Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Automatic_Differentiation.html">Automatic Differentiation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Exercises: Fitting a Linear Model with Gradient Descent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Reviewing-Our-Modeling-Problem">Reviewing Our Modeling Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Estimating-Optimal-Model-Parameters-Using-Gradient-Descent">Estimating Optimal Model Parameters Using Gradient Descent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Defining-Our-Linear-Model">Defining Our Linear Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#“Training”-Our-Model">“Training” Our Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Using-Un-Normalized-Data-(This-Won’t-Work-Well)">Using Un-Normalized Data (This Won’t Work Well)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Using-Normalized-Data">Using Normalized Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Re-Scaling-Our-Model’s-Predictions">Re-Scaling Our Model’s Predictions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FacialRecognition.html">Vision Module Capstone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../vision.html">Vision Module</a> &raquo;</li>
+        
+      <li>Exercises: Fitting a Linear Model with Gradient Descent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/Linear_Regression_Exercise.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Exercises:-Fitting-a-Linear-Model-with-Gradient-Descent">
+<h1>Exercises: Fitting a Linear Model with Gradient Descent<a class="headerlink" href="#Exercises:-Fitting-a-Linear-Model-with-Gradient-Descent" title="Permalink to this headline">¶</a></h1>
+<p>This notebook is a very important one. We will return to our favorite problem: modeling the relationship between an NBA player’s height and his wingspan using a linear model.</p>
+<p>Before, we found that we could exactly solve for the model parameters (i.e. the slope and y-intercept) that minimize the squared-residuals between our recorded data and our model’s predictions. Now, we will act as if no such analytic solution exists, since this will almost always be the case in “real world” problems. Instead, we will use gradient descent to tune the parameters of our linear model, and we will do this by leveraging MyGrad’s autodiff capabilities to compute the relevant gradients
+for this optimization process. The procedure that we exercise here will turn out to be almost exactly identical to the process for “training a neural network” using “supervised learning”, which are concepts that we will dive into .</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Run this cell to import the necessary libraries
+
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+%matplotlib notebook
+
+import numpy as np
+import xarray as xr
+import mygrad as mg
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Load the NetCDF-4 file `./data/nba_draft_measurements.nc` as an xarray-dataset
+# (refer to the previous exercise notebook if you need a refresher on this)
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Make a scatter plot that shows wingspan versus height (without shoes) for the players
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Reviewing-Our-Modeling-Problem">
+<h2>Reviewing Our Modeling Problem<a class="headerlink" href="#Reviewing-Our-Modeling-Problem" title="Permalink to this headline">¶</a></h2>
+<p>Based on the relationship between height and wingspan that we visualized above, we want to define a <strong>linear mathematical model that can predict an individual’s wingspan based on their height</strong>.</p>
+<p>Our recorded data consists of <span class="math notranslate nohighlight">\(N\)</span> measurements: <span class="math notranslate nohighlight">\(\big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\)</span>. Datum-<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(\big(x_i, y^{\mathrm{(true)}}_i\big)\)</span>, is the height and wingspan of player-<span class="math notranslate nohighlight">\(i\)</span>. We use the “true” superscript label here in anticipation of the fact that we will need to distinguish these measured wingspans from our model’s predicted wingspans. Supposing we have some values picked out for our model’s parameters, <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, then our
+model’s predicted wingspan for player-<span class="math notranslate nohighlight">\(i\)</span> is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y^{\mathrm{(pred)}}_i = F(m, b; x_i) = m x_i + b
+\end{equation}</div><p>Our goal is to find appropriate values for our model’s parameters, <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, such that <span class="math notranslate nohighlight">\(F(m, b; x)\)</span> will make reliable predictions about the wingspans of players whose measurements are not in our dataset. The way that we will measure the quality of our model’s predictions is via the loss function (a.k.a objective function) that computes the mean squared-error (a.k.a squared residuals) of our predictions compared to our recorded data.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}_{\mathrm{MSE}} = \frac{1}{N}\sum_{n=0}^{N-1}{\big(y^{\mathrm{(true)}}_n - y^{\mathrm{(pred)}}_n\big)^2}
+\end{equation}</div><p><strong>To find the values of</strong> <span class="math notranslate nohighlight">\(m\)</span> <strong>and</strong> <span class="math notranslate nohighlight">\(b\)</span> <strong>that minimize</strong> <span class="math notranslate nohighlight">\(\mathscr{L}_{\mathrm{MSE}}\)</span> <strong>is to produce the best-fit linear model - the one that minimizes empirical risk - for this dataset.</strong> We will denote these optimal model parameter values as <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>.</p>
+<p>Referring to the <a class="reference external" href="https://rsokl.github.io/CogWeb/Video/Linear_Regression.html#Linear-Least-Squares:-A-Closed-Form-Solution">previous section</a>, complete the following function that computes values of <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> directly, given our dataset. Note that we were already asked to do this in the reading comprehension question “Ordinary Least Squares in Python”; thus if you need guidance here, you can refer to the solution at the bottom of that page.</p>
+<p>We will be making use of this analytical solution so that we can precisely measure how far our approximate solution is away from the ideal; keep in mind that for most problems we will not have access to an exact solution like this.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def ordinary_least_squares(x, y):
+    &quot;&quot;&quot;
+    Computes the slope and y-intercept for the line that minimizes
+    the sum of squared residuals of mx + b and y, for the observed data
+    (x, y).
+
+    Parameters
+    ----------
+    x : numpy.ndarray, shape-(N,)
+        The independent data. At least two distinct pieces of data
+        are required.
+
+    y : numpy.ndarray, shape-(N,)
+        The dependent data in correspondence with ``x``.
+
+    Returns
+    -------
+    (m, b) : Tuple[float, float]
+        The optimal values for the slope and y-intercept
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Using this function, compute the parameters, <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>, that minimize the MSE of a linear model for our dataset, where <span class="math notranslate nohighlight">\(x\)</span> corresponds to “height” (without shoes) and <span class="math notranslate nohighlight">\(y\)</span> corresponds to wingspan. We will want to access the underlying NumPy arrays from the xarray data so that you can work with the “raw data” conveniently here.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Compute m* and b* that best fits the wingspan vs height (no shoes) data
+
+# Access the underlying numpy arrays
+# STUDENT CODE HERE
+
+# Compute the ideal parameter values
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Next, plot the data for this problem along with the resulting fitted linear model. Use <code class="docutils literal notranslate"><span class="pre">ax.scatter</span></code> to plot the original data and <code class="docutils literal notranslate"><span class="pre">ax.plot</span></code> to draw the model line; you will want to specify a distinct color for your linear model. Label your axes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Plot wingspan vs height (no shoes) as a scatter plot
+# Plot the line: m* x + b*
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following function creates a surface plot of <span class="math notranslate nohighlight">\(\mathscr{L}_{\mathrm{MSE}}(m, b)\)</span> over a range of <span class="math notranslate nohighlight">\((m, b)\)</span> values, given a user-specified data set. Take a moment to read its docstring and then run this cell to define the function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># You don&#39;t need to modify this function at all. Just read
+# through it and run this cell
+
+def graph_linear_regression_mse(
+    x,
+    y,
+    trajectory=None,
+    m_scale=10,
+    b_scale=10,
+    sample_density=500,
+):
+    &quot;&quot;&quot;
+    Given the data `x, y`, plots the MSE surface on the space of possible
+    slope and y-intercept values for a linear regression model.
+
+    The plot is automatically centered at the optimal parameter values (m*, b*); this
+    point is demarcated with a black dot.
+
+    Parameters
+    ----------
+    x : np.ndarray, shape-(N,)
+        The x data from your dataset
+
+    y : np.ndarray, shape-(N,)
+        The y data from your dataset
+
+    trajectory : Optional[np.ndarray], shape-(T, 2) or shape-(N, T, 2)
+        One or more length-T sequence of (slope, intercept) points to superimpose over the surface.
+        This can be used to display a &quot;trajectory&quot; of parameter values.
+
+    m_scale : int, optional (default=10)
+        The size of the range of slopes that are plotted in each direction
+
+    b_scale : int, optional (default=10)
+        The size of the range of y-intercepts that are plotted in each direction
+
+    sample_density : int, optional (default=500)
+        The number of samples to calculate along each axis. Decreasing this speeds
+        up the plot at the cost of visual quality.
+
+    Returns
+    -------
+    Tuple[Figure, Axis]
+        Returns the matplotlib figure and axis that was created so
+        that the plot can be further manipulated or saved.
+    &quot;&quot;&quot;
+
+    def mse(x, y, m, b):
+        &quot;&quot;&quot;Computes the mean squared-error (MSE)&quot;&quot;&quot;
+        m = np.atleast_1d(m)
+        b = np.atleast_1d(b)
+        return ((x * m[None] + b[None] - y) ** 2).mean(axis=1)
+
+    # find least squares solution
+    A = np.vstack([x, np.ones(len(x))]).T
+    m_opt, b_opt = np.linalg.lstsq(A, y, rcond=None)[0]
+    l_opt = mse(x, y, m_opt, b_opt)
+
+    center_m = m_opt
+    center_b = b_opt
+
+    # Creates the plot figure
+    fig = plt.figure()
+    ax = fig.gca(projection=&quot;3d&quot;)
+
+    # Plot the local minimum of the MSE surface as a black dot
+    ax.plot(
+        [m_opt],
+        [b_opt],
+        l_opt,
+        c=&quot;black&quot;,
+        marker=&quot;o&quot;,
+        zorder=3,
+        markersize=7,
+    )
+
+    # Define quadratic surface of MSE landscape over m and b
+    m_series = np.linspace(center_m - m_scale, center_m + m_scale, sample_density)
+    b_series = np.linspace(
+        center_b - b_scale, center_b + b_scale, sample_density
+    ).reshape(-1, 1)
+
+    Z = (b_series + x.reshape(-1, 1, 1) * m_series) - y.reshape(-1, 1, 1)
+
+    Z = np.mean(Z ** 2, axis=0)
+
+    # make surface plot
+    m_series, b_series = np.meshgrid(m_series, b_series)
+    ax.set_xlabel(&quot;Slope: m&quot;)
+    ax.set_ylabel(&quot;Intercept: b&quot;)
+    ax.set_zlabel(&quot;MSE Loss&quot;)
+    ax.ticklabel_format(style=&quot;sci&quot;, scilimits=(-1, 2))
+    ax.dist = 11
+    surf = ax.plot_surface(m_series, b_series, Z, cmap=plt.get_cmap(&quot;GnBu&quot;))
+
+    # Graphs one or more trajectories on the loss londscape
+    if trajectory is not None:
+        trajectories = np.atleast_2d(trajectory)
+        if trajectories.ndim == 2:
+            trajectories = trajectories[np.newaxis]
+        for trajectory in trajectories:
+            m_values, b_values = trajectory.T
+            l_values = ((x * m_values[:, None] + b_values[:, None] - y) ** 2).mean(
+                axis=1
+            )
+            ax.plot(
+                m_values,
+                b_values,
+                l_values,
+                marker=&quot;*&quot;,
+                zorder=3,
+                markersize=7,
+            )
+    return fig, ax
+</pre></div>
+</div>
+</div>
+<p>Invoke <code class="docutils literal notranslate"><span class="pre">graph_linear_regression_mse</span></code> for our dataset. Provide the <code class="docutils literal notranslate"><span class="pre">trajectory</span></code> argument the list of the optimal slope and intercept values that you computed via <code class="docutils literal notranslate"><span class="pre">ordinary_least_squares</span></code>. I.e. set <code class="docutils literal notranslate"><span class="pre">trajectory=[m_opt,</span> <span class="pre">b_opt]</span></code>. Your solution will appear as a star on the surface plot. The correct solution will appear as a black dot; thus the two should coincide. Note that you can click-and-drag your cursor over the plot to rotate it</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># plot the linear regression MSE surface with your solution point included
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>This surface is our so-called <strong>loss landscape</strong>. It represents the values of <span class="math notranslate nohighlight">\(\mathscr{L}_{\mathrm{MSE}}\)</span> over a continuum of <span class="math notranslate nohighlight">\((m, b)\)</span> parameter values. That is, given our fixed dataset, this depicts how well (or poorly) the various linear models of differing slopes and y-intercepts would fit the data. The ideal model is the one whose parameter values reside at the bottom of this loss-landscape. Typically we will use gradient descent to search for these ideal values that minimize
+<span class="math notranslate nohighlight">\(\mathscr{L}\)</span>; as such, that is what we will be doing in the rest of this notebook.</p>
+<p>Before we proceed, note that our loss landscape looks much more like a taco shell (or a half pipe) than it does like a bowl, even though our equation for <span class="math notranslate nohighlight">\(\mathscr{L}_{\mathrm{MSE}}\)</span> is quadratic in <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> (and 2D quadratic surfaces generally look like bowls). Even though the landscape looks flat along <span class="math notranslate nohighlight">\(b\)</span>, it is actually sloping upward away from the black dot; the slope is simply far more mild along the <span class="math notranslate nohighlight">\(b\)</span> direction than it is along the <span class="math notranslate nohighlight">\(m\)</span> direction.
+How might this affect the search for the minimum on this surface via gradient descent?</p>
+</div>
+<div class="section" id="Estimating-Optimal-Model-Parameters-Using-Gradient-Descent">
+<h2>Estimating Optimal Model Parameters Using Gradient Descent<a class="headerlink" href="#Estimating-Optimal-Model-Parameters-Using-Gradient-Descent" title="Permalink to this headline">¶</a></h2>
+<p>In keeping with our <a class="reference external" href="https://rsokl.github.io/CogWeb/Video/Gradient_Descent.html">discussion of gradient-based learning</a> we will arrive at near-optimal values for our model’s parameters by utilizing gradient descent.</p>
+<p>We will start this process by crudely drawing (small) random values for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>; these will determine where we first reside on the loss landscape. Next we’ll descend this loss landscape by iteratively updating the values for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> with the gradient-based step</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\begin{bmatrix}m_\text{new} \\ b_\text{new} \end{bmatrix} &amp;= \begin{bmatrix} m_\text{old} \\ b_\text{old} \end{bmatrix} - \delta \vec{\nabla} \mathscr{L}_{MSE} (m_{\text{old}}, b_{\text{old}})\\
+   &amp;\vdots\\
+   m_\text{new} &amp;= m_\text{old} - \delta \frac{\mathrm{d}\mathscr{L}_{MSE}}{\mathrm{d} m}\big|_{m_{old}, b_{old}}\\
+   b_\text{new} &amp;= b_\text{old} - \delta \frac{\mathrm{d}\mathscr{L}_{MSE}}{\mathrm{d} b}\big|_{m_{old}, b_{old}}
+\end{align}</div><p>where <span class="math notranslate nohighlight">\(\delta\)</span> is the learning rate - a single, positive valued number that we have to pick.</p>
+<p>Keep in mind that we will be able to leverage automatic differentiation, via MyGrad, to compute <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}_{MSE} (m_{\text{old}}, b_{\text{old}})\)</span>.</p>
+<p>Complete the following function that performs a gradient-step on all of the supplied parameters. Note that this was a reading comprehension task - “Writing a Generic Gradient-Update Function” - in <a class="reference external" href="https://rsokl.github.io/CogWeb/Video/Automatic_Differentiation.html#Gradient-Descent-with-MyGrad">a previous section</a>. You can refer back to the solution at the bottom of the page for assistance with this function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Complete the following function
+
+def gradient_step(tensors, learning_rate):
+    &quot;&quot;&quot;
+    Performs gradient-step in-place on each of the provides tensors
+    according to the standard formulation of gradient descent.
+
+    Parameters
+    ----------
+    tensors : Union[Tensor, Iterable[Tensors]]
+        A single tensor, or an iterable of an arbitrary number of tensors.
+
+        If a `tensor.grad` is `None`for a specific tensor, the update on
+        that tensor is skipped.
+
+    learning_rate : float
+        The &quot;learning rate&quot; factor for each descent step. A positive number.
+
+    Notes
+    -----
+    The gradient-steps performed by this function occur in-place on each tensor,
+    thus this function does not return anything
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now let’s code up <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE}\)</span> in MyGrad.</p>
+<p>We need to leverage MyGrad’s auto-differentiation capabilities so that we can compute <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE} (m_{\text{old}}, b_{\text{old}})\)</span>, in order to perform gradient descent. Thus we must use mygrad’s functions (instead of numpy) to compute the MSE of our model’s predictions, in comparison to the “truth”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Complete the following function
+
+import mygrad as mg
+
+def mean_squared_error_mygrad(y_pred, y_true):
+    &quot;&quot;&quot; Computers the mean-squared error for a collection of predictions
+    and corresponding true values.
+
+    Parameters
+    ----------
+    y_pred : mygrad.Tensor, shape-(N,)
+        A tensor of N predictions.
+
+    y_true : array_like, shape-(N,)
+        An array of N corresponding true values
+
+    Returns
+    -------
+    mse : mygrad.Tensor, shape-()
+        A scalar-tensor containing the mean-squared error.
+
+    Examples
+    --------
+    &gt;&gt;&gt; pred = mg.Tensor([1., 2., 3.])
+    &gt;&gt;&gt; true = mg.Tensor([1., 1., 3.])
+    &gt;&gt;&gt; mean_squared_error_mygrad(pred, true)
+    Tensor(0.33333333)
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Defining-Our-Linear-Model">
+<h2>Defining Our Linear Model<a class="headerlink" href="#Defining-Our-Linear-Model" title="Permalink to this headline">¶</a></h2>
+<p>We will now <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_4.html">create a class</a> used to encapsulate the parameters and functionality of our linear model. Although this might seem to be excessive here, this will prime us for creating more sophisticated models (e.g. neural networks) later on.</p>
+<p>This class will be responsible for:</p>
+<ul class="simple">
+<li><p>drawing random values to initialize <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code></p></li>
+<li><p>storing our model parameters <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> and making them easily accessible</p></li>
+<li><p>defining the so-called “forward pass” of our model: passing data to it and returning predictions</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># We will use `uniform` to draw random initial values for our model&#39;s parameters
+from mygrad.nnet.initializers import uniform
+
+class LinearModel:
+    &quot;&quot;&quot;
+    A linear model with parameters `self.m` and `self.b`
+    &quot;&quot;&quot;
+
+    def initialize_params(self):
+        &quot;&quot;&quot;
+        Uses `mygrad.nnet.initializers.uniform` to draw tensor
+        values for both `self.m` and `self.b` from the uniform
+        distribution [-10, 10].
+
+        Both parameters should be shape-(1,) tensors; the call:
+
+           uniform(1, lower_bound=-10, upper_bound=10)
+
+        will draw a shape-(1,) tensor from this distribution
+        &quot;&quot;&quot;
+        # Draw two values from the uniform distribution over [-10, 10]
+        # Assign one value to `self.m` and assign the other to `self.b`
+        # STUDENT CODE HERE
+
+    def __init__(self, m=None, b=None):
+        &quot;&quot;&quot; Accepts initial values for m and b. If either are not
+        specified, uses `self.initialize_params()` to draw them
+        randomly
+
+        Parameters
+        ----------
+        m : Optional[mygrad.Tensor], shape-(1,)
+            The slope for the linear model. If `None`, a random
+            value is drawn.
+
+        b : Optional[mygrad.Tensor], shape-(1,)
+            The y-intercept for the linear model. If `None`, a random
+            value is drawn.
+        &quot;&quot;&quot;
+        # Use `self.initialize_params()` to draw random values for
+        # `self.m` and `self.b`.
+        #
+        # If either parameter is provided as an input to this method,
+        # use that specified value to overwrite the randomly drawn value
+        #
+        # `self.m` and `self.b` must be defined by this method
+
+        # STUDENT CODE HERE
+
+    def __call__(self, x):
+        &quot;&quot;&quot;
+        Performs: m * x + b
+
+        This is known as a &#39;forward pass&#39; through the model
+        on the specified data. I.e. uses the linear model to
+        make a prediction based on the input `x`.
+
+        Parameters
+        ----------
+        x : array_like, shape-(N,)
+            An array or tensor of N observations.
+
+        Returns
+        -------
+        prediction : mygrad.Tensor, shape-(N,)
+            A corresponding tensor of N predictions based on
+            the linear model.
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; Returns a tuple of the tensors associated with the model&#39;s
+        parameters.
+
+        This is accessed as an attribute, via `model.parameters`
+        *not* as a method (i.e. not as `model.parameters()`)
+
+        Returns
+        -------
+        Tuple[Tensor, Tuple]
+            A tuple containing all of the learnable parameters for our model.
+
+            This should return a tuple containing the slope and y-intercept
+            associated with the model.
+
+        Examples
+        --------
+        &gt;&gt;&gt; model = LinearModel()
+        &gt;&gt;&gt; model.parameters
+        (Tensor([-7.714269], dtype=float32), Tensor([-6.770146], dtype=float32))
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Try initializing your model, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">LinearModel()</span></code> and check that:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model.m</span></code> and <code class="docutils literal notranslate"><span class="pre">model.b</span></code> are both defined and are shape-(1,) mygrad tensors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model.parameters</span></code> returns both tensors</p></li>
+<li><p>Calling <code class="docutils literal notranslate"><span class="pre">model(1.)</span></code> returns a mygrad tensor corresponding to: m * x + b</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Check that your model class is working as-expected
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="“Training”-Our-Model">
+<h2>“Training” Our Model<a class="headerlink" href="#“Training”-Our-Model" title="Permalink to this headline">¶</a></h2>
+<p>We will now use gradient descent to optimize our model’s parameter values based on our recorded data. In the parlance of modern machine learning, this process is typically described as us “training” our model. And to introduce more terminology, the pattern of machine learning that we are about to invoke is called <strong>supervised learning</strong>: it is the process of training (updating) our model based off of collected data where we have access to the desired predictions that we want our model to make.
+That is, for each recorded height that we are going to feed to our model, we have an associated true wingspan that we measured and that we want our model to predict.</p>
+<div class="section" id="Using-Un-Normalized-Data-(This-Won’t-Work-Well)">
+<h3>Using Un-Normalized Data (This Won’t Work Well)<a class="headerlink" href="#Using-Un-Normalized-Data-(This-Won’t-Work-Well)" title="Permalink to this headline">¶</a></h3>
+<p>To start off, we will attempt to search for ideal model parameters by processing our raw data (we will find that this works only moderately well and that we ought to pre-process our data before using it to train our model).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># This cell defines a convenience function for measuring the
+# distance between (m, b) and (m*, b*)
+#
+# Run this without modifying it
+true_params = np.array(ordinary_least_squares(height, wingspan))
+
+def dist_from_true(model_params, true_params) -&gt; float:
+    &quot;&quot;&quot; Computes sqrt[(m - m*)^2 + (b - b*)^2]
+
+    Parameters
+    ----------
+    model_params : Tuple[Tensor, Tensor]
+        m and b
+
+    true_params : numpy.ndarray, shape-(2,)
+        m* and b*
+
+    Returns
+    -------
+    float
+        The L2 distance between the parameters&quot;&quot;&quot;
+    params = np.array([i.item() for i in model_params])
+    return np.sqrt(np.sum((true_params - params) ** 2))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>heights = draft_data.height_no_shoes.data  # our observed data: x [inches]
+wingspans = draft_data.wingspan.data       # our observed data: y [inches]
+
+# Initialize your linear model without specifying any parameters.
+# Assign it to the variable called `model`
+# STUDENT CODE HERE
+
+# `trajectory` is a list that will store the sequence of estimated
+# model parameters that we compute during gradient descent:
+#           [(m0, b0), (m1, b1), ... ]
+trajectory = []
+
+# This is the number of times we will process the observed data
+# and perform an update our model&#39;s parameters
+#
+# An &quot;epoch&quot; denotes our having processed the dataset in its
+# entirety once. Thus we will train our model by processing
+# our dataset in full`num_epoch` times.
+num_epochs = 10
+
+# The learning rate used for gradient descent.
+#
+# This is a value that we need to choose. The following is simply
+# an educated guess of a good learning rate; there is a whole art
+# to making educated guesses and well-informed choices for learning
+# rates, which we will discuss later. The key thing to note here is that
+# there was no principled reason behind our picking this value
+learning_rate = 1E-4
+</pre></div>
+</div>
+</div>
+<p>The following cell initialized a plot using the <a class="reference external" href="https://github.com/rsokl/noggin">noggin library</a>. This library is capable of logging measurements taken from an experiment and plot them in real time. Here, we tell noggin that we want to track four measured “metrics”</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;loss&quot;</span></code>: the value of <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE}\)</span> for our current model parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;m:</span></code>: the current slope of our model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;b:</span></code>: the current y-intercept of our model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;dist_from_target:</span></code>: the Euclidean distance of our model’s <span class="math notranslate nohighlight">\((m, b)\)</span> from the optimal <span class="math notranslate nohighlight">\((m^*, b^*)\)</span></p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># The plot created here will update in real time as we run our experiment
+
+from noggin import create_plot
+
+# Four &quot;metrics&quot; will be tracked by the plotter
+plotter, fig, ax = create_plot([&quot;loss&quot;, &quot;m&quot;, &quot;b&quot;, &quot;dist_from_target&quot;], ncols=2)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># The code in this cell will be responsible for training our model
+
+# Fill out the following code blocks and then run this cell.
+# View the noggin plot above to see the recorded metrics
+
+for n in range(num_epochs):
+    # Perform a &quot;forward pass&quot; with your model on the *full* set of heights
+    # I.e. feed the model all N heights to produce N corresponding predictions
+    # using your lineary model
+    # STUDENT CODE HERE
+
+    # Compute the mean-squared error of your model&#39;s predictions, compared
+    # to the true wingspans. Assign this value to the variable `loss`
+    # STUDENT CODE HERE
+
+    # Use mygrad&#39;s auto-differentiation abilities to compute the derivatives
+    # of this error (a.k.a the loss) with respect to your model&#39;s parameters.
+    # I.e. invoke &quot;back-propagation&quot; from the computed loss.
+    # STUDENT CODE HERE
+
+    # This feeds our four measured metrics to noggin to be logged and plotted
+    # You don&#39;t need to change this
+    plotter.set_train_batch(
+        dict(
+            loss=loss,
+            m=model.m.item(),
+            b=model.b.item(),
+            dist_from_target=dist_from_true(model.parameters, true_params),
+        ),
+        batch_size=len(y_pred),
+    )
+
+    # Appends the current model params to the &quot;trajectory&quot; list
+    trajectory.append((model.m.item(), model.b.item()))
+
+    # Perform a single update to your model&#39;s parameters using
+    # gradient descent  (recall that you defined `gradient_step` earlier)
+    # STUDENT CODE HERE
+
+# This ensures that noggin plots any lingering measurements
+plotter.plot()
+
+# When you run this cell, the noggin plot above will update in real time
+</pre></div>
+</div>
+</div>
+<p>What does the graph of <code class="docutils literal notranslate"><span class="pre">dist_from_target</span></code> tell us about our approximate solution? Let’s print out the last value of this metric associated.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Prints the distance between our approximate solution and the exact one
+train_metrics = plotter.to_xarray(&quot;train&quot;).batch
+train_metrics.dist_from_target[-1]
+</pre></div>
+</div>
+</div>
+<p>Let’s visualize the “trajectory” of our model’s parameter values – depicting how they evolved throughout “training”. Does your the terminus of the trajectory end near the optimal solution?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>graph_linear_regression_mse(height, wingspan, trajectory=trajectory)
+</pre></div>
+</div>
+</div>
+<p>Let’s see how well our learned model matches our data. The following plot will compare your learned model against the ideal model, derived from the closed-form solution to the least-squares problem.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Run this
+fig, ax = plt.subplots()
+
+ax.scatter(height, wingspan)
+m, b =  ordinary_least_squares(height, wingspan)
+
+x = np.linspace(height.min(), height.max(), 1000)
+
+ax.plot(x, model.m * x + model.b, c=&quot;orange&quot;, label=&quot;Learned Fit&quot;)
+ax.plot(x, m * x + b, c=&quot;red&quot;, ls= &quot;--&quot;, label=&quot;Ideal Fit&quot;)
+ax.legend()
+ax.grid(True)
+ax.set_xlabel(&quot;Height [inches]&quot;)
+ax.set_ylabel(&quot;Wingspan [inches]&quot;);
+
+</pre></div>
+</div>
+</div>
+<p>You might see that the learned model does not match the least-squares solutions so closely (if it does match, then you got lucky! Try training the model again). It may match the model near the center of the data, but extrapolating outward would reveal discrepancies.</p>
+<p>Let’s see just how varied our models will be. The following will train an “ensemble” of linear models in identical fashions - but with different randomly-drawn parameters. It will then plot the trajectory associated with each model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Train an ensemble of linear models on our data
+# and plot their trajectories.
+#
+# Run this cell
+
+height = draft_data.height_no_shoes.data
+wingspan = draft_data.wingspan.data
+
+num_models = 10
+trajectories = [[] for i in range(num_models)]
+models = [LinearModel() for i in range(num_models)]
+
+num_epochs = 10
+step_size = 1e-4
+
+for n in range(num_epochs):
+    for model_id, model in enumerate(models):
+        y_pred = model(height)
+        loss = mean_squared_error_mygrad(y_pred, wingspan)
+        loss.backward()
+
+        trajectories[model_id].append((model.m.item(), model.b.item()))
+        gradient_step(model.parameters, learning_rate=learning_rate)
+
+trajectories = np.array(trajectories)
+graph_linear_regression_mse(height, wingspan, trajectory=trajectories)
+
+fig, ax = plt.subplots()
+
+ax.scatter(height, wingspan)
+m, b = ordinary_least_squares(height, wingspan)
+
+x = np.linspace(height.min(), height.max(), 1000)
+
+for n, model in enumerate(models):
+    ax.plot(x, model.m * x + model.b, alpha=0.5)
+ax.plot(x, m * x + b, c=&quot;red&quot;, ls=&quot;--&quot;, label=&quot;Ideal Fit&quot;)
+ax.legend()
+ax.grid(True)
+ax.set_xlabel(&quot;Height [inches]&quot;)
+ax.set_ylabel(&quot;Wingspan [inches]&quot;);
+</pre></div>
+</div>
+</div>
+<p>What is causing this stagnation in our optimization procedure? What is it about the shape of the “landscape” of <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE}\)</span> that appears to keep our model from learning parameters that fit more closely to <span class="math notranslate nohighlight">\((m^*, b^*)\)</span>? Consider these questions in light of the fact that we use the same learning rate for updating both <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<p>If you are working with others, discuss this with a neighbor and note your theories here.</p>
+<p><em>SOLUTION HERE</em></p>
+</div>
+<div class="section" id="Using-Normalized-Data">
+<h3>Using Normalized Data<a class="headerlink" href="#Using-Normalized-Data" title="Permalink to this headline">¶</a></h3>
+<p>The intense sensitivity of <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE}\)</span> to changes in <span class="math notranslate nohighlight">\(m\)</span> in comparison to changes in <span class="math notranslate nohighlight">\(b\)</span> occurs because our data is centered far from the origin <span class="math notranslate nohighlight">\((x=0, y=0)\)</span>. Thus, minute adjustments to <span class="math notranslate nohighlight">\(m\)</span> cause a dramatic change to the predictions produced by our model near <span class="math notranslate nohighlight">\((x=80, y=85)\)</span>, whereas changes to <span class="math notranslate nohighlight">\(b\)</span> that are comparable in magnitude have a much less significant impact on the prediction quality. This is why <span class="math notranslate nohighlight">\(\mathscr{L}_{MSE}\)</span> looks like a
+flat valley along the <span class="math notranslate nohighlight">\(b\)</span> axis compared to its steep slopes along the <span class="math notranslate nohighlight">\(m\)</span> axis. Take sometime to reflect on this and test this statement if it isn’t making sense at first.</p>
+<p>To remedy this we will want to <strong>normalize our data</strong> so that the normalized height and wingspan values both have a mean of <span class="math notranslate nohighlight">\(0\)</span> and a standard deviation of <span class="math notranslate nohighlight">\(1\)</span>. Using this normalized data will help to produce a loss landscape that features comparable curvatures along the <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> directions.</p>
+<p>See that the following function will normalize an array of data in this way.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def norm(x):
+    &quot;&quot;&quot;Return `x_normed` such that x_normed.mean() is 0
+    and x_normed.std() is 1.
+
+    Parameters
+    ----------
+    x : array_like, shape-(N,)
+
+    Returns
+    -------
+    normed_x : array_like, shape-(N,)
+        The normalized data&quot;&quot;&quot;
+    return (x - x.mean()) / x.std()
+</pre></div>
+</div>
+</div>
+<p>Lets normalize our height and wingspan data and plot it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>normed_height = norm(height)
+normed_wingspan = norm(wingspan)
+</pre></div>
+</div>
+</div>
+<p>Compute the mean and standard deviation of <code class="docutils literal notranslate"><span class="pre">normed_height</span></code> and <code class="docutils literal notranslate"><span class="pre">normed_wingspan</span></code> and explicitly confirm that they have the expected values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>#*SOLUTION HERE*
+</pre></div>
+</div>
+</div>
+<p>Let’s plot this normalized dataset.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Run this cell
+fig, ax = plt.subplots()
+ax.scatter(normed_height, normed_wingspan)
+ax.grid()
+</pre></div>
+</div>
+</div>
+<p>Note that the scales of the numbers on the x and y axes have changed: now our data is centered on <span class="math notranslate nohighlight">\((0, 0)\)</span> and most of the values fall within <span class="math notranslate nohighlight">\([-1, 1]\)</span>. That being said, the actual distribution of the data points relative to one another is entirely unchanged! That is, we have not in any way manipulated the patterns or relationships between height and wingspan that was encoded in the raw data.</p>
+<p>Let’s try “training” our model again, but this time we will use our normalized data. Note how <code class="docutils literal notranslate"><span class="pre">dist_from_target</span></code> evolved here versus before - it should be very close to <span class="math notranslate nohighlight">\(0\)</span> by then end of training.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>plotter, fig, ax = create_plot([&quot;loss&quot;, &quot;m&quot;, &quot;b&quot;, &quot;dist_from_target&quot;], ncols=2, last_n_batches=50)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>trajectory = []
+
+model = LinearModel()
+
+# note that we are training for many more epochs
+# and with a much larger learning rate
+num_epochs = 100
+learning_rate = 1e-1
+
+true_params_normed = np.array(ordinary_least_squares(normed_height, normed_wingspan))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Paste your earlier training-loop code here, but replace:
+# height -&gt; normed_height
+# wingspan -&gt; normed_wingspan
+# true_params -&gt; true_params_normed
+
+# for n in range(num_epochs):
+#     ...
+#
+# STUDENT CODE HERE
+plotter.plot()
+</pre></div>
+</div>
+</div>
+<p>How close is our approximate solution to the exact one?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># prints the distance between our approximate solution and the exact one
+train_metrics = plotter.to_xarray(&quot;train&quot;).batch
+train_metrics.dist_from_target[-1]
+</pre></div>
+</div>
+</div>
+<p>Let’s visualize the landscape for <span class="math notranslate nohighlight">\(\mathscr{L}(m,b; (\hat{x}_n, \hat{y}_n)_{n=0}^{N-1})\)</span> where <span class="math notranslate nohighlight">\((\hat{x}_n, \hat{y}_n)_{n=0}^{N-1}\)</span> represents our normalized data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Run this
+
+graph_linear_regression_mse(normed_height, normed_wingspan, trajectory=trajectory)
+
+fig, ax = plt.subplots()
+
+ax.scatter(normed_height, normed_wingspan)
+m, b =  ordinary_least_squares(normed_height, normed_wingspan)
+
+x = np.linspace(normed_height.min(), normed_height.max(), 1000)
+
+ax.plot(x, model.m * x + model.b, c=&quot;orange&quot;, label=&quot;Learned Fit&quot;, lw=&quot;4&quot;)
+ax.plot(x, m * x + b, c=&quot;red&quot;, ls= &quot;--&quot;, label=&quot;Ideal Fit&quot;)
+ax.legend()
+ax.grid(True)
+ax.set_xlabel(&quot;Normed Height&quot;)
+ax.set_ylabel(&quot;Normed Wingspan&quot;);
+</pre></div>
+</div>
+</div>
+<p>See that the landscape no longer looks so flat – adjusting <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span> have comparable impacts on the quality of our model’s predictions. Thus gradient descent will be much more effective at guiding our model’s parameters towards <span class="math notranslate nohighlight">\((m^*, b^*)\)</span>. Accordingly, our learned model now arrives at parameter values that are very close to <span class="math notranslate nohighlight">\((m^*, b^*)\)</span> This is all thanks to our having normalized our data before training on it.</p>
+<p>To see how much more reliable this training regimen is, let’s train an ensemble of models, each with different initial parameters, and see that they all arrive very close to the same terminus.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># training an ensemble of models on normalized data
+
+num_models = 10
+trajectories = [[] for i in range(num_models)]
+models = [LinearModel() for i in range(num_models)]
+
+num_epochs = 100
+step_size = 1E-1
+
+for n in range(num_epochs):
+    for model_id, model in enumerate(models):
+        y_pred = model(normed_height)
+        loss = mean_squared_error_mygrad(y_pred, normed_wingspan)
+        loss.backward()
+
+        trajectories[model_id].append((model.m.item(), model.b.item()))
+        gradient_step(model.parameters, learning_rate=learning_rate)
+
+trajectories = np.array(trajectories)
+
+fig, ax = graph_linear_regression_mse(normed_height, normed_wingspan, trajectory=trajectories)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Re-Scaling-Our-Model’s-Predictions">
+<h3>Re-Scaling Our Model’s Predictions<a class="headerlink" href="#Re-Scaling-Our-Model’s-Predictions" title="Permalink to this headline">¶</a></h3>
+<p>Although we see that our model learns well on the normalized data, note that we no longer can simply feed a height (measured in inches) to our model and get a wingspan predicted in inches – our model “expects” normalized data, and it’s learned parameters will produce predicted wingspans on this “normalized” scale. I.e. it was trained to fit:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\hat{y} = m \hat{x} + b
+\end{equation}</div><p>where <span class="math">\begin{align}
+\hat{x} &= \frac{x - \bar{x}}{\mathrm{Std}[x]}\\
+\hat{y} &= \frac{y - \bar{y}}{\mathrm{Std}[y]}
+\end{align}</span></p>
+<p><span class="math notranslate nohighlight">\(\bar{x}\)</span> is the mean height of our observed data; <span class="math notranslate nohighlight">\(\mathrm{Std}[x]\)</span> is the corresponding standard deviation. <span class="math notranslate nohighlight">\(\bar{y}\)</span> is the mean height of our observed data; <span class="math notranslate nohighlight">\(\mathrm{Std}[y]\)</span> is the corresponding standard deviation.</p>
+<p>Given this, complete the following function that will permit us to pass “raw” heights to our model and for us to get “raw” wingspan predictions back.</p>
+<p>Hint: Take the above equation that transforms <span class="math notranslate nohighlight">\(y\)</span> into <span class="math notranslate nohighlight">\(\hat{y}\)</span> and rewrite it so that <span class="math notranslate nohighlight">\(\hat{y}\)</span> is transformed to <span class="math notranslate nohighlight">\(y\)</span>. The output of our model, trained on normalized data, represents <span class="math notranslate nohighlight">\(\hat{y}^{\mathrm{(pred)}}\)</span> and we need to transform it into <span class="math notranslate nohighlight">\(y^{\mathrm{(pred)}}\)</span> so that the prediction represents a wingspan in inches - as expressed in the original (raw) data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def processed_predictions(
+    model,
+    new_x,
+    height_mean=height.mean(),
+    height_std=height.std(),
+    wingspan_mean=wingspan.mean(),
+    wingspan_std=wingspan.std(),
+):
+    &quot;&quot;&quot; Given one or more input heights, measured in inches, uses the provided linear
+    model that was trainined on normalized data, to return the predicted wingspan in inches.
+
+    Parameters
+    ----------
+    model : Callable[[array_like], Tensor]
+        The linear model trained on normalized data
+
+    new_x : array_like, shape-(N,)
+        N observed height values, measured in inches
+
+    height_mean : float
+        The mean of the height training data [inches]
+
+    height_std : float
+        The std-dev of the height training data  [inches]
+
+    wingspan_mean : float
+        The mean of the wingspan training data  [inches]
+
+    wingspan_std : float
+        The std-dev of the wingspan training data  [inches]
+
+    Returns
+    -------
+    numpy.ndarray, shape-(N,)
+        The N predicted wingspans, in inches, produced by the model
+
+    Notes
+    -----
+    Call `.data` on your model&#39;s output so that it produces a numpy array
+    and not a mygrad tensor.
+    &quot;&quot;&quot;
+    # First transform x into 𝑥̂
+    # Then pass 𝑥̂  into your model, the ourput represents 𝑦̂
+    # Finally, transform 𝑦̂ into y, and return this numpy array
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Finally, let’s plot predictions from our learned model, but by using <code class="docutils literal notranslate"><span class="pre">processed_predictions</span></code> to normalize the input data and “rescale” the resulting predictions to produce predicted wingspans on the desired scale (i.e. in inches). We should see that our learned model matches the ideal linear fit very closely.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = plt.subplots()
+
+ax.scatter(height, wingspan)
+
+x = np.linspace(height.min(), height.max(), 1000)
+
+# Produce the processed predictions of your model, given the input `x`,
+# and assign the output to the variable `y`
+# STUDENT CODE HERE
+
+
+ax.plot(x, y, color=&quot;orange&quot;, lw=4, label=&quot;Learned Model&quot;)
+
+
+m, b = ordinary_least_squares(height, wingspan,)
+ax.plot(x, m * x + b, c=&quot;red&quot;, label=&quot;Ideal Fit&quot;)
+ax.grid(True)
+ax.legend()
+ax.set_xlabel(&quot;Height [inches]&quot;)
+ax.set_ylabel(&quot;Wingspan [inches]&quot;);
+# &lt;/COGINST&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
+<p>This exercise notebook provides the glue that connects the essential concepts that we have learned about thus far in our journey towards understanding machine learning using neural networks (i.e. deep learning). Namely, we:</p>
+<ul class="simple">
+<li><p>Defined a mathematical model designed to transform observed data into useful predictions.</p>
+<ul>
+<li><p>In this case the model was a simple linear model, but we could easily generalize it to more complicated mathematical forms.</p></li>
+<li><p>It was natural for us to represent our model in terms of a <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_4.html">Python class</a>, since this allowed us to keep track of our model’s parameters, our initialization scheme for the parameter values, and the code for performing a “forward pass” of our model on input data, all in one place.</p></li>
+</ul>
+</li>
+<li><p>Utilized automatic differentiation by using MyGrad’s tensors and mathematical operations to store our model’s parameters and to perform all of the mathematics associated with evaluating the model and the loss function for our problem.</p>
+<ul>
+<li><p>This gave us easy access to the gradient of the loss function with respect to our model’s parameters.</p></li>
+</ul>
+</li>
+<li><p>Searched for optimal model parameter values - ones that minimize our loss function - by using gradient descent.</p>
+<ul>
+<li><p>We were introduced to the term “epoch” as an indicator that we had processed our dataset in its entirety.</p></li>
+<li><p>The selection of the learning rate was not informed by gradient descent or any obvious mathematics; we basically just made a guess at an appropriate value here (more on this later).</p></li>
+<li><p>This style of updating a mathematical model by using data containing the desired (or “true”) predictions is known as “supervised learning”.</p></li>
+</ul>
+</li>
+<li><p>Saw that the shape of our loss landscape had an impact on the efficacy of the gradient descent process, and, furthermore, that normalizing our data (to have a mean of <span class="math notranslate nohighlight">\(0\)</span> and standard deviation of <span class="math notranslate nohighlight">\(1\)</span>) could help reshape this loss landscape to improve the model optimization process.</p>
+<ul>
+<li><p>This dynamic was rooted in the fact that the scales of the numbers associated with our raw data were such that making a small adjustment to <span class="math notranslate nohighlight">\(m\)</span> made a much bigger impact on the quality of our model’s predictions than did making a comparable adjustment to <span class="math notranslate nohighlight">\(b\)</span>.</p></li>
+<li><p>Normalizing our data helped to place <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> on more of an equal footing in terms of their influence on the model’s predictions, and this led to healthier optimization performance, since we are using a single learning rate across all of the model’s parameters.</p></li>
+<li><p>This parameter-scale balancing act will prove to be important for other, more sophisticated mathematical models as well, and data normalization will regularly be leveraged to help with this.</p></li>
+</ul>
+</li>
+</ul>
+<p>It is recommended that you revisit and revise this notebook regularly to keep the lessons learned here in hand.</p>
+<p>In practice, we will never have the luxury of glimpsing the full loss landscape associated with our model and dataset as we did here. This is because our models will almost inevitable contain too many parameters to permit a plot of a 3D surface. So we wont have the benefit of qualitatively inspecting the trajectory of our gradient-based descent down the loss’s surface, nor will we be able to easily glean the features of the surface’s shape that prove difficult to traverse. For this reason, it is
+important to thoroughly internalize the lessons learned from this simple problem and prepare ourselves to anticipate their manifestations in more complicated scenarios - where we will need to be much more savvy and clever to deal with them.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../What_Does_Learning_Mean.html" class="btn btn-neutral float-right" title="Where is the “Learning” in All of This?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../Automatic_Differentiation.html" class="btn btn-neutral float-left" title="Automatic Differentiation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Automatic differentiation, Category: Cheat Sheet" name="description" />
+<meta content="automatic differentiation, autodiff, gradient descent, pytorch, numpy, mygrad" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Automatic Differentiation and MyGrad &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Cheat Sheets" href="../cheat_sheet.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Automatic Differentiation and MyGrad</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Terminology">Terminology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Installing-MyGrad">Installing MyGrad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-tensors">Creating tensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Doing-math-with-tensors">Doing math with tensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-automatic-differentiation">Using automatic differentiation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#A-single-variable-function">A single variable function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-multi-variable-function">A multi-variable function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Vectorized-autodiff">Vectorized autodiff</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Working-with-constants">Working with constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reshaping-tensors">Reshaping tensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Inspecting-tensors">Inspecting tensors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../cheat_sheet.html">Cheat Sheets</a> &raquo;</li>
+        
+      <li>Automatic Differentiation and MyGrad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Cheat_Sheets/Autodiff_and_MyGrad.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Automatic-Differentiation-and-MyGrad">
+<h1>Automatic Differentiation and MyGrad<a class="headerlink" href="#Automatic-Differentiation-and-MyGrad" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Terminology">
+<h2>Terminology<a class="headerlink" href="#Terminology" title="Permalink to this headline">¶</a></h2>
+<p>An <strong>automatic differentiation</strong> library provides us with mathematical functions and tools, which are specially designed so that, for any function that we evaluate, we can compute the corresponding (first-order) derivatives of that function. PyTorch and TensorFlow are examples of popular libraries with “auto-diff” capabilities. We will be using the <strong>MyGrad library</strong>, which is designed to be “NumPy with autodiff built in”.</p>
+<p>The <strong>gradient</strong> of a function is the collection (vector) of all of its (first-order) partial derivatives. E.g. the gradient of the three-variable function <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2, w_3)\)</span>, is the vector of derivatives: <span class="math notranslate nohighlight">\(\nabla \vec{\mathscr{L}} = \begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1} &amp; \frac{\partial \mathscr{L}}{\partial w_2} &amp; \frac{\partial \mathscr{L}}{\partial w_3} \end{bmatrix}\)</span>.</p>
+<p><strong>Back-propagation</strong> is a specific algorithm that can be used to perform automatic differentiation (via the chain rule in Calculus). MyGrad leverages “backprop” under the hood when it computes derivatives.</p>
+<p>For our purposes the terms <strong>tensor</strong> and <strong>array</strong> are synonymous and refer to multi-dimensional sequences of numbers. MyGrad uses “tensors” where NumPy uses “arrays”, because it is useful to be able to distinguish these types of objects in our code.</p>
+</div>
+<div class="section" id="Installing-MyGrad">
+<h2>Installing MyGrad<a class="headerlink" href="#Installing-MyGrad" title="Permalink to this headline">¶</a></h2>
+<p>Install mygrad with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mygrad</span>
+</pre></div>
+</div>
+<p>The only dependency is NumPy.</p>
+</div>
+<div class="section" id="Creating-tensors">
+<h2>Creating tensors<a class="headerlink" href="#Creating-tensors" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+
+<span class="go"># creating a 0D tensor (a scalar)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+<span class="go">Tensor(0.)</span>
+
+<span class="go"># creating a 1D tensor of 32-bit floats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="go">Tensor([1., 2., 3.], dtype=float32)</span>
+
+<span class="go"># creating a constant tensor - meaning that this tensor</span>
+<span class="go"># will be skipped over during backpropagation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.</span><span class="p">],</span> <span class="n">constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">constant</span>
+<span class="go">True</span>
+
+<span class="go"># using a built-in tensor-creation function to</span>
+<span class="go"># make create a sequence of numbers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">Tensor([ 0. ,  2.5,  5. ,  7.5, 10. ])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Doing-math-with-tensors">
+<h2>Doing math with tensors<a class="headerlink" href="#Doing-math-with-tensors" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">]])</span>
+
+<span class="go"># square each element of the tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="go">Tensor([[ 0.,  1.,  4.],</span>
+<span class="go">        [ 9., 16., 25.]])</span>
+
+<span class="go"># or</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">Tensor([[ 0.,  1.,  4.],</span>
+<span class="go">        [ 9., 16., 25.]])</span>
+
+<span class="go"># compute the square root of each element</span>
+<span class="go"># of the tensor, and force the output to be</span>
+<span class="go"># a constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">Tensor([[0.        , 1.        , 1.41421356],</span>
+<span class="go">        [1.73205081, 2.        , 2.23606798]])</span>
+
+<span class="go"># take the dot product between all pairs of rows</span>
+<span class="go"># of the tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="go">Tensor([[ 5., 14.],</span>
+<span class="go">        [14., 50.]])</span>
+
+<span class="go"># summing along the rows of the tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">Tensor([ 3., 12.])</span>
+
+<span class="go"># or</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">Tensor([ 3., 12.])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Using-automatic-differentiation">
+<h2>Using automatic differentiation<a class="headerlink" href="#Using-automatic-differentiation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="A-single-variable-function">
+<h3>A single variable function<a class="headerlink" href="#A-single-variable-function" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># f(x) = 2 * x  @ x=10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="c1"># Calling `.backward()` on the final tensor</span>
+<span class="c1"># of your calculation triggers auto-diff</span>
+<span class="c1"># through the function(s) that created it</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># Stores df/dx @ x=10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="A-multi-variable-function">
+<h3>A multi-variable function<a class="headerlink" href="#A-multi-variable-function" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># f(x, y) = x**2 + y  @ x=10, y=20</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">20.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># stores ∂f/∂x @ x=10, y=20</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">20.</span><span class="p">)</span>
+
+<span class="c1"># stores ∂f/∂x @ x=10, y=20</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Vectorized-autodiff">
+<h3>Vectorized autodiff<a class="headerlink" href="#Vectorized-autodiff" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># f(x) = x0**2 + x1**2 + x2**2  @ x0=-1, x1=4, x3=6</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">])</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># stores [∂f/∂x0, ∂f/∂x1, ∂f/∂x2]  @ x0=-1, x1=4, x3=6</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span> <span class="mf">12.</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Working-with-constants">
+<h2>Working with constants<a class="headerlink" href="#Working-with-constants" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &quot;Constant&quot; tensors are skipped by automatic differentiation.</span>
+<span class="c1"># This can save us from unnecessary computations</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">constant_tensor</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">variable_tensor</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>  <span class="c1"># default: constant=False</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">variable_tensor</span> <span class="o">**</span> <span class="n">constant_tensor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>  <span class="c1"># compute df/d(variable_tensor), skip constant_tensor</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">variable_tensor</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">6.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">constant_tensor</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="bp">True</span>
+
+
+<span class="c1"># Integer-valued tensors *must* be treated as constants</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">int_valued_tensor</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">int_valued_tensor</span><span class="o">.</span><span class="n">constant</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">constant</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c1"># not allowed</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="p">:</span> <span class="n">Integer</span><span class="o">-</span><span class="n">valued</span> <span class="n">tensors</span> <span class="n">must</span> <span class="n">be</span> <span class="n">treated</span> <span class="k">as</span> <span class="n">constants</span><span class="o">.</span>
+
+
+<span class="c1"># Operations on numpy arrays, lists, and other non-tensor objects will</span>
+<span class="c1"># automatically return constants</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]</span>  <span class="c1"># lists are constants</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">constant</span>
+<span class="bp">True</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a_numpy_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])</span>  <span class="c1"># numpy-arrays are constants</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a_numpy_array</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">constant</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Reshaping-tensors">
+<h2>Reshaping tensors<a class="headerlink" href="#Reshaping-tensors" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># making a shape-(2, 2) tensor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">]])</span>
+
+<span class="c1"># or</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">]])</span>
+
+<span class="c1"># transpose the tensor; swapping the rows</span>
+<span class="c1"># and the columns</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Inspecting-tensors">
+<h2>Inspecting tensors<a class="headerlink" href="#Inspecting-tensors" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">]])</span>
+
+<span class="go"># What is your shape?</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(3, 2)</span>
+
+<span class="go"># What is your dimensionality?</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span>
+<span class="go">2</span>
+
+<span class="go"># Are you a constant? I.e. will backprop &quot;skip&quot; you</span>
+<span class="go"># during autodiff?</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">constant</span>
+<span class="go">False</span>
+
+<span class="go"># Gimme your underlying numpy array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[0., 1., 2.],</span>
+<span class="go">       [3., 4., 5.]])</span>
+
+<span class="go"># or</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">array([[0., 1., 2.],</span>
+<span class="go">       [3., 4., 5.]])</span>
+
+<span class="go"># Gimme me your associated derivatives (an array or None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../cheat_sheet.html" class="btn btn-neutral float-left" title="Cheat Sheets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

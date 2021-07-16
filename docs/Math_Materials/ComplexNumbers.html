@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Math supplement, Difficulty: Easy, Category: Section" name="description" />
+<meta content="imaginary number, complex number, complex addition, complex subtraction, complex multiplication, complex division, complex conjugate, magnitude, eulers formula" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Complex Numbers &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to Single-Variable Calculus" href="Intro_Calc.html" />
+    <link rel="prev" title="Fundamentals of Linear Algebra" href="LinearAlgebra.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Complex Numbers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#What-are-Imaginary-Numbers?">What are Imaginary Numbers?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Calculating-Square-Roots-of-Negative-Numbers-Using-i">Calculating Square Roots of Negative Numbers Using <span class="math notranslate nohighlight">\(i\)</span></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#How-Do-We-Create-Complex-Numbers?">How Do We Create Complex Numbers?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Representation-of-Complex-Numbers-in-a-Plane">Representation of Complex Numbers in a Plane</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Complex-Numbers-in-Python">Complex Numbers in Python</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Operations-with-Complex-Numbers">Operations with Complex Numbers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Real-and-Imaginary-Components-of-Complex-Numbers">Real and Imaginary Components of Complex Numbers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Complex-Addition-and-Subtraction">Complex Addition and Subtraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Complex-Multiplication">Complex Multiplication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Magnitude-of-a-Complex-Number">Magnitude of a Complex Number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Complex-Conjugation">Complex Conjugation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Complex-Division">Complex Division</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Euler’s-Formula">Euler’s Formula</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Converting-a+bi-to-re^{i\varphi}">Converting <span class="math notranslate nohighlight">\(a+bi\)</span> to <span class="math notranslate nohighlight">\(re^{i\varphi}\)</span></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Applying-Euler’s-Formula">Applying Euler’s Formula</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Links-to-Official-Documentation-and-Other-Resources">Links to Official Documentation and Other Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Computing-Powers-of-i:-Solution">Computing Powers of <span class="math notranslate nohighlight">\(i\)</span>: Solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Computing-Square-Roots-of-Negative-Numbers:-Solution">Computing Square Roots of Negative Numbers: Solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Computing-Conjugates:-Solution">Computing Conjugates: Solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Write-A-Division-Function-for-Complex-Numbers:-Solution">Write A Division Function for Complex Numbers: Solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Exercises-with-Euler’s-Formula:-Solution">Exercises with Euler’s Formula: Solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Applying-Euler’s-Formula:-Solution">Applying Euler’s Formula: Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Complex Numbers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/ComplexNumbers.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Complex-Numbers">
+<h1>Complex Numbers<a class="headerlink" href="#Complex-Numbers" title="Permalink to this headline">¶</a></h1>
+<p>We will talk about complex numbers in this section, which are incredibly useful even when stepping outside the theoretical world of math to deal with real-world data. First, we will discuss the unit imaginary number <span class="math notranslate nohighlight">\(i\)</span>, and learn about how to represent any imaginary number. Then, we will discuss how to compose complex numbers and how these are represented in both mathematics and Python. Finally, we will discuss Euler’s Formula, an important connection between exponential and sinusoidal
+functions that is vital to understand for the audio-related portion of this course.</p>
+<div class="section" id="What-are-Imaginary-Numbers?">
+<h2>What are Imaginary Numbers?<a class="headerlink" href="#What-are-Imaginary-Numbers?" title="Permalink to this headline">¶</a></h2>
+<p>We are familiar with working with elements of the set of <strong>real numbers</strong> <span class="math notranslate nohighlight">\(\mathbb{R}\)</span>, e.g <span class="math notranslate nohighlight">\(-2\)</span>, <span class="math notranslate nohighlight">\(\sqrt{3}\)</span>, and <span class="math notranslate nohighlight">\(\frac{2}{3}\)</span>. We often specify that a number <span class="math notranslate nohighlight">\(x\)</span> is real by saying it lies in the set of real numbers, denoted as <span class="math notranslate nohighlight">\(x\in\mathbb{R}\)</span>.</p>
+<p>As we will see later, imaginary numbers will allow us to <em>extend</em> real numbers into complex numbers. However, to understand imaginary numbers, we must first consider the equation <span class="math notranslate nohighlight">\(x^2 = -1\)</span>.</p>
+<p>We know that the square of any <span class="math notranslate nohighlight">\(x\in\mathbb{R}\)</span> is non-negative, i.e. <span class="math notranslate nohighlight">\(x^2 \geq 0\)</span>. It would seem, then, that the equation <span class="math notranslate nohighlight">\(x^2 = -1\)</span> cannot be satisfied if we choose to work solely with real numbers. For this reason, we will define a new number, <span class="math notranslate nohighlight">\(i\)</span>, to be the solution to this equation.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>The <strong>imaginary unit</strong> <span class="math notranslate nohighlight">\(i\)</span> is defined as the solution to the equation <span class="math notranslate nohighlight">\(x^2 = -1\)</span>. Often this is written as <span class="math notranslate nohighlight">\(i = \sqrt{-1}\)</span>. Typically <span class="math notranslate nohighlight">\(i\)</span> is called the unit imaginary number or the imaginary unit to distinguish it from other imaginary numbers.</p>
+</div>
+<p>From the property <span class="math notranslate nohighlight">\(i^2 = -1\)</span>, we can actually determine all powers of <span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+i^1 &amp;= i \\
+i^2 &amp;= -1 \\
+i^3 &amp;= i^2 \cdot i = -1 \cdot i = -i \\
+i^4 &amp;= i^3 \cdot i = -i \cdot i = -(i^2) = -(-1) = 1 \\
+i^5 &amp;= i^4 \cdot i = 1 \cdot i = i
+\end{align}</div><p>We can see that the pattern above keeps repeating every 4 powers of <span class="math notranslate nohighlight">\(i\)</span>, as evidenced by <span class="math notranslate nohighlight">\(i^1 = i^5 = i\)</span>. In particular,</p>
+<div class="math notranslate nohighlight">
+\begin{equation} i^n = i^{n \text{ mod } 4}, \end{equation}</div><p>where <span class="math notranslate nohighlight">\(n \text{ mod } 4\)</span> is the remainder of <span class="math notranslate nohighlight">\(n\)</span> divided by <span class="math notranslate nohighlight">\(4\)</span> (in Python, we would compute this as <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">%</span> <span class="pre">4</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Computing Powers of i</strong></p>
+<p>Using the previous expression for powers of <span class="math notranslate nohighlight">\(i\)</span>, calculate the following:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(i^6\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i^{12}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i^0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i^{260}\)</span></p></li>
+</ul>
+</div>
+<div class="section" id="Calculating-Square-Roots-of-Negative-Numbers-Using-i">
+<h3>Calculating Square Roots of Negative Numbers Using <span class="math notranslate nohighlight">\(i\)</span><a class="headerlink" href="#Calculating-Square-Roots-of-Negative-Numbers-Using-i" title="Permalink to this headline">¶</a></h3>
+<p>Knowing that <span class="math notranslate nohighlight">\(i = \sqrt{-1}\)</span> allows us to calculate the square roots of negative numbers, something we cannot do working only with real numbers. Let’s consider <span class="math notranslate nohighlight">\(\sqrt{-16}\)</span>, which we can evaluate using our knowledge of <span class="math notranslate nohighlight">\(i\)</span> as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sqrt{-16} = \sqrt{-1 \cdot 16} = \sqrt{i^2 \cdot 4^2} = \sqrt{i^2} \cdot \sqrt{4^2} = 4 \cdot i.
+\end{equation}</div><p>This value, <span class="math notranslate nohighlight">\(4 \cdot i\)</span> (often written simply as <span class="math notranslate nohighlight">\(4i\)</span>), is an <strong>imaginary number</strong>. Imaginary numbers all take the form of a real number multiplied by the unit imaginary; that is to say, if <span class="math notranslate nohighlight">\(b\)</span> is a real number, then <span class="math notranslate nohighlight">\(bi\)</span> is an imaginary number. We can square <span class="math notranslate nohighlight">\(4i\)</span> to make sure that we get back our original value of -16 again:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(4i)^2 = \big(4^2\big) \cdot \big(i^2\big) = 16 \cdot -1 = -16.
+\end{equation}</div><p>Let’s look at another brief example of calculating the square root of a negative number:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sqrt{-8} = \sqrt{-1 \cdot 8} = \sqrt{i^2 \cdot 2^2 \cdot 2} = 2\sqrt{2}i.
+\end{equation}</div><p>Just as before, the square root of <span class="math notranslate nohighlight">\(-8\)</span>, which we found to be <span class="math notranslate nohighlight">\(2\sqrt{2}i\)</span>, is an imaginary number.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>In order to calculate <span class="math notranslate nohighlight">\(\sqrt{-x}\)</span>, where <span class="math notranslate nohighlight">\(x &gt; 0\)</span>:</p>
+<ol class="arabic simple">
+<li><p>Separate the square root into the product <span class="math notranslate nohighlight">\(\sqrt{-1}\cdot\sqrt{x}\)</span></p></li>
+<li><p>Represent the product as <span class="math notranslate nohighlight">\(\sqrt{i^2}\cdot\sqrt{x}\)</span></p></li>
+<li><p>Use power rules to arrive at the solution <span class="math notranslate nohighlight">\(\sqrt{-x} = \sqrt{x}i\)</span></p></li>
+</ol>
+<p>The final result is an imaginary number of the form <span class="math notranslate nohighlight">\(bi\)</span>, for some <span class="math notranslate nohighlight">\(b\in\mathbb{R}\)</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Computing Square Roots of Negative Numbers</strong></p>
+<p>Using the unit imaginary number <span class="math notranslate nohighlight">\(i\)</span>, calculate the following:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-20}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-30}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-10}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-5}\)</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="How-Do-We-Create-Complex-Numbers?">
+<h2>How Do We Create Complex Numbers?<a class="headerlink" href="#How-Do-We-Create-Complex-Numbers?" title="Permalink to this headline">¶</a></h2>
+<p>We know that values such as <span class="math notranslate nohighlight">\(5\)</span>, <span class="math notranslate nohighlight">\(\sqrt{3}\)</span>, and <span class="math notranslate nohighlight">\(\frac{2}{3}\)</span> are all elements of <span class="math notranslate nohighlight">\(\mathbb{R}\)</span>. We also just saw that values such as <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(4i\)</span>, and <span class="math notranslate nohighlight">\(2\sqrt{2}i\)</span> are all examples of <em>imaginary numbers</em>. But, what if we want to represent a number that is part real and part imaginary?</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>A <strong>complex number</strong> is a number of the form <span class="math notranslate nohighlight">\(a + bi\)</span>, where <span class="math notranslate nohighlight">\(a,b\in\mathbb{R}\)</span> and <span class="math notranslate nohighlight">\(i\)</span> is the imaginary unit. We use the symbol <span class="math notranslate nohighlight">\(\mathbb{C}\)</span> to denote the set of all complex numbers, with <span class="math notranslate nohighlight">\(z\in\mathbb{C}\)</span> denoting that <span class="math notranslate nohighlight">\(z\)</span> is a complex number.</p>
+</div>
+<p>In general, complex numbers satisfy the equality relationship that if <span class="math notranslate nohighlight">\(a + bi = u + vi\)</span>, then <span class="math notranslate nohighlight">\(a = u\)</span> and <span class="math notranslate nohighlight">\(b = v\)</span>.</p>
+<div class="section" id="Representation-of-Complex-Numbers-in-a-Plane">
+<h3>Representation of Complex Numbers in a Plane<a class="headerlink" href="#Representation-of-Complex-Numbers-in-a-Plane" title="Permalink to this headline">¶</a></h3>
+<p>Geometrically, we can think of complex numbers as points in a 2-D plane, which we call the complex plane. It is convention to have the horizontal axis be the <em>real axis</em> and the vertical axis be the <em>imaginary axis</em>. So, the complex number <span class="math notranslate nohighlight">\(a+bi\)</span> can be represented by the vector <span class="math notranslate nohighlight">\(\begin{bmatrix} a &amp; b\end{bmatrix}\)</span> in the complex plane, as depicted in the image below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/complex_numbers_imaginary_vector.png" alt="Vector in Complex Plane Pointing to (3,4i)" width="400">
+</p>
+</div><p>An attentive reader may be reminded of the diagrams in the <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html">Fundamentals of Linear Algebra</a> section. Just like vectors in linear algebra, we can add, subtract, and find the magnitude of vectors in the complex plane (i.e. complex numbers)! It is useful, but not necessary, to be comfortable with vector operations before we move on.</p>
+</div>
+<div class="section" id="Complex-Numbers-in-Python">
+<h3>Complex Numbers in Python<a class="headerlink" href="#Complex-Numbers-in-Python" title="Permalink to this headline">¶</a></h3>
+<p>We can very easily represent complex numbers in Python as well! Generally, we represent the complex number <span class="math notranslate nohighlight">\(a + bi\)</span> as <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">bj</span></code> in Python.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Notational Note</strong></p>
+<p>Electrical engineers use the symbol <span class="math notranslate nohighlight">\(j\)</span> in place of <span class="math notranslate nohighlight">\(i\)</span>, as they often reserve <span class="math notranslate nohighlight">\(i\)</span> for current. This is why Python displays the complex number <span class="math notranslate nohighlight">\(2 + 3i\)</span> as <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">3j</span></code>.</p>
+</div>
+<p>Along with the <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">bj</span></code> syntax, the built-in type <code class="docutils literal notranslate"><span class="pre">complex</span></code> can be used to create complex-type numbers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating complex numbers</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3j</span>
+<span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">3j</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">complex</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">3j</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">complex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">3j</span><span class="p">)</span>
+<span class="nb">complex</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="mi">4j</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">j</span></code> is not, by itself, reserved as a special placeholder for <span class="math notranslate nohighlight">\(i\)</span>. Rather, <code class="docutils literal notranslate"><span class="pre">j</span></code> <em>must be preceded immediately with a numerical literal</em> (i.e. you cannot use a variable) in order for the Python interpreter to treat it as a complex number.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># `j` by itself is treated like any other character</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">j</span>
+<span class="ne">NameError</span><span class="p">:</span> <span class="n">name</span> <span class="s1">&#39;j&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">defined</span>
+
+<span class="c1"># `1j` is interpreted as the imaginary unit</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">(</span><span class="mi">1j</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cmath</span></code> (“complex math”) module provides a collection of mathematical functions defined for complex numbers, some of which we will detail below. For a complete listing of these functions, refer to the <a class="reference external" href="https://docs.python.org/3/library/cmath.html#module-cmath">official documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="Operations-with-Complex-Numbers">
+<h2>Operations with Complex Numbers<a class="headerlink" href="#Operations-with-Complex-Numbers" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned, we can perform many of the same operations on complex numbers that we do on regular vectors, as well as a few others. This section will introduce these key operations and demonstrate how to use them in Python.</p>
+<div class="section" id="Real-and-Imaginary-Components-of-Complex-Numbers">
+<h3>Real and Imaginary Components of Complex Numbers<a class="headerlink" href="#Real-and-Imaginary-Components-of-Complex-Numbers" title="Permalink to this headline">¶</a></h3>
+<p>Before we begin performing operations like addition and subtraction on complex numbers, it’s important that we know how to retrieve the real and imaginary parts of a complex number.</p>
+<p>Suppose we have a complex number <span class="math notranslate nohighlight">\(z = a + bi\)</span>. To find the <em>real part</em> of <span class="math notranslate nohighlight">\(z\)</span>, we call <span class="math notranslate nohighlight">\(\operatorname{Re}(z)\)</span>. This yields <span class="math notranslate nohighlight">\(a\)</span>, where <span class="math notranslate nohighlight">\(a \in \mathbb{R}\)</span>. To find the <em>imaginary part</em> of <span class="math notranslate nohighlight">\(z\)</span>, we call <span class="math notranslate nohighlight">\(\operatorname{Im}(z)\)</span>, which returns <span class="math notranslate nohighlight">\(b\)</span>, where again <span class="math notranslate nohighlight">\(b \in \mathbb{R}\)</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Note</strong></p>
+<p>When we call <span class="math notranslate nohighlight">\(\operatorname{Im}(z)\)</span> to find the imaginary part of a complex number, the resulting value is a <em>real number</em> (<span class="math notranslate nohighlight">\(b \in \mathbb{R}\)</span>). The <em>imaginary component</em> <span class="math notranslate nohighlight">\(bi\)</span> is a complex number (<span class="math notranslate nohighlight">\(bi \in \mathbb{C}\)</span>).</p>
+</div>
+<div class="section" id="Real-and-Imaginary-Components-of-Complex-Numbers-in-Python">
+<h4>Real and Imaginary Components of Complex Numbers in Python<a class="headerlink" href="#Real-and-Imaginary-Components-of-Complex-Numbers-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>We can easily access the real and imaginary components (the <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> from <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">bj</span></code>, respectively) in Python through <code class="docutils literal notranslate"><span class="pre">real</span></code> and <code class="docutils literal notranslate"><span class="pre">imag</span></code> attributes. Let’s look at the complex number <span class="math notranslate nohighlight">\(z = 1.2 - 3.4i\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Accessing the real and imaginary parts of</span>
+<span class="c1"># a complex number.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.4</span><span class="p">)</span> <span class="c1"># z = 1.2 - 3.4i</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span>
+<span class="mf">1.2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span><span class="o">.</span><span class="n">imag</span>
+<span class="o">-</span><span class="mf">3.4</span>
+<span class="c1"># Just like in math, the returned value is a real number</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+<span class="nb">float</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Complex-Addition-and-Subtraction">
+<h3>Complex Addition and Subtraction<a class="headerlink" href="#Complex-Addition-and-Subtraction" title="Permalink to this headline">¶</a></h3>
+<p>Just like with vectors, to add and subtract two complex numbers is <em>to add and subtract their real and imaginary components individually</em>. Hence the sum of the complex numbers <span class="math notranslate nohighlight">\(a+bi\)</span> and <span class="math notranslate nohighlight">\(u+vi\)</span> will be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(a+bi) + (u+vi) = (a+u) + (b+v)i.
+\end{equation}</div><p>So, the sum of the complex numbers <span class="math notranslate nohighlight">\(2 + 3i\)</span> and <span class="math notranslate nohighlight">\(4 + 7i\)</span> will be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(2+3i) + (4+7i) = (2+4) + (3+7)i = 6 + 10i.
+\end{equation}</div><p>Subtraction is performed similarly,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(a+bi) - (u+vi) = (a-u) + (b-v)i.
+\end{equation}</div><p>Thus, if we were to subtract <span class="math notranslate nohighlight">\(4 + 7i\)</span> from <span class="math notranslate nohighlight">\(2 + 3i\)</span>, the difference would be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(2+3i) - (4+7i) = (2-4) + (3-7)i = -2 + (-4)i.
+\end{equation}</div><div class="section" id="Complex-Addition-and-Subtraction-in-Python">
+<h4>Complex Addition and Subtraction in Python<a class="headerlink" href="#Complex-Addition-and-Subtraction-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>Addition and subtraction of complex numbers in Python is just like adding and subtracting normal numbers, using the <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code> operators, respectively:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The addition example defined above</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">7j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="p">(</span><span class="mi">6</span><span class="o">+</span><span class="mi">10j</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s verify z is a complex number:</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="bp">True</span>
+
+<span class="c1"># Now let&#39;s look at the subtraction example</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">4j</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s verify z is a complex number:</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Complex-Multiplication">
+<h3>Complex Multiplication<a class="headerlink" href="#Complex-Multiplication" title="Permalink to this headline">¶</a></h3>
+<p>If we have two complex numbers <span class="math notranslate nohighlight">\(a + bi\)</span> and <span class="math notranslate nohighlight">\(u + vi\)</span>, we can find their product by the applying familiar distributive law: <span class="math">\begin{align}
+(a + bi) \cdot (u + vi) &= a \cdot (u + vi) + bi \cdot (u + vi) \\
+&= a \cdot u + (a\cdot v)i + (b\cdot u)i + (b\cdot v)i^2 \\
+&= (au - bv) + (av + bu) i.
+\end{align}</span></p>
+<p>Hence the general rule for multiplying two complex numbers is <span class="math">\begin{equation}
+(a + bi) \cdot (u + vi) = (au - bv) + (av+bu)i.
+\end{equation}</span></p>
+<p>For a concrete example, consider the complex numbers <span class="math notranslate nohighlight">\(3+4i\)</span> and <span class="math notranslate nohighlight">\(5+7i\)</span>, whose product is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(3+4i) \cdot (5+7i) = (3\cdot5-4\cdot7) + (3\cdot7+4\cdot5)i = -13 + 41i.
+\end{equation}</div><div class="section" id="Complex-Multiplication-in-Python">
+<h4>Complex Multiplication in Python<a class="headerlink" href="#Complex-Multiplication-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>Just like addition and subtraction, we can use the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator to multiply two complex numbers in Python. Let’s quickly do the multiplication example above in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The multiplication example defined above</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">4j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">7j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="p">(</span><span class="o">-</span><span class="mi">13</span><span class="o">+</span><span class="mi">41j</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s verify z is a complex number:</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Magnitude-of-a-Complex-Number">
+<h3>Magnitude of a Complex Number<a class="headerlink" href="#Magnitude-of-a-Complex-Number" title="Permalink to this headline">¶</a></h3>
+<p>In the 2-D plane, the magnitude of a vector <span class="math notranslate nohighlight">\(\begin{bmatrix} x &amp; y\end{bmatrix}\)</span> is <span class="math notranslate nohighlight">\(\sqrt{x^2+y^2}\)</span>. Because we can represent complex numbers in a 2-D plane, we can similarly define the magnitude of a complex number!</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>The <strong>magnitude</strong> of a complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span> (also known as the absolute value or the modulus) is defined as <span class="math notranslate nohighlight">\(|z| = \sqrt{a^2+b^2}\)</span>. Like the magnitude of a vector, the magnitude of a complex number will always be a <em>positive real number</em>. Geometrically, the magnitude of a complex number corresponds to the length of the vector representing the complex number in the complex plane.</p>
+</div>
+<p>As an example, the magnitude of the complex number <span class="math notranslate nohighlight">\(3+4i\)</span> will be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+|3+4i| = \sqrt{3^2+4^2} = 5.
+\end{equation}</div><p>This means that the length of the vector representing <span class="math notranslate nohighlight">\(3+4i\)</span> on the complex plane, <span class="math notranslate nohighlight">\(\begin{bmatrix}3 &amp; 4\end{bmatrix}\)</span>, is <span class="math notranslate nohighlight">\(5\)</span>.</p>
+<div class="section" id="Magnitudes-of-Complex-Numbers-in-Python">
+<h4>Magnitudes of Complex Numbers in Python<a class="headerlink" href="#Magnitudes-of-Complex-Numbers-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>In Python, we can use the built-in <code class="docutils literal notranslate"><span class="pre">abs</span></code> function to calculate the magnitude of a complex number, which is returned as a <code class="docutils literal notranslate"><span class="pre">float</span></code>. We can also calculate the magnitude using NumPy’s <code class="docutils literal notranslate"><span class="pre">numpy.abs</span></code> function. Let’s calculate the magnitude of the complex number <span class="math notranslate nohighlight">\(3+4i\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The magnitude example defined above</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">4j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="mf">5.0</span>
+
+<span class="c1"># In this case, z should be a float value. Let&#39;s verify this</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+<span class="bp">True</span>
+
+<span class="c1"># Let&#39;s try the same thing using NumPy</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="mf">5.0</span>
+
+<span class="c1"># In this case, z should be a numpy.float64 value. Let&#39;s verify this</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">numpy</span><span class="o">.</span><span class="n">float64</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Complex-Conjugation">
+<h3>Complex Conjugation<a class="headerlink" href="#Complex-Conjugation" title="Permalink to this headline">¶</a></h3>
+<p>Along with finding the magnitude of complex numbers, it is also important that we know how to find <strong>complex conjugates</strong> as well.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>The complex conjugate, or more simply the conjugate, of a complex number is represented by a superscript <span class="math notranslate nohighlight">\({}^*\)</span> and <em>replaces any instance of</em> <span class="math notranslate nohighlight">\(i\)</span> <em>with</em> <span class="math notranslate nohighlight">\(- i\)</span>. Thus, for a complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span>, the complex conjugate is <span class="math notranslate nohighlight">\(z^*=(a+bi)^*=a-bi\)</span>.</p>
+</div>
+<p>Let’s take the complex number <span class="math notranslate nohighlight">\(2+3i\)</span>. We can easily find the complex conjugate by swapping out all instances of <span class="math notranslate nohighlight">\(i\)</span> with <span class="math notranslate nohighlight">\(-i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation} (2 + 3i)^{*} = 2 - 3i. \end{equation}</div><p>That’s all there is to finding conjugates! Observe that the process of finding the complex conjugate does not affect the real part of the complex number. This leads to the important property that the complex conjugate of any real number is itself; i.e. for all <span class="math notranslate nohighlight">\(x\in\mathbb{R}\)</span>, then <span class="math notranslate nohighlight">\(x^*=x\)</span>.</p>
+<p>Another important property of the complex conjugate is that the product of a complex number and its conjugate yields the magnitude-squared of the complex number. In other words, for a complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span>, <span class="math">\begin{equation}
+zz^*=(a+bi)\cdot(a-bi)=(a^2+b^2)+(-ab+ab)i=a^2+b^2=|z|^2.
+\end{equation}</span></p>
+<div class="section" id="Complex-Conjugation-in-Python">
+<h4>Complex Conjugation in Python<a class="headerlink" href="#Complex-Conjugation-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>We can calculate the conjugate of a complex number <code class="docutils literal notranslate"><span class="pre">x</span></code> in Python by calling <code class="docutils literal notranslate"><span class="pre">x.conjugate()</span></code>, which returns a <code class="docutils literal notranslate"><span class="pre">complex</span></code> type value. We can also use NumPy’s <code class="docutils literal notranslate"><span class="pre">numpy.conjugate(x)</span></code> function. Let’s see the above example (where <span class="math notranslate nohighlight">\(x = 2 + 3i\)</span>) done in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The conjugation example defined above</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+<span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">3j</span><span class="p">)</span>
+
+<span class="c1"># The process is similar in NumPy</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span>
+<span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">3j</span><span class="p">)</span>
+
+<span class="c1"># Though the type returned is different</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="n">numpy</span><span class="o">.</span><span class="n">complex128</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Computing Conjugates</strong></p>
+<p>Calculate the conjugates of the following complex numbers and check your answers using Python or NumPy.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(8 - 10i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(e^{ix}\)</span>, where <span class="math notranslate nohighlight">\(x \in \mathbb{R}\)</span></p></li>
+</ul>
+<p>Then, with <span class="math notranslate nohighlight">\(z_1=a+bi\)</span> and <span class="math notranslate nohighlight">\(z_2=u+vi\)</span>, show the following properties of complex conjugation are true:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(z_1^*+z_2^*=(z_1+z_2)^*\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(z_1^*z_2^*=(z_1z_2)^*\)</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="Complex-Division">
+<h3>Complex Division<a class="headerlink" href="#Complex-Division" title="Permalink to this headline">¶</a></h3>
+<p>While we are comfortable with dividing real numbers, things get a tiny bit trickier when working with complex values. After all, if <span class="math notranslate nohighlight">\(z=a+bi\)</span> and <span class="math notranslate nohighlight">\(w=u+vi\)</span>, it may not be entirely clear how we can convert <span class="math">\begin{equation}
+\frac{z}{w}=\frac{a+bi}{u+vi}
+\end{equation}</span></p>
+<p>into the more familiar form of <span class="math notranslate nohighlight">\(x+iy\)</span>. In particular, how do we handle the complex number in the denominator?</p>
+<p>The key lies in the complex conjugate. Since multiplying a complex number by its conjugate yields its magnitude - a positive, real number - we can convert the complex-valued denominator into a real-valued one simply by multiplying by <span class="math notranslate nohighlight">\(\frac{1}{w^*}\)</span>! Since we want the quotient to have the same overall value, we will actually need to multiply the fraction by <span class="math notranslate nohighlight">\(\frac{w^*}{w^*}=1\)</span>. We can compute out the quotient as <span class="math">\begin{equation}
+\frac{z}{w} = \frac{z}{w} \cdot \frac{w^*}{w^*} = \frac{zw^*}{|w|^2} = \frac{(a + bi)(u - vi)}{(u + vi)(u - vi)} = \bigg(\frac{au + bv}{u^2 + v^2}\bigg) + \bigg(\frac{bu - av}{u^2 + v^2}\bigg)i.
+\end{equation}</span></p>
+<p>All in all, the quotient of complex numbers <span class="math notranslate nohighlight">\(z=a+bi\)</span> and <span class="math notranslate nohighlight">\(w=u+vi\)</span> is given by <span class="math">\begin{equation}
+\frac{z}{w} = \frac{a+bi}{u+vi} = \bigg(\frac{au + bv}{u^2 + v^2}\bigg) + \bigg(\frac{bu - av}{u^2 + v^2}\bigg)i.
+\end{equation}</span></p>
+<p>This also gives us the specific case of finding the reciprocal of a complex number <span class="math notranslate nohighlight">\(z=a+ib\)</span>: <span class="math">\begin{equation}
+\frac{1}{z} = \frac{z^*}{zz^*} = \bigg(\frac{a}{a^2 + b^2}\bigg) - \bigg(\frac{b}{a^2+b^2}\bigg)i.
+\end{equation}</span></p>
+<p>We could have alternatively found the quotient by first determining the reciprocal of <span class="math notranslate nohighlight">\(w\)</span>, <span class="math notranslate nohighlight">\(\frac{1}{w}\)</span>, and multiplied it by <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<p>Below is an example of finding <span class="math notranslate nohighlight">\(\frac{z}{w}\)</span>, where <span class="math notranslate nohighlight">\(z = 1 + 2i\)</span> and <span class="math notranslate nohighlight">\(w = 3 + 4i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{z}{w} = \frac{1 \cdot 3+2 \cdot 4}{3^2+4^2} + \frac{1 \cdot 4-2 \cdot 3}{3^2+4^2}i = \frac{11}{25} - \frac{2}{25}i
+\end{equation}</div><div class="section" id="Complex-Division-in-Python">
+<h4>Complex Division in Python<a class="headerlink" href="#Complex-Division-in-Python" title="Permalink to this headline">¶</a></h4>
+<p>Just like addition, subtraction, and multiplication, doing division in Python is straightforward and involves only the familiar <code class="docutils literal notranslate"><span class="pre">/</span></code> operation. Let’s do the example above in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The division example defined above</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">4j</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="p">(</span><span class="mf">0.44</span><span class="o">+</span><span class="mf">0.08j</span><span class="p">)</span> <span class="c1">#0.44 = 11/25 and 0.08 = 2/25</span>
+
+<span class="c1"># Let&#39;s verify that z is still a complex number</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="nb">complex</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>When you are trying to calculate <span class="math notranslate nohighlight">\(\frac{z}{w}\)</span>, where <span class="math notranslate nohighlight">\(z\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are both complex numbers:</p>
+<ol class="arabic simple">
+<li><p>Find the conjugate of <span class="math notranslate nohighlight">\(w\)</span>, <span class="math notranslate nohighlight">\(w^*\)</span></p></li>
+<li><p>Multiply both the numerator and denominator by <span class="math notranslate nohighlight">\(w^*\)</span> and group terms into real and imaginary parts</p></li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Write A Division Function for Complex Numbers</strong></p>
+<p>Write a function called <code class="docutils literal notranslate"><span class="pre">complex_divide</span></code> that takes in two <code class="docutils literal notranslate"><span class="pre">complex</span></code> values (<code class="docutils literal notranslate"><span class="pre">z</span></code> and <code class="docutils literal notranslate"><span class="pre">w</span></code>), computes <span class="math notranslate nohighlight">\(\frac{z}{w}\)</span>, and returns it as a <code class="docutils literal notranslate"><span class="pre">complex</span></code> type value. You should write this function without using the <code class="docutils literal notranslate"><span class="pre">/</span></code> symbol anywhere, though you are allowed to use NumPy functions, such as <code class="docutils literal notranslate"><span class="pre">numpy.reciprocal</span></code>, within your code. Remember to make sure that you return a <code class="docutils literal notranslate"><span class="pre">complex</span></code> data type, and not one of NumPy’s <code class="docutils literal notranslate"><span class="pre">numpy.complex128</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.complex64</span></code>!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Euler’s-Formula">
+<h2>Euler’s Formula<a class="headerlink" href="#Euler’s-Formula" title="Permalink to this headline">¶</a></h2>
+<p>Our later work with Fourier series will bring us in contact with an extremely important equation from complex analysis. <strong>Euler’s formula</strong> reveals a deep relationship between the exponential of a complex number and the cosine and sine functions. In particular, Euler’s formula states</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{i \varphi} = \cos(\varphi) + i \sin(\varphi)
+\end{equation}</div><p>Here we will take <span class="math notranslate nohighlight">\(\varphi\)</span> to be a real number; this assumption is not strictly necessary and made only for simplicity, as Euler’s formula will hold for complex <span class="math notranslate nohighlight">\(\varphi\)</span>. Often <span class="math notranslate nohighlight">\(\varphi\)</span> is referred to as the <em>phase</em> of the exponential.</p>
+<p>It is important to build some intuition for how <span class="math notranslate nohighlight">\(e^{i \varphi}\)</span> behaves. Because <span class="math notranslate nohighlight">\(\varphi\)</span> is a real number, the real (cosine) and imaginary (sine) components of <span class="math notranslate nohighlight">\(e^{i \varphi}\)</span> are both individually bounded between <span class="math notranslate nohighlight">\([-1, 1]\)</span>. Furthermore, both components are <strong>periodic</strong> in <span class="math notranslate nohighlight">\(\varphi\)</span> - they repeat themselves every time <span class="math notranslate nohighlight">\(\varphi\)</span> increases by <span class="math notranslate nohighlight">\(2\pi\)</span>. These properties of the sine and cosine functions should be familiar already.</p>
+<p>Using the following exercises as guidance, see that the complex number <span class="math notranslate nohighlight">\(\cos(\varphi) + i \sin(\varphi)\)</span> can be represented as vector lying on the unit circle, where <span class="math notranslate nohighlight">\(\varphi\)</span> is the angle made with the positive real axis, in the direction of the positive imaginary-axis. At <span class="math notranslate nohighlight">\(\varphi = 0\)</span>, we see that <span class="math notranslate nohighlight">\(e^{i \varphi} = e^{i 0} = \cos(0) = 1\)</span> represents the vector <span class="math notranslate nohighlight">\(\begin{bmatrix}1 &amp; 0\end{bmatrix}\)</span> on the complex plane. Increasing <span class="math notranslate nohighlight">\(\varphi\)</span> causes this point to
+rotate <em>counter-clockwise</em> around the unit circle.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/complex_numbers_eulers_formula.png" alt="Vector in Complex Plane Pointing to (3,4i)" width="400">
+</p>
+</div><div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Exercises with Euler’s Formula</strong></p>
+<p>Work through the following problems, and confirm your results by using the <code class="docutils literal notranslate"><span class="pre">numpy.exp</span></code> function and <code class="docutils literal notranslate"><span class="pre">numpy.pi</span></code> constant. Where appropriate, draw a complex plane and plot the following results on the plane.</p>
+<ul class="simple">
+<li><p>Prove that <span class="math notranslate nohighlight">\(|e^{i \varphi}| = 1\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i 0}\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \frac{\pi}{2}}\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \pi}\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \frac{3\pi}{2}}\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i 2\pi}\)</span></p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i n\pi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any odd integer</p></li>
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i n\pi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any even integer</p></li>
+<li><p>Using the fact that <span class="math notranslate nohighlight">\(e^{x + y} = e^{x}e^{y}\)</span>, prove that <span class="math notranslate nohighlight">\(e^{i (\varphi + 2n\pi)} = e^{i \varphi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any integer</p></li>
+</ul>
+</div>
+<div class="section" id="Converting-a+bi-to-re^{i\varphi}">
+<h3>Converting <span class="math notranslate nohighlight">\(a+bi\)</span> to <span class="math notranslate nohighlight">\(re^{i\varphi}\)</span><a class="headerlink" href="#Converting-a+bi-to-re^{i\varphi}" title="Permalink to this headline">¶</a></h3>
+<p>As illustrated above, we can use Euler’s formula to represent any complex number lying on the unit circle in the complex plane. That is, by choosing <span class="math notranslate nohighlight">\(\varphi\in\mathbb{R}\)</span> carefully, we can specify any complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span> with magnitude <span class="math notranslate nohighlight">\(|z|=1\)</span>. The specific value of <span class="math notranslate nohighlight">\(\varphi\)</span> can be found by the <span class="math notranslate nohighlight">\(\arctan_2\)</span> function. The details of its definition are not important, but for a complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span>, the angle made with the real axis of the complex plane
+is given by <span class="math">\begin{equation}
+\varphi = \arctan_2(b, a).
+\end{equation}</span></p>
+<p>Now that we can write complex numbers lying on the unit circle on the complex plane as a complex exponential, we can represent all other complex numbers by scaling our unit circle to varying radii. Just as <span class="math notranslate nohighlight">\(r\cos(\varphi)+r\sin(\varphi)\)</span> yields points on a circle of radius <span class="math notranslate nohighlight">\(r\)</span> in 2-D real space, <span class="math notranslate nohighlight">\(r\cos(\varphi)+ir\sin(\varphi)=re^{i\varphi}\)</span>, where <span class="math notranslate nohighlight">\(r\in\mathbb{R}\)</span>, yields points on a circle of radius <span class="math notranslate nohighlight">\(r\)</span> in the complex plane.</p>
+<p>So, since the magnitude of a complex number gives its length as the vector in the complex plane, then to represent an arbitrary complex number <span class="math notranslate nohighlight">\(z=a+bi\)</span> in terms of complex exponentials, we want to choose <span class="math">\begin{equation}
+r=|z|=\sqrt{a^2+b^2}.
+\end{equation}</span></p>
+<p>This means that any complex number <span class="math notranslate nohighlight">\(z = a + bi\)</span> can be represented as</p>
+<div class="math notranslate nohighlight">
+\begin{equation} re^{i\varphi} = \sqrt{a^2 + b^2} \cdot e^{i\arctan_2(b,a)}. \end{equation}</div><p>In doing this transformation, we are effectively converting between the Cartesian and Polar coordinate systems: <span class="math notranslate nohighlight">\(a+bi\)</span> represents a complex number with a real and a imaginary component, while <span class="math notranslate nohighlight">\(re^{i\varphi}\)</span> represents a complex number with a radial and an angular component.</p>
+<p>Let’s do an example with the number <span class="math notranslate nohighlight">\(3 + 4i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{gather}
+r = \sqrt{3^2 + 4^2} = \sqrt{25} = 5, \\
+\varphi = \arctan_2(4, 3) = 0.927.
+\end{gather}</div><p>Therefore, <span class="math notranslate nohighlight">\(3 + 4i = 5e^{0.927i}\)</span>.</p>
+<p>With this, we know how to convert complex numbers using Euler’s formula from one notation to the other.</p>
+</div>
+</div>
+<div class="section" id="Applying-Euler’s-Formula">
+<h2>Applying Euler’s Formula<a class="headerlink" href="#Applying-Euler’s-Formula" title="Permalink to this headline">¶</a></h2>
+<p>Euler’s formula provides us with a convenient way of representing both cosine and sine functions in terms of exponentials. The arithmetic properties of exponentials (e.g. <span class="math notranslate nohighlight">\(e^{i\alpha}e^{i\beta} = e^{i(\alpha + \beta)}\)</span>) are far simpler than those of the trigonometric functions. We will thus make heavy use of <span class="math notranslate nohighlight">\(e^{i\varphi}\)</span> in lieu of <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> when we study Fourier series.</p>
+<p>Let’s consider a concrete example of how Euler’s formula can be used to represent cosine and sine functions. Remember the pesky trigonometric identities from pre-calc, such as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sin(\alpha + \beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta\quad\text{and}\quad\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta.
+\end{equation}</div><p>It turns out that they are easily derived using Euler’s formula:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{i(\alpha + \beta)} = \cos(\alpha + \beta) + i\sin(\alpha + \beta)
+\end{equation}</div><p>Since <span class="math notranslate nohighlight">\(e^{i(\alpha + \beta)}\)</span> can also be rewritten as the product of two exponentials, we have that</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+e^{i(\alpha + \beta)} &amp;= e^{i\alpha}e^{i\beta} \\
+&amp;=(\cos\alpha + i\sin\alpha)(\cos\beta + i\sin\beta) \\
+&amp;= \cos\alpha\cos\beta - \sin\alpha\sin\beta + i(\cos\alpha\sin\beta + \sin\alpha\cos\beta)
+\end{align}</div><p>Thus, <span class="math">\begin{equation}
+\cos(\alpha + \beta) + i\sin(\alpha + \beta) = (\cos\alpha\cos\beta - \sin\alpha\sin\beta) + i(\cos\alpha\sin\beta + \sin\alpha\cos\beta).
+\end{equation}</span></p>
+<p>Comparing the real and imaginary components on both sides of the equality, we can recover the addition and subtraction formula for <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span>: <span class="math">\begin{gather}
+\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta, \\
+\sin(\alpha + \beta) = \cos\alpha\sin\beta + \sin\alpha\cos\beta.
+\end{gather}</span></p>
+<p>Using Euler’s formula allows us to derive these two angle identities, so you no longer need to waste time memorizing them!</p>
+<p>Euler’s formula appears throughout areas that deal with oscillitory/wave phenomena (e.g. electricity &amp; magnetism, classical mechanics, quantum mechanics, circuits, acoustics, …).</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Applying Euler’s Formula</strong></p>
+<ul class="simple">
+<li><p>Prove that <span class="math notranslate nohighlight">\(\cos(\varphi) = \frac{e^{i\varphi} + e^{-i\varphi}}{2}\)</span></p></li>
+<li><p>Prove that <span class="math notranslate nohighlight">\(\sin(\varphi) = \frac{e^{i\varphi} - e^{-i\varphi}}{2i}\)</span></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="Links-to-Official-Documentation-and-Other-Resources">
+<h2>Links to Official Documentation and Other Resources<a class="headerlink" href="#Links-to-Official-Documentation-and-Other-Resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>This Website: <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html">Linear Algebra</a></p></li>
+<li><p>Python Docs: <a class="reference external" href="https://docs.python.org/3/library/cmath.html#module-cmath">Complex Math</a></p></li>
+<li><p>Python Docs: <a class="reference external" href="https://python-reference.readthedocs.io/en/latest/docs/complex/conjugate.html">Conjugate</a> function</p></li>
+<li><p>Python Docs: <a class="reference external" href="https://docs.python.org/3/library/functions.html#abs">Absolute Value</a> function</p></li>
+<li><p>NumPy Docs: <a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.conjugate.html">Conjugate</a> function</p></li>
+<li><p>NumPy Docs: <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.reciprocal.html">Reciprocal</a> function</p></li>
+<li><p>NumPy Docs: <a class="reference external" href="https://numpy.org/doc/1.18/reference/generated/numpy.absolute.html">Absolute</a> function</p></li>
+<li><p>Python Like You Mean It: <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/Basic_Objects.html">Complex Type</a></p></li>
+<li><p>Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Complex_number#multiplication">Complex Numbers</a></p></li>
+</ul>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Computing-Powers-of-i:-Solution">
+<h3>Computing Powers of <span class="math notranslate nohighlight">\(i\)</span>: Solution<a class="headerlink" href="#Computing-Powers-of-i:-Solution" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(i^6 = i^5 \cdot i = i \cdot i = i^2 = -1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(i^{12} = (i^{6})^2 = (-1)^2 = 1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(i^0 = 1\)</span>, as any value raised to <span class="math notranslate nohighlight">\(0\)</span> is <span class="math notranslate nohighlight">\(1\)</span>. Alternatively, we know that the pattern repeats every four powers of <span class="math notranslate nohighlight">\(i\)</span>. So <span class="math notranslate nohighlight">\(i^{4} = i^{4-4} = i^{0} = 1\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(i^{-1} = i^{3} = i^{3-4} = i^{-1} = -i\)</span>.</p></li>
+<li><p>We know that <span class="math notranslate nohighlight">\(i^n=i^{n\textrm{ mod }4}\)</span>, and since <span class="math notranslate nohighlight">\(260 \textrm{mod} 4 = 0\)</span> and <span class="math notranslate nohighlight">\(i^0 = 1\)</span>, it must be that <span class="math notranslate nohighlight">\(i^{260} = i^0 = 1\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="Computing-Square-Roots-of-Negative-Numbers:-Solution">
+<h3>Computing Square Roots of Negative Numbers: Solution<a class="headerlink" href="#Computing-Square-Roots-of-Negative-Numbers:-Solution" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-20} = \sqrt{-1\cdot20} = \sqrt{-1}\cdot\sqrt{20} = i\cdot2\sqrt{5} = 2\sqrt{5}i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-1} = i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-30} = \sqrt{-1\cdot30} = \sqrt{-1}\cdot\sqrt{30} = i\cdot\sqrt{30} = \sqrt{30}i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-10} = \sqrt{-1\cdot10} = \sqrt{-1}\cdot\sqrt{10} = i\cdot\sqrt{10} = \sqrt{10}i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{-5} = \sqrt{-1\cdot5} = \sqrt{-1}\cdot\sqrt{5} = i\cdot\sqrt{5} = \sqrt{5}i\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="Computing-Conjugates:-Solution">
+<h3>Computing Conjugates: Solution<a class="headerlink" href="#Computing-Conjugates:-Solution" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((8 - 10i)^{*}\)</span> = <span class="math notranslate nohighlight">\(8 + 10i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((i)^{*}\)</span> = <span class="math notranslate nohighlight">\(-i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((e^{ix})^{*}=e^{-ix}\)</span>, with <span class="math notranslate nohighlight">\(x \in \mathbb{R}\)</span></p></li>
+</ul>
+<p>Now let’s consider the addition of complex conjugates. Applying the definition of the complex conjugate and regrouping terms,</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+z_1^*+z_2^*&amp;=(a+bi)^*+(u+vi)^* \\
+&amp;=(a-bi)+(u-vi) \\
+&amp;=(a+u)-(b+v)i \\
+&amp;=\big((a+u)+(b+v)i\big)^* \\
+&amp;=(z_1+z_2)^*
+\end{align}</div><p>For multiplication, we can similarly expand <span class="math notranslate nohighlight">\(z_1^*\)</span> and <span class="math notranslate nohighlight">\(z_2^*\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+z_1^*z_2^*&amp;=(a-bi)(u-vi) \\
+&amp;=(au-bv)-(av+bu)i \\
+&amp;=\big((au-bv)+(av+bu)i\big)^* \\
+&amp;=(z_1z_2)^*
+\end{align}</div></div>
+<div class="section" id="Write-A-Division-Function-for-Complex-Numbers:-Solution">
+<h3>Write A Division Function for Complex Numbers: Solution<a class="headerlink" href="#Write-A-Division-Function-for-Complex-Numbers:-Solution" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">complex_divide</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    z : complex</span>
+<span class="sd">        The dividend in the fraction</span>
+<span class="sd">    w : complex</span>
+<span class="sd">        The divisor in the fraction</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    complex</span>
+<span class="sd">        The quotient of z and w</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y_recip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># Directly find the reciprocal of w using NumPy</span>
+
+    <span class="n">quotient</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y_recip</span>  <span class="c1"># Calculate the quotient</span>
+
+    <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">quotient</span><span class="p">)</span>  <span class="c1"># Cast it to complex type and return it</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Exercises-with-Euler’s-Formula:-Solution">
+<h3>Exercises with Euler’s Formula: Solution<a class="headerlink" href="#Exercises-with-Euler’s-Formula:-Solution" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Prove that <span class="math notranslate nohighlight">\(|e^{i \theta}| = 1\)</span></p></li>
+</ul>
+<p>We can compute using Euler’s formula and the definition of the magnitude of a complex number,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+|e^{i \varphi}| = |\cos{\varphi} + i \sin{\varphi}|=\sqrt{(\cos{\varphi})^2 + (\sin{\varphi})^2} = \sqrt{1} = 1.
+\end{equation}</div><p>We can also work with the complex exponentials directly, using the fact that <span class="math notranslate nohighlight">\(zz^*=|z|^2\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+|e^{i \varphi}|=e^{i\varphi}e^{-i\varphi}=e^{i\varphi-i\varphi}=e^0=1.
+\end{equation}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i 0}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{aligned} e^{i0} &amp;= \cos(0) + i \sin(0) \\ &amp;= 1 + i\cdot(0) \\ &amp;= 1 \end{aligned}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \frac{\pi}{2}}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{aligned} e^{i\cdot\frac{\pi}{2}} &amp;= \cos\bigg(\frac{\pi}{2}\bigg) + i \sin\bigg(\frac{\pi}{2}\bigg) \\ &amp;= 0 + i\cdot(1) \\ &amp;= i \end{aligned}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \pi}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{aligned} e^{i\cdot\pi} &amp;= \cos(\pi) + i \sin(\pi) \\ &amp;= -1 + i\cdot(0) \\ &amp;= -1 \end{aligned}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i \frac{3\pi}{2}}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{aligned} e^{i\cdot\frac{3\pi}{2}} &amp;= \cos\bigg(\frac{3\pi}{2}\bigg) + i \sin\bigg(\frac{3\pi}{2}\bigg) \\ &amp;= 0 + i\cdot(-1) \\ &amp;= -i \end{aligned}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i 2\pi}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{aligned} e^{i\cdot2\pi} &amp;= \cos(2\pi) + i \sin(2\pi) \\ &amp;= 1 + i\cdot(0) \\ &amp;= 1 \end{aligned}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i n\pi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any odd integer</p></li>
+</ul>
+<p>Assume that <span class="math notranslate nohighlight">\(n\)</span> is odd and thus of the form <span class="math notranslate nohighlight">\(2m+1\)</span> for any integer <span class="math notranslate nohighlight">\(m\)</span>. By Euler’s formula, we know</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{in\pi}=\cos(n\pi)+i\sin(n\pi).
+\end{equation}</div><p>We know that <span class="math notranslate nohighlight">\(\cos\)</span> and <span class="math notranslate nohighlight">\(\sin\)</span> are cyclic, such that <span class="math notranslate nohighlight">\(\cos(x+2\pi)=\cos(x)\)</span> and <span class="math notranslate nohighlight">\(\sin(x+2\pi)=\sin(x)\)</span>. This means that we can take the argument of <span class="math notranslate nohighlight">\(\cos(x)\)</span> and <span class="math notranslate nohighlight">\(\sin(x)\)</span> to be <span class="math notranslate nohighlight">\(x\,\operatorname{mod}\,2\pi\)</span>. Therefore, <span class="math">\begin{equation}
+n\pi\,\operatorname{mod}\,2\pi=(2m+1)\pi\,\operatorname{mod}\,2\pi=(2m\pi+\pi)\,\operatorname{mod}\,2\pi=\pi.
+\end{equation}</span></p>
+<p>So,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{in\pi}=\cos(n\pi)+i\sin(n\pi)=\cos(\pi)+i\sin(\pi)=-1.
+\end{equation}</div><ul class="simple">
+<li><p>Evaluate <span class="math notranslate nohighlight">\(e^{i n\pi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any even integer</p></li>
+</ul>
+<p>Assume that <span class="math notranslate nohighlight">\(n\)</span> is even and thus of the form <span class="math notranslate nohighlight">\(2m\)</span> for any integer <span class="math notranslate nohighlight">\(m\)</span>. By Euler’s formula, we know</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{in\pi}=\cos(n\pi)+i\sin(n\pi).
+\end{equation}</div><p>As in the previous problem, we know that we can take the argument of <span class="math notranslate nohighlight">\(\cos(x)\)</span> and <span class="math notranslate nohighlight">\(\sin(x)\)</span> to be <span class="math notranslate nohighlight">\(x\,\operatorname{mod}\,2\pi\)</span>. Therefore, <span class="math">\begin{equation}
+n\pi\,\operatorname{mod}\,2\pi=2m\pi\,\operatorname{mod}\,2\pi=0.
+\end{equation}</span></p>
+<p>So,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+e^{in\pi}=\cos(n\pi)+i\sin(n\pi)=\cos(0)+i\sin(0)=1.
+\end{equation}</div><ul class="simple">
+<li><p>Using the fact that <span class="math notranslate nohighlight">\(e^{x + y} = e^{x}e^{y}\)</span>, prove that <span class="math notranslate nohighlight">\(e^{i (\varphi + 2n\pi)} = e^{i \varphi}\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is any integer</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\begin{align}
+e^{i(\varphi+2n\pi)} &amp;= e^{i\varphi+i2n\pi} \\
+&amp;= e^{i\varphi}\cdot e^{i2n\pi} &amp;&amp; 2n \text{ is always even} \\
+&amp;= e^{i\varphi}\cdot 1 &amp;&amp; \text{From previous problem, } e^{ik\pi}=1 \text{ for even k} \\
+&amp;= e^{i\varphi}
+\end{align}</div></div>
+<div class="section" id="Applying-Euler’s-Formula:-Solution">
+<h3>Applying Euler’s Formula: Solution<a class="headerlink" href="#Applying-Euler’s-Formula:-Solution" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\begin{aligned} \frac{e^{i\varphi} + e^{-i\varphi}}{2} &amp;= \frac{(\cos{\varphi} + i\sin{\varphi}) + (\cos{\varphi} - i\sin{\varphi})}{2} \\ &amp;= \frac{2\cos{\varphi}}{2} \\ &amp;= \cos{\varphi} \end{aligned}</div><div class="math notranslate nohighlight">
+\begin{aligned} \frac{e^{i\varphi} - e^{-i\varphi}}{2i} &amp;= \frac{(\cos{\varphi} + i\sin{\varphi}) - (\cos{\varphi} - i\sin{\varphi})}{2i} \\ &amp;= \frac{\cos{\varphi} + i\sin{\varphi} - \cos{\varphi} + i\sin{\varphi}}{2i} \\ &amp;= \frac{2i\sin{\varphi}}{2i} \\ &amp;= \sin{\varphi} \end{aligned}</div></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Intro_Calc.html" class="btn btn-neutral float-right" title="Introduction to Single-Variable Calculus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="LinearAlgebra.html" class="btn btn-neutral float-left" title="Fundamentals of Linear Algebra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

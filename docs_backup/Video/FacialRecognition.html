@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Vision Module Capstone &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Whispers Algorithm" href="Whispers.html" />
+    <link rel="prev" title="Supervised Learning Using Gradient Descent" href="Supervised_Learning_and_Modeling.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../vision.html">Vision Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Automatic_Differentiation.html">Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vision Module Capstone</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Pre-Trained-FaceNet-Models">Pre-Trained FaceNet Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Database">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Recognizing-Faces">Recognizing Faces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Whispers-Algorithm">Whispers Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Team-Tasks">Team Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Links">Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../vision.html">Vision Module</a> &raquo;</li>
+        
+      <li>Vision Module Capstone</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Video/FacialRecognition.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Vision-Module-Capstone">
+<h1>Vision Module Capstone<a class="headerlink" href="#Vision-Module-Capstone" title="Permalink to this headline">¶</a></h1>
+<p>We will put our knowledge of neural networks and working with visual data to use by creating a program that detects and recognizes faces in a pictures, in order to sort the pictures based on individuals. The goal is to</p>
+<ol class="arabic simple">
+<li><p>take input from our camera</p></li>
+<li><p>locate faces in the image</p></li>
+<li><p>determine if there is a match for each face in the database</p></li>
+<li><p>return the image with rectangles around the faces along with the corresponding name (or “Unknown” if there is no match)</p></li>
+</ol>
+<p>In the “Unknown” case, the program should prompt the user to input the unknown person’s name so they can be added to the database. Here is an example of what might be returned if the program recognizes everyone in the image</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/face_rec_example.png" alt="example face rec output" width=500>
+</p>
+</div><p>Let’s take a closer look at the pre-trained models we’ll be using to accomplish this.</p>
+<div class="section" id="Pre-Trained-FaceNet-Models">
+<h2>Pre-Trained FaceNet Models<a class="headerlink" href="#Pre-Trained-FaceNet-Models" title="Permalink to this headline">¶</a></h2>
+<p>We will utilize two models from pre-trained neural networks provided by <code class="docutils literal notranslate"><span class="pre">facenet_pytorch</span></code>. The first is a model called <code class="docutils literal notranslate"><span class="pre">MTCNN</span></code>, which provides face <em>detection</em> capabilities. Given an input image, the model will return a list of box coordinates with corresponding probabilities for each detected face. Let’s develop some intuition about how this model works. During training, images are broken into multiple boxes that are each “searched” for a face. An issue with this method is that
+cross-entropy loss skews the results towards the empty boxes (boxes with no detected objects). This is accounted for by weighting the boxes such that boxes with more content are weighted heavier. The result is a model that can effectively identify multiple faces in an image.</p>
+<p>Returning to how to use the trained model, you will be able to manipulate the box coordinates that are produced to create <code class="docutils literal notranslate"><span class="pre">Rectangle</span></code> objects that can be displayed around each face for the final product. You will also use these coordinates to crop your image such that it only displays the face you are attempting to recognize. This cropped image can be passed into our next pre-trained model to produce a <strong>descriptor vector</strong> for the face (this will need to be done for each face detected in your
+image).</p>
+<p>We will use <code class="docutils literal notranslate"><span class="pre">facenet_pytorch</span></code>’s <code class="docutils literal notranslate"><span class="pre">InceptionResnetV1</span></code>, which is trained to produce 512-dimensional face <strong>descriptor vectors</strong> for a given image of a face. A facial descriptor vector is essentially an <em>embedding</em> of a face that numerically describes abstract <em>features</em>. These features are not necessarily concrete facial features like a nose and eyes, but more abstract representations that the model learned. During training, the model learned that these abstract features are effective at
+distinguishing between distinct faces and finding similarities between similar faces. Thus, different images of the same face will have similar descriptor vectors whereas images of different faces will likely have drastically different descriptor vectors. The model learned to create facial descriptors in this way by calculating loss and updating model parameters based on the similarity between descriptors of two of the same faces and two different faces. Loss was calculated by creating
+descriptors of three face images - two of the same faces and one different - such that similarity between descriptors of the same face was encouraged and similarity between descriptors of different faces was discouraged (parameters were updated so that these descriptors were even more distinct).</p>
+<p>The principle that images of the same face have similar descriptor vectors allows us to “recognize” a face after it has been detected. If a detected face is “close enough” to a face in our database (the calculated distance between the face descriptors is below a certain cutoff), we can label the face with the appropriate name in the output image. Otherwise, we can prompt the user to enter the name corresponding to the unknown face.</p>
+<p>Now that we have some familiarity with the tools we’ll be employing to accomplish facial recognition, let’s talk about how our database can be structured to keep track of our faces and add new ones when we find them.</p>
+</div>
+<div class="section" id="Database">
+<h2>Database<a class="headerlink" href="#Database" title="Permalink to this headline">¶</a></h2>
+<p>A useful way to structure a database is as a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> object, which allows us to easily point to a profile in the database using a <em>key</em>, like an individual’s name. Make sure you’re familiar with Python’s dictionary data structure, which can be reviewed <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_II_Dictionaries.html">here</a> on PLYMI. Another important tool to familiarize yourself with is the <code class="docutils literal notranslate"><span class="pre">pickle</span></code> module, which will allow you to store and load
+objects from your computer’s file system. PLYMI’s coverage of the <code class="docutils literal notranslate"><span class="pre">pickle</span></code> module can be found <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/WorkingWithFiles.html#Saving-&amp;-Loading-Python-Objects:-pickle">here</a>.</p>
+<p>Like we mentioned earlier, the database will be comprised of profiles that we point to using an individual’s name. These profiles will store information pertinent to facial recognition, including a name, a collection of face descriptor vectors, and a mean descriptor vector. The collection of descriptor vectors will come from passing multiple images of the person through the models described in the previous section. The mean face descriptor will be used to compare to the faces we are trying to
+recognize.</p>
+<p>By also writing functionality to add descriptor vectors and even entirely new profiles, you will be able to strengthen your database when a face is deemed “unknown” by adding the new image to the proper person or creating a new profile depending on whether or not the inputted name already exists in the database.</p>
+<p>So we can</p>
+<ul class="simple">
+<li><p>encode an image of a face using the our two FaceNet models to produce face descriptors</p></li>
+<li><p>organize these descriptors into meaningful profiles in a database of faces</p></li>
+</ul>
+<p>But how do we actually recognize a face in a new image? Let’s take a look.</p>
+</div>
+<div class="section" id="Recognizing-Faces">
+<h2>Recognizing Faces<a class="headerlink" href="#Recognizing-Faces" title="Permalink to this headline">¶</a></h2>
+<p>We mentioned earlier that the nature of face descriptor vectors is that images of the same face should have similar face descriptors. Thus, in order to identify if a new image is a match to any of the faces in the database we must mathematically compute the similarity between the new face descriptor and each of the mean face descriptors in the database. This can be done with <strong>cosine distance</strong>, which is a measure of the similarity between two normalized vectors. cosine distance can be computed
+by taking the dot product of two normalized vectors. Review <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html#The-Dot-Product">“Fundamentals of Linear Algebra”</a> for additional coverage on this topic.</p>
+<p>We can use cosine distance to compute the similarity between any two face descriptors, but how similar is “close enough” to validate a match? This is where a <strong>cutoff</strong> comes into play. The cutoff indicates the maximum distance between two descriptors that is permitted to deem them a match. This value should be determined experimentally such that it is large enough to account for variability between descriptors of the same face but not so large as to falsely identify a face. If a face descriptor
+doesn’t fall below the cutoff distance with any face in the database, it is deemed “Unknown” and the user is prompted to enter a name. If the name exists in the database, the image should be added to that person’s profile. This situation may arise from a bad photo (bad lighting, something covering the face, etc.) or too strict of a cutoff (in this case, experiment with a slightly larger cutoff). If the name doesn’t already exist, you should make a new profile with that name and face descriptor.</p>
+</div>
+<div class="section" id="Whispers-Algorithm">
+<h2>Whispers Algorithm<a class="headerlink" href="#Whispers-Algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The second part of this capstone project involves implementing an algorithm that can separate images into clusters of pictures of the same person. There will be one cluster for each person in our database. The implementation of this algorithm is explored in the following page.</p>
+</div>
+<div class="section" id="Team-Tasks">
+<h2>Team Tasks<a class="headerlink" href="#Team-Tasks" title="Permalink to this headline">¶</a></h2>
+<p>This has been a basic run-through of the concepts and tools you will use to create this capstone project. Here are some general tasks that it can be broken down into.</p>
+<ul class="simple">
+<li><p>Functionality to generate face descriptors using <code class="docutils literal notranslate"><span class="pre">MTCNN</span></code> and <code class="docutils literal notranslate"><span class="pre">InceptionResnetV1</span></code></p></li>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">Profile</span></code> class with functionality to add face descriptors and compute the mean descriptor</p></li>
+<li><p>Functionality to create, load, and save a database of profiles</p>
+<ul>
+<li><p>Functionality to add and remove profiles</p></li>
+<li><p>Funcitonality to add an image to the database, given a name (create a new profile if the name isn’t in the database, otherwise add the image’s face descriptor vector to the proper profile)</p></li>
+</ul>
+</li>
+<li><p>Function to compute cosine distance between face descriptors</p></li>
+<li><p>Functionality to find a match for a face descriptor in the database, using a cutoff value</p></li>
+<li><p>Functionality to display an image with a box around detected faces with labels to indicate matches or an “Unknown” label otherwise</p></li>
+<li><p>Implement the whispers algorithm</p></li>
+</ul>
+</div>
+<div class="section" id="Links">
+<h2>Links<a class="headerlink" href="#Links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_II_Dictionaries.html">Dictionary Data Structure - PLYMI</a></p></li>
+<li><p><a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/WorkingWithFiles.html#Saving-&amp;-Loading-Python-Objects:-pickle">Pickle Module - PLYMI</a></p></li>
+<li><p><a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html#The-Dot-Product">“Fundamentals of Linear Algebra” - CogWeb</a> - <strong>link needs to be changed when official website is published</strong></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Whispers.html" class="btn btn-neutral float-right" title="Whispers Algorithm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Supervised_Learning_and_Modeling.html" class="btn btn-neutral float-left" title="Supervised Learning Using Gradient Descent" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

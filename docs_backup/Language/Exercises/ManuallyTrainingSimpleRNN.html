@@ -1,0 +1,928 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Manually Training a Simple RNN for the Even Odd Problem &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Manually Training a Simple RNN for the Even Odd Problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/ManuallyTrainingSimpleRNN.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Manually-Training-a-Simple-RNN-for-the-Even-Odd-Problem">
+<h1>Manually Training a Simple RNN for the Even Odd Problem<a class="headerlink" href="#Manually-Training-a-Simple-RNN-for-the-Even-Odd-Problem" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+
+import matplotlib.pyplot as plt
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<p>Recall how a straightforward dense neural network struggled to learn the even-odd problem in previous notebook:</p>
+<blockquote>
+<div><p>Given an input vector of zeros and ones, predict <code class="docutils literal notranslate"><span class="pre">1</span></code> if the number of ones in the vector is even, and predict <code class="docutils literal notranslate"><span class="pre">0</span></code> if the number of ones in the vector is odd.</p>
+</div></blockquote>
+<p>In this notebook, we’ll show how a very simple RNN (with a hidden state of size 2) can solve the problem.</p>
+<p>We’ll use the “simple” (aka “vanilla”) RNN equation:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t = f_h(x_t W_{xh} + h_{t-1} W_{hh} + b_h) \\
+y_t = f_y(h_t W_{hy} + b_y)
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(h_t\)</span> is the hidden (or recurrent) state of the cell and <span class="math notranslate nohighlight">\(x_t\)</span> is the sequence-element at step-<span class="math notranslate nohighlight">\(t\)</span>, for <span class="math notranslate nohighlight">\(t=0, 1, \dots, T-1\)</span> (with <span class="math notranslate nohighlight">\(T\)</span> as the length of our sequence). <span class="math notranslate nohighlight">\(y_{T-1}\)</span> is the final output. The <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(b\)</span> parameters are the <em>learnable parameters of our model</em>. Specifically:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_t\)</span> is a descriptor-vector for entry-<span class="math notranslate nohighlight">\(t\)</span> in our sequence of data. It has a shape-<span class="math notranslate nohighlight">\((1, C)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(h_t\)</span> is a “hidden-descriptor”, which encodes information about <span class="math notranslate nohighlight">\(x_t\)</span> <em>and</em> information about the preceding entries in our sequence of data, via <span class="math notranslate nohighlight">\(h_{t-1}\)</span>. It has a shape-<span class="math notranslate nohighlight">\((1, D)\)</span>, where <span class="math notranslate nohighlight">\(D\)</span> is the dimensionality that we choose for our hidden descriptors (akin to layer size).</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{xh}\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> hold dense-layer weights and biases, respectively, which are used to process our data <span class="math notranslate nohighlight">\(x_t\)</span> in order to form <span class="math notranslate nohighlight">\(h_t\)</span>. Thus <span class="math notranslate nohighlight">\(W_{xh}\)</span> has shape <span class="math notranslate nohighlight">\((C, D)\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> has shape-<span class="math notranslate nohighlight">\((1,D)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{hh}\)</span> hold dense-layer weights, which are used to process our previous hidden-descriptor <span class="math notranslate nohighlight">\(h_{t-1}\)</span> in order to form <span class="math notranslate nohighlight">\(h_t\)</span>. Thus <span class="math notranslate nohighlight">\(W_{hh}\)</span> has shape <span class="math notranslate nohighlight">\((D, D)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{hy}\)</span> and <span class="math notranslate nohighlight">\(b_y\)</span> hold dense-layer weights and biases, respectively, which are used to process our final hidden-descriptor <span class="math notranslate nohighlight">\(h_T\)</span> in order to produce our classification scores, <span class="math notranslate nohighlight">\(y_T\)</span>. Thus <span class="math notranslate nohighlight">\(W_{hy}\)</span> has shape <span class="math notranslate nohighlight">\((D, K)\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> has shape-<span class="math notranslate nohighlight">\((1,K)\)</span>. Where <span class="math notranslate nohighlight">\(K\)</span> is our number of classes. See that, given our input sequence <span class="math notranslate nohighlight">\(x\)</span>, we are ultimately producing <span class="math notranslate nohighlight">\(y_{T-1}\)</span> of shape-<span class="math notranslate nohighlight">\((1, K)\)</span>.</p></li>
+</ul>
+<p>These equations thus say that new hidden state (<span class="math notranslate nohighlight">\(h_t\)</span>) combines current input (<span class="math notranslate nohighlight">\(x_t\)</span>) and previous hidden state (<span class="math notranslate nohighlight">\(h_{t-1}\)</span>), then applies an activation function (<span class="math notranslate nohighlight">\(f_h\)</span>, e.g., <span class="math notranslate nohighlight">\(\tanh\)</span> or <span class="math notranslate nohighlight">\(\text{ReLU}\)</span>). The output (<span class="math notranslate nohighlight">\(y_t\)</span>) is then a function of the new hidden state (not necessarily applying the same activation function).</p>
+<p>Note: You may see some variations in how simple RNN cells are formulated. Some don’t apply an activation function to the output. Some first compute output as a function of the current state and input, and then update the current state to be this output. But the key similarity is that output is ultimately a function of input and a hidden state which is dependant on previous inputs.</p>
+<p>It turns out we can solve the even-odd problem with a hidden state of dimension 2.</p>
+<p>On top of that, we can figure out what the weights should be by hand, without having to use MyGrad!</p>
+<div class="section" id="Desired-Behavior-of-the-RNN">
+<h2>Desired Behavior of the RNN<a class="headerlink" href="#Desired-Behavior-of-the-RNN" title="Permalink to this headline">¶</a></h2>
+<p>Let the output <span class="math notranslate nohighlight">\(y_t\)</span> of the RNN cell at sequence-step <span class="math notranslate nohighlight">\(t\)</span> be 1 if there have been an even number of ones in the sequence so far and 0 if there have been an “odd” number of ones seen so far. Then the following logic is what we want to reproduce:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(y_{t-1}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(x_t\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(y_{t}\)</span></p></th>
+<th class="head"><p>meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>even so far, see 1, now odd</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>even so far, see 0, stay even</p></td>
+</tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>odd so far, see 1, now even</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>odd so far, see 0, stay odd</p></td>
+</tr>
+</tbody>
+</table>
+<p>This should look familiar: it’s exactly the XOR problem! If you aren’t familiar with the XOR problem, know that it is simply a type of boolean operation, much like AND or OR. XOR will only return True (or alternatively 1) if both inputs have <em>different</em> boolean values.</p>
+<p>The XOR problem cannot be solved by a neural network that has no hidden layers. Instead, the network needs intermediate “helpers” (nodes in a hidden layer) that compute OR and NAND (which can then be combined into the final XOR).</p>
+<p>So we can’t just have a single hidden value representing even/odd with output <span class="math notranslate nohighlight">\(y\)</span> just spitting out the hidden state. This would run into the same problem as XOR. For this problem we’ll need a hidden state of size <span class="math notranslate nohighlight">\(D=2\)</span>. Let <span class="math notranslate nohighlight">\(h_t\)</span>, the hidden state at time <span class="math notranslate nohighlight">\(t\)</span>, have the following interpretation:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t = \begin{bmatrix}h^\text{OR}_t &amp; h^\text{NAND}_t\end{bmatrix}
+\end{equation}</div><p>where * <span class="math notranslate nohighlight">\(h^\text{OR}_t\)</span> will mean that the previous output <span class="math notranslate nohighlight">\(y_{t-1}\)</span> was 1 (“even”) <strong>OR</strong> the current input <span class="math notranslate nohighlight">\(x_t\)</span> is 1, or both * <span class="math notranslate nohighlight">\(h^\text{NAND}_t\)</span> will mean it’s <strong>NOT</strong> the case that previous output <span class="math notranslate nohighlight">\(y_{t-1}\)</span> was 1 (“even”) <strong>AND</strong> the current input <span class="math notranslate nohighlight">\(x_t\)</span> is 1</p>
+<p>So the hidden variables and output at time <span class="math notranslate nohighlight">\(t\)</span> are related to certain values from time <span class="math notranslate nohighlight">\(t-1\)</span>:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(h^\text{OR}_{t}\)</span> is a function of <span class="math notranslate nohighlight">\(y_{t-1}\)</span> and <span class="math notranslate nohighlight">\(x_t\)</span></p>
+</div></blockquote>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(h^\text{NAND}_{t}\)</span> is a function of <span class="math notranslate nohighlight">\(y_{t-1}\)</span> and <span class="math notranslate nohighlight">\(x_t\)</span></p>
+<p><span class="math notranslate nohighlight">\(y_{t}\)</span> is a function of <span class="math notranslate nohighlight">\(h^\text{OR}_{t}\)</span> and <span class="math notranslate nohighlight">\(h^\text{NAND}_{t}\)</span></p>
+</div></blockquote>
+<p>However, based on how the RNN equations are set up, the RNN cell will only have access to the previous hidden state and the current input at each step (not the actual last output). So the RNN will use <span class="math notranslate nohighlight">\(h^\text{OR}_{t-1}\)</span> and <span class="math notranslate nohighlight">\(h^\text{NAND}_{t-1}\)</span> (which will be sufficient):</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(h^\text{OR}_{t}\)</span> is function of <span class="math notranslate nohighlight">\(h^\text{OR}_{t-1}\)</span>, <span class="math notranslate nohighlight">\(h^\text{NAND}_{t-1}\)</span>, and <span class="math notranslate nohighlight">\(x_t\)</span></p>
+</div></blockquote>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(h^\text{NAND}_{t}\)</span> is function of <span class="math notranslate nohighlight">\(h^\text{OR}_{t-1}\)</span>, <span class="math notranslate nohighlight">\(h^\text{NAND}_{t-1}\)</span>, and <span class="math notranslate nohighlight">\(x_t\)</span></p>
+<p><span class="math notranslate nohighlight">\(y_{t}\)</span> is function of <span class="math notranslate nohighlight">\(h^\text{OR}_{t}\)</span> and <span class="math notranslate nohighlight">\(h^\text{NAND}_{t}\)</span></p>
+</div></blockquote>
+<p>With this setup, we can now make a table showing the complete desired dynamics of the RNN for solving the even/odd problem. That is, given values of the previous hidden state and current input, we want the RNN to produce particular values for new hidden state and output:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 21%" />
+<col style="width: 10%" />
+<col style="width: 6%" />
+<col style="width: 17%" />
+<col style="width: 19%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(h^\text{OR}_{t-1}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(h^\text{NAND}_{t-1}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(y_{t-1}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(x_t\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(h^\text{OR}_{t}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(h^\text{NAND}_{t}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(y_{t}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Finding-Weights-and-Biases">
+<h2>Finding Weights and Biases<a class="headerlink" href="#Finding-Weights-and-Biases" title="Permalink to this headline">¶</a></h2>
+<p>Recall the simple RNN equations:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t = f_h(x_t W_{xh} + h_{t-1} W_{hh} + b_h) \\
+y_t = f_y(h_t W_{hy} + b_y)
+\end{equation}</div><p>For simplicity, we’ll use the “hard sigmoid” for the activation functions, which maps positive inputs to 1 and non-positive inputs to 0:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>That way we can just focus on finding weights that make the arguments to the hardsigmoid activations:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+x_t W_{xh} + h_{t-1} W_{hh} + b_h
+\end{equation}</div><p>and</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t W_{hy} + b_y
+\end{equation}</div><p>positive or negative as needed.</p>
+<p>Define the <code class="docutils literal notranslate"><span class="pre">hardsigmoid</span></code> activation function and plot it on [-2, 2] using 1000 points.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Finding-the-weights-to-produce-h^\text{OR}_t">
+<h3>Finding the weights to produce <span class="math notranslate nohighlight">\(h^\text{OR}_t\)</span><a class="headerlink" href="#Finding-the-weights-to-produce-h^\text{OR}_t" title="Permalink to this headline">¶</a></h3>
+<p>Writing out the update equation for <span class="math notranslate nohighlight">\(h_t\)</span> more explicitly, we have:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix}h^\text{OR}_t &amp; h^\text{NAND}_t\end{bmatrix} = \text{hardsigmoid}\left(x_t\begin{bmatrix}W_{xh}^{(0,0)} &amp; W_{xh}^{(0,1)}\end{bmatrix} + \begin{bmatrix}h^\text{OR}_{t-1} &amp; h^\text{NAND}_{t-1}\end{bmatrix}\begin{bmatrix}W_{hh}^{(0,0)} &amp; W_{hh}^{(0,1)} \\ W_{hh}^{(1,0)} &amp; W_{hh}^{(1,1)} \end{bmatrix} +
+\begin{bmatrix}b^\text{OR} &amp; b^\text{NAND}\end{bmatrix}\right)
+\end{equation}</div><p>Looking at just <span class="math notranslate nohighlight">\(h^\text{OR}_t\)</span> for now, we have</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h^\text{OR}_t = \text{hardsigmoid}\left(x_t W_{xh}^{(0,0)} +  h^\text{OR}_{t-1}\cdot W_{hh}^{(0,0)}  + h^\text{NAND}_{t-1}\cdot W_{hh}^{(1,0)}  + b^\text{OR}\right)
+\end{equation}</div><p>Incorporating actual values from the table and focusing on the sign of the input to <span class="math notranslate nohighlight">\(f\)</span> (hard-sigmoid), we ultimately arrive at a system of six constraints:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix}
+1 &amp; 1 &amp; 1 \\
+0 &amp; 1 &amp; 1 \\
+1 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\
+1 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+W_{xh}^{(0,0)} \\
+W_{hh}^{(0,0)} \\
+W_{hh}^{(1,0)} \\
+\end{bmatrix}
++ b^\text{OR}
+\longrightarrow
+\begin{bmatrix}
++ \\
++ \\
++ \\
+- \\
++ \\
+- \\
+\end{bmatrix}
+\end{equation}</div><p>where the 3 columns correspond to <span class="math notranslate nohighlight">\(x_t\)</span>, <span class="math notranslate nohighlight">\(h^\text{OR}_{t-1}\)</span>, and <span class="math notranslate nohighlight">\(h^\text{NAND}_{t-1}\)</span> and the plusses and minuses on the right correspond to <span class="math notranslate nohighlight">\(h^\text{OR}_t\)</span>.</p>
+<p>Now find (by hand!) a set of weights that satisfy these constraints!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># here&#39;s the matrix from the equation above,
+# you can use for experimenting and testing
+A = np.array([[1, 1, 1],
+              [0, 1, 1],
+              [1, 1, 0],
+              [0, 1, 0],
+              [1, 0, 1],
+              [0, 0, 1]])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Test your weights. You should get, after passing your vector through the hard-sigmoid activation, <code class="docutils literal notranslate"><span class="pre">array([</span> <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">0.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">0.])</span></code> which matches table column for <span class="math notranslate nohighlight">\(h^{OR}_{t}\)</span>.</p>
+</div>
+<div class="section" id="Finding-the-weights-to-produce-h^\text{NAND}_t">
+<h3>Finding the weights to produce <span class="math notranslate nohighlight">\(h^\text{NAND}_t\)</span><a class="headerlink" href="#Finding-the-weights-to-produce-h^\text{NAND}_t" title="Permalink to this headline">¶</a></h3>
+<p>Let’s repeat the process for <span class="math notranslate nohighlight">\(h^\text{NAND}_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h^\text{NAND}_t = \text{hardsigmoid}\left(x_t W_{xh}^{(0,1)} +  h^\text{OR}_{t-1}\cdot W_{hh}^{(0,1)}  + h^\text{NAND}_{t-1}\cdot W_{hh}^{(1,1)}  + b^\text{NAND}\right)
+\end{equation}</div><p>We can derive the following constraints for <span class="math notranslate nohighlight">\(h^\text{NAND}\)</span> from the table: <span class="math">\begin{equation}
+\begin{bmatrix}
+1 & 1 & 1 \\
+0 & 1 & 1 \\
+1 & 1 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 1 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+W_{xh}^{(0,1)} \\
+W_{hh}^{(0,1)} \\
+W_{hh}^{(1,1)} \\
+\end{bmatrix}
++ b^\text{NAND}
+\longrightarrow
+\begin{bmatrix}
+- \\
++ \\
++ \\
++ \\
++ \\
++ \\
+\end{bmatrix}
+\end{equation}</span></p>
+<p>Again, find the parameters that satisfy these constraints.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Test your weights. You should get <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">0.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.]</span></code> which matches table column for <span class="math notranslate nohighlight">\(h^{NAND}_{t}\)</span>.</p>
+</div>
+<div class="section" id="Weights-for-y_t">
+<h3>Weights for <span class="math notranslate nohighlight">\(y_t\)</span><a class="headerlink" href="#Weights-for-y_t" title="Permalink to this headline">¶</a></h3>
+<p>Finally, let’s finish up with <span class="math notranslate nohighlight">\(y_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y_t = \text{hardsigmoid}\left(\begin{bmatrix}h^{OR}_t &amp; h^{NAND}_t\end{bmatrix}
+\begin{bmatrix}W_{hy}^{(0,0)} \\ W_{hy}^{(1,0)}\end{bmatrix}+ b_y\right)
+\end{equation}</div><p>Deriving constraints from the table, we get:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix}
+1 &amp; 0 \\
+1 &amp; 1 \\
+1 &amp; 1 \\
+0 &amp; 1 \\
+1 &amp; 1 \\
+0 &amp; 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+W_{hy}^{(0,0)} \\
+W_{hy}^{(1,0)}
+\end{bmatrix}
++ b_y
+\longrightarrow
+\begin{bmatrix}
+- \\
++ \\
++ \\
+- \\
++ \\
+- \\
+\end{bmatrix}
+\end{equation}</div><p>Find values for the unknowns to make this constraints work.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># here&#39;s a new A matrix for experimenting
+A = np.array([[1, 0],
+              [1, 1],
+              [1, 1],
+              [0, 1],
+              [1, 1],
+              [0, 1]])
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Test your weights. You should get <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">0.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">0.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">0.]</span></code>, which matches table column for <span class="math notranslate nohighlight">\(y_{t}\)</span>.</p>
+</div>
+<div class="section" id="Putting-the-Weights-Together">
+<h3>Putting the Weights Together<a class="headerlink" href="#Putting-the-Weights-Together" title="Permalink to this headline">¶</a></h3>
+<p>Based on what you’ve worked out, assemble all the necessary weights: <code class="docutils literal notranslate"><span class="pre">W_xh,</span> <span class="pre">W_hh,</span> <span class="pre">b_h,</span> <span class="pre">W_hy,</span> <span class="pre">b_y</span></code></p>
+<p>The shapes should be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">W_xh</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">W_hh</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b_h</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">W_hy</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b_y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">(1, 2) (2, 2) (1, 2) (2, 1) (1, 1)</span>
+</pre></div>
+</div>
+<p>There are 11 total parameters in these matrices.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Testing-our-RNN">
+<h2>Testing our RNN<a class="headerlink" href="#Testing-our-RNN" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s actually apply our RNN. Complete the step function, which takes one time step in our RNN according to the equations:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t = \text{hardsigmoid}(x_t W_{xh} + h_{t-1} W_{hh} + b_h) \\
+y_t = \text{hardsigmoid}(h_t W_{hy} + b_y)
+\end{equation}</div><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def step(W_xh, W_hh, b_h, W_hy, b_y, h, x):
+    &quot;&quot;&quot;
+    Applies forward pass of simple RNN according to equations:
+        h_t = hardsigmoid(x_t W_{xh} + h_{t-1} W_{hh} + b_h)
+        y_t = hardsigmoid(h_t W_{hy} + b_y)
+
+    Parameters
+    ----------
+    W_xh: ndarray, shape=(1, 2)
+        The weights used in computing h_t from the current value in the sequence
+
+    W_hh: ndarray, shape=(2, 2)
+        The weights used in computing h_t from the previous hidden state
+
+    b_h: ndarray, shape=(1, 2)
+        The bias used for computing the current hidden state
+
+    W_hy: ndarray, shape=(2, 1)
+        The weights used for computing y_t from h_t
+
+    b_y: ndarray, shape=(1, 1)
+        The bias for computing the y term
+
+    h: ndarray, shape=(1, 2)
+        The hidden state of the previous time step
+
+    x: int
+        The current value (1 or 0) in the even-odd sequence
+
+    Returns
+    -------
+    h_t: ndarray, shape=(1, 2)
+        The hidden state of the current time step
+
+    y_t: ndarray, shape=(1, 1)
+        An integer tracking whether the sequence is even (y=1) or odd (y=0)
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Initialize hidden state to “even”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>h = np.array([1., 1.]).reshape(1, 2) # &lt;/COGLINE&gt;
+</pre></div>
+</div>
+</div>
+<p>Call step with initial hidden state and input x = 0. Verify that output is still “even” (y = 1).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Call step with previous hidden state and input x = 1. Verify that output is now “odd” (y = 0).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Call step with previous hidden state and input x = 1. Verify that output is “even” again (y = 1).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now evaluate on sequences of 0s and 1s of various sizes and display the output values. You will want to iteratively call your <code class="docutils literal notranslate"><span class="pre">step</span></code> function and save the resullting <code class="docutils literal notranslate"><span class="pre">y</span></code> values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>You were able to create a simple recurrent neural network (with just 11 parameters) that could do a task that a much more complex network (with many more parameters) failed to do!</p>
+<p>What mechanism allowed this? Do you think this simple version is flexible enough for harder problems? Discuss with a partner!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,998 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Training a Universal Function Approximator &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Training a Universal Function Approximator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/UniversalFunctionApprox.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import matplotlib.pyplot as plt
+
+import mygrad as mg
+import numpy as np
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Training-a-Universal-Function-Approximator">
+<h1>Training a Universal Function Approximator<a class="headerlink" href="#Training-a-Universal-Function-Approximator" title="Permalink to this headline">¶</a></h1>
+<p>The <em>universal approximation theorem</em> states:</p>
+<p>Let $ <span class="math">\varphi `(:nbsphinx-math:</span>cdot <cite>)$ be a nonconstant, bounded, and monotonically-increasing continuous function. Let $ I_m $ denote any compact subset of $ :nbsphinx-math:</cite>mathbb {R}` ^{m} $. The space of continuous functions <span class="math notranslate nohighlight">\(I_m \mapsto \mathbb {R}\)</span> is denoted by <span class="math notranslate nohighlight">\(C(I_{m})\)</span>.</p>
+<p>Then, given any <span class="math notranslate nohighlight">\(\varepsilon &gt;0\)</span> and any function <span class="math notranslate nohighlight">\(f\in C(I_{m})\)</span>, there exist <span class="math notranslate nohighlight">\(N\)</span> real constants <span class="math notranslate nohighlight">\(v_{i},b_{i}\in \mathbb {R}\)</span> and real vectors <span class="math notranslate nohighlight">\(\vec{w}_{i}\in \mathbb {R} ^{m}\)</span>, where <span class="math notranslate nohighlight">\(i=1,\cdots ,N\)</span>, such that we may define:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(\{v_i\}, \{\vec{w}_i\}, \{b_i\}; \vec{x}) = \sum_{i=1}^{N} v_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i})
+\end{equation}</div><p>as an approximate realization of a function <span class="math notranslate nohighlight">\(f(x)\)</span>, where <span class="math notranslate nohighlight">\(f\)</span> is independent of <span class="math notranslate nohighlight">\(\varphi\)</span> ; that is,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+| F( \vec{x} ) - f ( \vec{x} ) | &lt; \varepsilon
+\end{equation}</div><p>for all $ x:nbsphinx-math:<cite>in `I_{m}$. See that :math:</cite>vec{x} cdot vec{w}_{i}` is the dot product between <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(\vec{w}_{i}\)</span>, which are vectors in an <span class="math notranslate nohighlight">\(m\)</span>-dimensional space. Each <span class="math notranslate nohighlight">\({b_i}\)</span> is a scalar and each <span class="math notranslate nohighlight">\({v_i}\)</span> is a scalar. In later work we will want to extend <span class="math notranslate nohighlight">\(v_i\)</span> to be a vector, so here we will also treat it as a vector in a 1-dimensional space, to make our future transition seamless.</p>
+<p>This theorem was first proven in 1989, using the <em>sigmoid function</em> as <span class="math notranslate nohighlight">\(\varphi\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi(x) = \frac{1}{1 + e^{-x}}
+\end{equation}</div><div class="section" id="Our-problem">
+<h2>Our problem<a class="headerlink" href="#Our-problem" title="Permalink to this headline">¶</a></h2>
+<p>Here, we will try to find values for the parameters <span class="math notranslate nohighlight">\(N,v_{i},b_{i},w_{i}\)</span> (where <span class="math notranslate nohighlight">\(i=1,\cdots ,N\)</span>) such that <span class="math notranslate nohighlight">\(F(x)\)</span> approximates</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x) = \cos(x)\\
+x \in [-2\pi, 2\pi]
+\end{equation}</div><p>Using the sigmoid function as <span class="math notranslate nohighlight">\(\varphi\)</span>.</p>
+<p>Because <span class="math notranslate nohighlight">\(\cos(x)\)</span> maps <span class="math notranslate nohighlight">\([-2\pi, 2\pi] \mapsto [-1, 1]\)</span>, <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(w_{i}\)</span> are scalars. In the future we will be working with high dimensional data, so we will want to treat <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(w_{i}\)</span> as vectors in a 1-dimensional space (i.e. length-1 tensors) here; this will make it trivial to adapt our code to higher dimensional data later on.</p>
+<p>We will search for optimal values of <span class="math notranslate nohighlight">\(v_{i},w_{i},b_{i}\)</span> via <em>gradient descent</em>, using the obvious <strong>loss function</strong>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+L(\{v_i\}, \{w_i\}, \{b_i\}; x) = | F(\{v_i\}, \{w_i\}, \{b_i\}; x ) - \cos ( x ) |
+\end{equation}</div><p>The <em>number</em> of parameters to use, <span class="math notranslate nohighlight">\(N\)</span>, is a <strong>hyper parameter</strong>, which we must find through trial and error, or some other means. <span class="math notranslate nohighlight">\(N\)</span> is not something we can determine via gradient descent.</p>
+<div class="section" id="Plotting-our-“activation-function”">
+<h3>Plotting our “activation function”<a class="headerlink" href="#Plotting-our-“activation-function”" title="Permalink to this headline">¶</a></h3>
+<p>Import the <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code> from <code class="docutils literal notranslate"><span class="pre">mygrad.nnet.activations</span></code>. Plot this function on the domain <span class="math notranslate nohighlight">\([-10, 10]\)</span>.</p>
+<p>Is this a “nonconstant, bounded, and monotonically-increasing continuous function”, as demanded for <span class="math notranslate nohighlight">\(\varphi\)</span> by the universal approximation theorem?</p>
+<p>What does the sigmoid function do to “extreme” values of <span class="math notranslate nohighlight">\(x\)</span>? What mechanism might this serve? Discuss with neighbors.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Write-a-gradient-descent-function">
+<h3>Write a gradient-descent function<a class="headerlink" href="#Write-a-gradient-descent-function" title="Permalink to this headline">¶</a></h3>
+<p>Write a gradient descent function that accepts a tuple of tensors and a <strong>learning rate</strong> (<span class="math notranslate nohighlight">\(\delta\)</span>).</p>
+<p><strong>For each tensor in a list/tuple</strong>, update the tensor’s <em>underlying numpy array</em> using to gradient descent. Skip the tensor if its gradient is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Because you are modifying the data of these tensors in-place, this function need not return anything. Write a good docstring for the function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def grad_descent(params, learning_rate):
+    &quot;&quot;&quot; Update tensors according to vanilla gradient descent.
+
+    Parameters
+    ----------
+    params : Sequence[mygrad.Tensor]
+        A list/tuple of learnable parameters to be updated
+
+    learning_rate : float
+        The &#39;step size&#39; to use during the descent
+
+    Returns
+    -------
+    None
+        Each parameter in the list should be updated &#39;in-place&#39;&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Defining-Our-Model">
+<h2>Defining Our Model<a class="headerlink" href="#Defining-Our-Model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Working-with-“Batches”-of-Data">
+<h3>Working with “Batches” of Data<a class="headerlink" href="#Working-with-“Batches”-of-Data" title="Permalink to this headline">¶</a></h3>
+<p>It is computationally inefficient to train our model by passing it one datum, <span class="math notranslate nohighlight">\(x\)</span>, at a time. Rather, we will want to pass in a <strong>batch</strong> of <span class="math notranslate nohighlight">\(M\)</span> pieces of input data, <span class="math notranslate nohighlight">\(\{x_{j}\}_{j=0}^{M-1}\)</span>, and evaluate our model for each of these values independently. That is, we will pass on a batch of <span class="math notranslate nohighlight">\(M\)</span> pieces of data and produce <span class="math notranslate nohighlight">\(M\)</span> corresponding predictions from our model.</p>
+<p>Each prediction is made only on its corresponding piece of input data. Thus, prediction <span class="math notranslate nohighlight">\(F(\{v_i\}, \{w_i\}, \{b_i\}; x_j )\)</span> depends only on:</p>
+<ul class="simple">
+<li><p>our model’s parameters: <span class="math notranslate nohighlight">\(\{v_i\}, \{w_i\}, \{b_i\}\)</span></p></li>
+<li><p>datum <span class="math notranslate nohighlight">\(x_j\)</span></p></li>
+</ul>
+<p>it is <strong>not</strong> impacted by any of the other pieces of data in the batch. This is very important to keep in mind!</p>
+<p>We will make our <span class="math notranslate nohighlight">\(M\)</span> predictions for the batch using vectorization and not for-loops. Thus <code class="docutils literal notranslate"><span class="pre">x</span></code> will be a shape-<span class="math notranslate nohighlight">\((M, 1)\)</span> numpy-array instead of a single number.</p>
+<p>Recall that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+x_j \cdot w_{i}
+\end{equation}</div><p>can be evaluated all combinations of <span class="math notranslate nohighlight">\(j=1,\cdots ,M\)</span> and <span class="math notranslate nohighlight">\(i=1,\cdots ,N\)</span> via simple matrix multiplication between the shape-<span class="math notranslate nohighlight">\((M, 1)\)</span> <code class="docutils literal notranslate"><span class="pre">x</span></code> and the shape-<span class="math notranslate nohighlight">\((1, N)\)</span> <code class="docutils literal notranslate"><span class="pre">w</span></code>, producing a shape-<span class="math notranslate nohighlight">\((M, N)\)</span> output. And thus the following expression:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi(x_{j} \cdot w_{i} + b_{i})
+\end{equation}</div><p>can be performed for all <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(i\)</span> via broadcasting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sigmoid</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="c1"># matmul[(M,1) w/ (1, N)] + (N,) --&gt; (M, N)</span>
+</pre></div>
+</div>
+<p>Multiplying each such term by <span class="math notranslate nohighlight">\(v_{i}\)</span> and summing over <span class="math notranslate nohighlight">\(i\)</span> is thus just another matrix multiplication:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(\{v_i\}, \{w_i\}, \{b_i\}; x_j ) = \sum_{i=1}^{N} v_{i}\varphi(x_{j} \cdot w_{i} + b_{i})
+\end{equation}</div><p>can be performed for each <code class="docutils literal notranslate"><span class="pre">j</span></code> in the batch via:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out1</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># matmul[(M,1) w/ (1, N)] + (N,) --&gt; (M, N)</span>
+<span class="n">model_out</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>       <span class="c1"># matmul[(M, N) w/ (N, 1)] --&gt; (M, 1)</span>
+</pre></div>
+</div>
+<p>Thus <code class="docutils literal notranslate"><span class="pre">model_out</span></code> is a shape-<span class="math notranslate nohighlight">\((M, 1)\)</span> tensor that holds the prediction of our model, corresponding with each datum in our shape-(M, 1) batch.</p>
+<p>Define the <code class="docutils literal notranslate"><span class="pre">Model.__call__</span></code> method such that it accepts a batch of shape-(M, 1), and produces (M, 1) predictions. Include detailed comments about what the input and output shapes are of all the tensors in this so-called forward-pass.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>class Model:
+    def __init__(self, num_neurons: int):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+        num_neurons : int
+            The number of &#39;neurons&#39;, N, to be included in the model.
+        &quot;&quot;&quot;
+        # set self.N equal to `num_neurons
+        # STUDENT CODE HERE
+
+        # Use `self.initialize_params()` to draw random values for
+        # `self.w`, `self.b`, and `self.v`
+        # STUDENT CODE HERE
+
+    def __call__(self, x):
+        &quot;&quot;&quot;
+        Performs a so-called &#39;forward pass&#39; through the model
+        on the specified data. I.e. uses the model to
+        make a prediction based on `x`.
+
+        Parameters
+        ----------
+        x : array_like, shape-(M, 1)
+            An array of M observations.
+
+        Returns
+        -------
+        prediction : mygrad.Tensor, shape-(M, 1)
+            A corresponding tensor of M predictions based on
+            the form of the universal approximation theorem.
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+    def initialize_params(self):
+        &quot;&quot;&quot;
+        Randomly initializes and sets values for  `self.w`,
+        `self.b`, and `self.v`.
+
+        Uses `mygrad.nnet.initializers.normal to draw tensor
+        values w, b, and v from a normal distribution with
+        0-mean and std-dev of 1.
+
+        self.w : shape-(1, N)
+        self.b : shape-(N,)
+        self.v : shape-(N, 1)
+
+        where `N` is the number of neurons in the model.
+        &quot;&quot;&quot;
+        # assign `self.w`, `self.b`, and `self.v` each a tensor value drawn from
+        # the appropriate distribution
+        # STUDENT CODE HERE
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model.
+
+        This can be accessed as an attribute, via `model.parameters`
+
+        Returns
+        -------
+        Tuple[Tensor, ...]
+            A tuple containing all of the learnable parameters for our model&quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+    def load_parameters(self, w, b, v):
+        self.w = w
+        self.b = b
+        self.v = v
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Writing-a-loss-function">
+<h3>Writing a loss function<a class="headerlink" href="#Writing-a-loss-function" title="Permalink to this headline">¶</a></h3>
+<p>For the problem at hand, given how the universal approximation theorem is posed, it is quite natural to choose our loss function to be:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+L(x) = | F( \{v_i\}, \{w_i\}, \{b_i\}; x ) - \cos ( x ) |
+\end{equation}</div><p>which is called the “L1-loss”. Our loss grows linearly with the disagreement between our approximating function (a.k.a our “predictions”) and the “true” function.</p>
+<p>Note, however, that we want to make predictions size-<span class="math notranslate nohighlight">\(M\)</span> batches. Thus we will have:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+L(x_{j}) = | F(\{v_i\}, \{w_i\}, \{b_i\}; x_j ) - \cos ( x_{j} ) |
+\end{equation}</div><p>for each <span class="math notranslate nohighlight">\(j=1,\cdots ,M\)</span>.</p>
+<p>That being said, we want to ultimately have a <em>single scalar loss</em>. Let’s choose to compute our total loss as the <em>average</em> over the <span class="math notranslate nohighlight">\(M\)</span> values, <span class="math notranslate nohighlight">\(L(x_{j})\)</span>. (Note that this average-loss is called “risk” in machine learning and game theory literature).</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+L(\{v_i\}, \{w_i\}, \{b_i\}; \{x_k\} ) = \frac{1}{M}\sum_{j=1}^{M} | F(\{v_i\}, \{w_i\}, \{b_i\}; x_j ) - \cos ( x_{j} ) |
+\end{equation}</div><p>Write the function <code class="docutils literal notranslate"><span class="pre">l1_loss</span></code>, which accepts the shape-<span class="math notranslate nohighlight">\((M,1)\)</span> batch of <strong>predictions</strong> from our model along with the shape-<span class="math notranslate nohighlight">\((M, 1)\)</span> <strong>true</strong> values (which we are hoping to approximate) and returns the average loss, <span class="math notranslate nohighlight">\(L\)</span>.</p>
+<p>Make sure that you are using functions from mygrad and not numpy, so that we can back-propagate through this loss!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def l1_loss(pred, true):
+    &quot;&quot;&quot;
+    Parameters
+    ----------
+    pred : mygrad.Tensor, shape=(M,)
+    true : mygrad.Tensor, shape=(M,)
+
+    Returns
+    -------
+    mygrad.Tensor, shape=()
+        The l1-loss averaged over the size-M batch of predictions
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Preparing-the-training-data">
+<h2>Preparing the training data<a class="headerlink" href="#Preparing-the-training-data" title="Permalink to this headline">¶</a></h2>
+<p>You will create a numpy-array or <em>constant-Tensor</em> that samples <span class="math notranslate nohighlight">\([-2\pi, 2\pi]\)</span> 1,000 evenly-spaced points. Call this <code class="docutils literal notranslate"><span class="pre">train_data</span></code>. This should have the shape of (1000, 1). (You will do this lower down in the notebook).</p>
+<p>Why is it important that we use numpy-arrays or constant tensors? Why would it be inefficient to perform back-propagation if our training data were non-constant tensors? Discuss with your neighbors.</p>
+<div class="section" id="Training-Our-Approximating-Function!">
+<h3>Training Our Approximating Function!<a class="headerlink" href="#Training-Our-Approximating-Function!" title="Permalink to this headline">¶</a></h3>
+<p>We will use the handy ‘noggin’ package to keep track of how our loss is evolving during training. The following code will create a plotter that will keep track of “loss”, and will refresh itself every 2 seconds, during training:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">noggin</span> <span class="kn">import</span> <span class="n">create_plot</span>
+<span class="n">plotter</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">create_plot</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We will need to make take randomized “batches” of our training data, and use them to train our model. Each time we process all of the batches in our training data, we have completed an “epoch” of training.</p>
+<p>Below, we will use batches of size-25. Thus we will need to process <span class="math notranslate nohighlight">\(1000/25 = 40\)</span> batches to complete an epoch of training.</p>
+<p>Here, we will set up our training data, initialize our model’s parameters, set our batch size, and define the function that we are attempting to approximate. We will also create a plot that updates during training</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Running this code will recreate your model, re-initializing all of its parameters
+# Thus you must re-run this cell if you want to train your model from scratch again.
+
+# Create the noggin figure using the code snippet above
+# STUDENT CODE HERE
+
+# Create the shape-(1000,1) training data
+# STUDENT CODE HERE
+
+# Initialize your model;
+# start off with N=10 neurons
+# STUDENT CODE HERE
+
+# Set `batch_size = 25`: the number of predictions that we will make in each training step
+# STUDENT CODE HERE
+
+# Define the function `true_f`, which should just accept `x` and return `np.cos(x)`
+# (or any other function that you want to approximate later on)
+# STUDENT CODE HERE
+
+
+# we will store our model&#39;s weights in this list every 10 epochs
+#so that we can assess what our model&#39;s predictions look like mid-training
+params = []
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># running this code will train your model; you can run it consecutively,
+# with different learning rates to continue training your model.
+
+# set your &quot;learning rate&quot;: the scaling parameter in gradient descent
+# try a value of 0.01 to start
+#
+# If your loss function plateaus, you can reduce this by 10x and
+# resume training to further reduce the loss
+# STUDENT CODE HERE
+
+# We will train for 1000 epochs; you can change this if you&#39;d like
+for epoch_cnt in range(1000):
+    # We need to create randomly-drawn batches of data...
+
+    # Produce a numpy array of integer indices (starting at 0) - one for
+    # each datum in your training
+    # STUDENT CODE HERE
+
+    # Use np.random.shuffle to shuffle these indices.
+    # Note that this functions will sort  the indices *in-place* - it does
+    # not return anything
+    # STUDENT CODE HERE
+
+    # Let&#39;s keep track of our model&#39;s progress. Every 10 epochs we&#39;ll
+    # record our model&#39;s weights so that we can visualize what its
+    # predictions look like as it was training.
+    if epoch_cnt % 10 == 0:
+        params.append([w.data.copy() for w in [model.w, model.b, model.v]])
+
+    for batch_cnt in range(0, len(train_data) // batch_size):
+
+        # Take a size-`batch_size` slice from the randomized indices that you created
+        # above. Each batch count should produce the subsequent, non-overlapping slice.
+        #
+        # Remember that the &#39;stop&#39; point of the slice can exceed the end of the array -
+        # it will just produce a shorter slice. This means you don&#39;t need to worry about
+        # your batch-size dividing into your data evenly - your lase batch might just
+        # be a bit smaller than before.
+        # STUDENT CODE HERE
+
+        # Use the resulting batch-indices to get the corrsponding batch
+        # of training data
+        # STUDENT CODE HERE
+
+        # compute the predictions for this batch: F(x)
+        # STUDENT CODE HERE
+
+        # compute the true (a.k.a desired) values for this batch: f(x)
+        # STUDENT CODE HERE
+
+        # compute the loss associated with our predictions
+        # STUDENT CODE HERE
+
+        # back-propagate through your computational graph through your loss
+        # this will compute: dL/dw, dL/db, dL/dv
+        # STUDENT CODE HERE
+
+        # execute your gradient descent function, passing all of your model&#39;s
+        # parameters (w, b, v), and the learning rate. This will update your
+        # model&#39;s parameters based on the loss that was computed
+        # STUDENT CODE HERE
+
+        # this will record the current loss, and will plot it
+        plotter.set_train_batch({&quot;loss&quot;: loss.item()}, batch_size=batch_size)
+    plotter.set_train_epoch()
+
+# this will ensure you plotted the most recent data
+plotter.plot()
+</pre></div>
+</div>
+</div>
+<p>Remember that we were just updating our model’s parameters, <span class="math notranslate nohighlight">\(\{v_i\}, \{w_i\}, \{b_i\}\)</span>, using gradient descent so as to minimize our loss: L(x) = <span class="math notranslate nohighlight">\(| F( \{v_i\}, \{w_i\}, \{b_i\}; x ) - \cos ( x ) |\)</span></p>
+<p>Thus we should expect to see that <span class="math notranslate nohighlight">\(F( \{v_i\}, \{w_i\}, \{b_i\}; x ) \approx \cos ( x )\)</span></p>
+<p>To evaluate the quality of your model (i.e. your approximating function <span class="math notranslate nohighlight">\(F(x)\)</span>), plot <span class="math notranslate nohighlight">\(f(x)\)</span> (the desired function) and <span class="math notranslate nohighlight">\(F(x)\)</span> on the sample plot. Use <code class="docutils literal notranslate"><span class="pre">train_data</span></code> as your <code class="docutils literal notranslate"><span class="pre">x</span></code> values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Let’s see what our model looked like <em>as it was training/learning</em>. Run the following cell to see the true function (plotted in blue) and our approximating function (plotted in orange)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># execute this cell
+
+from matplotlib.animation import FuncAnimation
+
+x = np.linspace(-4 * np.pi, 4 * np.pi, 1000)
+
+
+
+fig, ax = plt.subplots()
+ax.plot(x, np.cos(x))
+ax.set_ylim(-2, 2)
+_model = Model(model.N)
+_model.load_parameters(*params[0])
+(im,) = ax.plot(x.squeeze(), _model(x[:, np.newaxis]).squeeze())
+
+
+def update(frame):
+    # ax.figure.canvas.draw()
+    _model.load_parameters(*params[frame])
+    im.set_data(x.squeeze(), _model(x[:, np.newaxis]).squeeze())
+    return (im,)
+
+
+ani = FuncAnimation(
+    fig,
+    update,
+    frames=range(0, len(params)),
+    interval=20,
+    blit=True,
+    repeat=True,
+    repeat_delay=1000,
+)
+</pre></div>
+</div>
+</div>
+<p>Let’s visualize the form learned by each of our “neurons”, scaled by . That is, plot</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i})
+\end{equation}</div><p>for each <span class="math notranslate nohighlight">\(i\)</span> on <span class="math notranslate nohighlight">\(x \in [-2\pi, 2\pi]\)</span>. Note that <span class="math notranslate nohighlight">\(v_i\)</span> is <em>not</em> included here.</p>
+<p>In the following, <code class="docutils literal notranslate"><span class="pre">axes</span></code> is an array that stores two columns of matplotlib-axis objects such that <code class="docutils literal notranslate"><span class="pre">axes.size</span></code> matches the number of neurons in your model. Plot the form of neuron-<span class="math notranslate nohighlight">\(i\)</span> in <code class="docutils literal notranslate"><span class="pre">axes.flatten()[i]</span></code>, for each neuron.</p>
+<p>Use a for-loop. It might be useful to use <code class="docutils literal notranslate"><span class="pre">flatten()</span></code> on your model parameters. You might also consider using <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/Itertools.html">zip</a>; but that is just a matter of convenience.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, axes = plt.subplots(ncols=2, nrows=model.N // 2)
+x = np.linspace(-2 * np.pi, 2 * np.pi)
+
+
+# Using a for-loop, plot the output of each scaled neuron:
+#     v * sigmoid(w*x + b)
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Finally, let’s include the scaling factors, {v_i}, each of which multiplies a respective neuron. That is, plot</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+v_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i})
+\end{equation}</div><p>for each <span class="math notranslate nohighlight">\(i\)</span> on <span class="math notranslate nohighlight">\(x \in [-2\pi, 2\pi]\)</span>.</p>
+<p><strong>What will the result look like if you plot the sum of all of these curves? (Hint: look back to the form of the universal function approximation theorem</strong>.</p>
+<p>Your response here:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = plt.subplots()
+x = np.linspace(-2 * np.pi, 2 * np.pi)
+
+# plots the full model output as a thick dashed black curve
+ax.plot(
+    x,
+    model(x[:, np.newaxis]),
+    color=&quot;black&quot;,
+    ls=&quot;--&quot;,
+    lw=4,
+    label=&quot;full model output&quot;,
+)
+
+# Add to the plot the scaled activation for each neuron: v σ(x * w + b)
+# using a separate color for each.
+# STUDENT CODE HERE
+
+ax.legend()
+ax.set_title(&quot;Visualizing the &#39;activity&#39; of each of the model&#39;s scaled neurons&quot;)
+ax.set_xlabel(r&quot;$x$&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Things-to-Try-(be-sure-to-preserve-any-good-code-you-have-before-trying-these-things)">
+<h3>Things to Try (be sure to preserve any good code you have before trying these things)<a class="headerlink" href="#Things-to-Try-(be-sure-to-preserve-any-good-code-you-have-before-trying-these-things)" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Once your loss curve (often called the “learning curve”) plateaus, try reducing the learning rate and resume training. This will likely lower your loss further.</p></li>
+<li><p>Once you have a good model, try plotting <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(F(x)\)</span> <em>beyond</em> the domain that you trained it on. For example, try plotting them on <span class="math notranslate nohighlight">\([-4\pi, 4\pi]\)</span>. What do you see? Is this reasonable? Discuss with a neighbor.</p>
+<ul>
+<li><p>Dig in a little deeper, plot each of the model’s scaled neurons <span class="math notranslate nohighlight">\(v_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i})\)</span> on <span class="math notranslate nohighlight">\([-4\pi, 4\pi]\)</span>. You should be able to visually see how the sigmoidal curves will sum outside of <span class="math notranslate nohighlight">\([-2\pi, 2\pi]\)</span></p></li>
+</ul>
+</li>
+<li><p>Try decreasing the the parameter-number in your model from <span class="math notranslate nohighlight">\(N=10\)</span> down to <span class="math notranslate nohighlight">\(N=1\)</span>. Thus <code class="docutils literal notranslate"><span class="pre">w</span></code> will have the shape (1, 1) instead of (1, 10), etc. Train this model as best you can, and plot <span class="math notranslate nohighlight">\(F(x)\)</span>. What shape does this take? Can you explain why?</p></li>
+<li><p>Using <span class="math notranslate nohighlight">\(N=10\)</span>, repeat your training but train on the domain <span class="math notranslate nohighlight">\([2\pi, 6\pi]\)</span>. Are you able to get your model to train well? Why should shifting the domain have any affect if <span class="math notranslate nohighlight">\(f(x)\)</span> is perfectly periodic. Consider what special properties our original domain, <span class="math notranslate nohighlight">\([-2\pi, 2\pi]\)</span> has. Consider, also, how we initialize our model’s parameters. Discuss with your neighbor what you suspect might be the issue here. You can use <code class="docutils literal notranslate"><span class="pre">noggin</span></code> to plot the mean values of <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">b</span></code> as you train. You can also plot the mean values of the gradients that are back-propagating through your model, with some minor modifications to your code. This is very interesting to visualize.</p></li>
+<li><p>Fit a different <span class="math notranslate nohighlight">\(f(x)\)</span> other than cosine. Do you need more parameters to approximate more complicated functions?</p></li>
+<li><p>Try increasing <span class="math notranslate nohighlight">\(N\)</span> to <span class="math notranslate nohighlight">\(N=1000\)</span>. You may need to try adjusting your learning rate during training, lowering it as you go. Does increasing <span class="math notranslate nohighlight">\(N\)</span> make things better or worse in this instance?</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># plotting F(x) outside of its training domain
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Plot each of the scaled neurons, v*sigmoid(w*x + b), on [-4 pi, 4 pi]
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># training the model using N=1
+
+# INTERPRETATION: For N=1, F(x) = v * sigmoid(x*w + b), thus F(x) must
+# have the form of a sigmoid function (albeit a shallow one)
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># visualizing w_grad.mean()
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

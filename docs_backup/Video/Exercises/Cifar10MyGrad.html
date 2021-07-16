@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Training a Two-Layer Neural Network on Cifar-10 &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Training a Two-Layer Neural Network on Cifar-10</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/Cifar10MyGrad.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Training-a-Two-Layer-Neural-Network-on-Cifar-10">
+<h1>Training a Two-Layer Neural Network on Cifar-10<a class="headerlink" href="#Training-a-Two-Layer-Neural-Network-on-Cifar-10" title="Permalink to this headline">¶</a></h1>
+<p>The tendril classification problem allowed us to use Neural Networks on a 2D toy dataset. In this notebook, we will work with an <span class="math notranslate nohighlight">\(n\)</span>-dimensional dataset of images, where <span class="math notranslate nohighlight">\(n\)</span> is the total size (# pixels x # color-channels) of an image. We will be using the famed <a class="reference external" href="https://www.cs.toronto.edu/~kriz/cifar.html">cifar-10 dataset</a>, so that our model can classify pictures of cars, planes, cats, dogs, frogs, and other items. There are 10 classes in total represented in this dataset. Each
+image has is an 32 pixels by 32 pixels RGB image of shape <code class="docutils literal notranslate"><span class="pre">(3,32,32)</span></code>. Thus each image is a point or vector in <span class="math notranslate nohighlight">\(\mathbb{R}^{3072}\)</span>.</p>
+<p>We will be training a two-layer neural network. Our loss function is the cross-entropy loss. The first two layers will use the ReLU activation function and the last layer will use softmax activation.</p>
+<div class="section" id="The-Model-in-Full">
+<h2>The Model in Full<a class="headerlink" href="#The-Model-in-Full" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\begin{equation}
+D_1(x) = \operatorname{ReLU}(xW_{1} + b_{1})\\
+D_2(x) = \operatorname{ReLU}(D_1(x) W_{2} + b_{3})\\
+F(\{W\}, \{b\}; x) = \operatorname{softmax}(D_2(x) W_3+b_3)
+\end{equation}</div><p>We will again be using the popular cross-entropy classification loss. Keep in mind that <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>, and other auto-differentiation libraries, provide a convenient softmax_crossentropy function, which efficiently computes the softmax <em>and then</em> the corss-entropy. So take care to not invoke softmax twice, in following the equations above.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import matplotlib.pyplot as plt
+
+import mygrad as mg
+import numpy as np
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import datasets
+datasets.download_cifar10()
+x_train, y_train, x_test, y_test = datasets.load_cifar10()
+
+print(&#39;Training data shape: &#39;, x_train.shape)
+print(&#39;Training labels shape: &#39;, y_train.shape)
+print(&#39;Test data shape: &#39;, x_test.shape)
+print(&#39;Test labels shape: &#39;, y_test.shape)
+print(x_train.dtype)
+</pre></div>
+</div>
+</div>
+<p>Let’s investigate what our data roughly looks like. Plotting some sample images from each class.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>classes = [&#39;plane&#39;, &#39;car&#39;, &#39;bird&#39;, &#39;cat&#39;, &#39;deer&#39;, &#39;dog&#39;, &#39;frog&#39;, &#39;horse&#39;, &#39;ship&#39;, &#39;truck&#39;]
+num_classes = len(classes)
+samples_per_class = 7
+for y, cls in enumerate(classes):
+    idxs = np.flatnonzero(y_train == y)
+    idxs = np.random.choice(idxs, samples_per_class, replace=False)
+    for i, idx in enumerate(idxs):
+        plt_idx = i * num_classes + y + 1
+        plt.subplot(samples_per_class, num_classes, plt_idx)
+        plt.imshow(x_train[idx].transpose(1,2,0).astype(&#39;uint8&#39;))
+        plt.axis(&#39;off&#39;)
+        if i == 0:
+            plt.title(cls)
+plt.show()
+</pre></div>
+</div>
+</div>
+<p>Flatten out x_train and x_test and use <code class="docutils literal notranslate"><span class="pre">astype</span></code> to convert your data to <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>. Your <code class="docutils literal notranslate"><span class="pre">(3,32,32)</span></code> image should now be <code class="docutils literal notranslate"><span class="pre">(3072,)</span></code>. Additionally, find the mean image and standard deviation image of the training and test data. Then, zero-center your data by subtracting the mean image and normalize by dividing out by the standard deviation image.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now, let’s construct our model using <code class="docutils literal notranslate"><span class="pre">MyNN</span></code> and define our <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Problems/ComputeAccuracy.html">accuracy function</a>.</p>
+<p>We can experiment with the sizes of our layers, but try:</p>
+<ul class="simple">
+<li><p>layer-1: size-100</p></li>
+<li><p>layer-2: size-50</p></li>
+<li><p>layer-3: size-? (hint: we don’t get to pick this)</p></li>
+</ul>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">he_normal</span></code> initialization for each layer.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mynn.initializers.he_normal import he_normal
+from mynn.activations.relu import relu
+from mynn.optimizers.sgd import SGD
+from mynn.losses.cross_entropy import softmax_cross_entropy
+from mynn.layers.dense import dense
+
+
+# Define your MyNN-`Model` class here. It should have:
+# - an `__init__` method that initializes all of your layers
+# - a `__call__` method that defines the model&#39;s &quot;forward pass&quot;
+# - a `parameters` property that returns a tuple of all of your
+#   model&#39;s learnable parameters (refer to the Tendrils-MyNN)
+#   notebook for the syntax of defining a class-property)
+class Model:
+    def __init__(self, n1, n2, num_classes):
+        &quot;&quot;&quot;
+        Initializes a model with two hidden layers of size `n1` and `n2`
+        respectively.
+
+        Parameters
+        ----------
+        n1 : int
+            The number of neurons in the first hidden layer
+
+        n2 : int
+            The number of neurons in the second hidden layer
+
+        num_classes : int
+            The number of classes predicted by the model&quot;&quot;&quot;
+        # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Initialize your model and optimizer, using SGD from MyNN. Specify the parameters, learning rate and weight_decay for your optimizer.</p>
+<p>A learning rate of <span class="math notranslate nohighlight">\(0.1\)</span> and a weight decay of <span class="math notranslate nohighlight">\(5\times10^{-4}\)</span> is sensible</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now write code to train your model! Experiment with your learning rate and weight_decay.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Set `batch_size = 100`: the number of predictions that we will make in each training step
+
+# STUDENT CODE HERE
+
+# We will train for 10 epochs; you can change this if you&#39;d like.
+# You will likely want to train for much longer than this
+for epoch_cnt in range(10):
+
+    # Create the indices to index into each image of your training data
+    # e.g. `array([0, 1, ..., 9999])`, and then shuffle those indices.
+    # We will use this to draw random batches of data
+    # STUDENT CODE HERE
+
+    for batch_cnt in range(0, len(x_train) // batch_size):
+        # Index into `x_train` to get your batch of M images.
+        # Make sure that this is a randomly-sampled batch
+        # STUDENT CODE HERE
+
+        # compute the predictions for this batch by calling on model
+        # STUDENT CODE HERE
+
+
+        # compute the true (a.k.a desired) values for this batch:
+        # STUDENT CODE HERE
+
+
+        # compute the loss associated with our predictions(use softmax_cross_entropy)
+        # STUDENT CODE HERE
+
+
+        # back-propagate through your computational graph through your loss
+        # STUDENT CODE HERE
+
+
+        # execute gradient-descent by calling step() of optim
+        # STUDENT CODE HERE
+
+
+        # compute the accuracy between the prediction and the truth
+        # STUDENT CODE HERE
+
+
+        plotter.set_train_batch({&quot;loss&quot; : loss.item(),
+                                 &quot;accuracy&quot; : acc},
+                                 batch_size=batch_size)
+
+    # After each epoch we will evaluate how well our model is performing
+    # on data from cifar10 *that it has never &quot;seen&quot; before*. This is our
+    # &quot;test&quot; data. The measured accuracy of our model here is our best
+    # estimate for how our model will perform in the real world
+    # (on 32x32 RGB images of things in this class)
+    test_idxs = np.arange(len(x_test))
+
+    for batch_cnt in range(0, len(x_test)//batch_size):
+        batch_indices = test_idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
+
+        batch = x_test[batch_indices]
+        truth = y_test[batch_indices]
+
+        # We do not want to compute gradients here, so we use the
+        # no_autodiff context manager to disable the ability to
+        with mg.no_autodiff:
+            # Get your model&#39;s predictions for this test-batch
+            # and measure the test-accuracy for this test-batch
+            # STUDENT CODE HERE
+
+        # pass your test-accuracy here; we used the name `test_accuracy`
+        plotter.set_test_batch({&quot;accuracy&quot; : test_accuracy}, batch_size=batch_size)
+    plotter.set_test_epoch()
+</pre></div>
+</div>
+</div>
+<div class="section" id="Evaluating-Your-Results">
+<h3>Evaluating Your Results<a class="headerlink" href="#Evaluating-Your-Results" title="Permalink to this headline">¶</a></h3>
+<p>How well is your model performing? Is there any discrepancy between how well it does on training data vs testing data?</p>
+<p>Below, we provide code to randomly pick an image from the test set, plot it, and print your model’s predicted label vs the true label. <code class="docutils literal notranslate"><span class="pre">datasets.load_cifar10.labels</span></code> returns a tuple of the label-names in correspondence with each truth-index.</p>
+<p>Since we shifted and normalized our data, we have to re-load the data here, using different names for the arrays.</p>
+<p>Note that we still need to pass your model the shifted/normalized test images. So the data you use to plot the image is different from the data that you pass to the model. Also note that your model expects a <em>batch</em> of images, not a single image. Thus we use a batch of size-1, which has shape-(1, 3072) - your model will produce a shape-(1, 10) tensor of predictions.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>_, _, img_test, label_test = datasets.load_cifar10()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>labels = datasets.load_cifar10.labels  # tuple of cifar-10 labels
+
+index = np.random.randint(0, len(img_test))  # pick a random test-image index
+
+true_label_index = label_test[index]
+true_label = labels[true_label_index]
+
+with mg.no_autodiff:
+    prediction = model(x_test[index:index + 1])  # you must pass in a shape-(1, 3072) array
+    predicted_label_index = np.argmax(prediction.data, axis=1).item()  # largest score indicates the prediction
+    predicted_label = labels[predicted_label_index]
+
+
+fig, ax = plt.subplots()
+
+# matplotlib wants shape-(H, W, C) images, with unsigned 8bit pixel values
+img = img_test[index].transpose(1,2,0).astype(&#39;uint8&#39;)
+
+ax.imshow(img)
+ax.set_title(f&quot;Predicted: {predicted_label}\nTruth: {true_label}&quot;);
+</pre></div>
+</div>
+</div>
+<p>Can you understand some of the mistakes that your model is making? Perhaps it sees a white plane over water, and confuses it for a boat. Can <em>you</em> figure out what some of these images depict? Some are pretty hard to identify, given the low resolution.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

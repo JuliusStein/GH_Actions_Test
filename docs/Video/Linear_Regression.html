@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Computer Vision, Category: Introduction" name="description" />
+<meta content="linear regression, supervised learning" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Baby Steps Towards Machine Learning: Linear Regression &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exercises: Exploring A Dataset" href="Exercises/Data_Exploration.html" />
+    <link rel="prev" title="A Brief Introduction to Machine Learning" href="intro_ml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../vision.html">Vision Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Baby Steps Towards Machine Learning: Linear Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Modeling-Wingspan-Versus-Height">Modeling Wingspan Versus Height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Defining-Success:-The-Method-of-Least-Squares">Defining Success: The Method of Least Squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Linear-Least-Squares:-A-Closed-Form-Solution">Linear Least Squares: A Closed-Form Solution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Next-Steps">Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Automatic_Differentiation.html">Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FacialRecognition.html">Vision Module Capstone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../vision.html">Vision Module</a> &raquo;</li>
+        
+      <li>Baby Steps Towards Machine Learning: Linear Regression</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Video/Linear_Regression.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Baby-Steps-Towards-Machine-Learning:-Linear-Regression">
+<h1>Baby Steps Towards Machine Learning: Linear Regression<a class="headerlink" href="#Baby-Steps-Towards-Machine-Learning:-Linear-Regression" title="Permalink to this headline">¶</a></h1>
+<p>It is time for us to roll up our sleeves and explore a simple data-modeling problem through regression analysis. Our objective here is to gain some experience devising a simple mathematical model to describe a pattern that we see manifest in data. Doing so will acquaint us with the following important terms and concepts:</p>
+<ul class="simple">
+<li><p>Model: a mathematical function used to relate <strong>observed data</strong> to desired <strong>predictions or decisions</strong> about said observed data.</p></li>
+<li><p>Model parameters: numerical values contained in our model that must be tuned so that our model faithfully describes important patterns in our data (i.e. so that it makes reliable predictions/decisions based on new observations).</p></li>
+<li><p>Objective (a.k.a “loss”) function: a mathematical function that compares our model’s predictions against recorded data, and provides a measure of the quality of the predictions.</p></li>
+</ul>
+<p>These points will form the foundation for our study of deep learning.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>The meaning of “regression”:</strong></p>
+<p>The process of regression analysis involves estimating a mathematical function that most closely fits the patterns seen in one’s data. In this way, the important patterns that manifest in discrete and potentially noisy data points can be viewed as a “regression” to the form of a single, continuous function - the function that you produce is a so-called regression model of your data.</p>
+</div>
+<div class="section" id="Modeling-Wingspan-Versus-Height">
+<h2>Modeling Wingspan Versus Height<a class="headerlink" href="#Modeling-Wingspan-Versus-Height" title="Permalink to this headline">¶</a></h2>
+<p>Sports are a great source of data because they generate oodles of systematically collected data. Suppose that we are interested in modeling the relationship between a basketball player’s height and their wingspan (What is a wingspan? If you hold out your arms so that your body makes a “T” shape, your wingspan is the distance from the tip of one hand to the tip of the other hand). That is, given a new player’s height measurement we would like to compute an accurate prediction of their wingspan.</p>
+<p>To begin this problem, we should find some data. Let’s take a look at some height and wingspan measurements taken of the <a class="reference external" href="https://www.nbadraft.net/2019-nba-draft-combine-measurements/">2019 NBA draftees</a>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/wingspan_vs_height.png" alt="Wingspan versus height for NBA draftees" width="600">
+</p>
+</div><p>This is a particularly nice introductory data-modeling problem for a couple of reasons:</p>
+<ol class="arabic simple">
+<li><p>We are only considering a single independent/observed quantity and one dependent/predicted quantity, thus we can visually summarize our data in a simple 2D plot.</p></li>
+<li><p>Based off of this plot, we see a relatively clean linear pattern in our data, which makes the process of picking an appropriate mathematical model for this problem trivial.</p></li>
+</ol>
+<p>Given the clear pattern, we are able to write down a simple equation to express the relationship between our observed data (height) and our desired predictions (wingspan).</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(m, b; x) = m x + b
+\end{equation}</div><p>This equation is our chosen <strong>model</strong> for the relationship between a player’s height and his wingspan. Here, <span class="math notranslate nohighlight">\(x\)</span> represents an input height, and the output, <span class="math notranslate nohighlight">\(F(m, b; x)\)</span>, is the wingspan that is predicted by our model. The variables <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are our <strong>model parameters</strong> – the slope and y-intercept of the line, respectively.</p>
+<p>Note that the model parameters are separated from the input variable by a semicolon in the function signature in order to help distinguish between the nature of these variables. Namely, <span class="math notranslate nohighlight">\(x\)</span> represents an observed quantity that we have no control over (it is our observed data), whereas <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are parameters whose values we must select so that our model produces accurate predictions.</p>
+<p>Assuming that we are satisfied with restricting ourselves to this simple linear model, <strong>our objective is to determine the model parameter values that produce the “best fit” to our data</strong> (we will discuss what “best” means here). We will represent these ideal parameter values as <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>. Once we have determined these values, our ideal linear model will look like so:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/least_squares_model.png" alt="Best-fit linear model" width="600">
+</p>
+</div><p>Obtaining this model will permit us to take a new height – one that is not in our dataset – and invoke our model to predict that individual’s wingspan.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Know Your Limits</strong></p>
+<p>It is extremely important to consider biases and limitations in ones data, as these will inevitably manifest in the model that results from said data.</p>
+<p>Based on the description of our data above, what might be some limitations or biases to our model? That is, should we expect that our model is good at predicting wingspans for any and all humans, or is a much more limited application of our model warranted?</p>
+</div>
+</div>
+<div class="section" id="Defining-Success:-The-Method-of-Least-Squares">
+<h2>Defining Success: The Method of Least Squares<a class="headerlink" href="#Defining-Success:-The-Method-of-Least-Squares" title="Permalink to this headline">¶</a></h2>
+<p>What exactly do we mean when we say that we want to find the parameters for the line that “best fits” our data? It turns out that this is a rather nuanced question and that the answer depends on the nature of our data, how it was collected, and what the purpose of our model is.</p>
+<p>Here, <strong>we will assume that our recorded data is free of outliers</strong>, e.g. measurements that were affected substantially by experimental error, <strong>and that our model will be used to provide predictions in contexts similar to the one in which the data was collected</strong>. Under these circumstances, it is appropriate to say that the “best fit” linear model is the one whose predictions <strong>minimize the sum of the squared-residuals</strong> from the recorded data. This isn’t as complicated as it might sound; let’s
+first understand what a “residual” is.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/least_squares_residual.png" alt="Illustrating a residual" width="600">
+</p>
+</div><p>Our recorded data consists of <span class="math notranslate nohighlight">\(N\)</span> measurements: <span class="math notranslate nohighlight">\(\big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\)</span>. Datum-<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(\big(x_i, y^{\mathrm{(true)}}_i\big)\)</span>, is the height and wingspan of player-<span class="math notranslate nohighlight">\(i\)</span>. Supposing we have some values picked out for our model’s parameters, <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, then our model’s predicted wingspan for player-<span class="math notranslate nohighlight">\(i\)</span> is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y^{\mathrm{(pred)}}_i = F(m, b; x_i) = m x_i + b
+\end{equation}</div><p>The so-called residual, or error, associated with this prediction is its difference from the measured (i.e. “true”) value:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathrm{residual}_i = y^{\mathrm{(true)}}_i - y^{\mathrm{(pred)}}_i
+\end{equation}</div><p>Thus the “sum of squared residuals” is simply</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{n=0}^{N-1}{\big(y^{\mathrm{(true)}}_n - y^{\mathrm{(pred)}}_n\big)^2}
+\end{equation}</div><p>Let’s write this sum of squared residuals, which we will denote as <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, explicitly in terms of our model’s parameters,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}\Big(m,b; \big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\Big) = \sum_{n=0}^{N-1}{\big(y^{\mathrm{(true)}}_n - F(m, b; x_n)\big)^2}
+\end{equation}</div><p>Keep in mind that our measured data, <span class="math notranslate nohighlight">\(\big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\)</span>, is fixed – we only have control over the values of our model’s parameters <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. <em>Our goal, then, is to find the values of</em> <span class="math notranslate nohighlight">\(m\)</span> <em>and</em> <span class="math notranslate nohighlight">\(b\)</span> <em>that minimize the sum of squared residuals;</em> we will denote these optimal values as <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>. Put succinctly, this approach to determining the desired values for our model’s parameters is known as <strong>the method of
+least squares</strong>.</p>
+<p>The following mathematical notation says “<span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> are the <em>particular</em> values for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> that minimize <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, for the fixed set of observed data <span class="math notranslate nohighlight">\(\big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\)</span>”:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+m^*, b^* = \operatorname*{arg\,min}_{m,b\in\mathbb{R}} \; \mathscr{L}\big(m,b; \big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\big)
+\end{equation}</div><p>The red line plotted above is the line of slope <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(y\)</span>-intercept <span class="math notranslate nohighlight">\(b^*\)</span>. The line with these parameters is the so-called <strong>line of least squares</strong> for our collected data – meaning that it is the line that minimizes <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> – and it is what we consider to be the linear model that best fits our data. We will ultimately learn two methods for computing <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>:</p>
+<ul class="simple">
+<li><p>Solve for <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> exactly, via a “closed-form” solution</p></li>
+<li><p>Solve for <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> approximately, via a numerical optimization scheme known as gradient-descent</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Objective functions and minimizing “risk”</strong></p>
+<p>In the context of this problem, the sum of squared residuals (<span class="math notranslate nohighlight">\(\mathscr{L}\)</span>) is playing the roll of the so-called “objective function”. That is, our <em>objective</em> is to find model parameters that <em>minimize</em> this function. It is also common for people to refer to this as a “loss function”.</p>
+<p>A common objective function for regression problems is the “mean squared-error”. Even though their names are quite distinct, the mean squared-error is nearly identical to the sum of squared residuals, but the mean of the squared residuals is taken instead of the sum. I.e.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}_{\mathrm{MSE}} = \frac{1}{N}\sum_{n=0}^{N-1}{\big(y^{\mathrm{(true)}}_n - y^{\mathrm{(pred)}}_n\big)^2}
+\end{equation}</div><p>This quantity, which is a measure of the average discrepancy our predictions against our available data, is sometimes referred to as “risk”. To seek out the model parameters that minimize this quantity, as we are, is to follow the <a class="reference external" href="https://en.wikipedia.org/wiki/Empirical_risk_minimization">empirical risk minimization principle</a> from statistical learning theory. To put it succinctly, it argues that the least “risky” model (or, more formally, “hypothesis”) that we can use to make predictions in
+the real world is the one that makes the fewest mistakes against our available data.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Summary</strong>:</p>
+<p>Given a data set consisting of <span class="math notranslate nohighlight">\(N\)</span> measurements, <span class="math notranslate nohighlight">\((x_n, y^{\mathrm{(true)}}_n)_{n=0}^{N-1}\)</span>, we will try to describe the trends underlying the data using a linear regression; i.e. we will find the parameters a first-degree polynomial</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(m, b; x) = m x + b
+\end{equation}</div><p>such that the resulting function fits our data closely. It is common to refer to this function as being our “mathematical model” for our data. The parameters of this model are simply its slope (<span class="math notranslate nohighlight">\(m\)</span>) and its y-intercept (<span class="math notranslate nohighlight">\(b\)</span>). The input to our model, <span class="math notranslate nohighlight">\(x\)</span>, is a piece of <strong>observed data</strong>. The output of this function, <span class="math notranslate nohighlight">\(F(m, b; x)\)</span>, is our model’s <strong>prediction or decision made about that piece of observed data</strong>.</p>
+<p>The method of least squares is to determine the values of <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> by minimizing the sum of the square-residuals between our observations and our linear model’s predictions:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}\big(m,b; \big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\big) = \sum_{n=0}^{N-1}{\big(y^{\mathrm{(true)}}_n - F(m, b; x_n)\big)^2}\\
+m^*, b^* = \operatorname*{arg\,min}_{m,b\in\mathbb{R}} \; \mathscr{L}\big(m,b; \big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\big)
+\end{equation}</div><p>We will see that there is a unique and exact solution to this problem. However, we will also benefit by studying an approximate numerical solution to this problem as well, which will inform our approach to solving more sophisticated problems in the area of machine learning.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Building Intuition for the Sum of Squared Residuals</strong></p>
+<p>Consult the plot of the least squares linear model over our data. Considering that we know that the sum squared residuals is minimized for this line, do you expect that this sum is a positive value, a negative value, or zero?</p>
+<p>Describe the spatial distribution of 2D data points that would yield a line of least squares whose sum of squared residuals is</p>
+<ol class="arabic simple">
+<li><p>a positive value</p></li>
+<li><p>equal to zero</p></li>
+<li><p>a negative value</p></li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Baby’s First Regression</strong>:</p>
+<p>Given a dataset consisting of only two measurements,</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathrm{height}=72\;\mathrm{inches}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{wingspan}=78\;\mathrm{inches}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{height}=76\;\mathrm{inches}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{wingspan}=82\;\mathrm{inches}\)</span></p></li>
+</ul>
+<p>find the associated line of least squares. What is the sum of square residuals of the linear model for this data? (Hint: you can solve this without reading about solving the method for least squares - think basic mathematics!)</p>
+</div>
+</div>
+<div class="section" id="Linear-Least-Squares:-A-Closed-Form-Solution">
+<h2>Linear Least Squares: A Closed-Form Solution<a class="headerlink" href="#Linear-Least-Squares:-A-Closed-Form-Solution" title="Permalink to this headline">¶</a></h2>
+<p>Our linear model and our objective function (the sum of squared residuals) are simple enough that we can solve for <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> exactly, by hand, to produce the line that is <em>the best possible linear fit for our data</em> (with respect to this particular objective function). For more complicated models, we will almost never have access to this sort of closed-form solution for the true ideal model parameters.</p>
+<p><span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is a convex function – it is shaped like a bowl in the space of <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> (treating our observed data as constant), thus there is exactly one pair of <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> that minimizes <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> for our data set. Obviously, the minimum occurs at the flat-bottom of this proverbial bowl.</p>
+<p>The following is a plot of <span class="math notranslate nohighlight">\(\mathscr{L}\big(m,b; \big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\big)\)</span> over a continuum of values for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. The result is a bowl-like surface, where the bowl’s minimum – located at <span class="math notranslate nohighlight">\((m^*, b^*)\)</span> – is marked by a black dot. Note that the data <span class="math notranslate nohighlight">\(\big(x_n, y^{\mathrm{(true)}}_n\big)_{n=0}^{N-1}\big)\)</span> was “normalized” in order to make the plot look like this. Creating the plot using the raw data would have produced a surface that
+would look nearly flat along the <span class="math notranslate nohighlight">\(b\)</span> (“intercept”) axis. We will discuss this in detail later.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/quadratic_bowl.png" alt="Loss landscape" width="600">
+</p>
+</div><p>As mentioned in the primers on <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Intro_Calc.html#Uses-for-the-Derivative">single-variable calculus</a> and <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#Minimizing-a-Function-Using-Gradient-Descent">multivariable calculus</a> sections, the location of this minimum occurs when the slope of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is <span class="math notranslate nohighlight">\(0\)</span> in all directions; i.e. where <span class="math notranslate nohighlight">\(\vec{\nabla}\mathscr{L} = \vec{0}\)</span> .</p>
+<p>Thus we want to solve solve the system of equations</p>
+<div class="math notranslate nohighlight">
+\begin{gather}
+\frac{\partial \mathscr{L}(m,b)}{\partial m}=0 \\
+\frac{\partial \mathscr{L}(m,b)}{\partial b}=0
+\end{gather}</div><p>Let’s expand the equation for our loss function, writing <span class="math notranslate nohighlight">\(y_n\)</span> instead of <span class="math notranslate nohighlight">\(y^{\mathrm{(true)}}_n\)</span> for readability’s sake:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}\big(m,b; (x_n, y_n)_{n=0}^{N-1}\big) = \sum_{n=0}^{N-1}{(y_n - (mx + b))^2}  = \sum_{n=0}^{N-1}m^2x_n^2+b^2+y_n^2+2(bmx_n-mx_ny_n-by_n)
+\end{equation}</div><p>Thus our system of equations is given by setting both derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> to zero</p>
+<div class="math notranslate nohighlight">
+\begin{gather}
+\frac{\partial\mathscr{L}(m,b)}{\partial m}=\sum_{n=0}^{N-1}2mx_n^2+2bx_n-2x_ny_n=0, \\
+\frac{\partial\mathscr{L}(m,b)}{\partial b}=\sum_{n=0}^{N-1}2b+2mx_n-2y_n=0.
+\end{gather}</div><p>We can start by solving for <span class="math notranslate nohighlight">\(b\)</span> in the second equation, which gives us an expression in terms of <span class="math notranslate nohighlight">\(m\)</span></p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+b=\frac{1}{N}\sum_{n=0}^{N-1}y_n-mx_n=\bar{y}-m\bar{x},
+\end{align*}</div><p>where <span class="math notranslate nohighlight">\(\bar{w}\)</span> denotes the mean of a sequence <span class="math notranslate nohighlight">\((w_n)_{n=0}^{N-1}\)</span>; i.e. <span class="math notranslate nohighlight">\(\bar{w}=\frac{1}{N}\sum_{n=0}^{N-1}w_n\)</span>.</p>
+<p>Now, substituting this expression for <span class="math notranslate nohighlight">\(b\)</span> into the first equation,</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\sum_{n=0}^{N-1}2mx_n^2+2(\bar{y}-m\bar{x})x_n-2x_ny_n&amp;=0 \\
+\sum_{n=0}^{N-1}mx_n^2+\bar{y}x_n-m\bar{x}x_n-x_ny_n&amp;=0 \\
+m\sum_{n=0}^{N-1}(x_n^2-\bar{x}x_n)+\sum_{n=0}^{N-1}(\bar{y}x_n-x_ny_n)&amp;=0 \\
+\end{align}</div><p>Rearraging terms, we find <span class="math notranslate nohighlight">\(m\)</span> to be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+m=\frac{\sum_{n=0}^{N-1}x_ny_n-\frac{1}{N}\sum_{n=0}^{N-1}{y_n}\sum_{n=0}^{N-1}{x_n}}{\sum_{n=0}^{N-1}x_n^2-\frac{1}{N}\big(\sum_{n=0}^{N-1}x_n\big)^2}
+\end{equation}</div><p>Note that the denominator of this equation is equivalent to <span class="math notranslate nohighlight">\({N\mathrm{Var}[x]}\)</span> (where <span class="math notranslate nohighlight">\(\mathrm{Var}[x]\)</span> is the variance – the square of the standard deviation – of <span class="math notranslate nohighlight">\((x_n)_{n=0}^{N-1}\)</span>). Thus we have arrived at the solution to this system of equations</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+m^* &amp;=\frac{\sum_{n=0}^{N-1}x_ny_n-\frac{1}{N}\sum_{n=0}^{N-1}{y_n}\sum_{n=0}^{N-1}{x_n}}{\sum_{n=0}^{N-1}x_n^2-\frac{1}{N}\big(\sum_{n=0}^{N-1}x_n\big)^2}, \\
+b^* &amp;=\bar{y}-m^*\bar{x}.
+\end{align}</div><p>The values <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> are known as the “ordinary least squares parameter estimates” for this data.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: A Picture is Worth A Thousand Words</strong></p>
+<p>Study the equations for <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>; when are these equations undefined? Provide the most general description of <span class="math notranslate nohighlight">\((x_i, y_i)_{i=0}^{N-1}\)</span> for which this closed-form solution does not exist. Consider, from a geometric perspective, when these equations should fail to yield a unique solution.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Ordinary Least Squares in Python</strong></p>
+<p>Using the equations expressing <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span> in terms of our data <span class="math notranslate nohighlight">\((x_n, y_n)_{n=0}^{N-1}\)</span>, complete the following function</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ordinary_least_squares</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the slope and y-intercept for the line that minimizes</span>
+<span class="sd">    the sum of squared residuals of mx + b and y, for the observed data</span>
+<span class="sd">    (x, y).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : numpy.ndarray, shape-(N,)</span>
+<span class="sd">        The independent data. At least two distinct pieces of data</span>
+<span class="sd">        are required.</span>
+
+<span class="sd">    y : numpy.ndarray, shape-(N,)</span>
+<span class="sd">        The dependent data in correspondence with ``x``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (m, b) : Tuple[float, float]</span>
+<span class="sd">        The optimal values for the slope and y-intercept</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+<p>It is recommended that you write this function using <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorized operations</a> (i.e. avoid writing explicit for-loops).</p>
+<p>Once you have coded up your solution, test it by randomly drawing values of <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> for some line, and then randomly draw some <span class="math notranslate nohighlight">\((x, y)\)</span> pairs from this line and pass them to <code class="docutils literal notranslate"><span class="pre">ordinary_least_squares</span></code> - your function should return the same values for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> as were used to generate the data.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: A Few Bad Apples Spoil The Bunch</strong></p>
+<p>What if one of the people taking the measurements didn’t understand what wingspan was? Suppose they thought that wingspan measured the distance from ones center to their out-stretch finger tip, and suppose that this person recorded roughly 10% of all of the data. That is, suppose that roughly one tenth of the wingspans are recorded at half of their appropriate values (around 40 inches).</p>
+<p>First, draw on a piece of paper what this data, which contains such outliers, would roughly look like. Given that only 10% of the data are outliers, do you expect them to have a large effect on the linear model? Consider the relative size of the squared residuals associated with these outliers compared with the rest of the data. How would the impact of these outliers change if we used the magnitude (i.e. absolute value) of the residuals instead of their squares?</p>
+<p>Hazarding a guess, draw the linear least squares model that would be produced by this data.</p>
+<p>The takeaway here is to see that that the method of least squares has no ability to exclude outliers from the fitting process - the resulting model will minimize the sum of squared residuals over the entire data set.</p>
+<p>For our toy problem, it would be trivial to see such dramatic outliers and to remove them by-hand before performing the method of least squares. That being said, for larger, more complicated datasets – especially when each datum exists in a high-dimensional space (e.g. an image) – detecting and removing outliers can be very challenging. Using an iterative random sample consensus (a.k.a <a class="reference external" href="https://en.wikipedia.org/wiki/Random_sample_consensus#Overview">RANSAC</a>) to identify outliers is an elegant
+and popular approach to dealing with this problem.</p>
+</div>
+</div>
+<div class="section" id="Next-Steps">
+<h2>Next Steps<a class="headerlink" href="#Next-Steps" title="Permalink to this headline">¶</a></h2>
+<p>The material laid our here enables us to find the linear model (i.e. its slope and <span class="math notranslate nohighlight">\(y\)</span>-intercept) that minimizes the sum of square residuals between our data and its predictions. The essential concepts of a “mathematical model”, “model parameters”, an “objective function”, and “empirical risk minimization” (as a strategy for finding our “best fit” model) that were presented here are all supremely relevant to our broader study of machine learning. The relation of these concepts to the
+process of fitting a linear regression is the same as their relation to more general mathematical models in machine learning, such as a neural network. Thus we have already made nice progress toward establishing a foundation for studying deep learning.</p>
+<p>That being said, linear regression is not representative of more general approaches to mathematical modeling in that it affords us an exact solution for computing ideal values for our model’s parameters, given our dataset. As emphasized earlier, we will almost never have this luxury when we turn to more sophisticated mathematical models. So, next, we will proceed with our linear model as if we do not have access to this exact solution. Instead, we will learn how to use a method known as
+“gradient descent”, which is a procedure of numerical optimization, as an approximate way to find near-ideal values for our model’s weights. This will prove to be a very important algorithm for us to learn about because <em>it is the engine that drives the “learning” in nearly all deep learning applications</em>.</p>
+<p>Before we tackle gradient descent for “training” our linear model, we should take some time to work with the dataset that we have been referring to throughout this section. In the following exercise notebook, we will get our hands on this NBA rookie dataset; we will familiarize ourselves with a powerful library called <code class="docutils literal notranslate"><span class="pre">xarray</span></code>, which provides us with NumPy-like arrays that support explicit coordinates, labels, and documentation for our data.</p>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Know Your Limits: Solution</strong></p>
+<p>It is extremely important to consider biases and limitations in ones data, as these will inevitably manifest in the model that results from said data.</p>
+<p>Based on the description of our data above, what might be some limitations or biases to our model? That is, should we expect that our model is good at predicting wingspans for any and all humans, or is a much more limited application of our model warranted?</p>
+<blockquote>
+<div><p>It is highly likely that our dataset is specialized to a degree that our linear model would <em>not</em> be good at predicting wingspans for the general population. This is a very small dataset consisting of only NBA draftees, meaning that these measurements are only taken from men, who reside in a narrow age bracket (roughly 19-25 years old), and who are likely much taller than the average person. Furthermore, it may well be that having an exceptional wingspan is advantageous to being basketball
+player, so this particular collection of people might have even been inadvertently selected for to have different height-wingspan proportions than the general population!</p>
+</div></blockquote>
+<blockquote>
+<div><p>In this particular application, it would likely only be responsible to use this current model to predict wingspans for other professional (or semi-professional) basketball players. More data would need to be collected before we could reasonably suppose that this model has any further validity.</p>
+</div></blockquote>
+<p><strong>Building Intuition for the Sum of Squared Residuals: Solution</strong></p>
+<p>Consult the plot of the least squares linear model over our data. Considering that we know that the sum squared residuals is minimized for this line, do you expect that this sum is a positive value, a negative value, or zero?</p>
+<p>Describe the spatial distribution of 2D data points that would yield a line of least squares whose sum of squared residuals is</p>
+<ol class="arabic simple">
+<li><p>a positive value</p></li>
+<li><p>equal to zero</p></li>
+<li><p>a negative value</p></li>
+</ol>
+<blockquote>
+<div><p>Notice that that, because we are summing the <em>squares</em> of the residuals, that we will always end up with a non-negative result; i.e. we do not care whether a prediction is an over-estimate or an under-estimate of the true value, all that matters is the magnitude of the discrepancy between the prediction and the associated true value. Therefore it is impossible for the sum of squared residuals to produce a negative value. Furthermore, the sum of squared residuals can be zero for our linear
+model only if the data itself falls perfectly along a line without any deviation.</p>
+<p>Thus for all “realistic” distributions of data, our least squares linear model will still produce a positive sum of squared residuals.</p>
+</div></blockquote>
+<p><strong>Baby’s First Regression: Solution</strong>:</p>
+<p>Given a dataset consisting of only two measurements,</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathrm{height}=72\;\mathrm{inches}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{wingspan}=78\;\mathrm{inches}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{height}=76\;\mathrm{inches}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{wingspan}=82\;\mathrm{inches}\)</span></p></li>
+</ul>
+<p>find the associated line of least squares. What is the sum of square residuals of the linear model for this data?</p>
+<blockquote>
+<div><p>Two points uniquely define a line, thus the line of least squares is simply the line that passes through these two points; its sum of squared residuals will be zero - the smallest possible value!</p>
+<p>Let’s simply solve for the line using the standard point-slope form:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+y - y_1 = \frac{y_1 - y_0}{x_1 - x_0}(x - x_1)
+\end{equation}</div><p>Plugging in our given data, <span class="math">\begin{align}
+y - 82\;\mathrm{inches} &= \frac{82\;\mathrm{inches} - 78\;\mathrm{inches}}{76\;\mathrm{inches} - 72\;\mathrm{inches}}(x - 76\;\mathrm{inches})\\
+y - 82\;\mathrm{inches} &= 1(x - 76\;\mathrm{inches})\\
+y &= x + 6\;\mathrm{inches}\\
+\end{align}</span></p>
+<p>Thus the parameters for our line of least squares is <span class="math notranslate nohighlight">\(m^*=1\)</span> and <span class="math notranslate nohighlight">\(b^* = 6\;\mathrm{inches}\)</span>.</p>
+</div></blockquote>
+<p><strong>A Picture is Worth A Thousand Words: Solution</strong></p>
+<p>Study the equations for <span class="math notranslate nohighlight">\(m^*\)</span> and <span class="math notranslate nohighlight">\(b^*\)</span>; when are these equations undefined? Provide the most general description of <span class="math notranslate nohighlight">\((x_i, y_i)_{i=0}^{N-1}\)</span> for which this closed-form solution does not exist. Consider, from a geometric perspective, when these equations should fail to yield a unique solution.</p>
+<blockquote>
+<div><p>As mentioned in the derivation of the ordinary least squares solution, the denominator for <span class="math notranslate nohighlight">\(m^*\)</span> is the square standard deviation (a.k.a “variance”) of <span class="math notranslate nohighlight">\((x_n)_{n=0}^{N-1}\)</span>. Thus any data set that fails to have two or more data points with distinct <span class="math notranslate nohighlight">\(x\)</span> values will fail to yield a solution via OLS.</p>
+<p>Geometrically speaking, this means that any data set with one or fewer data points, or, whose data points fall along a vertical line, will be incompatible with the ordinary least squares solution laid out above.</p>
+</div></blockquote>
+<p><strong>Ordinary Least Squares in Python: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">ordinary_least_squares</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the slope and y-intercept for the line that minimizes</span>
+<span class="sd">    the mean square error of mx + b and y, for the observed data</span>
+<span class="sd">    (x, y)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : numpy.ndarray, shape-(N,)</span>
+<span class="sd">        The independent data. At least two distinct pieces of data</span>
+<span class="sd">        are required.</span>
+
+<span class="sd">    y : numpy.ndarray, shape-(N,)</span>
+<span class="sd">        The dependent data in correspondence with ``x``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (m, b) : Tuple[float, float]</span>
+<span class="sd">        The optimal values for the slope and y-intercept</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">m</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Writing a test for our code</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isclose</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">def</span> <span class="nf">testing_ols_manual</span><span class="p">():</span>
+    <span class="c1"># draw random slope and intercept</span>
+    <span class="n">m_expected</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># random number in [-10, 10]</span>
+    <span class="n">b_expected</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># random number in [-10, 10]</span>
+
+    <span class="c1"># draw random x values</span>
+    <span class="n">num_points</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_points</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># random numbers in [-50, 50]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">m_expected</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b_expected</span>
+
+    <span class="n">m_actual</span><span class="p">,</span> <span class="n">b_actual</span> <span class="o">=</span> <span class="n">ordinary_least_squares</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># check results</span>
+    <span class="c1"># these &quot;assertions&quot; will raise an error if these checks ever return `False`</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span>
+        <span class="n">m_actual</span><span class="p">,</span> <span class="n">m_expected</span>
+    <span class="p">),</span> <span class="n">f</span><span class="s2">&quot;expected m={m_expected}, got {m_actual} (num-points={num_points})&quot;</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span>
+        <span class="n">b_actual</span><span class="p">,</span> <span class="n">b_expected</span>
+    <span class="p">),</span> <span class="n">f</span><span class="s2">&quot;expected b={b_expected}, got {b_actual} (num-points={num_points})&quot;</span>
+</pre></div>
+</div>
+<p>Running the test 100 times:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">testing_ols_manual</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We can, instead, use the <a class="reference external" href="https://hypothesis.readthedocs.io/en/latest/">Hypothesis testing library</a> to write a much nicer, and more informative test:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isclose</span>
+
+<span class="kn">from</span> <span class="nn">hypothesis</span> <span class="kn">import</span> <span class="n">given</span>
+<span class="kn">import</span> <span class="nn">hypothesis.strategies</span> <span class="kn">as</span> <span class="nn">st</span>
+
+<span class="nd">@given</span><span class="p">(</span>
+    <span class="n">m_expected</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">floats</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">b_expected</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">floats</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">lists</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">floats</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">testing_ols_hypothesis</span><span class="p">(</span><span class="n">m_expected</span><span class="p">,</span> <span class="n">b_expected</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">m_expected</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b_expected</span>
+
+    <span class="n">m_actual</span><span class="p">,</span> <span class="n">b_actual</span> <span class="o">=</span> <span class="n">ordinary_least_squares</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># check results</span>
+    <span class="c1"># these &quot;assertions&quot; will raise an error if these checks ever return `False`</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">m_actual</span><span class="p">,</span> <span class="n">m_expected</span><span class="p">),</span> <span class="n">f</span><span class="s2">&quot;expected m={m_expected}, got {m_actual}&quot;</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">b_actual</span><span class="p">,</span> <span class="n">b_expected</span><span class="p">),</span> <span class="n">f</span><span class="s2">&quot;expected b={b_expected}, got {b_actual}&quot;</span>
+</pre></div>
+</div>
+<p>By default, Hypothesis will automatically run 100 test cases for us when we run this function. If it finds a failing case, it will report to us the simplest failing case that it can find:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">testing_ols_hypothesis</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>A Few Bad Apples Spoil The Bunch: Solution</strong></p>
+<p>What if one of the people taking the measurements didn’t understand what wingspan was? Suppose they thought that wingspan measured the distance from ones center to their out-stretch finger tip, and suppose that this person recorded roughly 10% of all of the data. That is, suppose that roughly one tenth of the wingspans are recorded at half of their appropriate values (around 40 inches).</p>
+<p>First, draw on a piece of paper what this data, which contains such outliers, would roughly look like.</p>
+<blockquote>
+<div><p>The following shows the data set modified to contain the outliers described above; it also includes the linear least squares model</p>
+</div></blockquote>
+<div style="text-align: center">
+<p>
+<img src="../_images/outliers.png" alt="The height-wingspan data set with outliers included" width="600">
+</p>
+</div><p>Given that only 10% of the data are outliers, do you expect them to have a large affect on the linear model? Consider the relative size of the squared residuals associated with these outliers compared with the rest of the data. How would the impact of these outliers change if we used the magnitude (i.e. absolute value) of the residuals instead of their squares?</p>
+<blockquote>
+<div><p>Given that these outliers are stark and that we are concerned with minimizing the <strong>squared</strong> residuals, these have an out-sized impact on the least squares solution that we find. The skew created by these outliers would be less dramatic if we depended only linearly on the magnitude of their residuals instead of quadratically.</p>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Exercises/Data_Exploration.html" class="btn btn-neutral float-right" title="Exercises: Exploring A Dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro_ml.html" class="btn btn-neutral float-left" title="A Brief Introduction to Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

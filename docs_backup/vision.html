@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Computer Vision, Category: Introduction" name="description" />
+<meta content="introduction, machine learning, deep learning, neural networks, back-propagation, supervised learning" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Vision Module &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Prerequisites" href="Video/prereqs.html" />
+    <link rel="prev" title="Capstone Project: Song Recognition" href="Audio/capstone_summary.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vision Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html">Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html">Vision Module Capstone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Vision Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/vision.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Vision-Module">
+<h1>Vision Module<a class="headerlink" href="#Vision-Module" title="Permalink to this headline">¶</a></h1>
+<p>We will motivate this module using the same approach that we took in the audio module - by thinking about a neat trick that our phones can do. Many phones come with apps that can organize our photos for us, based not only on a picture’s metadata (e.g. the time and location where they were taken) but also on what or <em>who</em> are in the picture. For example, without our input the app can sort pictures of individuals into separate folders, making it easy for us to find all of the pictures of a parent
+or a friend. How can the app recognize who is in a picture? For that matter, how can the app understand the contents of a photograph <em>at all</em>?</p>
+<p>What might seem like a mere convenience afforded to us by an app is actually the culmination of remarkable technical achievements in the field of <strong>computer vision</strong>. In short, this field asks: how can we enable computers to “understand” visual data in manners similar to that of humans? To be more precise, computer vision is a scientific field that devises theories, mathematical methods, and algorithms that enable us to distill high-level meaning from an image in systematic ways that do not
+directly rely on human cognition.</p>
+<p>Computer vision is a broad field that draws widely from other fields such as signal processing, information theory, graph theory, and machine learning. With the relatively brief amount of time we will spend with this material, we will only have the opportunity to walk a narrow path through this field. In particular, we will focus on some recent developments in computer vision that have produced an explosion of interest and work; namely, we will view computer vision through the lens of machine
+learning, with a focus on supervised deep learning.</p>
+<p>To kick things off, we will take a bird’s eye view of the field of <strong>machine learning (ML)</strong> to understand, broadly, how it contextualizes problems and intersects with the field of computer vision. Here, we will see that the general task of <strong>transforming observations into useful predictions or decisions</strong> is a major thrust of ML. Mediating this transformation is a <strong>mathematical model</strong>, which we must design to have the capacity to capture the critical relationships between the data that we
+will observe and the meaning that we hope to distill from them. Before we delve too deeply into what makes for a good mathematical model, we will reflect on what it means for a model (or a machine), to <strong>learn</strong>. While there are many different flavors of learning we will be focusing on <strong>supervised learning</strong>, whereby we can “teach” a machine by showing it the results that it <em>should</em> have predicted. In this context, we will study how so-called gradient-based learning, which is rooted in the
+<strong>gradient descent</strong> optimization scheme, provides us with an ability to automate the process of making fine-tuned adjustments to our model’s mathematical parameters, so as to improve the quality of its predictions.</p>
+<p>Returning to the topic of mathematical models, a major challenge that machine learning practitioners face time and time again is the prospect of devising an appropriate mathematical model for each new problem that they tackle. The <strong>deep learning</strong> revolution has made major strides to help mitigate this challenge by putting forth ideas and techniques for designing “universal” mathematical models, which tend to take the form of <strong>neural networks</strong>. (To convey just how universal these models are
+becoming, a neural network based model that <a class="reference external" href="https://openai.com/blog/better-language-models/">exhibited remarkable language comprehension ability</a> was <a class="reference external" href="https://openai.com/blog/image-gpt/">repurposed to solve challenging computer vision tasks</a>). We will spend time understanding and working with basic neural networks, along with some of the crucial practical details that enable them to thrive.</p>
+<p>This range of topics, brought together, will enable us to leverage convolutional neural networks along with unsupervised clustering techniques to create our own photo-sorting app! With a click of a button it will be able to organize photos of friends and families.</p>
+<div style="text-align: center">
+<p>
+<img src="./_images/vision_module_overview.png" alt="Overview of the Vision Module" width="800">
+</p>
+</div><div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Video/prereqs.html">Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/prereqs.html#Installs">Installs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/prereqs.html#Math-Supplements">Math Supplements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html#Modeling-Wingspan-Versus-Height">Modeling Wingspan Versus Height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html#Defining-Success:-The-Method-of-Least-Squares">Defining Success: The Method of Least Squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html#Linear-Least-Squares:-A-Closed-Form-Solution">Linear Least Squares: A Closed-Form Solution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html#Next-Steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Linear_Regression.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Data_Exploration.html#Our-Dataset:-NBA-Player-Measurements">Our Dataset: NBA Player Measurements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Gradient_Descent.html">Gradient-Based Learning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#Minimizing-a-Loss-Function">Minimizing a Loss Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#A-Simple-Overview-of-Gradient-Descent">A Simple Overview of Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#Gradient-Descent-on-Multi-Variable-Functions">Gradient Descent on Multi-Variable Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#The-“Hyperparameters”-of-Gradient-Descent">The “Hyperparameters” of Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#Summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Gradient_Descent.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Automatic_Differentiation.html">Automatic Differentiation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Automatic-Differentiation-at-a-Glance">Automatic Differentiation at a Glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#An-Introduction-to-MyGrad">An Introduction to MyGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Running-Automatic-Differentiation">Running Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Gradient-Descent-with-MyGrad">Gradient Descent with MyGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Tensors-as-Collections-of-Scalar-Variables">Tensors as Collections of Scalar Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Summary-and-Looking-Ahead">Summary and Looking Ahead</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Automatic_Differentiation.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html#Reviewing-Our-Modeling-Problem">Reviewing Our Modeling Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html#Estimating-Optimal-Model-Parameters-Using-Gradient-Descent">Estimating Optimal Model Parameters Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html#Defining-Our-Linear-Model">Defining Our Linear Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html#“Training”-Our-Model">“Training” Our Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Exercises/Linear_Regression_Exercise.html#Summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Supervised_Learning_and_Modeling.html#Dissecting-the-Framework">Dissecting the Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Supervised_Learning_and_Modeling.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/FacialRecognition.html">Vision Module Capstone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Pre-Trained-FaceNet-Models">Pre-Trained FaceNet Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Recognizing-Faces">Recognizing Faces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Whispers-Algorithm">Whispers Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Team-Tasks">Team Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/FacialRecognition.html#Links">Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Video/Whispers.html">Whispers Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Unsupervised-Learning">Unsupervised Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Breaking-Down-the-Algorithm">Breaking Down the Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Key-Points">Key Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Whispers-Algorithm-With-Weighted-Edges">Whispers Algorithm With Weighted Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Team-Tasks">Team Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Video/Whispers.html#Taking-it-Further">Taking it Further</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Video/prereqs.html" class="btn btn-neutral float-right" title="Prerequisites" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Audio/capstone_summary.html" class="btn btn-neutral float-left" title="Capstone Project: Song Recognition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

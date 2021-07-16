@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Audio Processing, Category: Section" name="description" />
+<meta content="spectrogram, audio, temporal, fourier" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction to Spectrogram Analysis &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exercise: Creating Our Own Spectrogram" href="Exercises/spectrogram.html" />
+    <link rel="prev" title="Exercises: Applications of DFTs" href="Exercises/ApplicationsOfDFTs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction to Spectrogram Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Leveraging-Our-Methods-of-Audio-Analysis">Leveraging Our Methods of Audio Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Conveying-Time-and-Frequency:-The-Spectrogram">Conveying Time and Frequency: The Spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Introduction to Spectrogram Analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Audio/intro_spectrograms.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Introduction-to-Spectrogram-Analysis">
+<h1>Introduction to Spectrogram Analysis<a class="headerlink" href="#Introduction-to-Spectrogram-Analysis" title="Permalink to this headline">¶</a></h1>
+<p>We’ve made some major progress towards being able to write a song-recognition app. It took us some time to break down what sound is and how to record it, and, at last, we developed some mathematical “chops” so that we can being to quantify the musical contents of a recording. Indeed, Fourier analysis is our ticket towards distinguishing songs from one another in an systematic way; we need only extend the application of these methods slightly in order to extract “fingerprints” from these songs.</p>
+<p>We will be learning about spectrogram analysis, which will allow us to describe what notes are being played in a song as well as <em>when</em> they are being played. To understand our motivation behind this, let’s understand the blind spots in our current tools for quantitatively analyzing audio data.</p>
+<p>Listen to the following five second audio clip.</p>
+<audio src="https://upload.wikimedia.org/wikipedia/commons/4/43/BP_ET_minor.ogg" controls><p>alternative text</p>
+</audio><p>Three notes are played in accumulation, each spaced about a half second apart from one another, until all three are being played together. There is a brief pause right before the three second mark, and then the three-note chord is struck once again and held for the remainder of the song.</p>
+<div class="section" id="Leveraging-Our-Methods-of-Audio-Analysis">
+<h2>Leveraging Our Methods of Audio Analysis<a class="headerlink" href="#Leveraging-Our-Methods-of-Audio-Analysis" title="Permalink to this headline">¶</a></h2>
+<p>Let’s see if our current means of analysis – plotting the temporal waveform of the recording alongside its Fourier spectrum – can bear this out.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/BP_ET_minor_waveform_and_spectrum.png" alt="Temporal Waveform and Fourier Spectrum of Audio Recording" width="800">
+</p>
+</div><p>The temporal waveform reveals that the audio clip lasts for about five seconds; it also shows a jump in loudness around the 1 second mark and the brief gap just prior to the three second mark, before the sound resumes. It certainly doesn’t provide us with any interpretable information about what notes are being played, but we already knew that this would be the case – to distill actual notes from this “cacophony of data” was the entire thrust of our introduction to Fourier analysis.</p>
+<p>So what does the Fourier spectrum tell us? It reveals the three prominent notes being played: (approximately) <span class="math notranslate nohighlight">\(261\;\mathrm{Hz}\)</span>, <span class="math notranslate nohighlight">\(366\;\mathrm{Hz}\)</span>, and <span class="math notranslate nohighlight">\(609\;\mathrm{Hz}\)</span> (along with some “overtones”, which will be introduced in a video linked below). Note, however, that it tells us nothing of <em>when</em> these notes were played nor their duration. We also cannot tell from the Fourier spectrum that there was a pause in the music near the three second mark of the recording.</p>
+<p>It is also useful to plot the <span class="math notranslate nohighlight">\(y\)</span>-axis of the Fourier spectrum on a logarithmic scale. <a class="reference external" href="https://rsokl.github.io/CogWeb/Audio/physics-of-sound.html#Spatial-Waveforms">Recall that</a> humans perceive loudness on a logarithmic scale, which is often measured in decibels. As we will see, a spectrogram will also plot Fourier components on a logarithmic scale. See that the three most prominent notes are still present, but now it is easier to see the quieter overtones that are also present in the
+recording.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/BP_ET_minor_log_spectrum.png" alt="Temporal Waveform and Fourier Spectrum of Audio Recording" width="500">
+</p>
+</div></div>
+<div class="section" id="Conveying-Time-and-Frequency:-The-Spectrogram">
+<h2>Conveying Time and Frequency: The Spectrogram<a class="headerlink" href="#Conveying-Time-and-Frequency:-The-Spectrogram" title="Permalink to this headline">¶</a></h2>
+<p>Ultimately, we want to marry the temporal information of the waveform with the incisive frequency-decomposition of the Fourier spectrum; this is exactly the purpose of the spectrogram. Depicted below, the <strong>spectrogram</strong> tells us what notes are being played and when. This visualization is a “heat map” whose colors tell us how prominent or quiet any given note is. The <span class="math notranslate nohighlight">\(x\)</span>-axis is the temporal axis and the <span class="math notranslate nohighlight">\(y\)</span>-axis conveys information of the frequency content of the recording at a
+given time.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/BP_ET_minor_spectrogram.png" alt="Spectrogram of Audio Recording" width="600">
+</p>
+</div><p>The color map used here indicates the most prominent notes with bright yellow, while near-zero amplitudes are dark green.</p>
+<p>The spectrogram displayed above reveals that the <span class="math notranslate nohighlight">\(261\;\mathrm{Hz}\)</span> note was struck first (with overtones near <span class="math notranslate nohighlight">\(700\;\mathrm{Hz}\)</span>, <span class="math notranslate nohighlight">\(1,300\;\mathrm{Hz}\)</span>, and <span class="math notranslate nohighlight">\(2,400\;\mathrm{Hz}\)</span>). The <span class="math notranslate nohighlight">\(366\;\mathrm{Hz}\)</span> note was struck about a second later, and then the <span class="math notranslate nohighlight">\(609\;\mathrm{Hz}\)</span> sounded near <span class="math notranslate nohighlight">\(1.5\;\mathrm{seconds}\)</span>. The gap preceding the three second mark can clearly be seen, followed by the resumed three-note chord. This is a quantitative summary of our audio
+recording that can be easily aligned with the qualitative experience of listening to the recording.</p>
+<p>Simply put: <strong>a spectrogram is constructed by breaking the audio recording into brief temporal windows and performing a Fourier transform on the audio samples within each window</strong>. A vertical column of pixels in the spectrogram corresponds to a narrow time interval, and the heat map along that column stores the Fourier spectrum of the audio data in that time interval. The tall peaks in the Fourier spectrum for that time interval correspond to bright colors in the heat map along that column, and
+shallow regions of the Fourier spectrum correspond to dim colors.</p>
+<p>The next set of exercises will show us how to leverage matplotlib’s built-in spectrogram to analyze audio recordings. They will also step us through the process of constructing our own spectrogram from scratch.</p>
+<p>To conclude, let’s watch a brief video that demonstrates a spectrogram that evolves in real time as sound is being recorded. This will help mature our intuition for what the spectrogram reveals to us about audio recordings. It will also provide some nice insight into the overtones that often appear in these Fourier analyses.</p>
+<div style="text-align: center">
+</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_FatxGN3vAM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+</div><div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Interpreting the Spectrogram</strong>:</p>
+<p>Refer back to the Fourier spectrum of the audio recording, which was plotted on a logarithmic scale. Note the locations of the three most prominent peaks, which register above <span class="math notranslate nohighlight">\(10^{-2}\)</span> on the plot, and locate these three notes on the spectrogram along with where they manifest on the <span class="math notranslate nohighlight">\(x\)</span>-axis. Listen again to the recording and correspond what you hear with the emergence of these notes in the spectrogram.</p>
+<p>Next, count the number of prominent peaks on the Fourier spectrum (plotted on the logarithmic scale). Can you find a one-to-one correspondence with these peaks and the distinct notes and overtones present in the spectrogram?</p>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Interpreting the Spectrogram: Solution</strong></p>
+<p>Refer back to the Fourier spectrum of the audio recording, which was plotted on a logarithmic scale. Note the locations of the three most prominent peaks, which register above <span class="math notranslate nohighlight">\(10^{-2}\)</span> on the plot, and locate these three notes on the spectrogram along with where they manifest on the x-axis. Listen again to the recording and correspond what you hear with the emergence of these notes in the spectrogram.</p>
+<p>Next, count the number of prominent peaks on the Fourier spectrum (plotted on the logarithmic scale). Can you find a one-to-one correspondence with these peaks and the distinct notes and overtones present in the spectrogram?</p>
+<blockquote>
+<div><p>There are 10 distinct peaks in the log-scaled Fourier spectrum – 3 notes and 7 overtones. All ten of these features manifest as distinctive horizontal lines on the spectrogram, residing at the same frequencies, which are plotted along the <span class="math notranslate nohighlight">\(y\)</span>-axis on the spectrogram and the <span class="math notranslate nohighlight">\(x\)</span>-axis of the Fourier spectrum.</p>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Exercises/spectrogram.html" class="btn btn-neutral float-right" title="Exercise: Creating Our Own Spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Exercises/ApplicationsOfDFTs.html" class="btn btn-neutral float-left" title="Exercises: Applications of DFTs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Simple RNN Cell in MyGrad &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Simple RNN Cell in MyGrad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/MyGradSimpleCellRNN.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from collections import defaultdict
+
+import numpy as np
+
+from mynn.layers.dense import dense
+from mynn.optimizers.adam import Adam
+
+from mygrad.nnet.losses import softmax_crossentropy
+from mygrad.nnet.initializers import glorot_normal
+from mygrad.nnet.activations import relu
+
+import mygrad as mg
+import matplotlib.pyplot as plt
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Simple-RNN-Cell-in-MyGrad">
+<h1>Simple RNN Cell in MyGrad<a class="headerlink" href="#Simple-RNN-Cell-in-MyGrad" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook, we will implement a simple RNN model that can be used for sequence classification problems. We’ll apply this RNN to the <strong>classification problem of determining if a sequence of digits (0-9) is the concatentation of two identical halves.</strong></p>
+<p>For example: - <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> -&gt; contains identical halves - <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">9,</span> <span class="pre">2,</span> <span class="pre">1,</span> <span class="pre">8,</span> <span class="pre">3]</span></code> -&gt; does not contain identical halves</p>
+<p>Our model will take a single sequence of data (<span class="math notranslate nohighlight">\(x\)</span>) of shape <span class="math notranslate nohighlight">\((T, C)\)</span>, where <span class="math notranslate nohighlight">\(T\)</span> is the length of our sequence and <span class="math notranslate nohighlight">\(C\)</span> is the dimensionality of each entry in our sequence, and produce <span class="math notranslate nohighlight">\(K\)</span> classification scores (assuming there are <span class="math notranslate nohighlight">\(K\)</span> classes for the problem).</p>
+<p>In the context of word-embeddings, if each word in our vocabulary has a 50-dimensional word-embedding representation, and we have with a sentence containing 8 words, then <span class="math notranslate nohighlight">\(x\)</span> would have a shape <span class="math notranslate nohighlight">\((8, 50\)</span>) - representing that sentence numerically. Our model would produce <span class="math notranslate nohighlight">\(K\)</span> classification scores for this input data.</p>
+<p><strong>The actual problem that we are solving is the following:</strong> &gt; Given a sequence of digits, return 1 if the first half and second half of a sequence are identical and 0 otherwise.</p>
+<p>We’ll be using the following update equations for a simple RNN cell:       <span class="math notranslate nohighlight">\(h_t = ReLU(x_t W_{xh} + h_{t-1} W_{hh} + b_h)\)</span>       <span class="math notranslate nohighlight">\(y_{T-1} = h_{T-1} W_{hy} + b_y\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(h_t\)</span> is the hidden (or recurrent) state of the cell and <span class="math notranslate nohighlight">\(x_t\)</span> is the sequence-element at step-<span class="math notranslate nohighlight">\(t\)</span>, for <span class="math notranslate nohighlight">\(t=0, 1, \dots, T-1\)</span>. (<span class="math notranslate nohighlight">\(T\)</span> is the length of our sequence.) <span class="math notranslate nohighlight">\(y_{T-1}\)</span> is the output. The <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(b\)</span> parameters are the <em>learnable parameters of our model</em>. Specifically:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_t\)</span> is a descriptor-vector for entry-<span class="math notranslate nohighlight">\(t\)</span> in our sequence of data. It has a shape-<span class="math notranslate nohighlight">\((1, C)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(h_t\)</span> is a “hidden-descriptor”, which encodes information about <span class="math notranslate nohighlight">\(x_t\)</span> <em>and</em> information about the preceding entries in our sequence of data, via <span class="math notranslate nohighlight">\(h_{t-1}\)</span>. It has a shape-<span class="math notranslate nohighlight">\((1, D)\)</span>, where <span class="math notranslate nohighlight">\(D\)</span> is the dimensionality that we choose for our hidden descriptors (akin to layer size).</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{xh}\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> hold dense-layer weights and biases, respectively, which are used to process our data <span class="math notranslate nohighlight">\(x_t\)</span> in order to form <span class="math notranslate nohighlight">\(h_t\)</span>. Thus <span class="math notranslate nohighlight">\(W_{xh}\)</span> has shape <span class="math notranslate nohighlight">\((C, D)\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> has shape-<span class="math notranslate nohighlight">\((1,D)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{hh}\)</span> hold dense-layer weights, which are used to process our previous hidden-descriptor <span class="math notranslate nohighlight">\(h_{t-1}\)</span> in order to form <span class="math notranslate nohighlight">\(h_t\)</span>. Thus <span class="math notranslate nohighlight">\(W_{hh}\)</span> has shape <span class="math notranslate nohighlight">\((D, D)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{hy}\)</span> and <span class="math notranslate nohighlight">\(b_y\)</span> hold dense-layer weights and biases, respectively, which are used to process our final hidden-descriptor <span class="math notranslate nohighlight">\(h_T\)</span> in order to produce our classification scores, <span class="math notranslate nohighlight">\(y_T\)</span>. Thus <span class="math notranslate nohighlight">\(W_{hy}\)</span> has shape <span class="math notranslate nohighlight">\((D, K)\)</span> and <span class="math notranslate nohighlight">\(b_h\)</span> has shape-<span class="math notranslate nohighlight">\((1,K)\)</span>. Where <span class="math notranslate nohighlight">\(K\)</span> is our number of classes. See that, given our input sequence <span class="math notranslate nohighlight">\(x\)</span>, we are ultimately producing <span class="math notranslate nohighlight">\(y_{T-1}\)</span> of shape-<span class="math notranslate nohighlight">\((1, K)\)</span>.</p></li>
+</ul>
+<p>The basic idea is to have the forward pass in the model iterate over all elements in the input sequence, applying the update equations at each step.</p>
+<p>Then we’ll compute the loss between the final output <span class="math notranslate nohighlight">\(y_{T-1}\)</span> and the target classification, perform backpropagation through the computational graph to compute gradients (known as “backpropagation through time” or “BPTT” in RNNs), and update parameters using some form of gradient descent.</p>
+<div class="section" id="Define-Recurrent-Model-Class">
+<h2>Define Recurrent Model Class<a class="headerlink" href="#Define-Recurrent-Model-Class" title="Permalink to this headline">¶</a></h2>
+<p>First create a recurrent model class using MyGrad and MyNN with the following properties: * <code class="docutils literal notranslate"><span class="pre">__init__</span></code> * Takes three parameters: dim_input (<span class="math notranslate nohighlight">\(C\)</span>), dim_recurrent (<span class="math notranslate nohighlight">\(D\)</span>), dim_output (<span class="math notranslate nohighlight">\(K\)</span>) * Creates three dense layers (required for update equations) * Note: one of the dense layers doesn’t need a bias since it would be redundant. You can specify <code class="docutils literal notranslate"><span class="pre">bias=False</span></code> when initializing your dense layer. * You can leave the bias out of the dense layer corresponding to <span class="math notranslate nohighlight">\(W_{hh}\)</span> *
+<code class="docutils literal notranslate"><span class="pre">__call__</span></code> * Creates the initial hidden state (<span class="math notranslate nohighlight">\(h_{t=-1}\)</span>) as an array of zeros, shape-(1, D) * Iterates over the <span class="math notranslate nohighlight">\(T\)</span>-axis (rows) of the input sequence <span class="math notranslate nohighlight">\(x\)</span> and computes the successive hidden states <span class="math notranslate nohighlight">\(h_{t=0}, h_{t=1} \cdots, h_{t={T-1}}\)</span> * After processing the all <span class="math notranslate nohighlight">\(T\)</span> items in your sequence, computes/returns final output <span class="math notranslate nohighlight">\(y_{T-1}\)</span> * <code class="docutils literal notranslate"><span class="pre">parameters</span></code> * Returns the tuple of all the learnable parameters in your model.</p>
+<p>As usual, we will feed our <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">K)</span></code> scores to softmax-crossentropy loss, thus there is no need for an activation function on <span class="math notranslate nohighlight">\(y_{T-1}\)</span>, since softmax is built in to the loss.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">glorot_normal</span></code> for your dense weight initializations.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>class RNN():
+    &quot;&quot;&quot;Implements a simple-cell RNN that produces a single output at the
+    end of the sequence of input data.&quot;&quot;&quot;
+    def __init__(self, dim_input, dim_recurrent, dim_output):
+        &quot;&quot;&quot; Initializes all layers needed for RNN
+
+        Parameters
+        ----------
+        dim_input: int
+            Dimensionality of data passed to RNN (C)
+
+        dim_recurrent: int
+            Dimensionality of hidden state in RNN (D)
+
+        dim_output: int
+            Dimensionality of output of RNN (K)
+        &quot;&quot;&quot;
+        # Initialize one dense layer for each matrix multiplication that appears
+        # in the simple-cell RNN equation; name these &quot;layers&quot; in ways that make
+        # their correspondence to the equation obvious
+        # STUDENT CODE HERE
+
+
+    def __call__(self, x):
+        &quot;&quot;&quot; Performs the full forward pass for the RNN.
+
+        Note that we only care about the last y - the final classification scores for the full sequence.
+
+
+        Parameters
+        ----------
+        x: Union[numpy.ndarray, mygrad.Tensor], shape=(T, C)
+            The one-hot encodings for the sequence
+
+        Returns
+        -------
+        mygrad.Tensor, shape=(1, K)
+            The final classification scores, produced at the end of the sequence
+        &quot;&quot;&quot;
+        # Initialize the hidden state h_{t=-1} as zeros
+        #
+        # You will want to loop over each x_t to compute the corresponding h_t.
+        #
+        # A standard for-loop is appropriate here. Be mindful of what the shape
+        # of x_t should be versus the shape of the item that it produced by the
+        # for-loop.
+        #
+        # Note that you can do a for-loop over a mygrad-tensor and it will
+        # produce sub-tensors that are tracked by the computational graph.
+        # I.e. mygrad will be able to still &quot;backprop&quot; through your for-loop!
+        # STUDENT CODE HERE
+
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model.
+
+        This can be accessed as an attribute, via `model.parameters`
+
+        Returns
+        -------
+        Tuple[Tensor, ...]
+            A tuple containing all of the learnable parameters for our model
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Data-Generation">
+<h2>Data Generation<a class="headerlink" href="#Data-Generation" title="Permalink to this headline">¶</a></h2>
+<p>We’ll apply this new network to the <strong>problem of determining if a sequence of digits (0-9) is the concatentation of two identical halves.</strong></p>
+<p>For example: - <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> -&gt; contains identical halves - <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">9,</span> <span class="pre">2,</span> <span class="pre">1,</span> <span class="pre">8,</span> <span class="pre">3]</span></code> -&gt; does not contain identical halves</p>
+<p>We will be representing each digit using the so-called “<strong>one-hot encoding</strong>” * 0 <span class="math notranslate nohighlight">\(\longrightarrow\)</span> [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] * 1 <span class="math notranslate nohighlight">\(\longrightarrow\)</span> [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] * 2 <span class="math notranslate nohighlight">\(\longrightarrow\)</span> [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0] * 3 <span class="math notranslate nohighlight">\(\longrightarrow\)</span> [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0] * <span class="math notranslate nohighlight">\(\vdots\)</span> * 9 <span class="math notranslate nohighlight">\(\longrightarrow\)</span> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]</p>
+<p>Thus a sequence of <span class="math notranslate nohighlight">\(T\)</span> one-hot encoded digits will be represented by a shape-<span class="math notranslate nohighlight">\((T,C=10)\)</span> array.</p>
+<p>For example, the sequence</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># length-4 sequence</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Would have the one-hot encoding</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape-(4, 10)</span>
+<span class="n">array</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Create a function to generate a sample sequence that does the following: * allows you to specify min and max pattern length * randomly chooses a pattern length in the specified range * randomly generates a sequence of integers (0 through 9) of that length * sets first half of sequence equal to pattern * randomly chooses whether first and second half of sequence should match or not (with probability 0.5) * creates second half of sequence accordingly * creates float32 numpy array <code class="docutils literal notranslate"><span class="pre">x</span></code> of
+shape (T, 10) where row i is one-hot encoding of item i in sequence * creates int16 numpy array <code class="docutils literal notranslate"><span class="pre">y</span></code> of shape (1,) where <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">array([1])</span></code> if the patterns match and <code class="docutils literal notranslate"><span class="pre">array([0])</span></code> otherwise * returns <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">sequence)</span></code> (note that sequence is returned mainly just for debugging)</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">np.random.rand()</span> <span class="pre">&lt;</span> <span class="pre">0.5</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> with 50% probability. This will come in handy!</p>
+<p>For example, if you randomly generate the sequence [2, 0, 2, 0] (which has a pattern-length of 2, whose first half does match the second half, which should occur 50% of the time), the output of your function should be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x: one-hot encoded version of the sequence, shape-(4,10)</span>
+<span class="n">array</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]])</span>
+
+<span class="c1"># y: the halves of the sequence do match -&gt; 1</span>
+<span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># sequence</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def generate_sequence(pattern_length_min=1, pattern_length_max=10, palindrome=False):
+    &quot;&quot;&quot;
+    Randomly generate a sequence consisting of two equal-length patterns of digits,
+    concatenated end-to-end.
+
+    There should be a 50% chance that the two patterns are *identical* and a 50%
+    chance that the two patterns are distinct.
+
+    Parameters
+    ----------
+    pattern_length_min : int, optional (default=1)
+       The smallest permissable length of the pattern (half the length of the
+       smallest sequence)
+
+    pattern_length_max : int, optional (default=10)
+       The longest permissable length of the pattern (half the length of the
+       longest sequence)
+
+    palindome : bool, optional (default=False)
+        If `True`, instead of a sequence with the two identical patterns, generate
+        a palindrome instead.
+
+    Returns
+    -------
+    Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]
+        1. the one-hot encoded sequence; shape-(T, 10)
+        2. the label for the sequence: 0 (halves don&#39;t match), 1 (halves match); shape-(1,)
+        3. the actual sequence of digits; shape-(T,)
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Test your <code class="docutils literal notranslate"><span class="pre">generate_sequence</span></code> function manually. - Does it produce sequences within the desired length bounds? - Does <code class="docutils literal notranslate"><span class="pre">x</span></code> correspond to <code class="docutils literal notranslate"><span class="pre">sequence</span></code>, with the appropriate one-hot encoding? - Does <code class="docutils literal notranslate"><span class="pre">y</span></code> indicate <code class="docutils literal notranslate"><span class="pre">array([1])</span></code> when the halves of the sequence match?</p>
+<p>Consider writing some code with assert statements that will raise if any of these checks fail/</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Set up a noggin plot, as you will want to observe the loss and accuracy during training.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from noggin import create_plot
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Recall that each digit has a one-hot encoding, which means that <span class="math notranslate nohighlight">\(C=10\)</span> (<code class="docutils literal notranslate"><span class="pre">input_dim</span></code>). A sensible hidden-descriptor dimensionality is <span class="math notranslate nohighlight">\(D=50\)</span> (<code class="docutils literal notranslate"><span class="pre">dim_recurrent</span></code>). Lastly, we are solving a <em>two-class</em> classification problem (0 <span class="math notranslate nohighlight">\(\rightarrow\)</span> no pattern match, 1 <span class="math notranslate nohighlight">\(\rightarrow\)</span> pattern match), and thus <span class="math notranslate nohighlight">\(K=2\)</span> (<code class="docutils literal notranslate"><span class="pre">dim_output</span></code>). Initialize your model accordingly.</p>
+<p>Set up an Adam optimizer. Pass the Adam optimizer your model’s learnable parameters. Otherwise use its default learning rate and other hyperparameters. Feel free to mess with these later.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Train the model for 100000 iterations. Instead of pre-generating a set of training sequences, we’ll use a strategy of randomly sampling a new input sequence every iteration using the method you created earlier. Use pattern_length_min = 1 and pattern_length_max = 10.</p>
+<p><strong>Do not plot batch-level metrics. We will be processing so many sequences, that plotting all the losses and accuracies will become a performance bottleneck</strong>. You can set your loss and accuracy for each batch without plotting, using</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">set_train_batch</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span><span class="n">acc</span><span class="p">},</span>
+                        <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And then for every 500th batch (or whatever you want), call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">set_train_epoch</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will plot mean statistics for your model’s performance instead of the accuracy and loss for every single input.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Accuracy-vs-Sequence-Length">
+<h3>Accuracy vs Sequence Length<a class="headerlink" href="#Accuracy-vs-Sequence-Length" title="Permalink to this headline">¶</a></h3>
+<p>Create a plot of accuracy vs sequence length. To do so, randomly generate sequences (which will be of various lengths), apply the trained model to get the predicted outputs, and record whether the model predictions are correct or not. Then compute accuracy for sequences of length 2, for sequences of length 4, etc. (hint: Keep track of total and total correct for each possible length).</p>
+<p>MyGrad note: Because we are simply evaluating the model and have no reason to compute gradients, use the <code class="docutils literal notranslate"><span class="pre">no_autodiff</span></code> context manager to tell MyGrad not to keep track of the computational graph and speed up the evaluations.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What do you notice about accuracy as sequence length increases? Is this expected? What might make long sequences hard to deal with? Discuss with a neighbor!</p>
+<p>What happens if you apply the model to a sequence that’s longer than examples it’s been trained on? What happens if we train on and try to classify palindromes? Try messing around with our model and exploring the results.</p>
+</div>
+<div class="section" id="View-the-computational-graph-formed-from-processing-a-sequence">
+<h3>View the computational graph formed from processing a sequence<a class="headerlink" href="#View-the-computational-graph-formed-from-processing-a-sequence" title="Permalink to this headline">¶</a></h3>
+<p>We can view the computational graph that results from feeding a sequence through the RNN using MyGrad’s awesome <code class="docutils literal notranslate"><span class="pre">build_graph</span></code> capability.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.computational_graph import build_graph
+x, target, sequence = generate_sequence()
+
+output = model(x)
+
+loss = softmax_crossentropy(output, target)
+build_graph(loss, names=locals(), render=True)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

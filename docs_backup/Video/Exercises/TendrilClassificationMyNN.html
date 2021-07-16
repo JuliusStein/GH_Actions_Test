@@ -1,0 +1,896 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MyNN Implementation for Tendril Classification &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>MyNN Implementation for Tendril Classification</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/TendrilClassificationMyNN.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="MyNN-Implementation-for-Tendril-Classification">
+<h1>MyNN Implementation for Tendril Classification<a class="headerlink" href="#MyNN-Implementation-for-Tendril-Classification" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import mygrad as mg
+
+from datasets import ToyData
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<p>We’ve used a one-layer neural network to solve a classification problem on a toy data set: a spiral formation of 2D data points. In this notebook, we will rewrite our solution to take advantage of MyNN, our main neural network library. This will serve as a gentle introduction to the library, which will prove to be very useful in moving forward with neural networks. In fact, MyNN is similar in spirit to PyTorch, so the insight you gain using MyNN will be helpful in moving on to full-scale deep
+learning libraries.</p>
+<p>As before, let’s construct and visualize our dataset</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Constructing the spiral dataset and its labels.
+num_tendrils = 3
+spiral_data = ToyData(num_classes=num_tendrils)
+
+xtrain, ytrain, xtest, ytest = spiral_data.load_data()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = spiral_data.plot_spiraldata()
+</pre></div>
+</div>
+</div>
+<p>We’ll reuse our accuracy function from the previous notebook that checked how accurate our model’s predictions were.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def accuracy(predictions, truth):
+    &quot;&quot;&quot;
+    Returns the mean classification accuracy for a batch of predictions.
+
+    Parameters
+    ----------
+    predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
+        The scores for D classes, for a batch of M data points
+    truth : numpy.ndarray, shape=(M,)
+        The true labels for each datum in the batch: each label is an
+        integer in [0, D)
+
+    Returns
+    -------
+    float
+    &quot;&quot;&quot;
+    return np.mean(np.argmax(predictions, axis=1) == truth)
+</pre></div>
+</div>
+</div>
+<div class="section" id="Introducing-MyNN">
+<h2>Introducing MyNN<a class="headerlink" href="#Introducing-MyNN" title="Permalink to this headline">¶</a></h2>
+<p>Before, we had to construct the parameters of our neural network manually; recall that we created a <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">v</span></code> ourselves with randomly initialized numpy arrays. Additionally, we had to manually perform gradient descent in order to update our parameters. One of the main advantages of using a neural network library such as MyNN is that this sort of low-level implementation is already taken care of. Essentially, neural network libraries will package up the general form of various
+functionality we may want to use such as gradient descent so that we can focus on algorithmic developments rather than reimplementing gradient descent every time we want to train a network.</p>
+<div class="section" id="MyNN-Layers">
+<h3>MyNN Layers<a class="headerlink" href="#MyNN-Layers" title="Permalink to this headline">¶</a></h3>
+<p>We were using fully-connected (dense) layers to solve our classification problem. These are packaged up conveniently inside MyNN in the <code class="docutils literal notranslate"><span class="pre">layers</span></code> module. Let’s import the dense layer now:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mynn.layers.dense import dense
+</pre></div>
+</div>
+</div>
+<p>MyNN allows us to conveniently create “layers” for our neural network - this is an object that initializes and stores the weights associated</p>
+<p>When we create a dense layer, we simply specify the desired shape of that layer. We can then call that layer like a function to pass data through it. As an example:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># This initializes a shape-(2, 3) Tensor, `weight`, and a shape-(3,) Tensor, `bias`
+# and stores these tensors in this &quot;dense layer&quot;. The weights are drawn from
+# default statistical distributions - we can also specify the distribution
+# that we want
+dense_layer = dense(2, 3)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>dense_layer.weight
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>dense_layer.bias
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>data = np.random.rand(4, 2)
+
+# Calling `dense_layer(data)` multiplies the shape-(4, 2) matrix w/ our shape-(2, 3)
+# layer produces a shape-(4, 3) result
+# This performs: `data @ w + b`
+dense_layer(data)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># You can easily access all of a layer&#39;s parameters, stored in a tuple,
+# via &lt;layer&gt;.parameters
+dense_layer.parameters
+
+# this will make it easy for us to access all of our model&#39;s parameters
+# for gradient descent
+</pre></div>
+</div>
+</div>
+<p>There are other types of layers (such as <code class="docutils literal notranslate"><span class="pre">conv</span></code>) packaged inside MyNN as well.</p>
+<p>You may have already thought to reuse some of the code that you wrote in the universal function approximator or in the Tendril classifier you wrote using plain MyGrad already; this is essentially all that MyNN is doing: packaging up useful chunks of code so that we can more easily, more quickly, and with fewer mistakes implement neural networks.</p>
+</div>
+<div class="section" id="Activation-Functions">
+<h3>Activation Functions<a class="headerlink" href="#Activation-Functions" title="Permalink to this headline">¶</a></h3>
+<p>We’ll also need to use our ReLU activation function. It and other activations are stored in <code class="docutils literal notranslate"><span class="pre">mynn.activations</span></code>. Let’s import that now:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.nnet.activations import relu
+</pre></div>
+</div>
+</div>
+<p>The final piece we need to create our model is a weight initializer.</p>
+</div>
+<div class="section" id="Parameter-Initializers">
+<h3>Parameter-Initializers<a class="headerlink" href="#Parameter-Initializers" title="Permalink to this headline">¶</a></h3>
+<p>In MyGrad, we used a he-normal to initialize our weights, and initialized our bias to 0. By default, MyNN will initialize a bias to zero, but we will need to pass in an initializer for the weight matrix (by default, MyNN will use a uniform distribution).</p>
+<p>The He-normal distribution and all other initializers are in <code class="docutils literal notranslate"><span class="pre">mygrad.nnet.initializers</span></code>. There are several other initialization schemes defined in that module. Feel free to poke around and explore.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.nnet.initializers import he_normal
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Creating-a-MyNN-Model">
+<h2>Creating a MyNN Model<a class="headerlink" href="#Creating-a-MyNN-Model" title="Permalink to this headline">¶</a></h2>
+<p>Let’s recreate the model that we developed before using MyNN this time!</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">Model</span></code> class will maintain all of our layers and define how to propagate input through the network. By creating a model class, we can both organize the layers for our neural network as well as create a simple way for running a forward pass on our data through every layer. Creating a model object and passing in our data will give us the output of our model - it’s that simple.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">__init__(self)</span></code> we simply define our layers. In this case we have two dense layers as denoted by <code class="docutils literal notranslate"><span class="pre">dense1</span></code> and <code class="docutils literal notranslate"><span class="pre">dense2</span></code>. To understand what happens in the dense layer try reading the documentation for <code class="docutils literal notranslate"><span class="pre">dense()</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>class Model:
+    def __init__(self, num_neurons, num_classes):
+        &quot;&quot;&quot;This initializes all of the layers in our model, and sets them
+        as attributes of the model.
+
+        Parameters
+        ----------
+        n : int
+            The size of our hidden layer
+
+        num_out : int
+            The size of the outpur layer (i.e. the number
+            of tendrils).&quot;&quot;&quot;
+        self.dense1 = dense(2, num_neurons, weight_initializer=he_normal)
+        self.dense2 = dense(num_neurons, num_classes, weight_initializer=he_normal, bias=False)
+
+    def __call__(self, x):
+        &#39;&#39;&#39;Passes data as input to our model, performing a &quot;forward-pass&quot;.
+
+        This allows us to conveniently initialize a model `m` and then send data through it
+        to be classified by calling `m(x)`.
+
+        Parameters
+        ----------
+        x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, 2)
+            A batch of data consisting of M pieces of data,
+            each with a dimentionality of 2.
+
+        Returns
+        -------
+        mygrad.Tensor, shape=(M, num_out)
+            The model&#39;s prediction for each of the M pieces of data.
+        &#39;&#39;&#39;
+
+        # We pass our data through a dense layer, use the activation
+        # function relu and then pass it through our second dense layer
+        # We don&#39;t have a second activation function because it happens
+        # to be included in our loss function: softmax-crossentropy
+        return self.dense2(relu(self.dense1(x)))
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model.
+
+        This can be accessed as an attribute, via `model.parameters`
+
+        Returns
+        -------
+        Tuple[Tensor, ...]
+            A tuple containing all of the learnable parameters for our model&quot;&quot;&quot;
+        return self.dense1.parameters + self.dense2.parameters
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>model = Model(num_neurons=15, num_classes=num_tendrils)
+</pre></div>
+</div>
+</div>
+<p>As before, we’ll use the softmax cross-entropy loss provided by MyGrad. That being said, MyNN has some other loss functions in <code class="docutils literal notranslate"><span class="pre">mynn.losses</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.nnet.losses import softmax_crossentropy
+</pre></div>
+</div>
+</div>
+<p>Lastly, we had been writing our own gradient descent function. However this is also taken care of in MyNN. As you know, gradient descent is an optimization method; thus, it is located inside <code class="docutils literal notranslate"><span class="pre">mynn.optimizers</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mynn.optimizers.sgd import SGD
+</pre></div>
+</div>
+</div>
+<p>When we construct an optimizer, we must pass it the parameters of our model and any additional hyperparameters (such as learning rate). After we have backpropagated our loss through our network by calling <code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code>, we can call <code class="docutils literal notranslate"><span class="pre">step()</span></code> on the optimizer to perform a single step of the optimization procedure. In our case, the <code class="docutils literal notranslate"><span class="pre">step()</span></code> function will loop over all the parameters of our model and update them according to the gradient descent algorithm.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>optim = SGD(model.parameters, learning_rate=0.1)
+</pre></div>
+</div>
+</div>
+<p>As before, we’ll create a plot to see our loss and accuracy.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from noggin import create_plot
+plotter, fig, ax = create_plot(metrics=[&quot;loss&quot;, &quot;accuracy&quot;])
+
+batch_size = 50
+</pre></div>
+</div>
+</div>
+<p>We can use the same exact training loop structure as before. However, MyNN will take care of most of this for us. We’ll just need to:</p>
+<ul class="simple">
+<li><p>randomize our indices</p></li>
+<li><p>get a batch of training data</p></li>
+<li><p>call <code class="docutils literal notranslate"><span class="pre">model(batch)</span></code> on the data to get outputs</p></li>
+<li><p>get the truth</p></li>
+<li><p>compute the loss by calling <code class="docutils literal notranslate"><span class="pre">softmax_crossentropy(predictions,</span> <span class="pre">truth)</span></code></p></li>
+<li><p>backpropagate the loss</p></li>
+<li><p>call <code class="docutils literal notranslate"><span class="pre">optim.step()</span></code> to perform SGD</p></li>
+<li><p>plot our training statistics</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>for epoch_cnt in range(5000):
+    idxs = np.arange(len(xtrain))  # -&gt; array([0, 1, ..., 9999])
+    np.random.shuffle(idxs)
+
+    for batch_cnt in range(0, len(xtrain)//batch_size):
+        batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
+
+        batch = xtrain[batch_indices]  # random batch of our training data
+        truth = ytrain[batch_indices]
+
+        # `model.__call__ is responsible for performing the &quot;forward-pass&quot;
+        prediction = model(batch)
+
+        loss = softmax_crossentropy(prediction, truth)
+
+        # you still must compute all the gradients!
+        loss.backward()
+
+        # the optimizer is responsible for updating all of the parameters
+        optim.step()
+
+        # we&#39;ll also compute the accuracy of our model as usual
+        acc = accuracy(prediction, truth)
+
+        plotter.set_train_batch({&quot;loss&quot; : loss.item(),
+                                 &quot;accuracy&quot; : acc},
+                                 batch_size=batch_size)
+</pre></div>
+</div>
+</div>
+<p>As before, we can visualize our decision boundary.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def dummy_function(x):
+    from mygrad.nnet.activations import softmax
+    return softmax(model(x)).data
+
+fig, ax = spiral_data.visualize_model(dummy_function, entropy=False);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Fitting-a-One-Layer-Neural-Network">
+<h2>Fitting a One-Layer Neural Network<a class="headerlink" href="#Fitting-a-One-Layer-Neural-Network" title="Permalink to this headline">¶</a></h2>
+<p>Let’s try to build up some more intuition for how our model classifies the tendrils. To do this, we will make our model even simpler - we will make a model <strong>without any nonlinearities</strong>. This model will not do a great job on classification, but it’s operations will be easy to understand.</p>
+<p>Create a single-layer neural network:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(W, b; x) = \text{softmax}(Wx + b)
+\end{equation}</div><p>and use softmax-crossentropy loss (so the softmax will actually by taken care of by the loss)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Define your MyNN model-class; name is `SingleLayerModel`
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.nnet.losses import softmax_crossentropy
+from mynn.optimizers.sgd import SGD
+from noggin import create_plot
+
+model = SingleLayerModel(num_out=num_tendrils)
+optim = SGD(model.parameters, learning_rate=0.1)
+
+
+plotter, fig, ax = create_plot(metrics=[&quot;loss&quot;, &quot;accuracy&quot;])
+
+batch_size = 50
+</pre></div>
+</div>
+</div>
+<p>Let’s train this 1-layer model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>for epoch_cnt in range(5000):
+    idxs = np.arange(len(xtrain))  # -&gt; array([0, 1, ..., 9999])
+    np.random.shuffle(idxs)
+
+    for batch_cnt in range(0, len(xtrain)//batch_size):
+        batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
+        batch = xtrain[batch_indices]  # random batch of our training data
+
+        # `model.__call__ is responsible for performing the &quot;forward-pass&quot;
+        prediction = model(batch)
+        truth = ytrain[batch_indices]
+
+        loss = softmax_crossentropy(prediction, truth)
+
+        # you still must compute all the gradients!
+        loss.backward()
+
+        # the optimizer is responsible for updating all of the parameters
+        optim.step()
+
+        acc = accuracy(prediction, truth)
+
+        plotter.set_train_batch({&quot;loss&quot; : loss.item(),
+                                 &quot;accuracy&quot; : acc},
+                                 batch_size=batch_size)
+</pre></div>
+</div>
+</div>
+<div class="section" id="Understanding-Your-Results">
+<h3>Understanding Your Results<a class="headerlink" href="#Understanding-Your-Results" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Run this to visualize your results
+
+def dummy_function(x):
+    from mygrad.nnet.activations import softmax
+    return softmax(model(x)).data
+
+fig, ax = spiral_data.visualize_model(dummy_function, entropy=False);
+</pre></div>
+</div>
+</div>
+<p>Now print out the <code class="docutils literal notranslate"><span class="pre">weight</span></code> tensor of your single dense layer. What is its shape? Look back to the mathematical form of this neural network - what dot products are being performed by the matrix multiplication (are the rows of <code class="docutils literal notranslate"><span class="pre">weight</span></code> being used in the dot-product or the columns)?</p>
+<p>On paper, sketch the classification visualization that you see above. <strong>Draw the vectors stored in ``weight`` on top of this sketch</strong>.</p>
+<p>Reflect on our discussion of the dot-product being a means of measuring how much two vectors <em>overlap</em>. What did this simple model learn and how is it doing its classification?</p>
+<p><em>SOLUTION HERE</em></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

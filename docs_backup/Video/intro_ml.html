@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: machine learning, Category: Section" name="description" />
+<meta content="introduction, summary, computer vision, natural language processing" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>A Brief Introduction to Machine Learning &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Baby Steps Towards Machine Learning: Linear Regression" href="Linear_Regression.html" />
+    <link rel="prev" title="Prerequisites" href="prereqs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../vision.html">Vision Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Automatic_Differentiation.html">Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FacialRecognition.html">Vision Module Capstone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../vision.html">Vision Module</a> &raquo;</li>
+        
+      <li>A Brief Introduction to Machine Learning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Video/intro_ml.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="A-Brief-Introduction-to-Machine-Learning">
+<h1>A Brief Introduction to Machine Learning<a class="headerlink" href="#A-Brief-Introduction-to-Machine-Learning" title="Permalink to this headline">¶</a></h1>
+<p>An essential element of intelligence, as we recognize it in ourselves and in other animals, is the ability to observe and to make predictions or decisions based off those observations. Indeed, the members of STEM fields align in their quest to find rules, laws, and relationships that permit us to systematically transform observations into reliable predictions or useful decisions.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/observation_to_prediction.png" alt="Intelligent systems can make reliable decisions or predictions in light of new observations" width="600">
+</p>
+</div><p>To successfully distill such a pattern in a way that can be leveraged consistently is to acquire a certain amount of wisdom; to do so feels like obtaining a nugget of truth, or that some amount of chaos has been turned into order. Or, it might just mean that you can get a computer to tell the difference between cats and dogs in pictures.</p>
+<p>Practitioners of machine learning (ML) strive to create computer programs that can distill meaningful patterns or rules from observations (i.e. data – to put in a less anthropomorphic way). Conventional computer programs have static rules codified in them by humans, which permit the computer to transform input data into useful output data in a systematic way. Thus, humans have traditionally been responsible for figuring out the rules that get used by computer programs.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/manual_computer_program.png" alt="Humans have traditionally been responsible for determining the rules that become codified in an intelligent computer program" width="600">
+</p>
+</div><p>For example, in a “classical” chess computer program (e.g. <a class="reference external" href="https://stockfishchess.org/">Stockfish</a>), humans were responsible for designing and encoding the search patterns, types of analyses, and strategies that the chess-playing computer would rotely follow in order to try to win in a chess game. In this classical computer program, human intuition and expertise in chess are distilled into the computer program and are amplified by the computational power of the machine.</p>
+<p>By contrast, the goal of a ML algorithm is for <em>the machine</em> to arrive at such rules by learning from both the data and the predictions that we would like our model to make about the data (here the term “rules” is to be taken in a very broad sense — it is more correct to say that the algorithm will arrive at a “mathematical description” of patterns that are pertinent to the problem at hand).</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/ml_computer_program.png" alt="Machine learning systems are capable of determining the rules that will enable an intelligent system to make reliable predictions" width="600">
+</p>
+</div><p>Extending the chess analogy: a machine learning algorithm might learn chess strategy – for itself – by processing games played by chess grand masters, or it might even learn winning strategies simply by playing and “studying” (<em>many</em>) games against itself. Here, humans didn’t need to know how to write a winning chess algorithm, rather they needed to design a system by which a machine had the capacity and objective to <em>learn</em> how to win at chess.</p>
+<p>While a purely academic or even philosophical interest could lead one to design an algorithm capable of learning, a pragmatic thrust of ML is the insight that <em>machines may be able to learn solutions to problems that are superior to any solution that we know how to construct by hand</em>. Indeed, this is certainly proving to be the case in fields like computer vision, natural language processing, and game artificial intelligence.
+<a class="reference external" href="https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go">AlphaZero</a> is an example of a machine learning algorithm capable of enabling machines to learn to play chess, shogi, and the game Go at elite levels, such that human experts and classical algorithms are defeated by the strategies learned by AlphaGo.</p>
+<div style="text-align: center">
+</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7L2sUGcOgh0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+</div><p>Despite all of this fanciful discussion, we must note that, in practice, a typical ML application will be highly limited in the ways it “learns” – it will not formulate its own hypotheses to be tested, nor will it query the Internet to discover new information; rather, we will see that “learning” is often used to describe processes of rote numerical optimization. It is useful for us to quickly ground ourselves in this reality: the typical ML application is a relatively simple computer program
+that encapsulates perhaps-sophisticated-but-still-familiar mathematics, which were put there by humans. To heed these considerations will help keep us from assuming that machine learning is a discipline so exotic and advanced that we, the wary students of this course, could never hope to participate in it — this is certainly not the case!</p>
+<p>There are two major topics that we will be discussing in this module:</p>
+<ol class="arabic simple">
+<li><p>What it looks like for a model to learn</p></li>
+<li><p>The process and challenge of designing a mathematical model that is suitable for learning fruitful patterns from data</p></li>
+</ol>
+<p>These discussions will lead us down a road towards the fundamentals of neural networks and computer vision applications that are driven by deep learning.</p>
+<p>We will start off by tackling a simple problem: using a single-variable linear model to describe the relationship between height and wingspan in basketball players. This approach to modeling is known as <strong>linear regression</strong>; while it is a stretch to categorize this as a machine learning algorithm, it will introduce us to all of the essential concepts needed for understanding the procedure of <strong>supervised learning</strong> nonetheless.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Linear_Regression.html" class="btn btn-neutral float-right" title="Baby Steps Towards Machine Learning: Linear Regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="prereqs.html" class="btn btn-neutral float-left" title="Prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

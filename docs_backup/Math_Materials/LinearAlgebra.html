@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Math supplement, Difficulty: Easy, Category: Section" name="description" />
+<meta content="vector, vector addition, vector subtraction, scalar multiplication, norm, dot product, angle, matrix, matrix multiplication, python" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fundamentals of Linear Algebra &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Complex Numbers" href="ComplexNumbers.html" />
+    <link rel="prev" title="Sequences and Summations" href="Series.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fundamentals of Linear Algebra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#What-is-a-Vector?">What is a Vector?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Vectors-in-NumPy">Vectors in NumPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Operations-on-Vectors">Operations on Vectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Addition-and-Subtraction">Addition and Subtraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Scalar-Multiplication">Scalar Multiplication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-Norm">The Norm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-Dot-Product">The Dot Product</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Matrices:-Collections-of-Vectors">Matrices: Collections of Vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Links-to-Official-Documentation-and-Other-Resources">Links to Official Documentation and Other Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Fundamentals of Linear Algebra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/LinearAlgebra.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Fundamentals-of-Linear-Algebra">
+<h1>Fundamentals of Linear Algebra<a class="headerlink" href="#Fundamentals-of-Linear-Algebra" title="Permalink to this headline">¶</a></h1>
+<p>This section provides a review of fundamental linear algebra concepts that we will find ourselves encountering again and again. In particular, we will look at what vectors and how we can represent vectors in NumPy. We will explore what operations we can perform on vectors, both in linear algebra and in Python. We will learn how matrices and matrix multiplication can be used to more conveniently work with vectors. Lastly, we will explore geometric interpretations of these concepts to build
+intuitive interpretations of vector operations.</p>
+<div class="section" id="What-is-a-Vector?">
+<h2>What is a Vector?<a class="headerlink" href="#What-is-a-Vector?" title="Permalink to this headline">¶</a></h2>
+<p>In its simplest form, a <strong>vector</strong> is a quantity that posses both a <strong>direction</strong> and a <strong>magnitude</strong>. You may have heard this definition before, but what does it actually mean? Let’s start by considering a few examples. If I were to say that I am running at <span class="math notranslate nohighlight">\(10\)</span> mph, heading west, then I have described my movement (my velocity, to be more precise) as a vector whose magnitude is <span class="math notranslate nohighlight">\(10\)</span> mph and whose associated direction is westward. We can also visualize a vector as below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_34vec.png" alt="Vector Pointing to (3,4)" width="600">
+</p>
+</div><p>From the picture above, we see that the vector has a direction: the vector begins at the origin and points to the point <span class="math notranslate nohighlight">\((3,4)\)</span> on the <span class="math notranslate nohighlight">\(x\)</span>-<span class="math notranslate nohighlight">\(y\)</span> plane. We also see that the vector has a clear magnitude: if we so wanted, we could grab our rulers and measure the exact length of the vector. Broadly speaking, these are the only two notions we need to describe any given vector.</p>
+<p>It is common to root vectors at the origin, and this is what we will do from now with all our vectors. Choosing to have vectors start at the origin means that all the information we need to completely describe a vector is contained in the endpoint of the vector. This will allow us to write vectors as rows or columns of numbers. In our previous example, we could write the vector as <span class="math">\begin{equation}
+\vec{u}=\begin{bmatrix}3 \\ 4\end{bmatrix}\;\;\text{or}\;\;\vec{u}=\begin{bmatrix}3 & 4\end{bmatrix}.
+\end{equation}</span></p>
+<p>Notice the arrow on <span class="math notranslate nohighlight">\(\vec{u}\)</span>. This arrow simply helps us distinguish vectors from other mathematical objects; it tells us that we can perform special vector-only operations on <span class="math notranslate nohighlight">\(\vec{u}\)</span> that wouldn’t make sense for other objects. Often times we contrast vectors with <strong>scalars</strong>. Scalars are the numbers we are used to working with, which we of course never write with an arrow.</p>
+<p>In general, a vector is a unique specification of a point in space. For example, for any point <span class="math notranslate nohighlight">\((x,y)\)</span> in two-dimensional space, we can write the vector <span class="math">\begin{equation}
+\vec{u}=\begin{bmatrix}x \\ y\end{bmatrix}\;\;\text{or}\;\;\vec{u}=\begin{bmatrix}x & y\end{bmatrix}.
+\end{equation}</span></p>
+<p>In three-dimensional space, we would need three values – <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span> – to specify our location in space. Thus, a three-dimensional vector is given by <span class="math">\begin{equation}
+\vec{u}=\begin{bmatrix}x \\ y \\ z\end{bmatrix}\;\;\text{or}\;\;\vec{u}=\begin{bmatrix}x & y & z\end{bmatrix}.
+\end{equation}</span></p>
+<p>This brings us now to the idea of the <strong>dimensionality</strong> of a vector space.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>The <strong>dimensionality of a vector space</strong> is the number of coordinates needed to uniquely specify a point in space. When we write vectors as rows or columns of numbers, the dimensionality of the vector is the number of elements that we write. That is, the <strong>dimensionality of a vector</strong> is the number of elements in the vector.</p>
+</div>
+<p>In two-dimensional space, we need two distinct values – <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> – to localize ourselves. In 12-D space, we need a distinct coordinate for each of the <span class="math notranslate nohighlight">\(12\)</span> dimensions. Thus, a <span class="math notranslate nohighlight">\(12\)</span>-dimensional vector will have <span class="math notranslate nohighlight">\(12\)</span> components (elements). In general, if we are in <span class="math notranslate nohighlight">\(N\)</span>-dimensions, we need to <span class="math notranslate nohighlight">\(N\)</span> values to specify a point in that space.</p>
+</div>
+<div class="section" id="Vectors-in-NumPy">
+<h2>Vectors in NumPy<a class="headerlink" href="#Vectors-in-NumPy" title="Permalink to this headline">¶</a></h2>
+<p>We can represent vectors in NumPy with <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>s. For example, our original vector <span class="math notranslate nohighlight">\(\vec{u}=\begin{bmatrix}3 &amp; 4\end{bmatrix}\)</span> can be represented in NumPy as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This brings us to an extremely important distinction between our terminology and NumPy’s.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Important Note</strong>:</p>
+<p>The dimensionality of the vector is <strong>*not*</strong> the same as the dimensionality of a NumPy array. The dimensionality of a vector is the number of elements in the vector, while the dimensionality of an array is the number of indices needed to retrieve a single element.</p>
+</div>
+<p>The <em>1-D array</em> <code class="docutils literal notranslate"><span class="pre">np.array([3,</span> <span class="pre">4])</span></code> represents a <em>2-D vector</em>. Similarly, the arrays</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">9.1</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>are all 1-D NumPy arrays, as they each only require <span class="math notranslate nohighlight">\(1\)</span> integer-index to uniquely specify an element in the array. However, the arrays represent 1-D, 2-D, and 3-D vectors, respectively.</p>
+<p>All NumPy arrays with a single row of numbers are considered 1-dimensional arrays in NumPy-lingo. The <em>size</em> (i.e. the number of elements) of that 1-dimensional array corresponds the dimensionality of the vector it represents.</p>
+<p>The concepts of vector and array dimensionality are not completely disjoint, however. In fact, if we think of a <span class="math notranslate nohighlight">\(N\)</span>-D vector as an arrow pointing to specific location in <span class="math notranslate nohighlight">\(N\)</span>-D space, then an <span class="math notranslate nohighlight">\(N\)</span>-D NumPy array can be thought of as that <span class="math notranslate nohighlight">\(N\)</span>-D space itself. For example, the 2-D NumPy array</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>requires two indices to retrieve a specific value, and hence we need two distinct values to localize ourselves in the matrix. This is exactly the same as how a two-dimensional vector has two values that localize a point in 2-D space! Similarly, in a 3-D array, you need three indices to specify your position in the array, just as a three-dimensional vector uses three values to specify its position in 3-D space.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>A <span class="math notranslate nohighlight">\(N\)</span>-dimensional vector is a unique specification of a point in <span class="math notranslate nohighlight">\(N\)</span>-D space, and thus requires exactly <span class="math notranslate nohighlight">\(N\)</span> distinct elements. A <span class="math notranslate nohighlight">\(N\)</span>-D NumPy array can be thought of as <span class="math notranslate nohighlight">\(N\)</span>-D space itself, as it requires <span class="math notranslate nohighlight">\(N\)</span> distinct indices to specify an element in the array.</p>
+</div>
+</div>
+<div class="section" id="Operations-on-Vectors">
+<h2>Operations on Vectors<a class="headerlink" href="#Operations-on-Vectors" title="Permalink to this headline">¶</a></h2>
+<p>Since vectors are very different objects to the scalars we are used to working with, we need to define the operations that we can perform on vectors.</p>
+<div class="section" id="Addition-and-Subtraction">
+<h3>Addition and Subtraction<a class="headerlink" href="#Addition-and-Subtraction" title="Permalink to this headline">¶</a></h3>
+<p>First, we will define vector addition and subtraction element-wise; that is, <span class="math notranslate nohighlight">\(\vec{u}+\vec{v}\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}+\vec{v}=\begin{bmatrix}u_1 \\ u_2 \\ \vdots \\ u_n\end{bmatrix}+\begin{bmatrix}v_1 \\ v_2 \\ \vdots \\ v_n\end{bmatrix}=\begin{bmatrix}u_1+v_1 \\ u_2+v_2 \\ \vdots \\ u_n+v_n\end{bmatrix}.
+\end{equation}</div><p>Subtraction is defined identically:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}-\vec{v}=\begin{bmatrix}u_1 \\ u_2 \\ \vdots \\ u_n\end{bmatrix}-\begin{bmatrix}v_1 \\ v_2 \\ \vdots \\ v_n\end{bmatrix}=\begin{bmatrix}u_1-v_1 \\ u_2-v_2 \\ \vdots \\ u_n-v_n\end{bmatrix}.
+\end{equation}</div><p>Using our vectors-as-arrows representation of vectors, we can visualize the addition <span class="math notranslate nohighlight">\(\vec{u}+\vec{v}\)</span> as placing <span class="math notranslate nohighlight">\(\vec{v}\)</span> at the end of <span class="math notranslate nohighlight">\(\vec{u}\)</span>, then drawing a vector from the origin to the tip of <span class="math notranslate nohighlight">\(\vec{v}\)</span>. Consider the vectors <span class="math notranslate nohighlight">\(\vec{u}=\begin{bmatrix}2 &amp; 1\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\vec{v}=\begin{bmatrix}-1 &amp; 2\end{bmatrix}\)</span>, the sum of which can be visualized as:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_vectoradd.png" alt="Addition of Two Vectors" width="600">
+</p>
+</div><p>While this doesn’t quite follow our convention of having vectors rooted at the origin, it is convenient to visualize vector addition in this way. To visualize subtraction, think of flipping <span class="math notranslate nohighlight">\(\vec{v}\)</span> to point in the opposite direction and adding this flipped vector to <span class="math notranslate nohighlight">\(\vec{u}\)</span>:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_vectorsub.png" alt="Subtraction of Two Vectors" width="600">
+</p>
+</div><p>This vector addition and subtraction is exactly how NumPy implements addition and subtraction between arrays. For instance, if we have the two vectors <span class="math notranslate nohighlight">\(\vec{u}=\begin{bmatrix}-2 &amp; 5\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\vec{v}=\begin{bmatrix}4 &amp; 0\end{bmatrix}\)</span>, we can find the sum and difference of the vectors in Python as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="go">array([2, 5])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="go">array([-6, 5])</span>
+</pre></div>
+</div>
+<p>It is important to note, however, that while a Python expression such as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">])</span>
+<span class="go">array([5, 1, -6])</span>
+</pre></div>
+</div>
+<p>is valid due to <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Broadcasting.html?highlight=broadcasing">NumPy’s broadcasting</a> rules, <em>this is not a valid vector operation</em>. Vector addition and subtraction must be between two vectors of the <em>same dimensionality</em>.</p>
+<p>This begs the question, from these definitions of addition and subtraction, could we extrapolate a definition for multiplication and division between vectors? The answer is no. In linear algebra, element-wise multiplication and division are <em>not</em> standard operations, and we usually don’t need to consider them. However, NumPy will allow us to compute such elements-wise products and quotients, with <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">/</span></code>, if we so wished:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="go">array([-8, 0])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="go">array([-0.5, 10.])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Scalar-Multiplication">
+<h3>Scalar Multiplication<a class="headerlink" href="#Scalar-Multiplication" title="Permalink to this headline">¶</a></h3>
+<p>While we don’t consider element-wise multiplication and division between vectors, we do often multiply scalars and vectors. For a vector <span class="math notranslate nohighlight">\(\vec{u}\)</span> and scalar <span class="math notranslate nohighlight">\(k\)</span>, <strong>scalar multiplication</strong> is defined as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+k\vec{u}=\begin{bmatrix}ku_1 \\ ku_2 \\ \vdots \\ ku_n\end{bmatrix}.
+\end{equation}</div><p>That is, we multiply each element of <span class="math notranslate nohighlight">\(\vec{u}\)</span> by the scalar <span class="math notranslate nohighlight">\(k\)</span>. In NumPy, we can do this by simply multiplying a vector with a number:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="go">array([14., -6., 0., 1.])</span>
+</pre></div>
+</div>
+<p>Since we are multiplying each element in <span class="math notranslate nohighlight">\(\vec{u}\)</span> by the same <span class="math notranslate nohighlight">\(k\)</span>, we are actually <em>scaling</em> – changing the length of – the vector <span class="math notranslate nohighlight">\(\vec{u}\)</span> by a factor of <span class="math notranslate nohighlight">\(k\)</span>. This is visualized below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_scalarmult.png" alt="Multiplying a Vector by 3" width="600">
+</p>
+</div><p>Notice also that multiplying by a negative scalar actually reverses the direction of a vector, in addition to scaling it.</p>
+</div>
+<div class="section" id="The-Norm">
+<h3>The Norm<a class="headerlink" href="#The-Norm" title="Permalink to this headline">¶</a></h3>
+<p>This brings us to the operation responsible for finding the magnitude (length) of a vector: the <strong>norm</strong>. We denote the norm of a vector by <span class="math notranslate nohighlight">\(\lVert\vec{u}\rVert\)</span> and define it as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{u}\rVert=\sqrt{\sum_{i=0}^{n-1}u_i^2}.
+\end{equation}</div><p>The norm is simply a generalization of the Pythagorean theorem; in fact, in two dimensions, the norm of a vector simply recovers the Pythagorean theorem:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{u}\rVert=\sqrt{u_x^2+u_y^2}\;\longrightarrow\;\lVert\vec{u}\rVert^2=u_x^2+u_y^2.
+\end{equation}</div><p>Furthermore, we see that scalar multiplication does indeed scale the length of our vector:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert k\vec{u}\rVert=\sqrt{\sum_{i=0}^{n-1}(ku_i)^2}=k\sqrt{\sum_{i=0}^{n-1}u_i^2}=k\lVert\vec{u}\rVert.
+\end{equation}</div><p>When we have a vector whose magnitude is <span class="math notranslate nohighlight">\(1\)</span>, we call it a “unit vector” or a “normalized vector”. We denote unit vectors by with a “hat”, such as <span class="math notranslate nohighlight">\(\hat{u}\)</span>, so that we can make explicit when a vector is known to have a length of one. In 2-D, we often write <span class="math notranslate nohighlight">\(\hat{x}=\begin{bmatrix}1 &amp; 0\end{bmatrix}\)</span> for the unit vector that points along the <span class="math notranslate nohighlight">\(x\)</span>-axis, and <span class="math notranslate nohighlight">\(\hat{y}=\begin{bmatrix}0 &amp; 1\end{bmatrix}\)</span> for the unit vector along the <span class="math notranslate nohighlight">\(y\)</span>-axis.</p>
+<p>We can decompose any vector into the sum of unit vectors. A two-dimensional vector, for example, can be written as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}=\begin{bmatrix}u_1 \\ u_2\end{bmatrix}=\begin{bmatrix}u_1 \\ 0\end{bmatrix}+\begin{bmatrix}0 \\ u_2\end{bmatrix}=u_1\hat{x}+u_2\hat{y}.
+\end{equation}</div><p>We can also convert any arbitrary vector into a unit vector by <strong>normalizing</strong> that vector. That is, for a vector <span class="math notranslate nohighlight">\(\vec{u}\)</span>, we will multiply by the scalar <span class="math notranslate nohighlight">\(\frac{1}{\lVert\vec{u}\rVert}\)</span>, thus scaling our vector to have length <span class="math notranslate nohighlight">\(1\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>In linear algebra, we can define:</p>
+<ul class="simple">
+<li><p>element-wise addition and subtraction between vectors of the same dimensionality</p></li>
+<li><p>multiplication of a scalar and a vector</p></li>
+</ul>
+<p>In NumPy, we can additionally:</p>
+<ul class="simple">
+<li><p>perform element-wise multiplication and division between vectors of the same dimensionality</p></li>
+<li><p>add and subtract scalars and vectors</p></li>
+</ul>
+<p>These operations are not standard operations in linear algebra.</p>
+<p>We can also find the magnitude of a vector with the norm operation, and convert arbitrary vectors to unit vectors by dividing the vector by the norm.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Norm of a Sum</strong></p>
+<p>Using the definition of the norm, compute <span class="math notranslate nohighlight">\(\lVert\vec{a}+\vec{b}\rVert\)</span>, where <span class="math notranslate nohighlight">\(\vec{a}\)</span> and <span class="math notranslate nohighlight">\(\vec{b}\)</span> are both <span class="math notranslate nohighlight">\(N\)</span>-dimensional vectors. Simplify your answer to be in terms of the norm of <span class="math notranslate nohighlight">\(\vec{a}\)</span>, the norm of <span class="math notranslate nohighlight">\(\vec{b}\)</span>, and a sum.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Normalization</strong></p>
+<p>Write a Python function named <code class="docutils literal notranslate"><span class="pre">normalize</span></code>. It should take in one argument <code class="docutils literal notranslate"><span class="pre">v</span></code>, which is a 1-D NumPy array. The function should use <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorized operations</a> to compute the norm of the vector and should return the normalized <code class="docutils literal notranslate"><span class="pre">v</span></code> vector.</p>
+<p>Normalize the vector <span class="math notranslate nohighlight">\(\begin{bmatrix}3 &amp; -290 &amp; 1.234 &amp; -8529 &amp; 0.00001\end{bmatrix}\)</span>. Use the function <code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm</span></code> to confirm that the vector returned by your function does indeed have magnitude <span class="math notranslate nohighlight">\(1\)</span>.</p>
+</div>
+</div>
+<div class="section" id="The-Dot-Product">
+<h3>The Dot Product<a class="headerlink" href="#The-Dot-Product" title="Permalink to this headline">¶</a></h3>
+<p>We will find in our study of machine learning that it is of critical importance that we can quantify how <em>similar</em> two vectors are – to measure how much they overlap with one another. This is the role of the <strong>dot product</strong>. However, in order to have a good geometrical intuition for the dot product, we need to very briefly review some trigonometry.</p>
+<div class="section" id="The-Law-of-Cosines">
+<h4>The Law of Cosines<a class="headerlink" href="#The-Law-of-Cosines" title="Permalink to this headline">¶</a></h4>
+<p>Here we will recall the law of cosines, a generalization of the beloved Pythagorean theorem <span class="math notranslate nohighlight">\(a^2+b^2=c^2\)</span>. Say we have a non-right triangle, as shown below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_triangle.png" alt="Obtuse Triangle" width="600">
+</p>
+</div><p>Observe that we can treat the sides of this triangle as 2-D vectors:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_vectriangle.png" alt="Obtuse Triangle Written With Vectors" width="600">
+</p>
+</div><p>We can now break <span class="math notranslate nohighlight">\(\vec{b}\)</span> into it’s <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> components (i.e. write <span class="math notranslate nohighlight">\(\vec{b}=b_x\hat{x}+b_y\hat{y}\)</span>). In our picture, this can be visualized as</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_enhancedvectriangle.png" alt="Obtuse Triangles With Side Written in Components" width="600">
+</p>
+</div><p>Now we have a right triangle, and so we can apply the Pythagorean theorem! In particular, we see that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{a}-\vec{b}\rVert^2=\big(\lVert\vec{a}\rVert+b_x\big)^2+b_y^2=\lVert\vec{a}\rVert^2+2\lVert\vec{a}\rVert b_x+b_x^2+b_y^2=\lVert\vec{a}\rVert^2+2\lVert\vec{a}\rVert b_x+\lVert\vec{b}\rVert^2.
+\end{equation}</div><p>Furthermore, from our diagram, we can see that, in terms of <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(b_x\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+b_x=\lVert\vec{b}\rVert\cos(180^\circ-\theta)=\lVert\vec{b}\rVert\big(\cos(180^\circ)\cos(\theta)-\sin(180^\circ)\sin(\theta)\big)=-\lVert\vec{b}\rVert\cos(\theta).
+\end{equation}</div><p>We thus find the law of cosines as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{a}-\vec{b}\rVert^2=\lVert\vec{a}\rVert^2+\lVert\vec{b}\rVert^2-2\lVert\vec{a}\rVert\lVert\vec{b}\rVert\cos(\theta).
+\end{equation}</div><p>That’s enough trig for the rest of ever, so let’s get back into linear algebra.</p>
+</div>
+<div class="section" id="The-Dot-Product,-For-Real-Now">
+<h4>The Dot Product, For Real Now<a class="headerlink" href="#The-Dot-Product,-For-Real-Now" title="Permalink to this headline">¶</a></h4>
+<p>A special operation that we can define between two vectors is the dot product.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong></p>
+<p>The dot product is denoted by <span class="math notranslate nohighlight">\(\cdot\)</span> and is defined as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}\cdot\vec{v}=\sum_{i=0}^{n-1}u_iv_i.
+\end{equation}</div></div>
+<p>This means that we find the element-wise product of the two vectors (by multiplying the corresponding elements in each vector together), then sum the resultant values. As an example, take vectors <span class="math notranslate nohighlight">\(\vec{u}=\begin{bmatrix}2 &amp; 9\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\vec{v}=\begin{bmatrix}7 &amp; 4\end{bmatrix}\)</span>. Then we can compute the dot product as:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}\cdot\vec{v}=(2 \times 7) + (9 \times 4) = 14 + 36 = 50
+\end{equation}</div><p>When we compute the dot product, we need to ensure that our vectors are of equal dimensionality. After all, if one vector has more elements than the other, how are we supposed to compute an element-wise product!</p>
+<p>There are some useful properties of the dot product that we should discuss. First, the result of a dot product will always be a scalar, never a vector. Furthermore, the dot product is <em>commutative</em>, which is just fancy math speak for saying <span class="math notranslate nohighlight">\(\vec{u}\cdot\vec{v}=\vec{v}\cdot\vec{u}\)</span>.</p>
+<p>We should also notice that the dot product is <em>linear</em> (in fact, almost everything we do in linear algebra will be linear). This means two things:</p>
+<ul class="simple">
+<li><p>First, we can multiply by a scalar value either before or after we perform the dot product, i.e. <span class="math notranslate nohighlight">\(\vec{u}\cdot(k\vec{v})=k(\vec{u}\cdot\vec{v})\)</span>,</p></li>
+<li><p>Second, we can distribute the dot product over addition and subtraction, i.e. <span class="math notranslate nohighlight">\(\vec{u}\cdot(\vec{v}+\vec{w})=\vec{u}\cdot\vec{v}+\vec{u}\cdot\vec{w}\)</span>.</p></li>
+</ul>
+<p>The first of these is straightforward to see from the definition</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}\cdot\big(k\vec{v}\big)=\sum_{i=0}^{n-1}u_i(kv_i)=k\sum_{i=0}^{n-1}u_iv_i=k\big(\vec{u}\cdot\vec{v}\big).
+\end{equation}</div><p>The second may not be quite as clear, but when we expand the dot product in terms of the definition,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{u}\cdot\big(\vec{v}+\vec{w}\big)=\sum_{i=0}^{n-1}u_i(v_i+w_i)=\sum_{i=0}^{n-1}u_iv_i+\sum_{i=0}^{n-1}u_iw_i=\vec{u}\cdot\vec{v}+\vec{u}\cdot\vec{w}.
+\end{equation}</div><p>These properties can be extremely useful when working with expressions involving the dot product! Finally, we should observe that we can conveniently define the norm of a vector in terms of the dot product</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{u}\rVert=\sqrt{\sum_{i=0}^{n-1}u_i^2}=\sqrt{\vec{u}\cdot\vec{u}}.
+\end{equation}</div><div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Cauchy-Schwarz</strong></p>
+<p>By definition, we know that the norm of a vector is greater than or equal to 0. Using the connection between the norm and the dot product, and the fact that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+0\leq\bigg\lVert\vec{a}-\frac{\vec{a}\cdot\vec{b}}{\,\lVert\vec{b}\rVert^2}\,\vec{b}\bigg\rVert^2,
+\end{equation}</div><p>show that <span class="math notranslate nohighlight">\((\vec{a}\cdot\vec{b})^2\leq\lVert\vec{a}\rVert^2\lVert\vec{b}\rVert^2\)</span>. Note that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\vec{a}\cdot\vec{b}}{\,\lVert\vec{b}\rVert^2}
+\end{equation}</div><p>is simply a scalar value.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Dot Product</strong></p>
+<p>Write a function named <code class="docutils literal notranslate"><span class="pre">dot_prod</span></code> that takes in two 1-D NumPy arrays <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> of the same size and returns the dot product of the two arrays by applying vectorized operations.</p>
+<p>Use your function to find the dot product of the vectors <span class="math notranslate nohighlight">\(\vec{a}=\begin{bmatrix}8 &amp; -4 &amp; 1 &amp; 3 &amp; 0\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\vec{b}=\begin{bmatrix}0.25 &amp; -2 &amp; -11 &amp; 7 &amp; 9\end{bmatrix}\)</span>. Validate one of the previously discussed properties of the dot product by computing <span class="math notranslate nohighlight">\(\vec{a}\cdot(\vec{b}+\vec{c})\)</span> and <span class="math notranslate nohighlight">\(\vec{a}\cdot\vec{b}+\vec{a}\cdot\vec{c}\)</span>, where <span class="math notranslate nohighlight">\(\vec{c}=\begin{bmatrix}3 &amp; -5 &amp; 2.3 &amp; 0 &amp; 8\end{bmatrix}\)</span>.</p>
+</div>
+<p>At this point, we’ve built up all the tooling we need to look at the geometric consequences of the dot product. But what kind of geometrical meaning could the dot product even have? What’s with all this hullabaloo?</p>
+<p>To answer these questions: <em>the dot product provides us with a way of measuring the overlap between two vectors</em>. How do we see this? Well, let’s consider taking the dot product of <span class="math notranslate nohighlight">\(\vec{a}-\vec{b}\)</span> with itself. We know that we can distribute the dot product, and thus</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\big(\vec{a}-\vec{b}\big)\cdot\big(\vec{a}-\vec{b}\big)=\vec{a}\cdot\vec{a}+\vec{b}\cdot\vec{b}-2\vec{a}\cdot\vec{b}.
+\end{equation}</div><p>However, we also know that we can write the norm in terms of the dot product, and so the previous expression can be written as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{a}-\vec{b}\rVert^2=\lVert\vec{a}\rVert^2+\lVert\vec{b}\rVert^2-2\vec{a}\cdot\vec{b}.
+\end{equation}</div><p>But this is almost exactly the law of cosines, as we saw earlier! In fact, we can simply read off</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{a}\cdot\vec{b}=\lVert\vec{a}\rVert\lVert\vec{b}\rVert\cos\theta,
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\theta\)</span> was the angle between the vectors <span class="math notranslate nohighlight">\(\vec{a}\)</span> and <span class="math notranslate nohighlight">\(\vec{b}\)</span>. This is fantastic! We see that <em>the dot product is proportional to the angle between two vectors</em>, and thus can tell us how much the vectors overlap!</p>
+<p>Let’s take a look at a few extreme cases to build an intuition of this. First, when two vectors are <em>parallel</em> and thus overlap completely, the angle between them will be <span class="math notranslate nohighlight">\(0\)</span>. As a simple example, consider the vectors illustrated below:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_parvec.png" alt="Images of Parallel Vectors" width="600">
+</p>
+</div><p>When two vectors are parallel, their dot product is simply the product of their magnitudes, as <span class="math notranslate nohighlight">\(\cos(0)=1\)</span>. In the case that both vectors are normalized, this value will be <span class="math notranslate nohighlight">\(1\)</span>. When <span class="math notranslate nohighlight">\(\theta=0\)</span> also happens to be when cosine achieves its maximum, and so when two vectors are parallel, their dot product will be maximized.</p>
+<p>When two vectors are <em>anti-parallel</em>, they face in opposite directions:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_antvec.png" alt="Images of Anti-Parallel Vectors" width="600">
+</p>
+</div><p>In this case, the angle between the two vectors is <span class="math notranslate nohighlight">\(180^\circ\)</span>. However, when <span class="math notranslate nohighlight">\(\theta=180^\circ\)</span>, cosine is at its minimum value of <span class="math notranslate nohighlight">\(-1\)</span>. Thus, when two vectors are anti-parallel, their dot product will be minimized. When two normalized vectors are anti-parallel, their dot product will be <span class="math notranslate nohighlight">\(-1\)</span>.</p>
+<p>Lastly, consider two perpendicular vectors:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_perpvec.png" alt="Images of Perpendicular Vectors" width="600">
+</p>
+</div><p>When two vectors are perpendicular to one another, they do not overlap at all. This also means that <span class="math notranslate nohighlight">\(\theta=90^\circ\)</span>, and consequently <span class="math notranslate nohighlight">\(\cos(\theta)=0\)</span>. Thus, the dot product of the two perpendicular vectors will always be <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<p>In general, if we have two vectors <span class="math notranslate nohighlight">\(\vec{u}\)</span> and <span class="math notranslate nohighlight">\(\vec{v}\)</span>, then if <span class="math notranslate nohighlight">\(0^\circ&lt;\theta&lt;90^\circ\)</span>, we have <span class="math notranslate nohighlight">\(\vec{u}\cdot\vec{v}&gt;0\)</span>. Meanwhile, if <span class="math notranslate nohighlight">\(90^\circ&lt;\theta&lt;180^\circ\)</span>, then <span class="math notranslate nohighlight">\(\vec{u}\cdot\vec{v}&lt;0\)</span>. We can intuitively see why this might be the case by looking at two diagrams:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_dotprods.png" alt="Images of Vectors with Overlap" width="600">
+</p>
+</div><p>When <span class="math notranslate nohighlight">\(\theta&lt;90^\circ\)</span>, then the “shadow” of <span class="math notranslate nohighlight">\(\vec{u}\)</span> lies directly on <span class="math notranslate nohighlight">\(\vec{v}\)</span>. Meanwhile, when <span class="math notranslate nohighlight">\(\theta&gt;90^\circ\)</span>, if we wanted the “shadow” of <span class="math notranslate nohighlight">\(\vec{u}\)</span> to lie on top of <span class="math notranslate nohighlight">\(\vec{v}\)</span>, we would need to flip <span class="math notranslate nohighlight">\(\vec{v}\)</span> into <span class="math notranslate nohighlight">\(-\vec{v}\)</span>:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/linear_algebra_obtusedotprod.png" alt="Vectors with Obtuse Angle" width="600">
+</p>
+</div><p>While we work in 2-D here to develop an intuition, notice that the definition of the dot product applies for <span class="math notranslate nohighlight">\(N\)</span>-D vectors. While we may not be able to visualize the angle between two 12-D vectors, we could still use the dot product to compare these vectors! If the dot product is close to <span class="math notranslate nohighlight">\(1\)</span>, the vectors are very similar, whereas if the dot product is close to <span class="math notranslate nohighlight">\(0\)</span>, the vectors are very dissimilar.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>The dot product is a measure of how much two vectors overlap. In particular, the dot product is related to the angle between two vectors by the formula <span class="math">\begin{equation}
+\vec{a}\cdot\vec{b}=\lVert\vec{a}\rVert\lVert\vec{b}\rVert\cos\theta.
+\end{equation}</span></p>
+</div>
+<p>Now that we’ve quite thoroughly discussed the dot product, how can we code it up? Sure, we could implement a for-loop sum, but that would be awfully slow to run. Thankfully, because of how important the dot product is, NumPy has an optimized function <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dot.html">numpy.dot</a> (often pronounced np-dot-dot) that we can use. When passed in two 1-D arrays of the same size, <code class="docutils literal notranslate"><span class="pre">np.dot</span></code> will compute the dot product. For example,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">-26.0</span>
+</pre></div>
+</div>
+<p>We can also use the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator to compute the dot product:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; a = np.array([3, 7, -4, 10])
+&gt;&gt;&gt; b = np.array([0, -1, 6, 0.5])
+&gt;&gt;&gt; a @ b
+-26.0
+</pre></div>
+</div>
+<p>Note: the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator actually calls the function <code class="docutils literal notranslate"><span class="pre">numpy.matmul</span></code>, which we will discuss later. As seen here, it will also compute the dot product between two 1-D NumPy arrays.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Angles Between Vectors</strong></p>
+<p>Write a Python function named <code class="docutils literal notranslate"><span class="pre">angle</span></code> that takes in two 1-D NumPy arrays <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> of the same size and returns the angle between the two vectors. Use the NumPy functions <code class="docutils literal notranslate"><span class="pre">np.dot</span></code>, <code class="docutils literal notranslate"><span class="pre">np.linalg.norm</span></code>, and <code class="docutils literal notranslate"><span class="pre">np.arccos</span></code>.</p>
+<p>Use your function to find the angle between the following pairs of vectors:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\begin{bmatrix}3 &amp; \sqrt{27}\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\begin{bmatrix}-3 &amp; \sqrt{3}\end{bmatrix}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{bmatrix}1+\sqrt{3} &amp; \sqrt{3}-1\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\begin{bmatrix}0 &amp; -\frac{1}{2}\end{bmatrix}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{bmatrix}4 &amp; 4 &amp; 4 &amp; 4\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\begin{bmatrix}-\sqrt{3} &amp; 1 &amp; 0 &amp; \sqrt{2}\end{bmatrix}\)</span></p></li>
+</ul>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">np.arccos</span></code> will return a value in <em>radians</em>. You can use <code class="docutils literal notranslate"><span class="pre">np.degrees</span></code> to convert this value into degrees if you wish.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Matrices:-Collections-of-Vectors">
+<h2>Matrices: Collections of Vectors<a class="headerlink" href="#Matrices:-Collections-of-Vectors" title="Permalink to this headline">¶</a></h2>
+<p>Matrices can be interpreted in a number of ways, but it will be extremely convenient for us to think of a matrix as a collection of vectors of the same dimensionality. If we have <span class="math notranslate nohighlight">\(M\)</span> vectors, each of dimension <span class="math notranslate nohighlight">\(N\)</span>, we could then pack the vectors into a matrix.</p>
+<p>We can have each column of our matrix be a separate vector:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+&amp;\quad\;\,\begin{array}{ccc}\longleftarrow &amp; M &amp; \longrightarrow\end{array} \\
+W = \begin{array}{c}\uparrow \\ N \\ \downarrow\end{array}\;\;&amp;\begin{bmatrix}\uparrow &amp; \uparrow &amp; \cdots &amp; \uparrow \\ \vec{w}_1 &amp; \vec{w}_2 &amp; \cdots &amp; \vec{w}_M \\ \downarrow &amp; \downarrow &amp; \cdots &amp; \downarrow\end{bmatrix}
+\end{align}</div><p>Here <span class="math notranslate nohighlight">\(W\)</span> is a <span class="math notranslate nohighlight">\((N,M)\)</span> matrix, because it has <span class="math notranslate nohighlight">\(N\)</span> rows and <span class="math notranslate nohighlight">\(M\)</span> columns. We could alternatively construct a matrix where each row is a distinct vector:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+&amp;\;\;\begin{array}{ccc}\leftarrow &amp; N &amp; \rightarrow\end{array} \\
+V = \begin{array}{c}\big\uparrow \\ M \\ \big\downarrow\end{array}\;\;&amp;\begin{bmatrix}\leftarrow &amp; \vec{v}_1 &amp; \rightarrow \\ \leftarrow &amp; \vec{v}_2 &amp; \rightarrow \\ \vdots &amp; \vdots &amp; \vdots \\ \leftarrow &amp; \vec{v}_M &amp; \rightarrow\end{bmatrix}
+\end{align}</div><p>Here <span class="math notranslate nohighlight">\(V\)</span> is a <span class="math notranslate nohighlight">\((M,N)\)</span> matrix. In either case, our matrix is simply a collection of vectors. In Python, we can represent a matrix as a 2-D NumPy array.</p>
+<p>With matrices, we can define the matrix multiplication operation.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Definition</strong>:</p>
+<p>Consider the two matrices <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(W\)</span>, which have shapes <span class="math notranslate nohighlight">\((M,N)\)</span> and <span class="math notranslate nohighlight">\((N,L)\)</span>, respectively. We will think of <span class="math notranslate nohighlight">\(V\)</span> as having <span class="math notranslate nohighlight">\(M\)</span> vectors of dimension <span class="math notranslate nohighlight">\(N\)</span> (with each vector as a row) and <span class="math notranslate nohighlight">\(W\)</span> as having <span class="math notranslate nohighlight">\(L\)</span> vectors of dimension <span class="math notranslate nohighlight">\(N\)</span> (with each vector as a column). Performing matrix multiplication will yield a <span class="math notranslate nohighlight">\((M,L)\)</span> matrix, where element <span class="math notranslate nohighlight">\(i,j\)</span> is equal to:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(VW)_{ij}=\sum_{k=0}^{N-1}V_{ik}W_{kj}
+\end{equation}</div></div>
+<p>This formula bears a striking resemblance to the dot product we defined earlier. In fact, by performing a matrix multiplication, we are actually performing repeated dot products. The dot product between the <span class="math notranslate nohighlight">\(i^\text{th}\)</span> row of <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(j^\text{th}\)</span> column of <span class="math notranslate nohighlight">\(W\)</span> is computed, then filled into element <span class="math notranslate nohighlight">\(i,j\)</span> of our output matrix:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+&amp;\begin{bmatrix}\quad\!\uparrow &amp; \quad\;\;\;\!\uparrow &amp; \quad\;\!\!\cdots &amp; \!\!\uparrow \\ \quad\vec{w}_1\! &amp; \quad\;\;\;\,\vec{w}_2 &amp; \quad\;\!\!\cdots &amp; \;\;\;\:\vec{w}_L\;\;\;\;\:\!\!\! \\ \quad\!\downarrow &amp; \quad\;\;\;\!\downarrow &amp; \quad\;\!\!\cdots &amp; \!\!\downarrow\end{bmatrix} \\
+VW=\begin{bmatrix}\leftarrow &amp; \vec{v}_1 &amp; \rightarrow \\ \leftarrow &amp; \vec{v}_2 &amp; \rightarrow \\ \vdots &amp; \vdots &amp; \vdots \\ \leftarrow &amp; \vec{v}_M &amp; \rightarrow\end{bmatrix}&amp;\begin{bmatrix}\vec{v}_1\cdot\vec{w}_1 &amp; \vec{v}_1\cdot\vec{w}_2 &amp; \cdots &amp; \vec{v}_1\cdot\vec{w}_L \\ \vec{v}_2\cdot\vec{w}_1 &amp; \vec{v}_2\cdot\vec{w}_2 &amp; \cdots &amp; \vec{v}_2\cdot\vec{w}_L \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \vec{v}_M\cdot\vec{w}_1 &amp; \vec{v}_M\cdot\vec{w}_2 &amp; \cdots &amp; \vec{v}_M\cdot\vec{w}_L\end{bmatrix}
+\end{align}</div><p>It is very important to note that the shapes of the matrices do matter.</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Important Note</strong>:</p>
+<p>We can matrix multiply our <span class="math notranslate nohighlight">\((M,N)\)</span> and <span class="math notranslate nohighlight">\((N,L)\)</span> matrices <em>only</em> because the inner dimensions are both <span class="math notranslate nohighlight">\(N\)</span>. You cannot compute the matrix product of two matrices <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(W\)</span> unless the number of columns in <span class="math notranslate nohighlight">\(V\)</span> equals the number of rows in <span class="math notranslate nohighlight">\(W\)</span>. This is simply because the dot product requires we have two vectors of the same dimensionality.</p>
+</div>
+<p>There are a few other properties of matrix multiplication that are useful to note:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(VW\)</span> can be computed, then <span class="math notranslate nohighlight">\(WV\)</span> cannot be computed <em>unless</em> <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(W\)</span> have transposed shapes (i.e. <span class="math notranslate nohighlight">\(V\)</span> has a shape <span class="math notranslate nohighlight">\((N,M)\)</span> and <span class="math notranslate nohighlight">\(W\)</span> has a shape <span class="math notranslate nohighlight">\((M,N)\)</span>). Even in this case, <span class="math notranslate nohighlight">\(VW\)</span> is generally <em>not</em> equal to <span class="math notranslate nohighlight">\(WV\)</span>.</p></li>
+<li><p>You can multiply a <span class="math notranslate nohighlight">\((M,N)\)</span> matrix with a <span class="math notranslate nohighlight">\((N,1)\)</span> matrix (i.e. a column vector), to produce a <span class="math notranslate nohighlight">\((M,1)\)</span> vector. Similarly a <span class="math notranslate nohighlight">\((1,M)\)</span> matrix (or a row vector) can be multiplied with a <span class="math notranslate nohighlight">\((M,N)\)</span> matrix to yield a <span class="math notranslate nohighlight">\((1,N)\)</span> matrix.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Matrix Multiplication</strong></p>
+<p>Write a function named <code class="docutils literal notranslate"><span class="pre">matmul</span></code> that returns the matrix multiplication of two arrays. It should take in two 2-D NumPy arrays <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, with shapes <code class="docutils literal notranslate"><span class="pre">(N,M)</span></code> and <code class="docutils literal notranslate"><span class="pre">(M,L)</span></code>. Instantiate an empty array of the correct shape using <code class="docutils literal notranslate"><span class="pre">numpy.empty</span></code>, and populate the entries in the array with the appropriate values of the matrix multiplication of <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. Use <code class="docutils literal notranslate"><span class="pre">np.dot</span></code> to compute each entry in the output array. Confirm that</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+&amp;\begin{bmatrix}\;\;9 &amp; \;\;-1 \\ \;\;8 &amp; \;\;1.5\end{bmatrix} \\
+\begin{bmatrix}2 &amp; -4 \\ 0 &amp; 5\end{bmatrix}&amp;\begin{bmatrix}-14 &amp; -8 \\ 40 &amp; 7.5\end{bmatrix}.
+\end{align}</div></div>
+<p>Because matrix multiplication is simply repeated dot products, each value we compute actually represents an angle between vectors. Thus, the matrix we get when multiplying matrices <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(W\)</span> of shapes <span class="math notranslate nohighlight">\((M,N)\)</span> and <span class="math notranslate nohighlight">\((N,L)\)</span> is actually a matrix full of <span class="math notranslate nohighlight">\(M\times L\)</span> angles, where element <span class="math notranslate nohighlight">\(i,j\)</span> tells us the similarity between row <span class="math notranslate nohighlight">\(i\)</span> of matrix <span class="math notranslate nohighlight">\(V\)</span> and column <span class="math notranslate nohighlight">\(j\)</span> of matrix <span class="math notranslate nohighlight">\(W\)</span>.</p>
+<p>The <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html">matmul function</a> that NumPy provides will perform matrix multiplication on two arrays:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span> <span class="c1"># (2,3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">13</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span> <span class="c1"># (3,4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="c1"># (2,3) x (3,4) -&gt; (2,4)</span>
+<span class="go">array([[10., -18. ,   8. ,  -2. ],</span>
+<span class="go">       [ 2.,   9.5,  21. ,  -9.5]])</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">np.matmul</span></code> also follows the rules outlined for matrix multiplication, throwing an error if our inner dimensions are not aligned:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span> <span class="c1"># (3,4) x (2,3)</span>
+<span class="go">ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)-&gt;(n?,m?) (size 2 is different from 4)</span>
+</pre></div>
+</div>
+<p>As we see from the traceback, <code class="docutils literal notranslate"><span class="pre">np.matmul</span></code> complains that the inner dimensions do not have the same size: <code class="docutils literal notranslate"><span class="pre">size</span> <span class="pre">2</span> <span class="pre">is</span> <span class="pre">different</span> <span class="pre">from</span> <span class="pre">4</span></code>. Lastly, as mentioned earlier, we can use the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator to perform matrix multiplication:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; A @ B
+array([[10., -18. ,   8. ,  -2. ],
+       [ 2.,   9.5,  21. ,  -9.5]])
+</pre></div>
+</div>
+<p>In fact, under the hood all the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator does is call <code class="docutils literal notranslate"><span class="pre">np.matmul</span></code>!</p>
+</div>
+<div class="section" id="Links-to-Official-Documentation-and-Other-Resources">
+<h2>Links to Official Documentation and Other Resources<a class="headerlink" href="#Links-to-Official-Documentation-and-Other-Resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>NumPy Docs: <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dot.html">dot</a> function</p></li>
+<li><p>NumPy Docs: <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html">matmul</a> function</p></li>
+<li><p>Python Like You Mean It: <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Broadcasting.html?highlight=broadcasing">broadcasting</a></p></li>
+<li><p>Python Like You Mean It: <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorized operations</a></p></li>
+</ul>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Norm of a Sum: Solution</strong></p>
+<p>Applying the definition of the norm,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\lVert\vec{a}+\vec{b}\rVert=\sqrt{\sum_{i=0}^{N-1}(a_i+b_i)^2}=\sqrt{\sum_{i=0}^{N-1}a_i^2+b_i^2+2a_ib_i}=\sqrt{\lVert\vec{a}\rVert^2+\lVert\vec{b}\rVert^2+2\sum_{i=0}^{N-1}a_ib_i}
+\end{equation}</div><p><strong>Normalization: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : ndarray, shape=(N,)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray, shape=(N,)</span>
+<span class="sd">        The normalized vector v</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">norm_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">v</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_sq</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">290</span><span class="p">,</span> <span class="mf">1.234</span><span class="p">,</span> <span class="o">-</span><span class="mi">8529</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">norm_v</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">norm_v</span>
+<span class="go">array([ 3.51537943e-04, -3.39820012e-02,  1.44599274e-04, -9.99422373e-01, 1.17179314e-09])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">norm_v</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p><strong>Cauchy-Schwarz: Solution</strong></p>
+<p>We know that we can write the norm in terms of dot product, and thus</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+0\leq\bigg(\vec{a}-\frac{\vec{a}\cdot\vec{b}}{\,\lVert\vec{b}\rVert^2}\,\vec{b}\bigg)\cdot\bigg(\vec{a}-\frac{\vec{a}\cdot\vec{b}}{\,\lVert\vec{b}\rVert^2}\,\vec{b}\bigg).
+\end{equation}</div><p>We also know we can apply the distributive law to the dot product, and so</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+0\leq\vec{a}\cdot\vec{a}+\frac{(\vec{a}\cdot\vec{b})^2}{\,\lVert\vec{b}\rVert^4}\,\big(\vec{b}\cdot\vec{b}\big)-2\frac{\vec{a}\cdot\vec{b}}{\,\lVert\vec{b}\rVert^2}\,\big(\vec{a}\cdot\vec{b}\big).
+\end{equation}</div><p>However, we can write <span class="math notranslate nohighlight">\(\vec{a}\cdot\vec{a}\)</span> and <span class="math notranslate nohighlight">\(\vec{b}\cdot\vec{b}\)</span> as <span class="math notranslate nohighlight">\(\lVert\vec{a}\rVert^2\)</span> and <span class="math notranslate nohighlight">\(\lVert\vec{b}\rVert^2\)</span>, respectively, and our equation simplifies to</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+0\leq\lVert\vec{a}\rVert^2-\frac{(\vec{a}\cdot\vec{b})^2}{\,\lVert\vec{b}\rVert^2}.
+\end{equation}</div><p>We can rearrange the inequality to be</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{(\vec{a}\cdot\vec{b})^2}{\,\lVert\vec{b}\rVert^2}\leq\lVert\vec{a}\rVert^2.
+\end{equation}</div><p>Multiplying both sides by <span class="math notranslate nohighlight">\(\lVert\vec{b}\rVert^2\)</span> gives us the result we wanted,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\big(\vec{a}\cdot\vec{b}\big)^2\leq\lVert\vec{a}\rVert^2\lVert\vec{b}\rVert^2.
+\end{equation}</div><p><strong>Dot Product: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dot_prod</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : ndarray, shape=(N,)</span>
+<span class="sd">    b : ndarray, shape=(N,)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">        The dot product of the two vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dot_prod</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">20.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dot_prod</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">dot_prod</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot_prod</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p><strong>Angles Between Vectors: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : ndarray, shape=(N,)</span>
+<span class="sd">    b : ndarray, shape=(N,)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.float</span>
+<span class="sd">        The angle between the two vectors, in radians</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">27</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">1.5707963267948966</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="go">90.0</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">1.832595714594046</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="go">105.0</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">1.431096482650184</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="go">81.99578853187258</span>
+</pre></div>
+</div>
+<p><strong>Matrix Multiplication: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : ndarray, shape=(N, M)</span>
+<span class="sd">    B : ndarray, shape=(M, L)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray, shape=(N, L)</span>
+<span class="sd">        Result of matrix multiplication of A and B</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>  <span class="c1"># iterate over rows of output</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>  <span class="c1"># iterate over each element of a given row</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="go">array([[-14. ,  -8. ],</span>
+<span class="go">       [ 40. ,   7.5]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ComplexNumbers.html" class="btn btn-neutral float-right" title="Complex Numbers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Series.html" class="btn btn-neutral float-left" title="Sequences and Summations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

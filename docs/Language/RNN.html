@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Language module, Difficulty: Easy, Category: Section" name="description" />
+<meta content="natural language processing, artificial intelligence" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RNNs &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Language Module Capstone: Semantic Image Search" href="SemanticImageSearch.html" />
+    <link rel="prev" title="Word Embeddings and Autoencoders" href="WordEmbeddings.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../language.html">Language Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NLP.html">Natural Language Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WordEmbeddings.html">Word Embeddings and Autoencoders</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RNNs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Use-of-RNNs">Use of RNNs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Implementing-a-Simple-RNN">Implementing a Simple RNN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Backpropagation">Backpropagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Turing-Complete">Turing-Complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Variations-of-RNNs">Variations of RNNs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SemanticImageSearch.html">Language Module Capstone: Semantic Image Search</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../language.html">Language Module</a> &raquo;</li>
+        
+      <li>RNNs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Language/RNN.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="RNNs">
+<h1>RNNs<a class="headerlink" href="#RNNs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Use-of-RNNs">
+<h2>Use of RNNs<a class="headerlink" href="#Use-of-RNNs" title="Permalink to this headline">¶</a></h2>
+<p>After being exposed to CNNs in the vision module, we will start working with <em>recurrent</em> neural networks, RNNs. Why do we need a different type of NN? Different NNs are good at learning different types of problems.</p>
+<p>What if we wanted our NN to learn how to distinguish between a series of <span class="math notranslate nohighlight">\(0\)</span>’s and <span class="math notranslate nohighlight">\(1\)</span>’s that has an odd number of <span class="math notranslate nohighlight">\(1\)</span>’s from one that has an even number? We can try it with a dense neural network, but it will not be able to learn to classify the sequences. We can try tweaking the NN and how we train it, but much progress is not possible because the <em>structure</em> of the simple dense NN is not conducive for learning this classification.</p>
+<p>Think about it this way: what if a human was given such a sequence and asked whether it was even or odd? Some would count the number of <span class="math notranslate nohighlight">\(1\)</span>’s. If the number is even, then the sequence is even. Others would likely keep a toggle switch while parsing through the sequence: one that flips each time a <span class="math notranslate nohighlight">\(1\)</span> is encountered. The problem with the simple dense network is that it can’t <em>remember</em>. There is no storing of information about the input itself, so it can’t store the number of
+<span class="math notranslate nohighlight">\(1\)</span>’s or whether a sequence was even or odd until a given point. That’s where RNNs come in. RNNs are good for dealing with <strong>sequences</strong> because they have a <em>memory</em> system, which is referred to as the <strong>hidden state</strong>.</p>
+<p>Before we can train a RNN to classify these sequences as even or odd, let’s break down the problem into a simpler subproblem that can be solved with a dense NN: <span class="math notranslate nohighlight">\(xor\)</span>, which stands for “exclusive or”. <span class="math notranslate nohighlight">\(xor\)</span>, denoted ^, is a logical operator, just like <span class="math notranslate nohighlight">\(and\)</span>, denoted &amp;&amp;, and <span class="math notranslate nohighlight">\(or\)</span>, denoted ||. <span class="math notranslate nohighlight">\(a\)</span> <span class="math notranslate nohighlight">\(xor\)</span> <span class="math notranslate nohighlight">\(b\)</span> will be true, or <span class="math notranslate nohighlight">\(1\)</span>, if exactly one of <span class="math notranslate nohighlight">\(a\)</span> or <span class="math notranslate nohighlight">\(b\)</span> is true/<span class="math notranslate nohighlight">\(1\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/xor.png" alt="xor problem" width=500>
+</p>
+</div><p>When the <span class="math notranslate nohighlight">\(a\)</span> <span class="math notranslate nohighlight">\(xor\)</span> <span class="math notranslate nohighlight">\(b\)</span> is plotted, it becomes clear that <span class="math notranslate nohighlight">\(xor\)</span> is not <em>linearly separable</em>. This means that there is not one line that we can draw on the graph that will separate the trues from the falses. However, we can take a look at <span class="math notranslate nohighlight">\(nand\)</span>, “not and”, and <span class="math notranslate nohighlight">\(or\)</span>, which are linearly separable. <span class="math notranslate nohighlight">\(nand\)</span> is again a logical operator. It can be thought of as being composed of two other logical operators: <span class="math notranslate nohighlight">\(not\)</span>, denoted <span class="math notranslate nohighlight">\(!\)</span>, and &amp;&amp;. <span class="math notranslate nohighlight">\(a\)</span>
+<span class="math notranslate nohighlight">\(nand\)</span> <span class="math notranslate nohighlight">\(b\)</span> is equivalent to <span class="math notranslate nohighlight">\(!\)</span>(<span class="math notranslate nohighlight">\(a\)</span>&amp;&amp;<span class="math notranslate nohighlight">\(b\)</span>).</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nand_or.png" alt="xor in terms of nand and or" width=500>
+</p>
+</div><p>When we take a closer look, we find that the values bound by <span class="math notranslate nohighlight">\(nand\)</span> and <span class="math notranslate nohighlight">\(or\)</span> can give us those wanted from <span class="math notranslate nohighlight">\(xor\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/xor_bounded.png" alt="xor in terms of nand and or" width=500>
+</p>
+</div><p><span class="math notranslate nohighlight">\(xor\)</span>, when expressed in terms of <span class="math notranslate nohighlight">\(nand\)</span> and <span class="math notranslate nohighlight">\(or\)</span>, is linearly separable:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/xor_with_nand_or.png" alt="xor in terms of nand and or" width=500>
+</p>
+</div><p>In terms of a dense neural network, this means that if we have another step, which allows for interaction between the <span class="math notranslate nohighlight">\(nand\)</span> and <span class="math notranslate nohighlight">\(or\)</span>, the <span class="math notranslate nohighlight">\(xor\)</span> problem can be learned. This corresponds to having two weight terms, which results in one for computing the <span class="math notranslate nohighlight">\(nand\)</span> and one for computing the <span class="math notranslate nohighlight">\(or\)</span>. The third and final set of weights will combine the <span class="math notranslate nohighlight">\(nand\)</span> and <span class="math notranslate nohighlight">\(or\)</span> by &amp;&amp;’ing them to produce <span class="math notranslate nohighlight">\(xor\)</span>. Think about it this way: a dense layer is linear because
+the matrix of its weights is a linear function, like all matrices. The non-linear activation function only weights the underlying linearity. This is why two steps (computing <span class="math notranslate nohighlight">\(nand\)</span> and <span class="math notranslate nohighlight">\(or\)</span>, then combining them) are required.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/xor_explained.png" alt="explaining xor problem" width=500>
+</p>
+</div><p>Now that we have the <span class="math notranslate nohighlight">\(xor\)</span> problem solved, we can apply it to the sequence classifying. The toggle method from earlier is where <span class="math notranslate nohighlight">\(xor\)</span> comes in. A sequence is even, represented by <span class="math notranslate nohighlight">\(1\)</span>, <em>so far</em> if the current digit is <span class="math notranslate nohighlight">\(1\)</span> and the the sequence <em>until now</em> is <em>odd</em>. It is also even if the current digit is <span class="math notranslate nohighlight">\(0\)</span> and the sequence until now is even. This can be represented as: evenness of sequence so far = current digit <span class="math notranslate nohighlight">\(xor\)</span> evenness of sequence until now.</p>
+</div>
+<div class="section" id="Implementing-a-Simple-RNN">
+<h2>Implementing a Simple RNN<a class="headerlink" href="#Implementing-a-Simple-RNN" title="Permalink to this headline">¶</a></h2>
+<p>Now to translate this to a RNN. The hidden state should hold <em>evenness so far</em>, and as we saw due to the non linearly separable nature of the <span class="math notranslate nohighlight">\(xor\)</span>, we will need to store both the previous <span class="math notranslate nohighlight">\(or\)</span> and <span class="math notranslate nohighlight">\(nand\)</span>. This corresponds with the hidden state having a dimension of two. It will not always be so straightforward when it comes to deciding the dimension of a hidden state since most problems aren’t strictly linear like this one, and the precise contents the hidden state will store
+will not be known beforehand. In most cases, a rough ballpark for the dimension of the hidden state is what is known.</p>
+<p>Our simple (aka “Vanilla”) RNN will look like this:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+h_t = f_h(x_t W_{xh} + h_{t-1} W_{hh} + b_h) \\
+y_t = f_y(h_t W_{hy} + b_y)
+\end{equation}</div><p><span class="math notranslate nohighlight">\(h_t\)</span> is the hidden (or recurrent) state of the cell and <span class="math notranslate nohighlight">\(x_t\)</span> is the sequence-element at step-<span class="math notranslate nohighlight">\(t\)</span>, for <span class="math notranslate nohighlight">\(t=0, 1, \dots, T-1\)</span> (with <span class="math notranslate nohighlight">\(T\)</span> as the length of our sequence). <span class="math notranslate nohighlight">\(y_{T-1}\)</span> is the final output. The <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(b\)</span> parameters, the weights and biases respectively of the dense layer, are the <em>learnable parameters of our model</em>. These equations thus say that the new hidden state (<span class="math notranslate nohighlight">\(h_t\)</span>) combines current input (<span class="math notranslate nohighlight">\(x_t\)</span>) and the previous
+hidden state (<span class="math notranslate nohighlight">\(h_{t-1}\)</span>), then applies an activation function (<span class="math notranslate nohighlight">\(f_h\)</span>, e.g., <span class="math notranslate nohighlight">\(\tanh\)</span> or <span class="math notranslate nohighlight">\(\text{ReLU}\)</span>). The output (<span class="math notranslate nohighlight">\(y_t\)</span>) is then a function of the new hidden state (not necessarily applying the same activation function).</p>
+<p>Graphically, the Vanilla RNN looks like this:</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/RNN_graph.png" alt="graphical representation of Vanilla RNN" width=500>
+</p>
+</div><p>Note that the RNN produces a result at each time step which signifies the evenness of the sequence <em>so far</em>. While we are only using the result from the last iteration because we only want to know the classification of the whole sequence, there are applications that use all or more of the outputs. For example in “sequence tagging”, the parts of speech of each word in a text can be labeled with the output from each iteration.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/sequence_tagging.png" alt="sequence tagging" width=500>
+</p>
+</div></div>
+<div class="section" id="Backpropagation">
+<h2>Backpropagation<a class="headerlink" href="#Backpropagation" title="Permalink to this headline">¶</a></h2>
+<p>The way a RNN <em>learns</em> is with <strong>backpropagation through time</strong>, or BPTT. Think of this as <em>unrolling</em> the forward pass of a RNN for a number of time steps, or the length of the sequence with shared weights. The way backpropagation is programmed remains the same as before which is nice.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/RNN_BPTT.png" alt="RNN BPTT rolled out" width=500>
+</p>
+</div><p>Nulling gradients ensures that they don’t accumulate over time and cause large changes in the weights that do not correspond to the current state of the model. Because of the sequential nature of RNNs (each step is dependent on the previous steps), backpropagation takes a lot of time and memory. This makes nulling gradients even more important!</p>
+</div>
+<div class="section" id="Turing-Complete">
+<h2>Turing-Complete<a class="headerlink" href="#Turing-Complete" title="Permalink to this headline">¶</a></h2>
+<p>RNNs are <strong>Turing-complete</strong>, which means that they can represent any program. In other words, RNNs can perform <em>any</em> computable function. This is a parallel to how CNNs were able to approximate or represent functions given some fixed number of inputs by the Universal Approximation Theorem. In stricter terms, for every algorithm, there is at least one finite RNN that can implement it. The RNN takes in and returns binary data. These RNNs have a fixed number of iterations and are structured like
+the simple RNN we saw earlier. These will have a <strong>piecewise</strong> linear approximation of a sigmoid as an activation function. The slope of the function will always be zero or undefined, and this corresponds to <em>no learning</em>. As a result, weights and biases have to be predetermined. This means that the structure of a RNN is conducive to representing any program, without having to learn to approximate it. As an exercise, we will manually determine the weights and biases for the RNN to solve the
+even-odd sequence classification from above.</p>
+</div>
+<div class="section" id="Variations-of-RNNs">
+<h2>Variations of RNNs<a class="headerlink" href="#Variations-of-RNNs" title="Permalink to this headline">¶</a></h2>
+<p>Lastly, there are some variations in how RNN cells are formulated. Some don’t apply an activation function to the output. Some first compute output as a function of the current state and input, and then update the current state to be this output. The structure of the RNN we looked at is from around the 1990s, and a lot of progress has been made since.</p>
+<p>The Vanilla RNN was <em>many-to-one</em> in that it took in the input of a digit at each iteration and produced a one-digit end result signifying even/odd (we ignored the outputs of the previous iterations). We could implement a <em>one-to-many</em> RNN. An example of a use for one is taking in one image and outputting a variable length caption. Another option is the <em>many-to-many</em>, which takes in inputs during multiple iterations and outputs during multiple iterations as well. An example of this is the
+sequence-tagging from above. The RNN we used for the sequence classifying could be one as well, if we were interested in the evenness of the sequence at each iteration.</p>
+<p>The key similarity between all RNNs is that output is ultimately a function of input and a hidden state which is dependent on previous inputs.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="SemanticImageSearch.html" class="btn btn-neutral float-right" title="Language Module Capstone: Semantic Image Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="WordEmbeddings.html" class="btn btn-neutral float-left" title="Word Embeddings and Autoencoders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Classifying MNIST with Le-Net (MyGrad and MyNN) &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Classifying MNIST with Le-Net (MyGrad and MyNN)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/MyGradMnist.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Classifying-MNIST-with-Le-Net-(MyGrad-and-MyNN)">
+<h1>Classifying MNIST with Le-Net (MyGrad and MyNN)<a class="headerlink" href="#Classifying-MNIST-with-Le-Net-(MyGrad-and-MyNN)" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook, we will be training a convolutional neural network (using the Le-Net design described in <a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">this paper</a>) to classify hand-written digits. We will be using the <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">MNIST dataset</a>, which contains labeled images of hand-written digits from 0 to 9. The MNIST dataset has a training set of 60,000 images and a test set of 10,000 images.</p>
+<p>You should have downloaded the <a class="reference external" href="https://github.com/CogWorksBWSI/DataSets">DataSets repo</a>, installed it, and set it up using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code> within that directory. This provides you with the mnist dataset, and a function for loading it, which we will use below.</p>
+<p>We will be replicating the famous “LeNet” CNN architecture, which was one of the first convolutional neural network designs. We will explain the architecture and operations used in convolutional neural nets throughout this notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+import mygrad as mg
+from mygrad import Tensor
+
+from noggin import create_plot
+import matplotlib.pyplot as plt
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="MNIST-Data-Loading-and-preprocessing">
+<h2>MNIST Data Loading and preprocessing<a class="headerlink" href="#MNIST-Data-Loading-and-preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>First, we will load in our data using handy functions from the datasets repo. If you haven’t already, download the data by calling <code class="docutils literal notranslate"><span class="pre">download_mnist()</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from datasets import load_mnist, download_mnist
+download_mnist()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># loading in the dataset with train/test data/labels
+x_train, y_train, x_test, y_test = load_mnist()
+</pre></div>
+</div>
+</div>
+<p>What is the shape and data-types of these arrays? What is the shape of each individual image? How many color-channels does each number have.</p>
+<p>Let’s plot some examples from the MNIST dataset below</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>img_id = 5
+
+fig, ax = plt.subplots()
+ax.imshow(x_train[img_id, 0], cmap=&quot;gray&quot;)
+ax.set_title(f&quot;truth: {y_train[img_id]}&quot;);
+</pre></div>
+</div>
+</div>
+<p>We will want to turn these 28x28 images into 32x32 images, for the sake of compatibility with the convolutions that we want to do. We can simply pad two rows/columns of zeros to all sides of the images</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># zero-pad the images
+x_train = np.pad(x_train, ((0, 0), (0, 0), (2, 2), (2, 2)), mode=&quot;constant&quot;)
+x_test = np.pad(x_test, ((0, 0), (0, 0), (2, 2), (2, 2)), mode=&quot;constant&quot;)
+</pre></div>
+</div>
+</div>
+<p>The original images stored unsigned 8bit integers for their pixel values. We need to convert these to floating-point values. Let’s convert the images (not the labels) 32-bit floats. You can use the <code class="docutils literal notranslate"><span class="pre">.astype()</span></code> array method to do this, and specify either <code class="docutils literal notranslate"><span class="pre">np.float32</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;float32&quot;</span></code> in the method call.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Finally, we need to normalize these images. With cifar-10, we shifted the images by the mean and divided by the standard deviation. Here, let’s be a little laze and simply normalize the images so that their pixel values lie on <span class="math notranslate nohighlight">\([0, 1]\)</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Complete the following classification accuracy function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def accuracy(predictions, truth):
+    &quot;&quot;&quot;
+    Returns the mean classification accuracy for a batch of predictions.
+
+    Parameters
+    ----------
+    predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
+        The scores for D classes, for a batch of M data points
+
+    truth : numpy.ndarray, shape=(M,)
+        The true labels for each datum in the batch: each label is an
+        integer in [0, D)
+
+    Returns
+    -------
+    float
+        The fraction of predictions that indicated the correct class.
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="The-“LeNet”-Architecture">
+<h1>The “LeNet” Architecture<a class="headerlink" href="#The-“LeNet”-Architecture" title="Permalink to this headline">¶</a></h1>
+<p>In the convnet to classify MNIST images, we will construct a CNN with two convolutional layers each structured as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conv</span> <span class="n">layer</span> <span class="o">--&gt;</span> <span class="n">relu</span> <span class="o">--&gt;</span> <span class="n">pooling</span> <span class="n">layer</span>
+</pre></div>
+</div>
+<p>, followed by two dense layers with a relu between them. Thus our network is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONV</span> <span class="o">-&gt;</span> <span class="n">RELU</span> <span class="o">-&gt;</span> <span class="n">POOL</span> <span class="o">-&gt;</span> <span class="n">CONV</span> <span class="o">-&gt;</span> <span class="n">RELU</span> <span class="o">-&gt;</span> <span class="n">POOL</span> <span class="o">-&gt;</span> <span class="n">FLATTEN</span> <span class="o">-&gt;</span> <span class="n">DENSE</span> <span class="o">-&gt;</span> <span class="n">RELU</span> <span class="o">-&gt;</span> <span class="n">DENSE</span> <span class="o">-&gt;</span> <span class="n">SOFTMAX</span>
+</pre></div>
+</div>
+<div class="section" id="Layer-Details">
+<h2>Layer Details<a class="headerlink" href="#Layer-Details" title="Permalink to this headline">¶</a></h2>
+<p>CONV-1: 20 filters, 5x5 filter size, stride-1</p>
+<p>POOL-1: 2x2, stride-2</p>
+<p>CONV-2: 10 filters, 5x5 filter size, stride-1</p>
+<p>POOL-2: 2x2, stride-2</p>
+<p>DENSE-3: 20 neurons</p>
+<p>DENSE-4: size-??? # hint: what should the dimensionality of our output be?</p>
+</div>
+<div class="section" id="Activations">
+<h2>Activations<a class="headerlink" href="#Activations" title="Permalink to this headline">¶</a></h2>
+<p>We will be using the “Glorot Uniform” initialization scheme for all of our layers’ weights (the biases will be 0, which is the default). If you would like to read more about how Xavier Glorot explains the rationalization behind these weight initializations, look here for <a class="reference external" href="http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf">his paper written with Yoshua Bengio</a>.</p>
+<p>This initialization scheme takes an additional “gain parameter”, which will be <span class="math notranslate nohighlight">\(\sqrt{2}\)</span> for us. Use the following syntax for specifying this gain:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mygrad.nnet.initializers</span> <span class="kn">import</span> <span class="n">glorot_uniform</span>
+
+<span class="n">gain</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gain&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+
+<span class="c1"># E.g. initializing a dense layer with glorot-uniform initialization</span>
+<span class="c1"># and a gain of root-2</span>
+<span class="n">dense</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span>
+      <span class="n">weight_initializer</span><span class="o">=</span><span class="n">glorot_uniform</span><span class="p">,</span>
+      <span class="n">weight_kwargs</span><span class="o">=</span><span class="n">gain</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mynn.layers.conv import conv
+from mynn.layers.dense import dense
+
+from mygrad.nnet.initializers import glorot_uniform
+from mygrad.nnet.activations import relu
+from mygrad.nnet.layers import max_pool
+from mygrad.nnet.losses import softmax_crossentropy
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Define your `Model`-MyNN class for the architecture prescribed above.
+
+class Model:
+    &#39;&#39;&#39; A simple convolutional neural network. &#39;&#39;&#39;
+    def __init__(self, num_input_channels, f1, f2, d1, num_classes):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+        num_input_channels : int
+            The number of channels for a input datum
+
+        f1 : int
+            The number of filters in conv-layer 1
+
+        f2 : int
+            The number of filters in conv-layer 2
+
+        d1 : int
+            The number of neurons in dense-layer 1
+
+        num_classes : int
+            The number of classes predicted by the model.
+        &quot;&quot;&quot;
+        # Initialize your two convolution layers and two dense layers each
+        # as class attributes using the functions imported from MyNN
+        #
+        # We will use `weight_initializer=glorot_uniform` for all 4 layers
+
+        # Note that you will need to compute `input_size` for
+        # dense layer 1 : the number of elements being produced by the preceding conv
+        # layer
+        # STUDENT CODE HERE
+
+
+    def __call__(self, x):
+        &#39;&#39;&#39; Defines a forward pass of the model.
+
+        Parameters
+        ----------
+        x : numpy.ndarray, shape=(N, 1, 32, 32)
+            The input data, where N is the number of images.
+
+        Returns
+        -------
+        mygrad.Tensor, shape=(N, num_classes)
+            The class scores for each of the N images.
+        &#39;&#39;&#39;
+
+        # Define the &quot;forward pass&quot; for this model based on the architecture detailed above.
+        # Note that, to compute
+        # We know the new dimension given the formula: out_size = ((in_size - filter_size)/stride) + 1
+
+        # STUDENT CODE HERE
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model. &quot;&quot;&quot;
+        # Create a list of every parameter contained in the 4 layers you wrote in your __init__ function
+        # STUDENT CODE HERE
+
+</pre></div>
+</div>
+</div>
+<p>Initialize the SGD-optimizer. We will be adding a new feature to our update method, known as <a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Momentum">“momentum”</a>. The following is a sensible configuration for the optimizer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SGD</span><span class="p">(</span><span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">5e-04</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Import SGD and initialize it as described above
+# Also initialize your model
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>plotter, fig, ax = create_plot([&quot;loss&quot;, &quot;accuracy&quot;])
+</pre></div>
+</div>
+</div>
+<p>Using a batch-size of 100, train your convolutional neural network. Try running through 1 epoch of your data (i.e. enough batches to have processed your entire training data set once) - this may take a while. Plot training-loss and training accuracy, via noggin, for each batch. After each epoch, measure the <em>test</em> accuracy of your model on the entire test set - do not perform backprop for this stage. You should find that your network gets excellent performance.</p>
+<p>Reference the cifar-10 (solution) notebook for guidance on this.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Referencing the matplotlib code at the top of the notebook, visualize some images and check your model’s predictions for them.</p>
+<p>Also, use your model and the truth data to find images that the model <em>fails</em> to get right - plot some of these fail cases.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

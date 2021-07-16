@@ -1,0 +1,893 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Audio Processing, Category: Exercises" name="description" />
+<meta content="spectrogram, audio, temporal, fourier" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercise: Creating Our Own Spectrogram &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Matching Audio Recordings" href="../audio_features.html" />
+    <link rel="prev" title="Introduction to Spectrogram Analysis" href="../intro_spectrograms.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Exercise: Creating Our Own Spectrogram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Accessing-Time-and-Frequency:-Building-an-Intuition-for-Spectrograms">Accessing Time <em>and</em> Frequency: Building an Intuition for Spectrograms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Revisiting-the-Fourier-Spectrum">Revisiting the Fourier Spectrum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Comparing-a-Fourier-Spectrum-to-a-Spectrogram">Comparing a Fourier Spectrum to a Spectrogram</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Digging-into-Spectrograms">Digging into Spectrograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-Your-Own-Spectrogram">Creating Your Own Spectrogram</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Learning-About-the-Sliding-Window-Function">Learning About the Sliding Window Function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Exercise: Creating Our Own Spectrogram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Audio/Exercises/spectrogram.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Exercise:-Creating-Our-Own-Spectrogram">
+<h1>Exercise: Creating Our Own Spectrogram<a class="headerlink" href="#Exercise:-Creating-Our-Own-Spectrogram" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook we will learn how to create our own <em>spectrogram</em>. A spectrogram is a visual representation of the frequencies in a signal (such as an audio signal) <em>as they vary in time</em>. That is, whereas plotting the Fourier components (i.e. the Fourier spectrum) of a signal tells us what frequencies are present in the signal, a spectrogram will tell us what frequencies are present in the signal and <em>where/when</em> they occur. This is an extremely powerful tool for signal analysis.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># run this cell (maybe twice to get %matplotlib notebook to work)
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+from microphone import record_audio
+from typing import Tuple
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Accessing-Time-and-Frequency:-Building-an-Intuition-for-Spectrograms">
+<h2>Accessing Time <em>and</em> Frequency: Building an Intuition for Spectrograms<a class="headerlink" href="#Accessing-Time-and-Frequency:-Building-an-Intuition-for-Spectrograms" title="Permalink to this headline">¶</a></h2>
+<p>Thus far we have seen two means for representing audio data visually. We have plotted: 1. Amplitude vs Time: Shows how the pressure from the sound wave varies over time. 2. Fourier Spectrum: Reveals the prominent frequencies that are present in the sound wave.</p>
+<p>Let’s revisit the clip of a trumpet playing a chord that we studied before.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import librosa
+
+# `recorded_audio` is a numpy array of N audio samples
+recorded_audio, sampling_rate = librosa.load(&quot;data/trumpet.wav&quot;, sr=44100, mono=True)
+</pre></div>
+</div>
+</div>
+<p>Let’s play this audio clip to recall what is being played.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from IPython.display import Audio
+Audio(recorded_audio, rate=sampling_rate)
+</pre></div>
+</div>
+</div>
+<div class="section" id="Revisiting-the-Fourier-Spectrum">
+<h3>Revisiting the Fourier Spectrum<a class="headerlink" href="#Revisiting-the-Fourier-Spectrum" title="Permalink to this headline">¶</a></h3>
+<p>We’ll plot both the temporal wave form/amplitude and its Fourier spectrum. We will plot the Fourier coefficients, <span class="math notranslate nohighlight">\(|a_{k}|\)</span>, on a <em>log-scale</em>. This is a natural scale to plot the Fourier spectrum on, as the human ear responds to loudness on a logarithmic scale (an amplitude of 4 needs to increase to an amplitude of 16 (<span class="math notranslate nohighlight">\(4^2\)</span>) in order for us to perceive a doubling in loudness).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8, 4))
+
+# Compute the times at which each sample was recorded in seconds
+
+# Define the following variable(s)
+# `time`: array storing t_0, t_1, ..., t_{N-1}
+# STUDENT CODE HERE
+
+# Plotting the waveform (every 100th datapoint for sake of efficiency)
+ax0.plot(time[::100], recorded_audio[::100])
+ax0.set_xlabel(&quot;Time [seconds]&quot;)
+ax0.set_ylabel(&quot;Proportional to Pressure&quot;)
+ax0.set_title(&quot;Temporal Waveform&quot;)
+ax0.grid(True)
+
+
+# Plotting the Fourier spectrum
+
+# Compute the real-valued Fourier coefficents for this recording
+# and the corresponding frequencies (in Hz)
+
+# Define the following variable(s)
+# `ak`: array storing the real-valued Fourier coeffs: a_0, a_1, ..., a_{N//2}
+# `fk`: array storing the associated frequencies: 0/T, 1/T, ..., (N//2)/T
+
+# STUDENT CODE HERE
+
+ax1.plot(fk[:20000], ak[:20000])
+ax1.set_title(&quot;Fourier Spectrum&quot;)
+ax1.set_xlabel(&quot;Frequency [Hz]&quot;)
+ax1.set_ylabel(&quot;Proportional to decibels [dB]&quot;)
+ax1.grid(True)
+ax1.set_yscale(&quot;log&quot;)
+fig.tight_layout()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax1 = plt.subplots()
+ax1.plot(fk[:20000], ak[:20000])
+ax1.set_title(&quot;Fourier Spectrum&quot;)
+ax1.set_xlabel(&quot;Frequency [Hz]&quot;)
+ax1.set_ylabel(&quot;Proportional to decibels [dB]&quot;)
+ax1.grid(True)
+#ax1.set_yscale(&quot;log&quot;)
+fig.tight_layout()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Comparing-a-Fourier-Spectrum-to-a-Spectrogram">
+<h3>Comparing a Fourier Spectrum to a Spectrogram<a class="headerlink" href="#Comparing-a-Fourier-Spectrum-to-a-Spectrogram" title="Permalink to this headline">¶</a></h3>
+<p>See that there is a trade-off between these two representations of the data. That is, from the waveform we can see that the trumpet is playing a relatively sustained chord for about <span class="math notranslate nohighlight">\(2.5\)</span> seconds, while we cannot glean from the wave form what notes are being played. The Fourier spectrum reveals very clear information about the notes being played, but reveals nothing about the duration or ordering of the notes (are they being played in unison? in sequence? for how long? etc.).</p>
+<p>We would like to know <em>what frequencies</em> are present in our signal and <em>when</em> they occur in our signal. A <strong>spectrogram</strong> plots exactly this information. Without further ado, let’s use matplotlib’s built-in spectrogram function to understand what this visualization represents:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># using matplotlib&#39;s built-in spectrogram function
+import matplotlib.mlab as mlab
+
+fig, ax = plt.subplots()
+
+S, freqs, times, im = ax.specgram(
+    recorded_audio,
+    NFFT=4096,
+    Fs=sampling_rate,
+    window=mlab.window_hanning,
+    noverlap=4096 // 2,
+    mode=&#39;magnitude&#39;,
+    scale=&quot;dB&quot;
+)
+fig.colorbar(im)
+
+ax.set_xlabel(&quot;Time [seconds]&quot;)
+ax.set_ylabel(&quot;Frequency (Hz)&quot;)
+ax.set_title(&quot;Spectrogram of Recording&quot;)
+ax.set_ylim(0, 4000);
+</pre></div>
+</div>
+</div>
+<p>The spectrogram displays a heat map which reflects the magnitude (i.e. absolute value) of the Fourier coefficients for a given time and frequency. For example the yellow horizontal streak near <span class="math notranslate nohighlight">\(1000\;\mathrm{Hz}\)</span> indicates that this frequency is prominent throughout the duration of the signal. Note that this spectrogram function is automatically plotting these magnitudes on a log-scale, for the reasons discussed earlier. This plot reveals that the prominent notes are being played in
+unison, and sustained for roughly <span class="math notranslate nohighlight">\(2.5\)</span> seconds. We can also easily read off the frequencies of these notes.</p>
+<p>(1.7.1) Create the function, <code class="docutils literal notranslate"><span class="pre">plot_recording</span></code>, that:</p>
+<ul class="simple">
+<li><p>Accepts a time-length, in seconds</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">microphone.record_audio</span></code> to record audio for that duration of time</p></li>
+<li><p>converts the “frames” of audio data to a numpy array, using <code class="docutils literal notranslate"><span class="pre">np.hstack([np.frombuffer(i,</span> <span class="pre">np.int16)</span> <span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">frames])</span></code></p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">mlab.specgram</span></code> to plot the spectrogram for that recording</p></li>
+<li><p>Returns the matplotlib <code class="docutils literal notranslate"><span class="pre">Figure</span></code> and <code class="docutils literal notranslate"><span class="pre">Axes</span></code> object instances that were produced by the plot</p></li>
+</ul>
+<p>Set the <span class="math notranslate nohighlight">\(y\)</span>-limit to only plot up to <span class="math notranslate nohighlight">\(10,000\;\mathrm{Hz}\)</span>. Don’t change any of the spectrogram settings other than the data that you pass in and the sampling rate.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def plot_recording(time: float) -&gt; Tuple[plt.Figure, plt.Axes]:
+    &quot;&quot;&quot;
+    Record audio and plot its spectrogram.
+
+    Parameters
+    ----------
+    time : float
+        The duration (seconds) to record audio for
+
+    Returns
+    -------
+    fig, ax
+        The plot objects for the spectrogram&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>To continue building our intuition for the spectrogram, use <code class="docutils literal notranslate"><span class="pre">microphone.record_audio</span></code> to record a <span class="math notranslate nohighlight">\(5\)</span> second clip of yourself whistling, clapping, etc. Try varying the pitch, rhythm, etc. during the clip. Plot the clip as a spectrogram.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>You should see that the spectrogram successfully captures both the prominent frequencies present in the signal and their dynamics in time. This is extremely useful! Now how exactly is this working?</p>
+</div>
+</div>
+<div class="section" id="Digging-into-Spectrograms">
+<h2>Digging into Spectrograms<a class="headerlink" href="#Digging-into-Spectrograms" title="Permalink to this headline">¶</a></h2>
+<p>A spectrogram is constructed simply by dividing your signal into <span class="math notranslate nohighlight">\(M\)</span> temporal windows, each of time-length <span class="math notranslate nohighlight">\(\Delta t\)</span> and consisting of <span class="math notranslate nohighlight">\(N\)</span> samples:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(y_{n})_{\text{full recording}} \Longrightarrow
+\begin{bmatrix}
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{0}} &amp; \rightarrow  \\
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{1}}  &amp; \rightarrow \\
+    &amp; \vdots  &amp;\\
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{M-1}} &amp; \rightarrow  \\
+\end{bmatrix}
+\end{equation}</div><p>and performing a Fourier transform on each window of the signal. This produces a frequency spectrum for each time bin of size <span class="math notranslate nohighlight">\(\Delta t\)</span>; this makes up each column of numbers in the spectrogram:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix}
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{0}} &amp; \rightarrow  \\
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{1}} &amp; \rightarrow \\
+    &amp; \vdots  &amp;\\
+    \leftarrow   &amp;  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{M-1}} &amp; \rightarrow  \\
+\end{bmatrix} \Longrightarrow
+\begin{bmatrix}
+    \leftarrow   &amp;  \big\{(|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{0}} &amp; \rightarrow  \\
+    \leftarrow   &amp;  \big\{|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{1}}  &amp; \rightarrow \\
+    &amp; \vdots  &amp;\\
+    \leftarrow   &amp;  \big\{|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{M-1}} &amp; \rightarrow  \\
+\end{bmatrix}
+\end{equation}</div><p>If each temporal-window of our digital audio signal contains <span class="math notranslate nohighlight">\(N\)</span> samples, then the Fourier transform on each window will produce <span class="math notranslate nohighlight">\(\left\lfloor\frac{N}{2}\right\rfloor + 1\)</span> Fourier coefficients <span class="math notranslate nohighlight">\((|a_{k}|)_{k=0}^{\lfloor N/2\rfloor}\)</span>. Remember that we are interested in the <em>amplitude</em> of each Fourier coefficient, not its complex value, for the spectrogram. This allows us to know what the frequency distribution is in our signal during each time-interval (a.k.a temporal window).
+The time window starts at <span class="math notranslate nohighlight">\(m\Delta t\)</span> and ends at <span class="math notranslate nohighlight">\((m+1)\Delta t\)</span>, for <span class="math notranslate nohighlight">\(m \in [0, 1, \dots, M-1]\)</span>.</p>
+<p><strong>The *transpose* of the depicted array is what we plot in the spectrogram</strong>: each column corresponds to one of <span class="math notranslate nohighlight">\(M\)</span> temporal windows, and stores the Fourier spectrum of the audio recording during that time-interval.</p>
+<p>The following function produces the same spectrogram as was plotted above, but without producing the associated plot; let’s get the spectrogram for the audio recording:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># obtaining the spectrogram for the trumpet wave form (again)
+
+sampling_rate = 44100  # sampling rate in Hz
+
+S, freqs, times = mlab.specgram(
+    recorded_audio,
+    NFFT=4096,
+    Fs=sampling_rate,
+    window=mlab.window_hanning,
+    noverlap=int(4096 / 2),
+    mode=&#39;magnitude&#39;
+)
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">S</span></code> is the spectrogram, the 2-D array whose rows corresponds to frequencies and whose columns correspond to time. <code class="docutils literal notranslate"><span class="pre">freqs</span></code> is an array of the frequency values corresponding to the rows, and <code class="docutils literal notranslate"><span class="pre">times</span></code> is an array of time values corresponding to the columns.</p>
+<p>(1.7.2) Inspect the shapes of these arrays. How many time bins, <span class="math notranslate nohighlight">\(M\)</span>, were used in the spectrogram? How many frequency values are present in each time-bin? Verify that the shape of <code class="docutils literal notranslate"><span class="pre">S</span></code> corresponds with the lengths of <code class="docutils literal notranslate"><span class="pre">freqs</span></code> and <code class="docutils literal notranslate"><span class="pre">times</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What are the sizes of the frequency bins? Of the time bins? Are the bins (nearly) uniform in size?</p>
+<p>Assign <code class="docutils literal notranslate"><span class="pre">recorded_dt</span></code> to the amount of time covered by each temporal window (i.e. a single float)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Creating-Your-Own-Spectrogram">
+<h2>Creating Your Own Spectrogram<a class="headerlink" href="#Creating-Your-Own-Spectrogram" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Learning-About-the-Sliding-Window-Function">
+<h3>Learning About the Sliding Window Function<a class="headerlink" href="#Learning-About-the-Sliding-Window-Function" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">mygrad</span></code> comes with a sliding window function; this creates windowed <em>views</em> of an array at regular intervals. Import <code class="docutils literal notranslate"><span class="pre">sliding_window_view</span></code> from <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> and read its docstring or <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.sliding_window_view.html#mygrad.sliding_window_view">its documentation page</a>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad import sliding_window_view
+
+help(sliding_window_view)
+</pre></div>
+</div>
+</div>
+<p>(1.7.3) Now create a 1-D NumPy array containing the integers from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(11\)</span>. Use <code class="docutils literal notranslate"><span class="pre">sliding_window_view</span></code> to make the following windowed views:</p>
+<ul class="simple">
+<li><p>window size: 2, stride: 1</p></li>
+<li><p>window size: 2, stride: 2</p></li>
+<li><p>window size: 3, stride: 2</p></li>
+<li><p>window size: 6, stride: 3</p></li>
+<li><p>window size: 6, stride: 6</p></li>
+</ul>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">sliding_window_view</span></code> doesn’t accept a window <em>size</em> but rather a window <em>shape</em>. Thus if you want to make a 1-D window of size <span class="math notranslate nohighlight">\(2\)</span> applied with a step-size of <span class="math notranslate nohighlight">\(1\)</span>, you would specify</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sliding_window_view</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">window_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Study the shape and contents of the windowed arrays that you produce here. What do the axes of the resulting array correspond to? Use <code class="docutils literal notranslate"><span class="pre">numpy.shares_memory</span></code> to convince yourself that these arrays do not make a copy of the underlying data. Discuss your observations with your neighbor.</p>
+<p>(1.7.4) Now use <code class="docutils literal notranslate"><span class="pre">sliding_window_view</span></code> to create <strong>non-overlapping</strong> time windows of the trumpet audio signal. Determine the appropriate window size so as to roughly match the spectrogram that we created above. That is, make sure each of your windows include the appropriate number of samples so that your <span class="math notranslate nohighlight">\(\Delta t\)</span> matches matplotlib’s.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># The desired temporal duration (seconds) of each window of audio data
+window_dt = recorded_dt  # you can adjust this value later
+
+
+# Compute the number of samples that should fit in each
+# window, so that each temporal window has a duration of `window_dt`
+# Hint: remember that the audio samples have an associated
+# sampling rate of 44100 samples per second
+
+# Define this as `window_size` (an int)
+# STUDENT CODE HERE
+
+# Using the above window size and `sliding_window_view`, create an array
+# of non-overlapping windows of the audio data.
+# What should the step-size be so that the windows are non-overlapping?
+
+# Define `windowed_audio` to be a 2D array where each row contains the
+# samples of the recording in a temporal window.
+# The shape should be (M, N), where M is the number of temporal windows
+# and N is the number of samples in each window
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Look at the shape of your array. How many time windows did you create; i.e. what is <span class="math notranslate nohighlight">\(M\)</span> equal to? How many samples, <span class="math notranslate nohighlight">\(N\)</span>, reside in each window? Thus what is the time duration of each window?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Compute the duration of the <em>full</em> audio signal in seconds, given that the sampling rate used to record it was <span class="math notranslate nohighlight">\(44,100\;\mathrm{Hz}\)</span>. Assign this to <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Compute the maximum frequency included in the Fourier spectrum for any of the given temporal windows. Assign this float value to <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Time to plot our spectrogram! We will make use of <code class="docutils literal notranslate"><span class="pre">T</span></code> and <code class="docutils literal notranslate"><span class="pre">F</span></code> to set the scales for our plot axes, and to set a sensible aspect ratio for the plot.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Plug your spectrogram array in `imshow` and execute this cell
+# notes that we set `origin=&quot;lower&quot;` in the `imshow function, this is
+# so the low frequencies occur at the bottom of the y axis; this is flipped
+# from how your array is structured
+
+max_freq = 4000  # the largest frequency that we want to plot
+
+# this is used to set the (left, right, bottom, top) scale for the image axes
+extent = (0, T, 0, F)
+aspect_ratio = T / max_freq
+
+fig, ax = plt.subplots()
+ax.imshow(
+    np.log(spectrogram),
+    origin=&quot;lower&quot;,
+    aspect=aspect_ratio,
+    extent=extent,
+    interpolation=&quot;bilinear&quot;,
+)
+ax.set_ylim(0, max_freq)
+
+ax.set_xlabel(&quot;Time (sec)&quot;)
+ax.set_ylabel(&quot;Frequency (Hz)&quot;)
+</pre></div>
+</div>
+</div>
+<p>Notice that, to mimic the original spectrogram plot, we are plotting the <em>logarithm</em> of the Fourier amplitudes, so that these values correspond to audible decibels.</p>
+<p>This plot should resemble that of the original spectrogram quite closely. There are some special considerations to take in order to ensure that the boundaries between time bins are handled well – not accounting for these introduces significant artifacts into the spectrogram. Matplotlib’s spectrogram looks much cleaner than ours because they use nice techniques, like the application of a “hamming window”, to stitch together the Fourier spectra over time.</p>
+<p>At its core though, a spectrogram is as simple as applying a Fourier transform on time-windowed bins of the signal, and plotting the resulting Fourier coefficient amplitudes as the columns of a frequency vs time plot, with each column corresponding to a time window of the signal.</p>
+<ul class="simple">
+<li><p>col-0 : Fourier spectrum of signal during <span class="math notranslate nohighlight">\(\Delta t_0\)</span></p></li>
+<li><p>col-1 : Fourier spectrum of signal during <span class="math notranslate nohighlight">\(\Delta t_1\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\vdots\)</span></p></li>
+</ul>
+<p>To improve the quality of your spectrogram, you can try doubling the window size, but keeping the same stride. Thus the windows will partially overlap, which will help to mitigate the effects of the artificial boundaries that we introduced in our windowing.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../audio_features.html" class="btn btn-neutral float-right" title="Matching Audio Recordings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../intro_spectrograms.html" class="btn btn-neutral float-left" title="Introduction to Spectrogram Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

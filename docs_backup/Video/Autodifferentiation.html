@@ -1,0 +1,839 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Machine Learning, Category: Introduction" name="description" />
+<meta content="automatic differentiation, autodiff, back propagation, pytorch, tensorflow" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Computing Gradients with Automatic Differentiation &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Computing Gradients with Automatic Differentiation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Video/Autodifferentiation.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Background Material</strong>:</p>
+<p>It is highly recommended that the reader work through the introductions to <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Intro_Calc.html">single variable calculus</a> and <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html">multivariable calculus</a> as a supplement to this section. These materials make accessible the most fundamental aspects of calculus needed to get a firm grasp on gradient-based learning. Even if you are already familiar with calculus, these sections
+also provide an introduction to automatic differentiation, which will be a critical technology for us moving forward.</p>
+</div>
+<div class="section" id="Computing-Gradients-with-Automatic-Differentiation">
+<h1>Computing Gradients with Automatic Differentiation<a class="headerlink" href="#Computing-Gradients-with-Automatic-Differentiation" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Introduction</p></li>
+<li><p>(exercise) code up auto differentiation</p></li>
+<li><p>(exercise) redo descent down parabola and paraboloid</p></li>
+<li><p>(advanced) limitations of autodiff -lohopital</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Retracing Our Steps</strong>:</p>
+<p>Given a simple linear model</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F\big((w_1, w_2); x \big) = w_2 x + w_1
+\end{equation}</div><p>Assuming that we have <span class="math notranslate nohighlight">\(N\)</span> pieces of recorded observations and associated “true” outcomes, <span class="math notranslate nohighlight">\((x_n, y_n)_{n=0}^{N-1}\)</span>, <strong>write the “mean-squared error” loss function</strong> in terms of the model’s parameters, and the individual pieces of data.</p>
+<p>Refer back to the section on linear regression for a refresher on this particular loss function.</p>
+</div>
+<p>See that the sequence of <span class="math notranslate nohighlight">\(w\)</span> values indeed corresponds to a “descent” down <span class="math notranslate nohighlight">\(\mathscr{L}(w)\)</span>, towards <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/parabola_descent.png" alt="Depicting gradient descent down a parabola" width="500">
+</p>
+</div><p>Notice that even though the so-called learning rate, <span class="math notranslate nohighlight">\(\delta=0.3\)</span>, is constant, the distance between subsequent <span class="math notranslate nohighlight">\(w\)</span>-values gets shorter as they near <span class="math notranslate nohighlight">\(w_\mathrm{min}\)</span>; this is due to the fact that <span class="math notranslate nohighlight">\(\frac{\mathrm{d}\mathscr{L}}{\mathrm{d}w}\)</span>, which multiplies <span class="math notranslate nohighlight">\(\delta\)</span>, naturally shrinks in magnitude near the minimum (i.e. the slope approaches zero), and thus the update to <span class="math notranslate nohighlight">\(w_\mathrm{old}\)</span> becomes more “refined” in its vicinity.</p>
+<p>We stopped the gradient descent process where we did out of sheer convenience; we don’t usually carry our gradient descent by hand – we will have a computer do the hard work for us! The terminal value of <span class="math notranslate nohighlight">\(w_\mathrm{stop} = 0.1024\)</span> isn’t necessarily sufficiently close to the true minimum of the parabola, but we cannot make a decision about this in a principled way without having additional context about <em>why</em> we want to find this minimum. In practice, we will need some additional metric of
+success to inform how close is “close enough” when we are searching for the minimum of a function. For our present purposes, this example simply demonstrates the mechanics of and logic behind gradient descent. The following two reading comprehension questions are particularly important for cementing these takeaways.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Descent Down a Parabola in Python</strong>:</p>
+<p>Complete the following Python function that implements gradient descent on <span class="math notranslate nohighlight">\(\mathscr{L}(w) = w^2\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">descent_down_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient descent on L(w) = w ** 2, returning the sequence</span>
+<span class="sd">    of x-values: [w_start, ..., w_stop]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    w_start : float</span>
+<span class="sd">        The initial value of w.</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    num_steps : int</span>
+<span class="sd">        The number subsequent of descent steps taken. A non-negative number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape-(num_steps + 1, )</span>
+<span class="sd">        The sequence of w-values produced via gradient descent, starting with w_start</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+<p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=10</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.3</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=5</span></code> and confirm that your function reproduces the results presented in this discussion. Repeat this computation using <code class="docutils literal notranslate"><span class="pre">w_start=-10</span></code>, and see that gradient descent reliably coaxes <span class="math notranslate nohighlight">\(w\)</span> in the opposite direction – still towards the global minimum of the parabola.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Analyzing Descent Convergence</strong>:</p>
+<p>Using your implementation of <code class="docutils literal notranslate"><span class="pre">descent_down_parabola</span></code>, and the inputs <code class="docutils literal notranslate"><span class="pre">w_start=10</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.3</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=100</span></code>, <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">use matplotlib</a> to make a plot of “Distance of <span class="math notranslate nohighlight">\(w\)</span> from Minimum vs Number of Steps”. You should see that <span class="math notranslate nohighlight">\(w\)</span> approaches <span class="math notranslate nohighlight">\(0\)</span> so rapidly that it is hard to discern its trajectory on a linear scale; try plotting the <span class="math notranslate nohighlight">\(y\)</span>-axis on a log scale (you can use
+<code class="docutils literal notranslate"><span class="pre">ax.set_yscale(&quot;log&quot;)</span></code>).</p>
+<p>Describe the mathematical form of the trajectory of <span class="math notranslate nohighlight">\(w\)</span> towards the minimum. Does the process of gradient descent ever lead <span class="math notranslate nohighlight">\(w\)</span> away from the minimum? Try experimenting with different learning rates before you come to a final conclusion.</p>
+</div>
+<div class="section" id="Gradient-Descent-on-Multi-Variable-Functions">
+<h2>Gradient Descent on Multi-Variable Functions<a class="headerlink" href="#Gradient-Descent-on-Multi-Variable-Functions" title="Permalink to this headline">¶</a></h2>
+<p>The utility of gradient descent might seem questionable when we only consider functions of one variable. In these cases, it seems like we can simply plot such a function and locate minima by eye! Let’s remember, however, that we are going to want to employ gradient descent to obtain optimal values for the parameters of sophisticated mathematical models used in the context of machine learning. In the case of our simple linear regression problem, this means working with a function of two
+variables. That being said, once we graduate to working with neural networks, we will find ourselves soon working with mathematical models represented by functions of <em>hundreds, thousands, millions,</em> <a class="reference external" href="https://en.wikipedia.org/wiki/GPT-3">or even billions</a> of variables!</p>
+<p>Needless to say, once we are working with functions of several variables, we will have no hope of visualizing our function so as to simply locate its minima by eye. Instead, we will be like <a class="reference external" href="https://en.wikipedia.org/wiki/Gradient_descent#An_analogy_for_understanding_gradient_descent">a mountain climber trying to descend a mountain covered in a thick fog</a>: we can only attempt to find our way down the mountain by feeling the way that the ground slopes under our feet. (Note that this process of
+“feeling the slope of the mountain” is an analogy for evaluating the <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#Taking-a-Derivative-Along-Any-Direction-Using-the-Gradient">gradient</a> of our multi-variable function; it reveals only the local topography of the mountain at a particular point in space.)</p>
+<p>Ultimately, gradient descent is a process by which we can find a minimum of a multi-variable function. E.g. if we were working with a function of three variables, <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2, w_3)\)</span>, then gradient descent would permit us to search for the point <span class="math notranslate nohighlight">\((w_1, w_2, w_3)_\mathrm{min}\)</span> that corresponds to a local minimum of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>.</p>
+<p>Fortunately, the general equation for the gradient step of multiple variables is quite straightforward. Suppose that we are performing gradient descent with a function of <span class="math notranslate nohighlight">\(M\)</span> variables, <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, ..., w_M)\)</span>. Then <strong>the set of M equations describing a single iteration of gradient descent on a function of M variables is as follows</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_M \end{bmatrix}_\text{new} = \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_M \end{bmatrix}_\text{old} - \delta\: \begin{bmatrix} \frac{\partial f}{\partial w_1} \\ \frac{\partial f}{\partial w_2} \\ \vdots \\ \frac{\partial f}{\partial w_M} \end{bmatrix}_\text{old}
+\end{equation}</div><p>Once again, <span class="math notranslate nohighlight">\(\delta\)</span> plays the role of the so-called “learning rate”. Note that the same learning rate value is used across each of the <span class="math notranslate nohighlight">\(M\)</span> dimensions here.</p>
+<p>Really, the single equation above specifies <span class="math notranslate nohighlight">\(M\)</span> <em>separate equations</em> – each one is a “recipe” for updating the value of a corresponding variable in search for a minimum of <span class="math notranslate nohighlight">\(f\)</span>. We invoke <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html">vector notation</a> to more concisely express these “parallel” equations. Let’s focus on the update being made to the <span class="math notranslate nohighlight">\(j^\text{th}\)</span> variable to see just how closely it resembles the form for gradient descent of a single-variable
+function.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+w_{j}^{\mathrm{new}} = w_{j}^{\mathrm{old}} - \delta\:\Bigg( \frac{\partial \mathscr{L}(w_1, ..., w_M)}{\partial w_j}\bigg|_{w=w^\mathrm{old}_j}\Bigg)
+\end{equation}</div><p>See that we utilize the <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#What-is-a-Partial-Derivative?">partial derivative</a> of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> with respect to <span class="math notranslate nohighlight">\(w_j\)</span> here, which measures the instantaneous slope of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> along <span class="math notranslate nohighlight">\(w_j\)</span>, holding all other variables fixed.</p>
+<p>Mechanically speaking, we we simply replaced the derivative of <span class="math notranslate nohighlight">\(\mathscr{L}(w)\)</span> with a partial derivative, and replicated the equation for each of the <span class="math notranslate nohighlight">\(M\)</span>; that being said, this generalization is not made haphazardly. We will see that this is indeed the <em>optimal</em> formula for searching for a minimum of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> if we are only to use its first-order derivatives. Towards this end, it is critical to note that the collection of partial derivatives
+<span class="math notranslate nohighlight">\(\begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1} &amp; \cdots &amp; \frac{\partial \mathscr{L}}{\partial w_M} \end{bmatrix}\)</span> is far more special than it might appear; this is, in fact, <strong>the gradient of</strong> <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, ..., w_M)\)</span></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla} \mathscr{L}(w_1, w_2, \dots, w_M)=\begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1} &amp; \frac{\partial \mathscr{L}}{\partial w_2} &amp; \cdots &amp; \frac{\partial \mathscr{L}}{\partial w_M} \end{bmatrix}.
+\end{equation}</div><p>The gradient of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\)</span>, is a vector-field that has the special property that it <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#Properties-of-the-Gradient">always points in the direction of steepest ascent</a> on <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, wherever it is evaluated (it is worthwhile to review <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html">our content on linear algebra</a> and <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#">multivariable
+calculus</a> to better digest this). This means that <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}(\vec{w}_{\mathrm{old}})\)</span> provides us with critically-important information: it tells us, based on our current model parameter values (<span class="math notranslate nohighlight">\(\vec{w}_{\mathrm{old}}\)</span>), the <em>best</em> incremental update that we can make to our model’s parameters in order to minimize <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> (i.e. improve our model’s predictions).</p>
+<p>Rewriting the gradient update using this gradient notation, and representing <span class="math notranslate nohighlight">\((w_1, \dots, w_M)\)</span> as the vector <span class="math notranslate nohighlight">\(\vec{w}\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{w}_\mathrm{new} = \vec{w}_\mathrm{old} - \delta \, \vec{\nabla} \mathscr{L}(w_1, \dots, w_M)\big|_{\vec{w}=\vec{w}_\mathrm{old}}
+\end{equation}</div><p>Thus the equation of gradient descent indicates that <span class="math notranslate nohighlight">\(\vec{w}_\mathrm{old}\)</span> is always “nudged” in the direction of steepest <em>descent</em> of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, as dictated by <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\)</span>.</p>
+<div class="section" id="Descending-a-Parabaloid-Using-Gradient-Descent">
+<h3>Descending a Parabaloid Using Gradient Descent<a class="headerlink" href="#Descending-a-Parabaloid-Using-Gradient-Descent" title="Permalink to this headline">¶</a></h3>
+<p>As always, it is important that we make concrete the mathematical foundation that we are laying by working through an example. Let’s descend the parabaloid surface</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2
+\end{equation}</div><p>First, we need to <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#Taking-a-Derivative-Along-Any-Direction-Using-the-Gradient">compute the gradient</a> for <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2)\)</span> by writing out its <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#What-is-a-Partial-Derivative?">partial derivatives</a></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\partial\mathscr{L}}{\partial w_1} = 4 w_1\\\
+\frac{\partial\mathscr{L}}{\partial w_2} = 6 w_2\\\
+\end{equation}</div><p>Thus the gradient of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is given by the following vector field</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla} \mathscr{L}(w_1, w_2) = \begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1} &amp; \frac{\partial \mathscr{L}}{\partial w_2} \end{bmatrix} = [4 w_1, 6 w_2]
+\end{equation}</div><p>which is simple to evaluate at any point <span class="math notranslate nohighlight">\((w_1, w_2)\)</span> during our descent.</p>
+<p>(Note: it just happens to be the case that <span class="math notranslate nohighlight">\(\frac{\partial\mathscr{L}}{\partial w_1}\)</span> only depends on <span class="math notranslate nohighlight">\(w_1\)</span> and <span class="math notranslate nohighlight">\(\frac{\partial\mathscr{L}}{\partial w_2}\)</span> only depends on <span class="math notranslate nohighlight">\(w_2\)</span> here. In general, each partial derivative of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> could depend on any/all of the model’s parameters).</p>
+<p>Starting with <span class="math notranslate nohighlight">\(\vec{w}_\mathrm{old} = [2, 4]\)</span> and using a learning rate of <span class="math notranslate nohighlight">\(\delta=0.1\)</span>. We’ll take five steps down <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> using gradient descent.</p>
+<p>(For the sake of legibility, we are rounding to two decimal places)</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\vec{w}_\mathrm{new} &amp;= \vec{w}_\mathrm{old} - \delta \vec{\nabla} \mathscr{L}|_{\vec{w}=\vec{w}_\mathrm{old}}\\
+\vec{w}_\mathrm{new} &amp;= \vec{w}_\mathrm{old} - \delta \begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1}|_{\vec{w}=\vec{w}_\mathrm{old}} &amp; \frac{\partial \mathscr{L}}{\partial w_2}|_{\vec{w}=\vec{w}_\mathrm{old}} \end{bmatrix}\\
+\vec{w}_\mathrm{new} &amp;= [w^{\mathrm{(old)}}_1, w^{\mathrm{(old)}}_2] - (0.1) [4 w^{\mathrm{(old)}}_1, 6 w^{\mathrm{(old)}}_2]\\
+&amp;\Downarrow \\
+[1.20    , 1.60    ] &amp;= [2.00, 4.00] - (0.1) [8.00, 24.0]\\
+[0.72   , 0.64   ] &amp;= [1.20    , 1.60    ] - (0.1) [ 4.8    ,  9.6    ]\\
+[0.43  , 0.26  ] &amp;= [0.72   , 0.64   ] - (0.1) [ 2.88   ,  3.84   ]\\
+[0.26 , 0.10] &amp;= [0.43  , 0.26  ] - (0.1) [ 1.73  ,  1.54  ]\\
+[0.16, 0.04] &amp;= [0.26 , 0.10] - (0.1) [ 1.04 ,  0.61 ]\\
+\end{align}</div><p>The following figure depicts this paraboloid, along with the five-step trajectory that we just calculated.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/paraboloid_descent.png" alt="Depicting gradient descent down a paraboloid" width="1000">
+</p>
+</div><p>Once again, the iterative process of gradient descent guides us towards parameter values towards the minimum of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, which resides at <span class="math notranslate nohighlight">\((0, 0)\)</span>; however this time we invoke the gradient of a multivariable function instead of the derivative of a single variable function, so that we can search for the minimum within a higher dimensional space. Whether our last “best guess” at a minimum – <span class="math notranslate nohighlight">\((0.16, 0.04)\)</span> – is “good enough” would depend on the broader context of <em>why</em> we
+want to find this minimum. In the context of a machine learning problem, “good enough” might be informed by how consistently our model, whose parameters are given by this best guess, makes predictions that are in agreement with collected data.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Descent Down a Parabolic Surface in Python</strong>:</p>
+<p>Complete the following Python function that implements gradient descent on the skewed paraboloid <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span>.</p>
+<p>Note that the partial derivatives of this function are simply</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\partial \mathscr{L}(w_1, w_2)}{\partial x} = 4 w_1 \\
+\frac{\partial \mathscr{L}(w_1, w_2)}{\partial y} = 6 w_2 \\
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">descent_down_2d_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient descent on L(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 ,</span>
+<span class="sd">    returning the sequence of w-values: [w_start, ..., w_stop]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    w_start : np.ndarray, shape-(2,)</span>
+<span class="sd">        The initial value of (w1, w2).</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    num_steps : int</span>
+<span class="sd">        The number subsequent of descent steps taken. A non-negative number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape-(num_steps + 1, 2)</span>
+<span class="sd">        The sequence of (w1, w2)-values produced via gradient descent, starting</span>
+<span class="sd">        with w_start</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+<p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=np.array([2.0,</span> <span class="pre">4.0])</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.1</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=5</span></code> and, by hand, confirm that your function correctly performed the first gradient step. Repeat this computation using <code class="docutils literal notranslate"><span class="pre">xy_start=np.array([-2.0,-4.0])</span></code>, and see that gradient descent reliably coaxes <span class="math notranslate nohighlight">\(\vec{w}\)</span> in the opposite direction - still towards the global minimum of the paraboloid.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Summary</strong>:</p>
+<p>Given a function <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, ..., w_M)\)</span>, suppose that we want to find a set of values for <span class="math notranslate nohighlight">\((w_1, ..., w_M)\)</span> that <em>minimizes</em> <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>. Assuming that <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is smooth and differentiable, we can search for these parameter values that minimize <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> using a process known as gradient descent. Representing <span class="math notranslate nohighlight">\((w_1, ..., w_M)\)</span> as the vector <span class="math notranslate nohighlight">\(\vec{w}\)</span>, we suppose that we have some initial values for these parameters,
+<span class="math notranslate nohighlight">\(\vec{w}_{\mathrm{old}}\)</span>, where we begin out search for them minimizing parameter values. Then gradient descent prescribes the following <em>iterative</em> process by which we update our “best guess” for these values:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{w}_\mathrm{new} = \vec{w}_\mathrm{old} - \delta \, \vec{\nabla} \mathscr{L}(w_1, \dots, w_M)\big|_{\vec{w}=\vec{w}_\mathrm{old}}\\
+\vec{w}_\mathrm{old} \leftarrow \vec{w}_\mathrm{new} \\
+\mathrm{(repeat)}
+\end{equation}</div><p><span class="math notranslate nohighlight">\(\delta\)</span> is a constant, positive number that we are responsible for choosing. This is often times referred to as a “learning rate”, as it affects the scale of the updates that we make to <span class="math notranslate nohighlight">\(\vec{w}_\mathrm{old}\)</span>.</p>
+<p>The key insight to this process is that the gradient of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\)</span>, evaluated at any point in this <span class="math notranslate nohighlight">\(M\)</span>-dimensional space spanned by <span class="math notranslate nohighlight">\((w_1, ..., w_M)\)</span>, points in the direction of steepest ascent for <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>. Thus the iteration laid out above prescribes that we repeatedly update <span class="math notranslate nohighlight">\(\vec{w}_\mathrm{old}\)</span> by nudging it in the <em>opposite</em> direction – along the direction of steepest <em>descent</em>. Given a sufficiently small
+<span class="math notranslate nohighlight">\(\delta\)</span>, these updates will eventually converge to a local minimum of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, where <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\big|_{\vec{w}=\vec{w}_\mathrm{old}} \approx \vec{0}\)</span>.</p>
+<p>In the context of machine learning, <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> typically represents a so-called “loss function” (or objective function), <span class="math notranslate nohighlight">\((w_1, ..., w_M)\)</span> represent our model’s parameters, and <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> also depends on our collected data, which we hold as constant here. <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> will be responsible for comparing our model’s predictions about recorded observations to the desired, or “true”, predictions that we want it to make. We design <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> such that <em>better
+predictions from our model will produce smaller loss values</em>. Thus we can use gradient descent to search for particular values of <span class="math notranslate nohighlight">\((w_1, ..., w_M)\)</span> that minimizes <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, and thereby we arrive at the parameter values that enable our model to make the most accurate and reliable predictions about our recorded data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="Where-is-the-“Learning”-in-all-of-this?">
+<h2>Where is the “Learning” in all of this?<a class="headerlink" href="#Where-is-the-“Learning”-in-all-of-this?" title="Permalink to this headline">¶</a></h2>
+<p>The colloquial use of the word “learning” is wrapped tightly in the human experience. To use it in the context of machine learning might make us think of a computer querying a digital library for new information, or perhaps of conducting simulated experiments to inform and test hypotheses. Compared to these things, gradient descent hardly looks like it facilitates “learning” in machines. Indeed, it is simply a rote algorithm for numerical optimization after all. This is where we encounter a
+challenging issue with semantics; phrases like “machine learning” and “artificial intelligence” are not necessarily well-defined, and the way that they being used in the parlance among present-day researchers and practitioners may not jive with the intuition that science fiction authors created for us.</p>
+<p>There is plenty to discuss here, but let’s at least appreciate the ways that we can, in good faith, view gradient descent as a means of learning. The context laid out in this section describes a way for a machine to “locate” model parameter values that minimize a loss function that depends on some observed data, thereby maximizing the quality of predictions that the model makes about said data in an automated way. In this way the model’s parameter values are being informed by this observed data.
+Insofar as these observations augment the model’s ability to make reliable predictions or decisions about new data, we can sensibly say that the model has “learned” from the data.</p>
+<p>Despite this tidy explanation, plenty of people would squint incredulously at the suggestion that linear regression, driven by gradient descent, is an example of machine learning. After all, the humans were the ones responsible for curating the data, analyzing it, and deciding that the model should take on a linear form. In this way, the humans were responsible for writing down all of the critical rules and patterns for the machine to follow. Gradient descent merely tunes the parameters of the
+linear model in a clearly-defined way. Fair enough; it might be a stretch to deem this “machine learning”. But we will soon see that swapping out our linear model for a much more generic (or “universal”) mathematical model will change this perception greatly.</p>
+<p>A neural network is simply a mathematical function, but is one with an incredible “capacity” for taking the shape of complicated patterns and thus it does not have the rigid form of a linear model. In this way, it is useful to think of it as a formless block of clay.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/block_of_clay.png" alt="A diagram describing gradient descent" width="600">
+</p>
+</div><p>We will use gradient descent as we did for the linear model; however, instead of merely tweaking the position and alignment of a line, gradient descent will play the role of “sculpting” our neural network so that it will capture intricate and even unknown patterns between our observed data and desired predictions. In this way, because we did not know beforehand what “form” we wanted our mathematical model to take, the process of gradient descent takes on a distinct quality: it enabled the
+computer to discover the important rules or patterns that underpin our data. For a machine to derive reliable and previously-unknown rules from data, which then enables it to make accurate predictions in the future about new observations, is quite incredible. This certainly counts as “machine learning” for most people in technical fields.</p>
+<p>Neural networks will be introduced in detail shortly, but it is worthwhile for us to have considered them in such vague terms in order to appreciate the point made above. It is worth restating this: one can go from “performing a regression” to “enabling machine learning” by holding the actual learning algorithm (e.g. gradient descent) constant and changing only the form of the mathematical model being used.</p>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Retracing Our Steps: Solution</strong></p>
+<p>Given a simple linear model</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F\big((w_1, w_2); x \big) = w_2 x + w_1
+\end{equation}</div><p>Assuming that we have <span class="math notranslate nohighlight">\(N\)</span> pieces of recorded observations and associated “true” outcomes, <span class="math notranslate nohighlight">\((x_n, y_n)_{n=0}^{N-1}\)</span>, <strong>write the “mean-squared error” loss function</strong> in terms of the model’s parameters, and the individual pieces of data.</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\mathscr{L}_{\mathrm{MSE}}\big(w_1, w_2 ; (x_n, y_n)_{n=0}^{N-1}\big) &amp;= \frac{1}{N}\sum_{n=0}^{N-1}{\big(y_n - y^{\mathrm{(pred)}}_n\big)^2}\\
+&amp;= \frac{1}{N}\sum_{n=0}^{N-1}{\big(y_n - F\big((w_1, w_2); x_n \big)\big)^2}\\
+&amp;= \frac{1}{N}\sum_{n=0}^{N-1}{\big(y_n - (w_2 x_n + w_1)\big)^2}\\
+\end{align}</div><p><strong>Descent Down a Parabola in Python: Solution</strong>:</p>
+<p>Complete the following function that implements gradient descent on <span class="math notranslate nohighlight">\(\mathscr{L}(w) = w^2\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">descent_down_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient descent on L(w) = w ** 2, returning the sequence</span>
+<span class="sd">    of x-values: [w_start, ..., w_stop]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    w_start : float</span>
+<span class="sd">        The initial value of w.</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    num_steps : int</span>
+<span class="sd">        The number subsequent of descent steps taken. A non-negative number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape-(num_steps + 1, )</span>
+<span class="sd">        The sequence of w-values produced via gradient descent, starting with w_start</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">w_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">w_start</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+        <span class="n">w_old</span> <span class="o">=</span> <span class="n">w_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">w_new</span> <span class="o">=</span> <span class="n">w_old</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_old</span><span class="p">)</span>
+        <span class="n">w_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w_new</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=10</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.3</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=5</span></code> and confirm that your function reproduces the results presented in this discussion.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">descent_down_parabola</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">array([10.    ,  4.    ,  1.6   ,  0.64  ,  0.256 ,  0.1024])</span>
+</pre></div>
+</div>
+<p>Repeat this computation using <code class="docutils literal notranslate"><span class="pre">w_start=-10</span></code>, and see that gradient descent reliably coaxes <span class="math notranslate nohighlight">\(w\)</span> in the opposite direction - still towards the global minimum of the parabola.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">descent_down_parabola</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">array([-10.    ,  -4.    ,  -1.6   ,  -0.64  ,  -0.256 ,  -0.1024])</span>
+</pre></div>
+</div>
+<p><strong>Analyzing Descent Convergence : Solution</strong>:</p>
+<p>Using your implementation of <code class="docutils literal notranslate"><span class="pre">descent_down_parabola</span></code>, using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=10</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.3</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=100</span></code>, <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">use Matplotlib</a> to make a plot of “Distance of <span class="math notranslate nohighlight">\(w\)</span> from Minimum vs Number of Steps”. You should see that <span class="math notranslate nohighlight">\(w\)</span> approaches <span class="math notranslate nohighlight">\(0\)</span> so rapidly that it is hard to discern its trajectory on a linear scale; try plotting the <span class="math notranslate nohighlight">\(y\)</span>-axis on a log scale (you can use
+<code class="docutils literal notranslate"><span class="pre">ax.set_yscale(&quot;log&quot;)</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">descent_down_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distance from Minimum&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Steps&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Analyzing Convergence of Gradient Descent on $\mathscr</span><span class="si">{L}</span><span class="s2">(w)=w^2$&quot;</span><span class="p">);</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Video_Autodifferentiation_30_0.png" src="../_images/Video_Autodifferentiation_30_0.png" />
+</div>
+</div>
+<p>Describe the mathematical form of the trajectory of <span class="math notranslate nohighlight">\(w\)</span> towards the minimum.</p>
+<blockquote>
+<div><p>We see <span class="math notranslate nohighlight">\(w\)</span> approaches ever closer to the true minimum of <span class="math notranslate nohighlight">\(w^2\)</span> via the iterative process of gradient descent. The distance between <span class="math notranslate nohighlight">\(w\)</span> and the minimum (<span class="math notranslate nohighlight">\(0\)</span>) decreases exponentially quickly with number of descent steps. This is apparent from the linearly-decreasing form of the distance-from-the-minimum versus number of steps, <strong>viewed on a logarithmic scale for the y-axis</strong>.</p>
+</div></blockquote>
+<p>Does the process of gradient descent ever lead <span class="math notranslate nohighlight">\(w\)</span> away from the minimum? Try experimenting with different learning rates before you come to a final conclusion.</p>
+<blockquote>
+<div><p>Increasing the learning rate can lead to updates to <span class="math notranslate nohighlight">\(w\)</span> that are so large that we end up inadvertently <em>ascending</em> the parabola. That is, each step results in us leaping from one side of the parabola to the other, and further away from the minimum than we were before. See this below, where we increase the learning rate from <span class="math notranslate nohighlight">\(0.3\)</span> to <span class="math notranslate nohighlight">\(3.0\)</span></p>
+</div></blockquote>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">descent_down_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distance from Minimum&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Steps&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Analyzing Convergence of Gradient Descent on $\mathscr</span><span class="si">{L}</span><span class="s2">(w)=w^2$&quot;</span><span class="p">);</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Video_Autodifferentiation_33_0.png" src="../_images/Video_Autodifferentiation_33_0.png" />
+</div>
+</div>
+<p><strong>Descent Down a Parabolic Surface in Python</strong>:</p>
+<p>Complete the following Python function that implements gradient descent on the skewed paraboloid <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span>.</p>
+<p>Note that the partial derivatives of this function are simply</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\partial \mathscr{L}(w_1, w_2)}{\partial x} = 4 w_1 \\
+\frac{\partial \mathscr{L}(w_1, w_2)}{\partial y} = 6 w_2 \\
+\end{equation}</div><p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=np.array([2,4])</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.1</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=5</span></code> and, by hand, confirm that your function correctly performed the first gradient step. Repeat this computation using <code class="docutils literal notranslate"><span class="pre">xy_start=np.array([-2,-4])</span></code>, and see that gradient descent reliably coaxes <span class="math notranslate nohighlight">\(\vec{w}\)</span> in the opposite direction - still towards the global minimum of the paraboloid.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">descent_down_2d_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient descent on L(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 ,</span>
+<span class="sd">    returning the sequence of w-values: [w_start, ..., w_stop]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    w_start : np.ndarray, shape-(2,)</span>
+<span class="sd">        The initial value of (w1, w2).</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    num_steps : int</span>
+<span class="sd">        The number subsequent of descent steps taken. A non-negative number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape-(num_steps + 1, 2)</span>
+<span class="sd">        The sequence of (w1, w2)-values produced via gradient descent, starting</span>
+<span class="sd">        with w_start</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">w_start</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+        <span class="n">xy_old</span> <span class="o">=</span> <span class="n">xy_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">xy_new</span> <span class="o">=</span> <span class="n">xy_old</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">])</span> <span class="o">*</span> <span class="n">xy_old</span><span class="p">)</span>
+        <span class="n">xy_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xy_new</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy_values</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">descent_down_2d_parabola</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">2.</span>     <span class="p">,</span> <span class="mf">4.</span>     <span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.2</span>    <span class="p">,</span> <span class="mf">1.6</span>    <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.72</span>   <span class="p">,</span> <span class="mf">0.64</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.432</span>  <span class="p">,</span> <span class="mf">0.256</span>  <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.2592</span> <span class="p">,</span> <span class="mf">0.1024</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.15552</span><span class="p">,</span> <span class="mf">0.04096</span><span class="p">]])</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">descent_down_2d_parabola</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">2.</span>     <span class="p">,</span> <span class="o">-</span><span class="mf">4.</span>     <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">1.2</span>    <span class="p">,</span> <span class="o">-</span><span class="mf">1.6</span>    <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.72</span>   <span class="p">,</span> <span class="o">-</span><span class="mf">0.64</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.432</span>  <span class="p">,</span> <span class="o">-</span><span class="mf">0.256</span>  <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.2592</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.1024</span> <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.15552</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04096</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1342 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Automatic Differentiation, Category: Introduction" name="description" />
+<meta content="automatic differentiation, autodiff, gradient descent, pytorch, numpy, tensorflow" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Automatic Differentiation &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exercises: Fitting a Linear Model with Gradient Descent" href="Exercises/Linear_Regression_Exercise.html" />
+    <link rel="prev" title="Gradient-Based Learning" href="Gradient_Descent.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../vision.html">Vision Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_ml.html">A Brief Introduction to Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linear_Regression.html">Baby Steps Towards Machine Learning: Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Data_Exploration.html">Exercises: Exploring A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gradient_Descent.html">Gradient-Based Learning</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Automatic Differentiation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Automatic-Differentiation-at-a-Glance">Automatic Differentiation at a Glance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#An-Introduction-to-MyGrad">An Introduction to MyGrad</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-and-Using-Tensors">Creating and Using Tensors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Specialized-Functions-for-Deep-Learning">Specialized Functions for Deep Learning</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Running-Automatic-Differentiation">Running Automatic Differentiation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#MyGrad-Bakes-Autodiff-Into-Everything-It-Does">MyGrad Bakes Autodiff Into Everything It Does</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#MyGrad-Adds-“Drop-In”-AutoDiff-to-NumPy">MyGrad Adds “Drop-In” AutoDiff to NumPy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-All-Important-.backward()-Method">The All-Important <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> Method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Constant-Tensors-and-Mixed-Operations-with-NumPy-Arrays">Constant Tensors and Mixed Operations with NumPy Arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Under-the-Hood-of-MyGrad’s-Tensor-(Just-a-NumPy-Array)">Under the Hood of MyGrad’s Tensor (Just a NumPy Array)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Gradient-Descent-with-MyGrad">Gradient Descent with MyGrad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Tensors-as-Collections-of-Scalar-Variables">Tensors as Collections of Scalar Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Vectorized-Autodiff">Vectorized Autodiff</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Summary-and-Looking-Ahead">Summary and Looking Ahead</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Looking-Ahead">Looking Ahead</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/Linear_Regression_Exercise.html">Exercises: Fitting a Linear Model with Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="What_Does_Learning_Mean.html">Where is the “Learning” in All of This?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Supervised_Learning_and_Modeling.html">Supervised Learning Using Gradient Descent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FacialRecognition.html">Vision Module Capstone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Whispers.html">Whispers Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../vision.html">Vision Module</a> &raquo;</li>
+        
+      <li>Automatic Differentiation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Video/Automatic_Differentiation.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Background Material</strong>:</p>
+<p>It is highly recommended that the reader work through the introductions to <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Intro_Calc.html">single variable calculus</a> and <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html">multivariable calculus</a> as a supplement to this section. These materials make accessible the most fundamental aspects of calculus needed to get a firm grasp on gradient-based learning. Even if you are already familiar with calculus, these sections
+also provide an introduction to automatic differentiation, which will be a critical technology for us moving forward.</p>
+</div>
+<div class="section" id="Automatic-Differentiation">
+<h1>Automatic Differentiation<a class="headerlink" href="#Automatic-Differentiation" title="Permalink to this headline">¶</a></h1>
+<p>In the previous section, we identified the gradient descent algorithm as a simple but powerful method by which we can optimize a mathematical model’s ability to make reliable predictions about data. We do so by searching for the model parameter values that <em>minimize</em> a loss function, <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, which is responsible for comparing our model’s outputs (i.e. it’s “predictions) against the desired values.</p>
+<p>At risk of stating the obvious, performing gradient descent requires that we are able to evaluate <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\)</span> - the gradient of our loss function - for any particular input values for the loss function. With the simple examples that we considered in the previous section, we did this by explicitly deriving all of the relevant partial derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>,
+<span class="math notranslate nohighlight">\(\begin{bmatrix} \frac{\partial \mathscr{L}}{\partial w_1} &amp; \frac{\partial \mathscr{L}}{\partial w_2} &amp; \cdots &amp; \frac{\partial \mathscr{L}}{\partial w_M} \end{bmatrix}\)</span>, by hand. Keep in mind that each of these partial derivatives is itself a function. We then evaluated those partial derivatives, and thus evaluated <span class="math notranslate nohighlight">\(\vec{\nabla} \mathscr{L}\)</span>, using our model’s current parameter values by plugging them into these equations. This process worked fine for these simple examples, but we
+will soon find that deriving each <span class="math notranslate nohighlight">\(\frac{\partial \mathscr{L}}{\partial w_i}\)</span> by hand to be untenable as our mathematical models, and thus <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, begin to grow in complexity.</p>
+<p>Fortunately, the recent surge of interest in neural networks and gradient-based learning methods has led to development of popular and highly-powerful <strong>automatic differentiation libraries</strong>, such as <a class="reference external" href="https://pytorch.org/">PyTorch</a>, <a class="reference external" href="https://www.tensorflow.org/">TensorFlow</a>, <a class="reference external" href="https://github.com/google/jax">JAX</a>, and <a class="reference external" href="https://github.com/FluxML/Zygote.jl">Zygote</a>. These “autodiff” libraries are able to evaluate the derivatives of arbitrary compositions of mathematical functions, such
+as polynomials, exponentials, and trigonometric functions. These libraries can handle enormously complex functions of many (<em>millions</em>) of variables; the derivatives of such functions would be totally intractable for us to evaluate by-hand.</p>
+<p><strong>In this course, we will be making frequent use of the autodiff library called</strong> <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/">MyGrad</a>, which is designed to behave just like NumPy, but with auto-differentiation added on top. If you already have NumPy installed in your Python environment, you can simply install MyGrad with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install mygrad
+</pre></div>
+</div>
+<p>The goal of this section is to familiarize ourselves with MyGrad as a tool for performing automatic differentiation, and to give insight into how such a tool works, and how we can wield it effectively. This is a general-purpose capability that will grow in popularity in fields beyond machine learning; you can even use MyGrad to help you with your calculus homework!</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>An Important Note on Semantics</strong>:</p>
+<p>To be clear: most automatic differentiation libraries <em>do not</em> produce derivatives of functions. Recall that the derivative of a function is another function; an autodiff library does not produce a symbolic representation of a new function as its output. Instead, an autodiff library can <em>evaluate the derivative(s) of a function at a given input</em>, producing the number(s) that represents the instantaneous slope of the function at that point. Thus, it is more appropriate to say that these autodiff
+libraries can tell us the instantaneous slope of any function at any point, more so than saying that they can “take the derivative” of any function.</p>
+</div>
+<div class="section" id="Automatic-Differentiation-at-a-Glance">
+<h2>Automatic Differentiation at a Glance<a class="headerlink" href="#Automatic-Differentiation-at-a-Glance" title="Permalink to this headline">¶</a></h2>
+<p>Let’s not dawdle any longer; it is time to see some automatic differentiation in action. Suppose that we have the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x, y) = xy + x^2
+\end{equation}</div><p>and that we want to evaluate the first-order partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\((x=2, y=4)\)</span>. Let’s evaluate these by hands so that we can know what to expect from our autodiff library. The relevant partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> are</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\partial f}{\partial x} &amp;= y + 2x\\
+\frac{\partial f}{\partial y} &amp;= x
+\end{align}</div><p>Evaluated at <span class="math notranslate nohighlight">\((x=2, y=4)\)</span> gives:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\partial f}{\partial x}\big|_{x=2, y=4} &amp;= 4 + 2(2) = 8\\
+\frac{\partial f}{\partial y}\big|_{x=2, y=4} &amp;= 2
+\end{align}</div><p>To compute these derivatives in MyGrad, we need only compute <span class="math notranslate nohighlight">\(f\)</span> at the point(s) of interest; we can then instruct MyGrad to compute the derivatives of <span class="math notranslate nohighlight">\(f\)</span>. In order for MyGrad to keep track of the mathematical operations that we are using, we must represent our variables of interest using <code class="docutils literal notranslate"><span class="pre">mygrad.Tensor</span></code> objects (more on these later).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining x and y, and computing f(x, y)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># computes f(2, 4)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="c1"># stores f(2, 4) as a mygrad-tensor</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">12.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The MyGrad-tensor <code class="docutils literal notranslate"><span class="pre">f</span></code> stores not only the value of <span class="math notranslate nohighlight">\(f(2, 4)\)</span> but also the mathematical operations that were used to compute this value. With this information, we can instruct MyGrad to compute the derivatives of <span class="math notranslate nohighlight">\(f\)</span> with respect to each of its variables - evaluated at the variable’s specific value. We do this by calling the method <code class="docutils literal notranslate"><span class="pre">f.backward()</span></code> (“backward” is short for “backpropagation” which is the particular automatic differentiation algorithm that MyGrad employs).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invoking autodiff, specifically backpropagation</span>
+<span class="c1">#</span>
+<span class="c1"># This says: &quot;evaluate all of the derivatives of `f` with</span>
+<span class="c1"># respect to all of the variables that `f` depends on&quot;</span>
+<span class="c1">#</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>  <span class="c1"># this method doesn&#39;t return any value</span>
+</pre></div>
+</div>
+<p>The derivatives are stored in each of the respective tensors, in the attribute <code class="docutils literal notranslate"><span class="pre">Tensor.grad</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Accessing the derivatives of `f`, stored in the `Tensor.grad`</span>
+<span class="c1"># attribute. These are always stored as NumPy arrays.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores df/dx @ x=2, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">8.</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores df/dy @ x=2, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Voilà! We have officially used automatic differentiation to evaluate the derivatives of a function. Note that we didn’t need to know any calculus or write down any derivatives to achieve this; all we needed to do was use evaluate the function itself while using MyGrad’s <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> object to represent our variables. From there, everything else was… <em>automatic</em>.</p>
+<p>MyGrad is capable of handling much more complex and interesting functions than this; it will behoove us to familiarize ourselves more thoroughly with this library.</p>
+</div>
+<div class="section" id="An-Introduction-to-MyGrad">
+<h2>An Introduction to MyGrad<a class="headerlink" href="#An-Introduction-to-MyGrad" title="Permalink to this headline">¶</a></h2>
+<p>NumPy is the cornerstone for nearly all numerical and scientific computing software in Python, and thus it is desirable for us to spend our time focused on learning NumPy rather than splitting our attention across multiple array-math libraries. For this reason, MyGrad was specifically designed to to act and feel just like NumPy. Thus, if you want to get good at using MyGrad, you should spend most of your time <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_3.html">mastering NumPy!</a>.</p>
+<p>The crux of MyGrad is the <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> object. This is analagous to NumPy’s <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, as it:</p>
+<ul class="simple">
+<li><p>can store <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AccessingDataAlongMultipleDimensions.html">N-dimensional array data</a>, which can be <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/tensor_manipulation.html">manipulated (e.g. reshaped, transposed, etc.)</a></p></li>
+<li><p>supports both <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Basic-Indexing">basic indexing</a> (accessing elements and subsections of tensor), <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AdvancedIndexing.html">advanced indexing</a> (accessing arbitrary collections of elements from the tensor)</p></li>
+<li><p>permits convenient <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorized operations</a>, which obey <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Broadcasting.html">NumPy’s broadcasting semantics</a></p></li>
+<li><p>mirrors NumPy’s mechanism for providing <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Producing-a-View-of-an-Array">views of data</a> and <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Augmenting-the-Underlying-Data-of-an-Array">in-place updates on data</a></p></li>
+</ul>
+<p>What distinguishes the <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> is that designed to support all of these features, <em>plus</em> it enables automatic differentiation through any mathematical operations that involve tensors.</p>
+<p>If you are already at least familiar with each of the above concepts, then you are already well-along your way to being a competent MyGrad user! If these aren’t ringing a bell, then it is strongly recommended that you review the <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_3.html">NumPy module from Python Like You Mean It</a>.</p>
+<div class="section" id="Creating-and-Using-Tensors">
+<h3>Creating and Using Tensors<a class="headerlink" href="#Creating-and-Using-Tensors" title="Permalink to this headline">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> must be provided the array data that it is to store. This can be a single number, a sequence of numbers, a NumPy array, or an existing tensor.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Creating MyGrad Tensor instances</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Making a 0-D tensor from a float</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.3</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">2.3</span><span class="p">)</span>
+
+<span class="c1"># Making a shape-(3,) tensor of 32-bit floats from a list</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Making a shape-(3, 3) tensor from a a numpy array</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+
+<span class="c1"># creating a shape-(9,) tensor and reshaping</span>
+<span class="c1"># it into a shape-(3, 3) tensor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">9.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Note that MyGrad uses NumPy’s data-type system exactly so we can pass, e.g., <code class="docutils literal notranslate"><span class="pre">np.float32</span></code> anywhere there is a <code class="docutils literal notranslate"><span class="pre">dtype</span></code> argument in a MyGrad function to tell that function to return a tensor that stores 32-bit floats.</p>
+<div class="section" id="Tensor-Creation-Functions">
+<h4>Tensor-Creation Functions<a class="headerlink" href="#Tensor-Creation-Functions" title="Permalink to this headline">¶</a></h4>
+<p>MyGrad provides <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/tensor_creation.html">a whole suite of tensor-creation functions</a>, which exactly mimic their NumPy counterparts. These can be used to conveniently create tensors of specific shapes and with specific values as their elements.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Demonstrating some of MyGrad&#39;s tensor-creation functions</span>
+
+<span class="c1"># Create a shape-(10,) tensor of subsequent integer-valued floats 0-9</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">])</span>
+
+<span class="c1"># Create a shape-(2, 3, 4) tensor of 0s</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">Tensor</span><span class="p">([[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]],</span>
+
+        <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Create a shape-(3, 4) tensor of numbers drawn randomly</span>
+<span class="c1"># from the interval [0, 1)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.84171912</span><span class="p">,</span> <span class="mf">0.48059864</span><span class="p">,</span> <span class="mf">0.68269986</span><span class="p">,</span> <span class="mf">0.72591644</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.2315483</span> <span class="p">,</span> <span class="mf">0.04201723</span><span class="p">,</span> <span class="mf">0.51519654</span><span class="p">,</span> <span class="mf">0.2711251</span> <span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.76460016</span><span class="p">,</span> <span class="mf">0.49148986</span><span class="p">,</span> <span class="mf">0.2825281</span> <span class="p">,</span> <span class="mf">0.38161674</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Tensor creation in MyGrad</strong>:</p>
+<p>Find a MyGrad function that enables you to create a shape-(15,) tensor of 15 evenly-spaced elements over the interval <span class="math notranslate nohighlight">\([0, \pi]\)</span>, and use it to create this tensor. Make the tensor store 32-bit floats instead of the standard 64-bit ones.</p>
+</div>
+</div>
+<div class="section" id="Standard-Mathematical-Operations">
+<h4>Standard Mathematical Operations<a class="headerlink" href="#Standard-Mathematical-Operations" title="Permalink to this headline">¶</a></h4>
+<p>In terms of math, MyGrad provides all of the same standard <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/math.html">arithmetic, trigonometric, and exponential (etc.) functions</a> as does NumPy. These are vectorized functions that obey NumPy’s broadcasting semantics. That is, unary functions naturally operate element-wise over tensors and binary functions naturally map between corresponding pairs of elements between two same-shape tensors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Performing NumPy-like mathematical operation in MyGrad</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.</span><span class="p">],</span>
+<span class="o">...</span>                <span class="p">[</span><span class="mf">1.</span><span class="p">],</span>
+<span class="o">...</span>                <span class="p">[</span><span class="mf">2.</span><span class="p">]])</span>
+
+<span class="c1"># computing sine on each element of `x`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.24740396</span><span class="p">,</span> <span class="mf">0.47942554</span><span class="p">,</span> <span class="mf">0.68163876</span><span class="p">,</span> <span class="mf">0.84147098</span><span class="p">])</span>
+
+<span class="c1"># broadcast-multiply a shape-(5,) tensor with a shape-(3, 1) tensor</span>
+<span class="c1"># producing a shape-(3, 5) tensor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.</span>  <span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span> <span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.</span>  <span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.5</span> <span class="p">,</span> <span class="mf">1.</span>  <span class="p">,</span> <span class="mf">1.5</span> <span class="p">,</span> <span class="mf">2.</span>  <span class="p">]])</span>
+
+<span class="c1"># summing the rows of `x * y`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">0.</span>  <span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.5</span> <span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mf">3.</span>  <span class="p">])</span>
+</pre></div>
+</div>
+<p>The distinguishing feature here is that all of these mathematical operations support automatic differentiation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># computing the derivatives of `mg.sum(x * y)`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">2.5</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.5</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.5</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Basic Tensor Math</strong></p>
+<p>Given the following shape-(4, 4) tensor</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span> <span class="mf">4.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span> <span class="mf">8.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span><span class="mf">12.</span><span class="p">,</span> <span class="mf">13.</span><span class="p">,</span> <span class="mf">14.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Using basic indexing, take the natural-logarithm of the 1st and 3rd element in the 3rd-row of x, producing a shape-(2,) result.</p></li>
+<li><p>Add the four quadrants of x (the top-left 2x2 corner, the top-right, etc.), producing a shape-(2, 2) output.</p></li>
+<li><p>Compute the mean column of <code class="docutils literal notranslate"><span class="pre">x</span></code>, producing a shape-(4,) output.</p></li>
+<li><p>Treating each of the rows of <code class="docutils literal notranslate"><span class="pre">x</span></code> as a vector, update <code class="docutils literal notranslate"><span class="pre">x</span></code> in-place so that each row is “normalized” - i.e. so that <code class="docutils literal notranslate"><span class="pre">sum(row</span> <span class="pre">**</span> <span class="pre">2)</span></code> is <code class="docutils literal notranslate"><span class="pre">1.0</span></code> for each row (thus each vector has become a “unit vector”).</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="Linear-Algebra-Operations">
+<h4>Linear Algebra Operations<a class="headerlink" href="#Linear-Algebra-Operations" title="Permalink to this headline">¶</a></h4>
+<p>There are two essential linear algebra functions, <code class="docutils literal notranslate"><span class="pre">matmul</span></code> and <code class="docutils literal notranslate"><span class="pre">einsum</span></code>, <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/linalg.html">provided by MyGrad</a>. (In the future, more of NumPy’s linear algebra functions will be implemented by MyGrad). <code class="docutils literal notranslate"><span class="pre">matmul</span></code> is capable of performing all the common patterns of matrix products, vector products (i.e. “dot” products), and matrix-vector products. <code class="docutils literal notranslate"><span class="pre">einsum</span></code>, on the other hand, is a rather complicated function, but it is capable of performing a rich and
+diverse assortment of customizable linear algebra operations - and MyGrad supports autodiff through all of them! It is worthwhile to take some time to <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.einsum.html#mygrad.einsum">study example usages of einsum</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Demonstrating matmul. Note that `x @ y` is equivalent to `mg.matmul(x, y)`
+
+# Computing the dot-product between two 1D tensors
+&gt;&gt;&gt; x = mg.tensor([1.0, 2.0])
+&gt;&gt;&gt; y = mg.tensor([-3.0, -4.0])
+&gt;&gt;&gt; mg.matmul(x, y)
+Tensor(-11.)
+
+# Performing matrix multiplication between two 2D arrays
+# shape-(4, 2)
+&gt;&gt;&gt; a = mg.tensor([[1, 0],
+...                [0, 1],
+...                [2, 1],
+...                [3, 4]])
+
+# shape-(2, 3)
+&gt;&gt;&gt; b = mg.tensor([[4, 1, 5],
+...                [2, 2, 6]])
+
+# shape-(4, 2) x shape-(2, 3) -&gt; shape-(4, 3)
+&gt;&gt;&gt; a @ b
+Tensor([[ 4,  1,  5],
+        [ 2,  2,  6],
+        [10,  4, 16],
+        [20, 11, 39]])
+
+# Broadcast matrix-multiply a stack of 5 shape-(3, 4) matrices
+# with a shape-(4, 2) matrix.
+# Produces a stack of 5 shape-(3, 2) matrices
+&gt;&gt;&gt; x = mg.random.rand(5, 3, 4)
+&gt;&gt;&gt; y = mg.random.rand(4, 2)
+&gt;&gt;&gt; mg.matmul(x, y)
+Tensor([[[1.58748244, 1.51358424],
+         [0.51050875, 0.56065769],
+         [0.76175208, 0.83783723]],
+
+        [[1.1523679 , 1.1903295 ],
+         [1.14289929, 1.18696065],
+         [0.92242907, 1.06143745]],
+
+        [[0.5638518 , 0.6160062 ],
+         [1.13099094, 1.13372748],
+         [0.33663353, 0.33281849]],
+
+        [[0.52271593, 0.47828053],
+         [1.1220926 , 1.14347422],
+         [0.978343  , 0.96900857]],
+
+        [[0.96079816, 0.82959776],
+         [0.5029887 , 0.39473396],
+         [0.83622258, 0.84607976]]])
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Get a Load of “Einstein” Over Here</strong></p>
+<p>Read the documentation for <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.einsum.html#mygrad.einsum">einsum</a>. Then write an expression using <code class="docutils literal notranslate"><span class="pre">mygrad.einsum</span></code> that operates on two 2D tensors of the same shape, such that it computes the dot product of each corresponding pair of rows between them. I.e. operating on two shape-<span class="math notranslate nohighlight">\((N, D)\)</span> tensors will produce a shape-<span class="math notranslate nohighlight">\((N,)\)</span> tensor storing the resulting dot-product of each of the <span class="math notranslate nohighlight">\(N\)</span> pairs of rows.</p>
+</div>
+</div>
+</div>
+<div class="section" id="Specialized-Functions-for-Deep-Learning">
+<h3>Specialized Functions for Deep Learning<a class="headerlink" href="#Specialized-Functions-for-Deep-Learning" title="Permalink to this headline">¶</a></h3>
+<p>Lastly, MyGrad also provides a <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/nnet.html">suite of functions and utilities</a> that are essential for constructing and training neural networks. These include common deep learning operations like performing convolutions and poolings using <span class="math notranslate nohighlight">\(N\)</span>-dimensional sliding windows, and batch normalization. Also supplied are common activation and loss functions, as well as model-weight initialization schemes. We will make heavy use of these in the coming
+sections.</p>
+<p>(For the more advanced reader, you may have noticed that there is not <code class="docutils literal notranslate"><span class="pre">dense</span></code> operation among the “layer” operations documented under <code class="docutils literal notranslate"><span class="pre">mygrad.nnet</span></code>. This is because the standard linear algebra function <code class="docutils literal notranslate"><span class="pre">mygrad.matmul</span></code> already satisfies this functionality!)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Performing a &quot;conv-net&quot;-style 2D convolution</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">mygrad.nnet</span> <span class="kn">import</span> <span class="n">conv_nd</span>
+
+<span class="c1"># shape-(1, 1, 3, 3)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">kernel</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+<span class="o">...</span>                       <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="o">...</span>                       <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]]]])</span>
+
+<span class="c1"># shape-(1, 1, 5, 5)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">image</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[[[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">],</span>
+<span class="o">...</span>                      <span class="p">[</span> <span class="mf">5.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">],</span>
+<span class="o">...</span>                      <span class="p">[</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">12.</span><span class="p">,</span> <span class="mf">13.</span><span class="p">,</span> <span class="mf">14.</span><span class="p">],</span>
+<span class="o">...</span>                      <span class="p">[</span><span class="mf">15.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">17.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">,</span> <span class="mf">19.</span><span class="p">],</span>
+<span class="o">...</span>                      <span class="p">[</span><span class="mf">20.</span><span class="p">,</span> <span class="mf">21.</span><span class="p">,</span> <span class="mf">22.</span><span class="p">,</span> <span class="mf">23.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">]]]])</span>
+
+<span class="c1"># shape-(1, 1, 5, 5) result</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">conv_nd</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">([[[[</span> <span class="mf">6.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span> <span class="mf">13.</span><span class="p">,</span> <span class="mf">17.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">21.</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">,</span> <span class="mf">40.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">41.</span><span class="p">,</span> <span class="mf">55.</span><span class="p">,</span> <span class="mf">60.</span><span class="p">,</span> <span class="mf">65.</span><span class="p">,</span> <span class="mf">55.</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">61.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">,</span> <span class="mf">85.</span><span class="p">,</span> <span class="mf">90.</span><span class="p">,</span> <span class="mf">75.</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">56.</span><span class="p">,</span> <span class="mf">79.</span><span class="p">,</span> <span class="mf">83.</span><span class="p">,</span> <span class="mf">87.</span><span class="p">,</span> <span class="mf">66.</span><span class="p">]]]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Running-Automatic-Differentiation">
+<h2>Running Automatic Differentiation<a class="headerlink" href="#Running-Automatic-Differentiation" title="Permalink to this headline">¶</a></h2>
+<p>With a bit of know-how about MyGrad under our belts, let’s mosey through a thorough discussion of automatic differentiation.</p>
+<div class="section" id="MyGrad-Bakes-Autodiff-Into-Everything-It-Does">
+<h3>MyGrad Bakes Autodiff Into Everything It Does<a class="headerlink" href="#MyGrad-Bakes-Autodiff-Into-Everything-It-Does" title="Permalink to this headline">¶</a></h3>
+<p>All of the examples of MyGrad’s mathematical operations laid out above behave <em>identically</em> to their NumPy counterparts in terms of the numerical results that they produce. The difference is that MyGrad’s functions were all designed to provide users with the ability to perform automatic differentiation through each of these operations. We saw this in action at the beginning of this section, in <a class="reference external" href="#Automatic-Differentiation-at-a-Glance">“Automatic Differentiation at a Glance”</a>, but that was
+before we were familiar with MyGrad.</p>
+<p>It is important to note that MyGrad’s <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> objects were written to “overload” the common arithmetic operators, such as <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">*</span></code>, so that you can use these familiar operators but actually invoke the corresponding MyGrad functions. For example, calling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tensor_c</span> <span class="o">=</span> <span class="n">tensor_a</span> <span class="o">+</span> <span class="n">tensor_b</span>
+</pre></div>
+</div>
+<p>will <em>actually</em> call</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tensor_c</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tensor_a</span><span class="p">,</span> <span class="n">tensor_b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So that we can perform automatic differentiation through this addition operation. We can read about Python’s <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module4_OOP/Special_Methods.html">special methods</a> to better understand how one can design a class to “overload” operators in this way.</p>
+</div>
+<div class="section" id="MyGrad-Adds-“Drop-In”-AutoDiff-to-NumPy">
+<h3>MyGrad Adds “Drop-In” AutoDiff to NumPy<a class="headerlink" href="#MyGrad-Adds-“Drop-In”-AutoDiff-to-NumPy" title="Permalink to this headline">¶</a></h3>
+<p>MyGrad’s functions are intentionally designed to mirror NumPy’s functions almost exactly. In fact, for all of the NumPy functions that MyGrad mirrors, we can pass a tensor to a NumPy function and it will be “coerced” into returning a tensor instead of a NumPy array – thus we can autodifferentiate through NumPy functions!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># showing off &quot;drop-in&quot; autodiff through NumPy functions</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># note that we are using a numpy function here!</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span>  <span class="c1"># y is a tensor, not a numpy array</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">9.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>  <span class="c1"># compute derivatives of y</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores dy/dx @ x=3</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">6.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>How does this work? MyGrad’s tensor is able to tell NumPy’s function to <em>actually</em> call a MyGrad function.</p>
+<p>So</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><em>actually</em> calls</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>under the hood. Not only is this convenient, but it also means that you can take a complex function that is written in terms of numpy functions and pass a tensor through it so that you can differentiate that function!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">some_library</span> <span class="kn">import</span> <span class="n">complicated_numpy_function</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">out_tensor</span> <span class="o">=</span> <span class="n">complicated_numpy_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">out_tensor</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span> <span class="c1"># compute d(complicated_numpy_function) / dx !</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Making it to the Big Leagues</strong>:</p>
+<p>During this course, we will have grown so comfortable with automatic differentiation and array mathematics that it will be easy for us to graduate to using “industrial-grade” libraries like PyTorch and TensorFlow, which are much more appropriate for doing high-performance work. These libraries are far more sophisticated than is MyGrad (they have millions of dollars of funding and incredible expertise behind them!) and are able to leveraged specialized computer hardware, like GPUs, to perform
+blazingly-fast computations. In fact, we will turn to PyTorch for some of our capstone project work.</p>
+</div>
+</div>
+<div class="section" id="The-All-Important-.backward()-Method">
+<h3>The All-Important <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> Method<a class="headerlink" href="#The-All-Important-.backward()-Method" title="Permalink to this headline">¶</a></h3>
+<p>The sole method that we need to use to invoke autodiff in MyGrad is <code class="docutils literal notranslate"><span class="pre">Tensor.backward()</span></code>. Suppose that we have computed a tensor <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> from other tensors; calling <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code> instructs MyGrad to compute the derivatives of <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> with respect to all of the tensors that it depends on. These derivatives are then stored as NumPy arrays in the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> attribute in each of the respective tensors that preceded <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> in its computation.</p>
+<p>(Note that we are purposefully using the fancy unicode symbol <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> (U+2112) to evoke an association with the “loss” function <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, whose gradient we will be interested in computing in machine learning problems. That being said, this is purely an aesthetic choice made for this section; MyGrad does not care about the particular variable names that we use.)</p>
+<p>Let’s take an example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>x = mg.tensor(2.0)
+y = mg.tensor(3.0)
+f = x * y  # actually calls: `mygrad.multiply(x, y)`
+ℒ = f + x - 2  # actually calls `mygrad.subtract(mygrad.add(f, x), 2)`
+</pre></div>
+</div>
+<p>See that <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is a function of <span class="math notranslate nohighlight">\(f\)</span>, <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(y\)</span>, and that <span class="math notranslate nohighlight">\(f\)</span> is a function of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. Thus the “terminal” (final) tensor in this “computational graph” that we have laid out can be thought of as the function <span class="math notranslate nohighlight">\(\mathscr{L}(f(x, y), x, y)\)</span>.</p>
+<p>As described above, calling <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code> instructs MyGrad to compute all of the derivatives of <code class="docutils literal notranslate"><span class="pre">ℒ</span></code>. It does this using an algorithm known as “backpropagation”, which we will discuss later. Suffice it to say that MyGrad <strong>simply uses the chain rule</strong> (<a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Chain_Rule.html">reference</a>) to compute these derivatives.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ℒ.backward()  # triggers computation of derivatives of `ℒ`
+
+&gt;&gt;&gt; f.grad  # stores dℒ/df = ∂ℒ/∂f @ x=2, y=2
+array(1.)
+
+&gt;&gt;&gt; y.grad  # stores dℒ/dy = ∂ℒ/∂f ∂f/∂y @ x=2, y=2
+array(2.)
+
+&gt;&gt;&gt; x.grad  # stores dℒ/dx = ∂ℒ/∂f ∂f/∂x + ∂ℒ/∂x @ x=2, y=2
+array(4.)
+</pre></div>
+</div>
+<p>To re-emphasize the point made above: MyGrad was only able to access the necessary information to compute all of the derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> (via the chain rule) because all of our quantities of interest were stored as MyGrad-tensors, and all of the mathematical operations that we performed on them were functions supplied by MyGrad.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> and <code class="docutils literal notranslate"><span class="pre">y.grad</span></code> together express the gradient of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>, <span class="math notranslate nohighlight">\(\vec{\nabla}\mathscr{L} = \begin{bmatrix} \frac{d \mathscr{L}}{d x} &amp; \frac{d \mathscr{L}}{dy} \end{bmatrix}\)</span>, evaluated at <span class="math notranslate nohighlight">\((x=2, y=3)\)</span>. These derivatives are now available for use; e.g. we can use these derivatives to perform gradient descent on <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>.</p>
+<p>Involving any of these tensors in further operations will automatically “null” its derivative (i.e. set it to <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Involving a tensor in a new operation will automatically set</span>
+<span class="c1"># its `.grad` attribute to `None`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">4.</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># nulls the grad stored by `x`</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+<p>You can also explicitly call <code class="docutils literal notranslate"><span class="pre">Tensor.null_grad()</span></code> to set that tensor’s <code class="docutils literal notranslate"><span class="pre">.grad</span></code> attribute back to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Demonstrating `Tensor.null_grad()`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">null_grad</span><span class="p">()</span>  <span class="c1"># returns the tensor itself (for convenience)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+<p>It is useful to understand how these gradients get cleared since we will need to make repeated use of a tensor and its associated derivative during gradient descent, and thus we will need to discard of a tensor’s associated derivative between iterations of gradient descent.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Some Basic Autodiff Exercises</strong></p>
+<p>Given <span class="math notranslate nohighlight">\(x = 2.5\)</span>, compute <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dx}\big|_{x=2.5}\)</span> for the following <span class="math notranslate nohighlight">\(\mathscr{L}(x)\)</span></p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\mathscr{L}(x) = 2 + 3x - 5x^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathscr{L}(x) = \cos{(\sqrt{x})}\)</span></p></li>
+<li><p>Given <span class="math notranslate nohighlight">\(f(x) = x^2\)</span>, <span class="math notranslate nohighlight">\(\mathscr{L}(x) = (2 x f(x))^2 - f(x)\)</span> …define <code class="docutils literal notranslate"><span class="pre">f</span></code> as a separate tensor before computing <code class="docutils literal notranslate"><span class="pre">ℒ</span></code>.</p></li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: A Function By Any Other Name (Would Differentiate The Same)</strong></p>
+<p>Given <span class="math notranslate nohighlight">\(x = 2.5\)</span>, verify that the following pairs of functions yield the same derivatives in MyGrad.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\mathscr{L}(x) = xx\)</span> and <span class="math notranslate nohighlight">\(\mathscr{L}(x) = x^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathscr{L}(x) = e^{\ln x}\)</span> and <span class="math notranslate nohighlight">\(\mathscr{L}(x) = x\)</span></p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="Constant-Tensors-and-Mixed-Operations-with-NumPy-Arrays">
+<h3>Constant Tensors and Mixed Operations with NumPy Arrays<a class="headerlink" href="#Constant-Tensors-and-Mixed-Operations-with-NumPy-Arrays" title="Permalink to this headline">¶</a></h3>
+<p>An important feature of MyGrad is that you can do mixed operations between its tensors and other array-like objects or numbers. Not only is this convenient, but it also enables us to designate certain quantities in our computations as <strong>constants</strong>, i.e. as quantities for which we <strong>do not need to compute derivatives</strong>. For example, in the following calculation MyGrad only computes one derivative, <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dx}\)</span>, of a binary function; this enables us to avoid unnecessary
+computation if we don’t have any use for <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dy}\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Demonstrating mixed operations between tensors
+# and non-tensors
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; x = mg.tensor([1., 2.])
+&gt;&gt;&gt; y = np.array([3., 4.])  # this array acts like &quot;a constant&quot;
+&gt;&gt;&gt; ℒ = x * y
+&gt;&gt;&gt; ℒ.backward()  # only dℒ/dx is computed
+&gt;&gt;&gt; x.grad
+array([3., 4.])
+</pre></div>
+</div>
+<p>All of MyGrad’s functions also accept a “constant” argument, which, when specified as <code class="docutils literal notranslate"><span class="pre">True</span></code>, will cause the creation of a <strong>constant tensor</strong>. Just like when it encounters a NumPy array or Python number, MyGrad knows to skip the calculation of a derivative with respect to a constant tensor. We can check the <code class="docutils literal notranslate"><span class="pre">Tensor.constant</span></code> attribute to see if a tensor is a constant or not.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Demonstrating the use of a constant Tensor
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; x = mg.tensor([1., 2.])
+&gt;&gt;&gt; y = mg.tensor([3., 4.], constant=True)
+
+&gt;&gt;&gt; x.constant
+False
+&gt;&gt;&gt; y.constant
+True
+
+&gt;&gt;&gt; ℒ = x * y
+&gt;&gt;&gt; ℒ.backward()  # only dℒ/dx is computed
+&gt;&gt;&gt; x.grad
+array([3., 4.])
+&gt;&gt;&gt; y.grad is None
+True
+</pre></div>
+</div>
+<p>Operations only involving constants and constant tensors will naturally create constant tensors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Operations involving only constants will produce a constant</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">out</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="n">constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">constant</span>
+<span class="bp">True</span>
+</pre></div>
+</div>
+<p>And calling <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> on a constant tensor will not do anything at all!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># calling `.backward()` on a constant has no effect</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<div class="section" id="Constants-vs. Variables:-Why-all-the-fuss?">
+<h4>Constants vs. Variables: Why all the fuss?<a class="headerlink" href="#Constants-vs. Variables:-Why-all-the-fuss?" title="Permalink to this headline">¶</a></h4>
+<p>The semantics of constants versus variable tensors are important because we will often encounter situations wherein we do not need the derivatives for all of the quantities involved in a computation, and that needlessly calculating them would actually be very costly. Consider the case of optimizing the parameters for a machine learning model via gradient descent. As we discussed, that involves computing each <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dw_i}\)</span> for the expression</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}\big(w_1, ..., w_M ; (x_n, y_n)_{n=0}^{N-1}\big)
+\end{equation}</div><p>Note that we <em>do not</em> need to compute each <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dx_i}\)</span>, which represents the derivative of our loss function <em>with respect to each datum in our dataset</em>. If we were optimizing some computer vision model, calculating each <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dx_i}\)</span> would be tantamount to calculating a derivative associated <em>with each pixel of each image in our dataset</em>. Very expensive indeed!</p>
+<p>Thus, in MyGrad, we can simply express each <span class="math notranslate nohighlight">\(w_i\)</span> as part of a (variable) tensor, and express each <span class="math notranslate nohighlight">\(x_i\)</span> as part of a NumPy array (or constant tensor), thus when we invoke autodiff on <span class="math notranslate nohighlight">\(\mathscr{L}\big(w_1, ..., w_M ; (x_n, y_n)_{n=0}^{N-1}\big)\)</span> MyGrad will naturally avoid computing any unnecessary derivatives.</p>
+</div>
+</div>
+<div class="section" id="Under-the-Hood-of-MyGrad’s-Tensor-(Just-a-NumPy-Array)">
+<h3>Under the Hood of MyGrad’s Tensor (Just a NumPy Array)<a class="headerlink" href="#Under-the-Hood-of-MyGrad’s-Tensor-(Just-a-NumPy-Array)" title="Permalink to this headline">¶</a></h3>
+<p>It is useful to know that MyGrad isn’t doing anything too fancy under the hood; each <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> instance is simply holding onto a NumPy array, and is also responsible for keeping track of the mathematical operations that the array was involved in. We can access a tensor’s underlying array via the <code class="docutils literal notranslate"><span class="pre">.data</span></code> attribute:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Accessing a tensor&#39;s underlying NumPy array...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">4.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="n">Tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+
+<span class="c1"># via `Tensor.data`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+
+<span class="c1"># via `numpy.asarray` and `mygrad.asarray`</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mg</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>It is useful to keep the intimate relationship between a MyGrad tensor and an underlying NumPy array in mind because it reminds us of how similar these libraries are, and it informs our intuition for how tensors behave. Furthermore, this will prove to be an important technical detail for when we perform gradient descent, where we will want to update directly the data being held by the tensor.</p>
+</div>
+</div>
+<div class="section" id="Gradient-Descent-with-MyGrad">
+<h2>Gradient Descent with MyGrad<a class="headerlink" href="#Gradient-Descent-with-MyGrad" title="Permalink to this headline">¶</a></h2>
+<p>Without further ado, let’s leverage automatic differentiation to perform gradient descent on a simple function. To stick with a familiar territory, we will once again perform gradient descent on the simple function <span class="math notranslate nohighlight">\(\mathscr{L}(w) = w^2\)</span>. This will match exactly the gradient descent example the we saw in the previous example, only here we will not need to write our the derivative of <span class="math notranslate nohighlight">\(\mathscr{L}(w)\)</span> or evaluate it manually. Instead, by making sure that we store the value representing
+<span class="math notranslate nohighlight">\(w\)</span> as a MyGrad tensor, and use it to calculate <span class="math notranslate nohighlight">\(L(w)\)</span>, we will be able to leverage autodiff.</p>
+<p>Recall that we will be updating <span class="math notranslate nohighlight">\(w\)</span> according to the gradient-based step</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+w_{\mathrm{new}} = w_{\mathrm{old}} - \delta \frac{\mathrm{d}\mathscr{L}}{\mathrm{d}w}\big|_{w_{\mathrm{old}}}
+\end{equation}</div><p>Picking <span class="math notranslate nohighlight">\(w = 10\)</span> as a starting point, using the learning rate <span class="math notranslate nohighlight">\(\delta=0.3\)</span>, and taking five steps, let’s search for the minimum of <span class="math notranslate nohighlight">\(L\)</span>. One thing to note here is that we will update the NumPy array underlying the tensor <code class="docutils literal notranslate"><span class="pre">w</span></code> directly for the gradient-based update.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Performing gradient descent on ℒ(w) = w ** 2
+w = mg.Tensor(10.0)
+learning_rate = 0.3
+num_steps = 10
+print(w)
+
+for step_cnt in range(num_steps):
+    ℒ = w ** 2    # compute L(w)
+    ℒ.backward()  # compute derivative of L
+    w.data -= learning_rate * w.grad  # update w via gradient-step
+    print(w)
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tensor</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">4.</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">1.6</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.64</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.256</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.1024</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.04096</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.016384</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.0065536</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.00262144</span><span class="p">)</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mf">0.00104858</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See that the gradient descent algorithm is steadily guiding use towards the global minimum <span class="math notranslate nohighlight">\(w = 0\)</span>, and we didn’t even need to do any calculus on our own!</p>
+<p>The line of code that we wrote to represent the gradient-step,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">w</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+<p>might be a little more nuanced than one might have expected. We could have instead written</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">w</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+<p>which more closely aligns with the mathematical equation written above. That being said, the former equation has two benefits, both in terms of optimizing computational speed and both deriving from the fact that we are operating directly on the NumPy array stored by <code class="docutils literal notranslate"><span class="pre">w</span></code> via `w.data:</p>
+<ol class="arabic simple">
+<li><p>The form <code class="docutils literal notranslate"><span class="pre">w.data</span> <span class="pre">-=</span> <span class="pre">learning_rate</span> <span class="pre">*</span> <span class="pre">w.grad</span></code> involves only NumPy arrays, thus we do not need to pay the extra computational overhead incurred by MyGrad’s tracking of mathematical operations.</p></li>
+<li><p>Using the operator <code class="docutils literal notranslate"><span class="pre">-=</span></code> invokes an <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Augmented-Assignments">augmented update</a> on the data held by <code class="docutils literal notranslate"><span class="pre">w</span></code>, this means that the computer can directly overwrite the memory associated with <code class="docutils literal notranslate"><span class="pre">w.data</span></code> instead of allocating a new array and then replacing <code class="docutils literal notranslate"><span class="pre">w.data</span></code> with it.</p></li>
+</ol>
+<p>Neither of these points really matter for this extremely lightweight example, but they will make more of a difference when we are making many updates to numerous, large arrays of data, which will be the case when we are tuning the parameters of a neural network. Towards that end, be sure to carefully complete the following exercise…</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Writing a Generic Gradient-Update Function</strong>:</p>
+<p>Complete the following Python function, which is responsible for taking an arbitrary collection (e.g. a list) of MyGrad tensors, <strong>which are assumed to already store their relevant gradients</strong>, and perform a gradient-step on each one of them. That is, assume that, outside of this function, <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> has already been computed and <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code> was already invoked so that now all that is left to be done is perform the gradient-based step on each tensor.</p>
+<p>This function will be a very useful utility for when you are optimizing a function involving multiple different variables.</p>
+<p>(Hint: this should be a very brief function… much shorter than its docstring)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_step</span><span class="p">(</span><span class="n">tensors</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient-step in-place on each of the provides tensors</span>
+<span class="sd">    according to the standard formulation of gradient descent.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tensors : Union[Tensor, Iterable[Tensors]]</span>
+<span class="sd">        A single tensor, or an iterable of an arbitrary number of tensors.</span>
+
+<span class="sd">        If a `tensor.grad` is `None`for a specific tensor, the update on</span>
+<span class="sd">        that tensor is skipped.</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The gradient-steps performed by this function occur in-place on each tensor,</span>
+<span class="sd">    thus this function does not return anything</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Tensors-as-Collections-of-Scalar-Variables">
+<h2>Tensors as Collections of Scalar Variables<a class="headerlink" href="#Tensors-as-Collections-of-Scalar-Variables" title="Permalink to this headline">¶</a></h2>
+<p>Thus far we have focused on equations involving scalars, like <code class="docutils literal notranslate"><span class="pre">Tensor(2.0)</span></code>, which are zero-dimensional tensors. This was done intentionally, since we are most comfortable with thinking of equations that only involve scalars, such as <span class="math notranslate nohighlight">\(f(x) = x^2\)</span>; we intuitively know that <span class="math notranslate nohighlight">\(x\)</span> represents a single number here. That being said, the <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> object was clearly designed to be able to represent an <span class="math notranslate nohighlight">\(N\)</span>-dimensional array of data. How, then, are we to interpret the <code class="docutils literal notranslate"><span class="pre">.grad</span></code>
+attribute associated with a multidimensional tensor? The answer, generally, is that <strong>each element of a tensor is to be interpreted as a scalar-valued variable</strong>.</p>
+<p>Consider, for example, the following calculation</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; tensor = mg.tensor([2.0, 4.0, 8.0])
+&gt;&gt;&gt; arr = np.array([-1.0, 2.0, 0])
+&gt;&gt;&gt; ℒ = (arr * tensor ** 2).sum()
+&gt;&gt;&gt; ℒ.backward()
+</pre></div>
+</div>
+<p>What value(s) should we expect to be stored in <code class="docutils literal notranslate"><span class="pre">tensor.grad</span></code>? Take some time to think about this and see if you can convince yourself of an answer.</p>
+<p>Let’s work out what we should expect the gradient to be given the aforementioned prescription: that each element of <code class="docutils literal notranslate"><span class="pre">tensor</span></code> should be treated like a scalar-valued variable. I.e. we’ll say <span class="math notranslate nohighlight">\(\mathrm{tensor} = [x_0, x_1, x_2]\)</span>, then the equation for <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L} = -1\:(x_0)^2 + 2\:(x_1)^2 + 0\:(x_2)^2
+\end{equation}</div><p>And <code class="docutils literal notranslate"><span class="pre">tensor.grad</span></code> will store <span class="math notranslate nohighlight">\(\vec{\nabla}\mathscr{L}\)</span> evaluated at the particular value stored by <code class="docutils literal notranslate"><span class="pre">tensor</span></code></p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\vec{\nabla}\mathscr{L} &amp;= \big[\frac{\mathrm{d}\mathscr{L}}{\mathrm{d}x_0},\frac{\mathrm{d}\mathscr{L}}{\mathrm{d}x_1},\frac{\mathrm{d}\mathscr{L}}{\mathrm{d}x_2}\big]\\
+&amp;= \big[-2x_0,\:4x_1,\:0x_0\big]\\
+\vec{\nabla}\mathscr{L}\big|_{x_0=2, x_1=4, x_2=8} &amp;= \big[-4,\:16,\:0\big]
+\end{align}</div><p>Indeed this is what we find</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">array([-4., 16.,  0.])</span>
+</pre></div>
+</div>
+<p>Thus the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> array has a clear correspondence with its associated tensor: if <code class="docutils literal notranslate"><span class="pre">tensor</span></code> is a N-dimensional tensor that is involved in <strong>the calculation of a scalar</strong> <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> (and assuming that we invoked <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code>), then <code class="docutils literal notranslate"><span class="pre">t.grad</span></code> is an array <strong>of the same shape as</strong> <code class="docutils literal notranslate"><span class="pre">tensor</span></code> that stores the corresponding derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>.</p>
+<p>That is, given that we think of an element of a tensor to be a scalar-valued variable</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\text{tensor}[i_1, \dots, i_N] \rightarrow x_{i_1, \dots, i_N}
+\end{equation}</div><p>then the corresponding element of the associated gradient is the derivative involving that variable</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\text{tensor.grad}[i_1, \dots, i_N] \rightarrow \frac{\mathrm{d}\mathscr{L}}{\mathrm{d} x_{i_1, \dots, i_N}}\\
+\end{equation}</div><div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Tensors as Collections of Scalar Variables</strong>:</p>
+<p>Given the shape-<span class="math notranslate nohighlight">\((3, 3)\)</span> tensor</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Tensor</span><span class="p">([[</span> <span class="mf">2.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">10.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>whose elements correspond to <span class="math notranslate nohighlight">\(x_0, x_1, \dots, x_8\)</span>, evaluate the derivatives of</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L} = 0x_0 + 1x_1 + \dots + 8x_8 = \sum_{n=0}^8{n x_n}
+\end{equation}</div></div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Descent Down a Parabolic Surface using MyGrad</strong>:</p>
+<p>(This problem mirrors a reading comprehension question from the previous section on gradient descent, but here we leverage automatic differentiation)</p>
+<p>Using automatic differentiation with MyGrad, complete the following Python function that implements gradient descent on the skewed paraboloid <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span>.</p>
+<p>Note that you should not need to derive/compute the partial derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> yourself.</p>
+<p>Your calculation of <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span> should be fully vectorized; i.e. you should use a shape-(2,) tensor <code class="docutils literal notranslate"><span class="pre">w</span></code> to store <span class="math notranslate nohighlight">\([w_1, w_2]\)</span>, and perform element-wise operations on it in order to compute <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>. Think about what array you can use do element-wise multiplication, but where you are performing <code class="docutils literal notranslate"><span class="pre">(2*,</span> <span class="pre">3*)</span></code>.</p>
+<p>Use your <code class="docutils literal notranslate"><span class="pre">gradient_step</span></code> function to make updates to <code class="docutils literal notranslate"><span class="pre">w</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">descent_down_2d_parabola</span><span class="p">(</span><span class="n">w_start</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient descent on ℒ(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 ,</span>
+<span class="sd">    returning the sequence of w-values: [w_start, ..., w_stop]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    w_start : mygrad.Tensor, shape-(2,)</span>
+<span class="sd">        The initial value of (w1, w2).</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    num_steps : int</span>
+<span class="sd">        The number subsequent of descent steps taken. A non-negative number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tensor, shape-(2,)</span>
+<span class="sd">        The final updated values of (w_1, w_2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+<p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=mg.Tensor([2.0,</span> <span class="pre">4.0])</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.1</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=10</span></code>.</p>
+</div>
+<div class="section" id="Vectorized-Autodiff">
+<h3>Vectorized Autodiff<a class="headerlink" href="#Vectorized-Autodiff" title="Permalink to this headline">¶</a></h3>
+<p>There was an important caveat made above, which is that we always assume that the “terminus” from which we call <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> is a scalar. If we call <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> from a tensor that is <em>not</em> a scalar, then <strong>MyGrad acts as if the terminus tensor has first been summed to down a scalar</strong>, and then backpropagation is invoked. It is essential that <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is a scalar so that each <span class="math notranslate nohighlight">\(\frac{\mathrm{d}\mathscr{L}}{\mathrm{d} x_{i_1, \dots, i_N}}\)</span> is also a scalar, and so that
+<code class="docutils literal notranslate"><span class="pre">tensor</span></code> and <code class="docutils literal notranslate"><span class="pre">tensor.grad</span></code> always possess the same shape.</p>
+<p>That being said, this mechanism affords us some rather convenient behavior. Consider the following computation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># a tensor of 100 evenly-spaced elements along [-5, 5]
+&gt;&gt;&gt; tensor = mg.linspace(-5, 5, 100)
+&gt;&gt;&gt; ℒ = tensor ** 2  # shape-(100) tensor
+&gt;&gt;&gt; ℒ.backward()
+&gt;&gt;&gt; tensor.grad
+array([-10.        ,  -9.7979798 ,  -9.5959596 ,  -9.39393939,
+        -9.19191919,  -8.98989899,  -8.78787879,  -8.58585859,
+        -8.38383838,  -8.18181818,  -7.97979798,  -7.77777778,
+        ...
+         8.58585859,   8.78787879,   8.98989899,   9.19191919,
+         9.39393939,   9.5959596 ,   9.7979798 ,  10.        ])
+</pre></div>
+</div>
+<p>Recall that <code class="docutils literal notranslate"><span class="pre">tensor</span> <span class="pre">**</span> <span class="pre">2</span></code> simply represents the element-wise application of the square operator, thus <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L} = \big[x_0 ^2,;\ \dots, \; x^2_{99} \big]
+\end{equation}</div><p>In MyGrad, invoking <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code> behaves as if we have first summed <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> before invoking <code class="docutils literal notranslate"><span class="pre">.backward()</span></code>, but note that the terms in this sum are all independent:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\Sigma{\mathscr{L}} = x_0 ^2 + \dots + x^2_{99}
+\end{equation}</div><p>thus the gradient is simply</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\vec{\nabla}(\Sigma{\mathscr{L}}) = \big[2x_0,;\ \dots, \; 2x_{99} \big]
+\end{equation}</div><p>See that the original operation was simply the element-wise square operation, and that the gradient corresponds simply to the element-wise derivative as well. In essence, we performed a vectorized computation of <span class="math notranslate nohighlight">\(f(x) = x ^ 2\)</span> and its derivative <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x} = 2x\)</span> at 100 independent values.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Derivative Plotter</strong>:</p>
+<p>Complete the following function that leverages vectorized autodiff to plot a function and its derivative over a user-specified domain of values. Refer to <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">this resource</a> for a primer on using Matplotlib.</p>
+<p>Note that matplotlib’s functions might not know how to process tensors, so we should pass them arrays instead (recall that <code class="docutils literal notranslate"><span class="pre">tensor.data</span></code> will return the array associated with a tensor).</p>
+<p>Provide labels for the respective plots of <code class="docutils literal notranslate"><span class="pre">func(x)</span></code> and its derivative, and include a legend.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_func_and_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Plots func(x) and dfunc/dx on the same set of axes at the user-specified point</span>
+<span class="sd">    stored in ``x``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : mygrad.Tensor, shape-(N,)</span>
+<span class="sd">        The positions at which `func` and its derivative will be</span>
+<span class="sd">        evaluated and plotted.</span>
+
+<span class="sd">    func: Callable[[Tensor], Tensor]</span>
+<span class="sd">        A unary function that is assumed to support backpropagation via MyGrad.</span>
+<span class="sd">        I.e. calling `func(x).backward()` will compute the derivative(s) of `func`</span>
+<span class="sd">        with respect to `x`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[Figure, Axis]</span>
+<span class="sd">        The figure and axis objects associated with the plot that was produced.`l</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># YOUR CODE HERE</span>
+</pre></div>
+</div>
+<p>Use this utility to plot the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x) = \sin{(2x)}\; \cos{(x)}\; e^{-x/3}
+\end{equation}</div><p>and its derivative evaluated at 10,000 evenly-spaced points over <span class="math notranslate nohighlight">\([0, 10]\)</span></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Differentiate *The Universe* (Hot-Take Alert)</strong>:</p>
+<p>Presently, automatic differentiation is proving to far more useful than simply being a means for facilitating gradient descent. Indeed the ability to richly measure “cause and effect” through sophisticated computer programs via autodiff is spurring advancements in, and new connections between, fields such as scientific computing, physics, probabilistic programming, machine learning, and others.</p>
+<p>Programming languages like <a class="reference external" href="https://julialang.org/">Julia</a> are advancing a paradigm known as <a class="reference external" href="https://en.wikipedia.org/wiki/Differentiable_programming">differentiable programming</a>, in which automatic differentiation can be performed directly on arbitrary code. This is in contrast to using an autodiff library like MyGrad, in which you have to constrain your computer program to specifically use only that library’s functionality, rather than write generic Python code, in order to enjoy the
+benefits of automatic differentiability. The impact of differentiable programming is that computer programs that were written for specialized purposes - and without heed to any notion of differentiability - can be incorporated into a framework that is nonetheless fully differentiable. Because of this, programs like physics engines, ray tracers, and neural networks can all be combined into a fully differentiable system, and this differentiability can then enable rich new optimizations,
+simulations, and analyses through these programs.</p>
+<p>The new synergies, advancements, and problems resulting from technologies like differentiable programming are being categorized as items in the field of <a class="reference external" href="https://sciml.ai/">“scentific machine learning”</a>. It is my (the author’s) opinion that the recent advancements in deep learning, which is attributed to neural networks and early automatic differentiation tools, will eventually be seen as a mere prelude to a more staggering impact made across the STEM fields by differentiable programming and
+scientific machine learning.</p>
+</div>
+</div>
+</div>
+<div class="section" id="Summary-and-Looking-Ahead">
+<h2>Summary and Looking Ahead<a class="headerlink" href="#Summary-and-Looking-Ahead" title="Permalink to this headline">¶</a></h2>
+<p>The past decade featured the emergence of powerful numerical software libraries that are equipped with the ability to automatically compute derivatives associated with calculations. These are known as automatic differentiation libraries, or “autodiff” libraries. PyTorch and Tensorflow are examples of extremely popular libraries that feature autodiff capabilities.</p>
+<p>The “killer” application of autodiff libraries has been to enable the use of gradient descent to optimize arbitrarily-complex mathematical models, where a model is implemented using the tools supplied by an autodiff library so that the derivatives associated with its parameters can be calculated “automatically”. As we will see, this process is very often the driving force behind the “learning” in “deep learning”; that is, to optimize the parameters of a neural network.</p>
+<p>We were introduced to MyGrad, which is a simple and ergonomic autodiff library whose primary purpose is to act like “NumPy + autodiff”; in this way we can continue to focusing on developing our NumPy skills with little distraction. Towards this end MyGrad provides a <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/tensor.html">Tensor class</a>, which behaves nearly identically to NumPy’s <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> class. It’s main difference is that standard mathematical operations using arithmetic operators (<code class="docutils literal notranslate"><span class="pre">+</span></code>,
+<code class="docutils literal notranslate"><span class="pre">*</span></code>, etc.), or using MyGrad’s suite of functions, and involving MyGrad-tensors will be tracked by MyGrad so that derivatives through arbitrary compositions of functions can be computed. Specifically, MyGrad uses an algorithm known as “backpropagation” to perform this automatic differentiation.</p>
+<div class="section" id="Looking-Ahead">
+<h3>Looking Ahead<a class="headerlink" href="#Looking-Ahead" title="Permalink to this headline">¶</a></h3>
+<p>The next exercise notebook is a very important one; in it we will return to our modeling problem where we selected a linear model to describe the relationship between an NBA player’s height and his wingspan. Before, we found that we could exactly solve for the model parameters (i.e. the slope and y-intercept) that minimize the squared-residuals between our recorded data and our model’s predictions. Now, we will act as if no such analytic solution exists, since this will almost always be the case
+in “real world” problems. Instead, we will use gradient descent to tune the parameters of our linear model, and we will do this by leveraging MyGrad’s autodiff capabilities to compute the relevant gradients for this optimization process. The procedure that we exercise here will turn out to be almost exactly identical to the process for “training a neural network” using “supervised learning”.</p>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Tensor creation in MyGrad: Solution</strong></p>
+<p>Find a MyGrad function that enables you to create a tensor of 15 evenly-spaced elements over the interval <span class="math notranslate nohighlight">\([0, \pi]\)</span>, and use it to create this tensor. Make the tensor store 32-bit floats instead of the standard 64-bit ones.</p>
+<blockquote>
+<div><p><a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.linspace.html#mygrad.linspace">mygrad.linspace</a> is the function that generates a tensor of elements evenly spaced over a specified interval.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+
+<span class="go"># Create a shape-(15,) tensor of elements over [0, pi]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mg</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="go">Tensor([0.        , 0.22439948, 0.44879895, 0.67319843, 0.8975979 ,</span>
+<span class="go">        1.12199738, 1.34639685, 1.57079633, 1.7951958 , 2.01959528,</span>
+<span class="go">        2.24399475, 2.46839423, 2.6927937 , 2.91719318, 3.14159265])</span>
+</pre></div>
+</div>
+</div><p><strong>Basic Tensor Math: Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span> <span class="mf">4.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span> <span class="mf">8.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span><span class="mf">12.</span><span class="p">,</span> <span class="mf">13.</span><span class="p">,</span> <span class="mf">14.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">]])</span>
+
+
+<span class="go"># 1. Take the natural-logarithm of the 1st and 3rd element</span>
+<span class="go">#    in the 3rd-row of x, producing a shape-(2,) result.</span>
+<span class="go">#</span>
+<span class="go"># Select the desired row and then use the slice `::2`</span>
+<span class="go"># to slice &quot;every other&quot; column - i.e. columns 1 and 3.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">Tensor([2.07944154, 2.30258509])</span>
+
+<span class="go"># 2. Add the four quadrants of `x`, producing a shape-(2, 2) output.</span>
+<span class="go">#    top-left  top-right    bottom-left  bottom-right</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+<span class="go">Tensor([[20., 24.],</span>
+<span class="go">        [36., 40.]])</span>
+
+<span class="go"># 3. Compute the mean column of `x`, producing a shape-(4,) output</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">Tensor([ 1.5,  5.5,  9.5, 13.5])</span>
+
+<span class="go"># 4. Treating each of the rows of `x` as a vector, update `x` in-place so</span>
+<span class="go">#    that each row is &quot;normalized&quot;</span>
+<span class="go">#</span>
+<span class="go"># We use /= to perform an in-place division on `x`.</span>
+<span class="go"># The `mg.sum(..., keepdims=True)` option makes it convenient to make the</span>
+<span class="go"># row-wise magnitudes that we compute broadcast-compatible with x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">/=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+<span class="go"># Checking the normalization</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">Tensor([1., 1., 1., 1.])</span>
+</pre></div>
+</div>
+<p><strong>Get a Load of “Einstein” Over Here: Solution</strong></p>
+<p>Read the documentation for <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.einsum.html#mygrad.einsum">einsum</a>. Then write an expression using <code class="docutils literal notranslate"><span class="pre">mygrad.einsum</span></code> that operates on two 2D tensors of the same shape, such that it computes the dot product of each corresponding pair of rows between them. I.e. operating on two shape-<span class="math notranslate nohighlight">\((N, D)\)</span> tensors will produce a shape-<span class="math notranslate nohighlight">\((N,)\)</span> tensor storing the resulting dot-product of each of the <span class="math notranslate nohighlight">\(N\)</span> pairs of rows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+<span class="go"># creating example input tensors</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">12.</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">12.</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="go"># Two shape-(4, 3) tensors</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+<span class="go">(Tensor([[ 0.,  1.,  2.],</span>
+<span class="go">         [ 3.,  4.,  5.],</span>
+<span class="go">         [ 6.,  7.,  8.],</span>
+<span class="go">         [ 9., 10., 11.]]),</span>
+<span class="go"> Tensor([[ -0.,  -1.,  -2.],</span>
+<span class="go">         [ -3.,  -4.,  -5.],</span>
+<span class="go">         [ -6.,  -7.,  -8.],</span>
+<span class="go">         [ -9., -10., -11.]]))</span>
+
+<span class="go"># computes the dot product between each of the</span>
+<span class="go"># 4 corresponding pairs of rows between `x` and `y`</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;nd,nd-&gt;n&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">Tensor([  -5.,  -50., -149., -302.])</span>
+</pre></div>
+</div>
+<p><strong>Some Basic Autodiff Exercises: Solution</strong></p>
+<p>Given <span class="math notranslate nohighlight">\(x = 2.5\)</span>, compute <span class="math notranslate nohighlight">\(\frac{d\mathscr{L}}{dx}\big|_{x=2.5}\)</span> for the following <span class="math notranslate nohighlight">\(\mathscr{L}(x)\)</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; x = mg.Tensor(2.5)
+
+# 1. ℒ(x) = 2 + 3x - 5x**2
+&gt;&gt;&gt; ℒ = 2 + 3 * x - 5 * x ** 2
+&gt;&gt;&gt; ℒ.backward()
+&gt;&gt;&gt; x.grad  # dℒ/dx @ x=2.5
+array(-22.)
+
+# 2. ℒ(x) = cos(sqrt(x))
+&gt;&gt;&gt; ℒ = mg.cos(mg.sqrt(x))
+&gt;&gt;&gt; ℒ.backward()
+&gt;&gt;&gt; x.grad  # dℒ/dx @ x=2.5
+array(-0.31621085)
+
+# 3. f(x) = x**2, and ℒ(x) = (2x f(x))**2 - f(x)
+&gt;&gt;&gt; f = x ** 2
+&gt;&gt;&gt; ℒ = (2 * x * f) ** 2 - f
+&gt;&gt;&gt; ℒ.backward()
+&gt;&gt;&gt; x.grad  # dℒ/dx @ x=2.5
+array(2338.75)
+</pre></div>
+</div>
+<p><strong>A Function By Any Other Name (Would Differentiate The Same): Solution</strong></p>
+<p>Given <span class="math notranslate nohighlight">\(x = 2.5\)</span>, verify that the following pairs of functions yield the same derivatives in MyGrad.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mf">2.5</span><span class="p">)</span>
+
+<span class="go"># 1. ℒ(x) = x*x vs ℒ(x) = x ** 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">array(5.)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">array(5.)</span>
+
+<span class="go"># 2. ℒ(x) = exp(ln(x)) vs ℒ(x) = x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">array(1.)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">array(1.)</span>
+</pre></div>
+</div>
+<p><strong>Writing a Generic Gradient-Update Function: Solution</strong></p>
+<p>Complete the following Python function, which is responsible for taking an arbitrary collection (e.g. a list) of MyGrad tensors, <strong>which are assumed to already store their relevant gradients</strong>, and perform a gradient-step on each one of them. That is, assume that, outside of this function, <code class="docutils literal notranslate"><span class="pre">ℒ</span></code> has already been computed and <code class="docutils literal notranslate"><span class="pre">ℒ.backward()</span></code> was already invoked so that now all that is left to be done is perform the gradient-based step on each tensor.</p>
+<p>This function will be a very useful utility for when you are optimizing a function involving multiple different variables.</p>
+<p>(Hint: this should be a very brief function… much shorter than its docstring)</p>
+<blockquote>
+<div><p>Simply loop over each tensor and perform the in-place standard gradient step on its underlying NumPy array.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_step</span><span class="p">(</span><span class="n">tensors</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs gradient-step in-place on each of the provides tensors</span>
+<span class="sd">    according to the standard formulation of gradient descent.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tensors : Union[Tensor, Iterable[Tensors]]</span>
+<span class="sd">        A single tensor, or an iterable of an arbitrary number of tensors.</span>
+
+<span class="sd">        If a `tensor.grad` is `None`for a specific tensor, the update on</span>
+<span class="sd">        that tensor is skipped.</span>
+
+<span class="sd">    learning_rate : float</span>
+<span class="sd">        The &quot;learning rate&quot; factor for each descent step. A positive number.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The gradient-steps performed by this function occur in-place on each tensor,</span>
+<span class="sd">    thus this function does not return anything</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensors</span><span class="p">,</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="c1"># Only one tensor was provided. Pack</span>
+        <span class="c1"># it into a list so it can be accessed via</span>
+        <span class="c1"># iteration</span>
+        <span class="n">tensors</span> <span class="o">=</span> <span class="p">[</span><span class="n">tensors</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tensors</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">t</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+<p><strong>Tensors as Collections of Scalar Variables: Solution</strong></p>
+<p>Given the shape-<span class="math notranslate nohighlight">\((3, 3)\)</span> tensor</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Tensor</span><span class="p">([[</span> <span class="mf">2.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">10.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>whose elements correspond to <span class="math notranslate nohighlight">\(x_0, x_1, \dots, x_8\)</span>, evaluate the derivatives of</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L} = 0x_0 + 1x_1 + \dots + 8x_8 = \sum_{n=0}^8{n x_n}
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Create the shape-(3, 3) tensor
+&gt;&gt;&gt; x = mg.Tensor([[ 2.,  6.,  7.],
+...                [ 1.,  4.,  9.],
+...                [10.,  8.,  5.]])
+
+# We need to multiply each element of `x` by
+# the appropriate coefficient; we&#39;ll arrange
+# these in a shape-(3, 3) array so that we can
+# carry out this multiplication in a vectorized
+# fashion
+&gt;&gt;&gt; const = np.arange(9.).reshape(3, 3)
+&gt;&gt;&gt; const
+array([[0., 1., 2.],
+       [3., 4., 5.],
+       [6., 7., 8.]])
+
+# Computing the sum that defines ℒ
+&gt;&gt;&gt; ℒ = mg.sum(const * x)
+
+# Computing the derivatives of ℒ
+&gt;&gt;&gt; ℒ.backward()
+&gt;&gt;&gt; x.grad
+array([[0., 1., 2.],
+       [3., 4., 5.],
+       [6., 7., 8.]])
+</pre></div>
+</div>
+<p><strong>Descent Down a Parabolic Surface using MyGrad: Solution</strong>:</p>
+<p>Using automatic differentiation with MyGrad, complete the following Python function that implements gradient descent on the skewed paraboloid <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span>.</p>
+<p>Note that you should not need to derive/compute the partial derivatives of <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> yourself.</p>
+<p>Your calculation of <span class="math notranslate nohighlight">\(\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2\)</span> should be fully vectorized; i.e. you should use a shape-(2,) tensor <code class="docutils literal notranslate"><span class="pre">w</span></code> to store <span class="math notranslate nohighlight">\([w_1, w_2]\)</span>, and perform element-wise operations on it in order to compute <span class="math notranslate nohighlight">\(\mathscr{L}\)</span>. Think about what array you can use do element-wise multiplication, but where you are performing <code class="docutils literal notranslate"><span class="pre">(2*,</span> <span class="pre">3*)</span></code>.</p>
+<p>Use your <code class="docutils literal notranslate"><span class="pre">gradient_step</span></code> function to make updates to <code class="docutils literal notranslate"><span class="pre">w</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>import numpy as np
+
+def descent_down_2d_parabola(w_start, learning_rate, num_steps):
+    &quot;&quot;&quot;
+    Performs gradient descent on L(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 ,
+    returning the sequence of w-values: [w_start, ..., w_stop]
+
+    Parameters
+    ----------
+    w_start : mygrad.Tensor, shape-(2,)
+        The initial value of (w1, w2).
+
+    learning_rate : float
+        The &quot;learning rate&quot; factor for each descent step. A positive number.
+
+    num_steps : int
+        The number subsequent of descent steps taken. A non-negative number.
+
+    Returns
+    -------
+    Tensor, shape-(2,)
+        The final updated values of (w_1, w_2)
+    &quot;&quot;&quot;
+    # We don&#39;t want to mutate our input tensor,
+    # so we make a copy
+    w = mg.Tensor(w_start)
+
+    const = np.array([2.0, 3.0])
+    for _ in range(num_steps):
+        ℒ = const * w ** 2
+        ℒ.backward()
+        # updates `w` in-place
+        gradient_step(w, learning_rate=learning_rate)
+    return w
+</pre></div>
+</div>
+<p>Test your function using the inputs <code class="docutils literal notranslate"><span class="pre">w_start=mg.Tensor([2.0,</span> <span class="pre">4.0])</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate=0.1</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_steps=10</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">descent_down_2d_parabola</span><span class="p">([</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">Tensor([0.01209324, 0.00041943])</span>
+</pre></div>
+</div>
+<p><strong>Derivative Plotter: Solution</strong></p>
+<p>Complete the following function that leverages vectorized autodiff to plot a function and its derivative over a user-specified domain of values. Refer to <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">this resource</a> for a primer on using Matplotlib.</p>
+<p>Provide labels for the respective plots of <code class="docutils literal notranslate"><span class="pre">func(x)</span></code> and its derivative, and include a legend.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">notebook</span>
+
+<span class="k">def</span> <span class="nf">plot_func_and_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Plots func(x) and dfunc/dx on the same set of axes at the user-specified point</span>
+<span class="sd">    stored in ``x``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : mygrad.Tensor, shape-(N,)</span>
+<span class="sd">        The positions at which `func` and its derivative will be</span>
+<span class="sd">        evaluated and plotted.</span>
+
+<span class="sd">    func: Callable[[Tensor], Tensor]</span>
+<span class="sd">        A unary function that is assumed to support backpropagation via MyGrad.</span>
+<span class="sd">        I.e. calling `func(x).backward()` will compute the derivative(s) of `func`</span>
+<span class="sd">        with respect to `x`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[Figure, Axis]</span>
+<span class="sd">        The figure and axis objects associated with the plot that was produced.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+    <span class="c1"># We need to pass arrays to matplotlib&#39;s functions, not</span>
+    <span class="c1"># tensors</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;f(x)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;df/dx&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+</pre></div>
+</div>
+<p>Use this utility to plot the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x) = \sin{(2x)}\; \cos{(x)}\; e^{-x/3}
+\end{equation}</div><p>and its derivative evaluated at 10,000 evenly-spaced points over <span class="math notranslate nohighlight">\([0, 10]\)</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mg</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<div style="text-align: center">
+<p>
+<img src="../_images/plot_func_and_deriv.png" alt="Plot of function and derivative" width="600">
+</p>
+</div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Exercises/Linear_Regression_Exercise.html" class="btn btn-neutral float-right" title="Exercises: Fitting a Linear Model with Gradient Descent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Gradient_Descent.html" class="btn btn-neutral float-left" title="Gradient-Based Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Math supplement, Difficulty: Medium, Category: Section" name="description" />
+<meta content="chain rule, derivative, calculus" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Chain Rule &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Audio Module" href="../audio.html" />
+    <link rel="prev" title="Multivariable Calculus: Partial Derivatives &amp; Gradients" href="Multivariable_Calculus.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Chain Rule</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Basics-of-the-Chain-Rule">Basics of the Chain Rule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Example-Calculation-Using-the-Chain-Rule">Example Calculation Using the Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Representing-the-Chain-Rule-Using-Leibniz-Notation">Representing the Chain Rule Using Leibniz Notation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#The-Chain-Rule-for-Multivariable-Functions">The Chain Rule for Multivariable Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#A-Simple-Example">A Simple Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Autodifferentiation-and-the-Chain-Rule">Autodifferentiation and the Chain Rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Chain Rule</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/Chain_Rule.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Chain-Rule">
+<h1>Chain Rule<a class="headerlink" href="#Chain-Rule" title="Permalink to this headline">¶</a></h1>
+<p>In the machine learning world, we will often deal with functions that are more complex than simple polynomial, exponential, or sinusoidal functions. Most of the time, <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Functions.html#Function-Composition">functions will be composite</a>, meaning that one function will be located inside another function (which might also be located within another function). The functions <span class="math notranslate nohighlight">\(\sin{(x^2)}\)</span>, <span class="math notranslate nohighlight">\(\ln{(4x\cos{(x^3)}+x)}\)</span>, and
+<span class="math notranslate nohighlight">\(e^{\cos{(3x^2 + 4)}}\)</span> are all composite functions, and being able to calculate the derivatives of such functions is essential for training neural networks.</p>
+<p>This material introduces a simple method for computing derivatives of composite functions: the so-called chain rule.</p>
+<div class="section" id="Basics-of-the-Chain-Rule">
+<h2>Basics of the Chain Rule<a class="headerlink" href="#Basics-of-the-Chain-Rule" title="Permalink to this headline">¶</a></h2>
+<p>The chain rule can become unruly from a notational point of view when using the Leibniz notation for the derivative: <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span>. For the moment, let’s adopt a functional notation for the derivative: <span class="math notranslate nohighlight">\(f'(x)\)</span>. That is, <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span> and <span class="math notranslate nohighlight">\(f'(x)\)</span> represent exactly the same function - the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span>. Additionally, let’s assume that all of our functions are only single-variable functions, for the time being.</p>
+<p>Given the composition of the function <span class="math notranslate nohighlight">\(g(x)\)</span> with the function <span class="math notranslate nohighlight">\(f(x)\)</span></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)(x),
+\end{equation}</div><p>the <strong>chain rule</strong> states that the derivative of the composite function with respect to <span class="math notranslate nohighlight">\(x\)</span> is given by the composition of the function <span class="math notranslate nohighlight">\(g'(x)\)</span> with <span class="math notranslate nohighlight">\(f(x)\)</span>, multiplied by <span class="math notranslate nohighlight">\(f'(x)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)'(x) = g'(f(x)) \cdot f'(x).
+\end{equation}</div><p>Using the <span class="math notranslate nohighlight">\(g \circ f\)</span> notation for function composition, the chain rule says</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)'(x) = (g' \circ f)(x) \cdot f'(x).
+\end{equation}</div><div class="section" id="Example-Calculation-Using-the-Chain-Rule">
+<h3>Example Calculation Using the Chain Rule<a class="headerlink" href="#Example-Calculation-Using-the-Chain-Rule" title="Permalink to this headline">¶</a></h3>
+<p>Let’s jump to an example immediately to make sure that we are not confused by this notation. Consider the following functions:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+f(x) &amp;= 3x + 1\\
+g(x) &amp;= x^2 - 2\\
+(g \circ f)(x) &amp;= (3x + 1)^2 - 2
+\end{align}</div><p>The derivatives of <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(g(x)\)</span> are quite simple: <span class="math">\begin{align}
+f'(x) &= 3\\
+g'(x) &= 2x\\
+\end{align}</span></p>
+<p>According to the chain rule, this is all we need to compute the derivative of <span class="math notranslate nohighlight">\((g\circ f)(x)\)</span>. Recognizing that <span class="math notranslate nohighlight">\((g'\circ f)(x) = 2f(x)\)</span>, we can write the derivative of <span class="math notranslate nohighlight">\((g\circ f)(x)\)</span> as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)'(x) = (g'\circ f)(x) \cdot f'(x) = 2f(x) \cdot  f'(x).
+\end{equation}</div><p>Plugging in for <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(f'(x)\)</span>, we obtain</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)'(x) = 2(3x + 1) \cdot 3 = 18x + 6.
+\end{equation}</div><p>As an exercise, write <span class="math notranslate nohighlight">\((g \circ f)(x)\)</span> out in full — as <span class="math notranslate nohighlight">\((g \circ f)(x) = (3x + 1)^2 - 2\)</span>, expanding the squared term — and take its derivative directly. Verify that the result you obtain agrees with the equation for <span class="math notranslate nohighlight">\((g \circ f)'(x)\)</span> that we arrived at by using the chain rule. Review this example carefully, and be sure to have a clear understanding of the symbolic form of the chain rule.</p>
+</div>
+</div>
+<div class="section" id="Representing-the-Chain-Rule-Using-Leibniz-Notation">
+<h2>Representing the Chain Rule Using Leibniz Notation<a class="headerlink" href="#Representing-the-Chain-Rule-Using-Leibniz-Notation" title="Permalink to this headline">¶</a></h2>
+<p>We will ultimately need to make use of the chain rule generalized to <em>multivariable</em> functions. For this, Leibniz notation is extremely valuable. <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Multivariable_Calculus.html#What-is-a-Partial-Derivative?">Recall</a> that we write the partial derivative of <span class="math notranslate nohighlight">\(f(x,y)\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> as <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span>. Let’s translate the chain rule into Leibniz notation:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+(g \circ f)'(x) &amp;\longrightarrow \frac{\mathrm{d}(g \circ f)}{\mathrm{d}x} \\
+g'(f(x)) &amp;\longrightarrow \frac{\mathrm{d}g}{\mathrm{d}f}\Bigr|_{f=f(x)} \\
+f'(x) &amp;\longrightarrow \frac{\mathrm{d}f}{\mathrm{d}x} \\
+(g \circ f)'(x) = (g'\circ f)(x) \cdot f'(x) &amp;\longrightarrow \frac{\mathrm{d}((g \circ f)(x))}{\mathrm{d}x} = \frac{\mathrm{d}g}{\mathrm{d}f}\Bigr|_{f=f(x)}\frac{\mathrm{d}f}{\mathrm{d}x}
+\end{align}</div><p>Here, <span class="math notranslate nohighlight">\(g(x)\)</span> depends on another dependent variable: <span class="math notranslate nohighlight">\(f(x)\)</span>. This is why we use the vertical line to indicate that the derivative of <span class="math notranslate nohighlight">\(g(x)\)</span> is to be evaluated using the value of <span class="math notranslate nohighlight">\(f(x)\)</span> as its input variable. Because we will always evaluate intermediate derivatives within the chain rule in this fashion, we can forego using the vertical line and simply remain mindful of the preceding statement. Thus the chain rule, written using Leibniz notation, is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}((g \circ f)(x))}{\mathrm{d}x} = \frac{\mathrm{d}g}{\mathrm{d}f}\frac{\mathrm{d}f}{\mathrm{d}x}.
+\end{equation}</div><p>This is the notation that we will use moving forward, especially as we begin to work with partial derivatives of multivariable functions. This simple chain rule is also sufficient for generalizing to an arbitratily-long sequence of compositions.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Proof of Chain Rule With Multiple Composite Functions</strong></p>
+<p>Use the equation <span class="math notranslate nohighlight">\(\frac{\mathrm{d}(g \circ f)}{\mathrm{d}x} = \frac{\mathrm{d}g}{\mathrm{d}f}\frac{\mathrm{d}f}{\mathrm{d}x}\)</span> to prove that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} (f_1 \circ f_2 \circ \cdots \circ f_n)}{\mathrm{d}x} = \frac{\mathrm{d}f_1}{\mathrm{d}f_2}\frac{\mathrm{d}f_2}{\mathrm{d}f_3} \cdots \frac{\mathrm{d}f_{n-1}}{\mathrm{d}f_n}\frac{\mathrm{d}f_n}{\mathrm{d}x},
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f_j}{\mathrm{d}f_{j+1}}\)</span> is understood to be evaluated at <span class="math notranslate nohighlight">\((f_{j+1} \circ \cdots \circ f_n)(x)\)</span>.</p>
+<p>Hint: Consider one composition at a time. In other words, what is <span class="math notranslate nohighlight">\(\frac{\mathrm{d}(f_1\circ g)}{\mathrm{d}x}\)</span>, where <span class="math notranslate nohighlight">\(g=f_2\circ\cdots\circ f_n\)</span>?</p>
+</div>
+<p>One final note to help clarify the vertical-bar notation used above. If we wanted to compute the derivative of <span class="math notranslate nohighlight">\((g \circ f)\)</span>, evaluated at, say, <span class="math notranslate nohighlight">\(x = 2\)</span>, we would denote this as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}(g \circ f)}{\mathrm{d}x}\bigg|_{x=2} = \frac{\mathrm{d}g}{\mathrm{d}f}\bigg|_{f=f(2)} \frac{\mathrm{d}f}{\mathrm{d}x} \bigg|_{x=2},
+\end{equation}</div><p>which, of course, is the same as writing</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(g \circ f)'(2) = g'(f(2)) \cdot f'(2).
+\end{equation}</div><p>To be clear, <span class="math notranslate nohighlight">\((g \circ f)'(2)\)</span> and <span class="math notranslate nohighlight">\(\frac{\mathrm{d}(g \circ f)}{\mathrm{d}x}\Bigr|_{x=2}\)</span> both mean: take the derivative of <span class="math notranslate nohighlight">\((g \circ f)(x)\)</span> and evaluate the resulting function at <span class="math notranslate nohighlight">\(x = 2\)</span>. It doesn’t make sense to take the derivative of <span class="math notranslate nohighlight">\((g \circ f)(2)\)</span>, as this is simply a number.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Chain Rule With a Single Variable Function</strong></p>
+<p>Calculate the derivative with respect to <span class="math notranslate nohighlight">\(x\)</span> of the function</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x) = (3x+1)^3 + 8\cdot(3x+1) + 6.
+\end{equation}</div><p>First, do this using the chain rule. Then do it by expanding out the function and using just the power rule. Confirm that both derivatives are equivalent.</p>
+</div>
+</div>
+<div class="section" id="The-Chain-Rule-for-Multivariable-Functions">
+<h2>The Chain Rule for Multivariable Functions<a class="headerlink" href="#The-Chain-Rule-for-Multivariable-Functions" title="Permalink to this headline">¶</a></h2>
+<p>The case of composing a single-variable function with a multivariable one is quite simple for extending the chain rule with partial derivatives. Take the single-variable function <span class="math notranslate nohighlight">\(g(x)\)</span> and multivariable function <span class="math notranslate nohighlight">\(f(x,y)\)</span>. Then, for <span class="math notranslate nohighlight">\(g(f(x,y))\)</span>, <span class="math">\begin{align}
+\frac{\mathrm{d}g}{\mathrm{d}x} &= \frac{\mathrm{d}g}{\mathrm{d}f}\frac{\partial f}{\partial x} \\
+\frac{\mathrm{d}g}{\mathrm{d}y} &= \frac{\mathrm{d}g}{\mathrm{d}f}\frac{\partial f}{\partial y}
+\end{align}</span></p>
+<div class="line-block">
+<div class="line">The partial derivative of <span class="math notranslate nohighlight">\(g(x)\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> (<span class="math notranslate nohighlight">\(y\)</span>) is given by the derivative of <span class="math notranslate nohighlight">\(g(x)\)</span>, evaluated at <span class="math notranslate nohighlight">\(f(x, y)\)</span>, times the partial derivative of <span class="math notranslate nohighlight">\(f(x,y)\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> (<span class="math notranslate nohighlight">\(y\)</span>).</div>
+<div class="line">Qualitatively, <span class="math notranslate nohighlight">\(\frac{\partial f}{\partial x}\)</span> represents the change in <span class="math notranslate nohighlight">\(f(x,y)\)</span> that occurs given a small change in <span class="math notranslate nohighlight">\(x\)</span> (holding <span class="math notranslate nohighlight">\(y\)</span> fixed); <span class="math notranslate nohighlight">\(\frac{\mathrm{d}g}{\mathrm{d}f}\)</span> represents the change in <span class="math notranslate nohighlight">\(g(x)\)</span> given a small change in the value of <span class="math notranslate nohighlight">\(f(x,y)\)</span>. It follows, then, that <span class="math notranslate nohighlight">\(\frac{\mathrm{d}g}{\mathrm{d}f}\frac{\partial f}{\partial x}\)</span> represents the change in <span class="math notranslate nohighlight">\(g(f(x, y))\)</span> given a small change in <span class="math notranslate nohighlight">\(x\)</span> <em>only</em>. This is exactly what
+<span class="math notranslate nohighlight">\(\frac{\partial g}{\partial x}\)</span> represents.</div>
+</div>
+<p>You will also encounter more complicated instances, in which <span class="math notranslate nohighlight">\(g\)</span> itself depends on multiple functions of the independent variables: <span class="math notranslate nohighlight">\(g(x, y) = g(p(x, y),\, q(x, y))\)</span>. <em>The following result is very important</em>. Here, you simply <strong>accumulate</strong> (i.e. sum) the derivatives that are contributed by <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span>, respectively:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\mathrm{d} g}{\mathrm{d} x} &amp;= \frac{\partial g}{\partial p}\frac{\partial p}{\partial x} + \frac{\partial g}{\partial q}\frac{\partial q}{\partial x} \\
+\frac{\mathrm{d} g}{\mathrm{d} y} &amp;= \frac{\partial g}{\partial p}\frac{\partial p}{\partial y} + \frac{\partial g}{\partial q}\frac{\partial q}{\partial y} \\
+\end{align}</div><p>Again, this can be generalized to accommodate an arbitrary number of dependent variables. So, for the function <span class="math notranslate nohighlight">\(g(f_1(x, y), f_2(x, y), ..., f_n(x, y))\)</span>, <span class="math">\begin{align}
+\frac{\mathrm{d} g}{\mathrm{d} x} &= \frac{\partial g}{\partial f_1}\frac{\partial f_1}{\partial x} + \frac{\partial g}{\partial f_2}\frac{\partial f_2}{\partial x} + ... + \frac{\partial g}{\partial f_n}\frac{\partial f_n}{\partial x} \\
+\frac{\mathrm{d} g}{\mathrm{d} y} &= \frac{\partial g}{\partial f_1}\frac{\partial f_1}{\partial y} + \frac{\partial g}{\partial f_2}\frac{\partial f_2}{\partial y} + ... + \frac{\partial g}{\partial f_n}\frac{\partial f_n}{\partial y} \\
+\end{align}</span></p>
+<p>This should make sense once dissected — we want to describe how varying <span class="math notranslate nohighlight">\(x\)</span> by a small amount affects <span class="math notranslate nohighlight">\(g\)</span>. Thus we need to know how varying <span class="math notranslate nohighlight">\(x\)</span> affects <span class="math notranslate nohighlight">\(f_1\)</span> <span class="math notranslate nohighlight">\(\big(\!\)</span> through <span class="math notranslate nohighlight">\(\frac{\partial f_1}{\partial x}\big)\)</span>, and multiply it with how varying <span class="math notranslate nohighlight">\(f_1\)</span> affects <span class="math notranslate nohighlight">\(g\)</span> <span class="math notranslate nohighlight">\(\big(\!\)</span> through <span class="math notranslate nohighlight">\(\frac{\partial g}{\partial f_1}\big)\)</span>. So <span class="math notranslate nohighlight">\(\frac{\partial g}{\partial f_1}\frac{\partial f_1}{\partial x}\)</span> describes how varying <span class="math notranslate nohighlight">\(x\)</span> affects
+<span class="math notranslate nohighlight">\(g\)</span> <strong>via</strong> <span class="math notranslate nohighlight">\(f_1\)</span>. Repeat this for <span class="math notranslate nohighlight">\(f_2,\dots,\,f_n\)</span>, and sum up all of these contributions to arrive at how varying <span class="math notranslate nohighlight">\(x\)</span> affects <span class="math notranslate nohighlight">\(g\)</span> in total: <span class="math notranslate nohighlight">\(\frac{\mathrm{d} g}{\mathrm{d} x}\)</span></p>
+<div class="section" id="A-Simple-Example">
+<h3>A Simple Example<a class="headerlink" href="#A-Simple-Example" title="Permalink to this headline">¶</a></h3>
+<p>Given the following functions, we will calculate <span class="math notranslate nohighlight">\(\frac{\mathrm{d} g}{\mathrm{d} x}\)</span> and <span class="math notranslate nohighlight">\(\frac{\mathrm{d} g}{\mathrm{d} y}\)</span> at the point <span class="math notranslate nohighlight">\((x=3, y=1)\)</span>. Take <span class="math notranslate nohighlight">\(g(p(x,y), q(x, y))\)</span> to be given by</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+g(p, q) &amp;= p^2 - q^3 \\
+p(x, y) &amp;= yx^2 \\
+q(x, y) &amp;= 2x + y \\
+\end{align}</div><p>According to the chain rule provided above, the derivatives needed to compute <span class="math notranslate nohighlight">\(\frac{\mathrm{d} g}{\mathrm{d} x}\)</span> and <span class="math notranslate nohighlight">\(\frac{\mathrm{d} g}{\mathrm{d} y}\)</span> are simply <span class="math">\begin{align}
+\frac{\partial g}{\partial p}\bigg|_{x=3, y=1} &= 2p(3, 1) = 2\cdot (1 \cdot 3^2) = 18\\
+\frac{\partial g}{\partial q}\bigg|_{x=3, y=1} &= -3q(3, 1)^2 = -3\cdot (2 \cdot 3 + 1)^2 = -3\cdot (49) = -147 \\
+\frac{\partial p}{\partial x}\bigg|_{x=3, y=1} &= 2yx\big|_{x=3, y=1} = 2 (1 \cdot 3) = 6\\
+\frac{\partial p}{\partial y}\bigg|_{x=3, y=1} &= x^2\big|_{x=3, y=1} = 3^2 = 9\\
+\frac{\partial q}{\partial x}\bigg|_{x=3, y=1} &= 2 \\
+\frac{\partial q}{\partial y}\bigg|_{x=3, y=1} &= 1
+\end{align}</span></p>
+<p>We can simply plug these values into the expression for the chain rule for a function of multiple dependent variables, and we will have computed the derivatives of <span class="math notranslate nohighlight">\(g\)</span> with respect to <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> at the given point:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\mathrm{d} g}{\mathrm{d} x} &amp;= \frac{\partial g}{\partial p}\frac{\partial p}{\partial x} + \frac{\partial g}{\partial q}\frac{\partial q}{\partial x} \longrightarrow \frac{\mathrm{d} g}{\mathrm{d} x}\bigg|_{x=3, y=1} = 18\cdot 6 + (-147)\cdot 2 = -186 \\
+\frac{\mathrm{d} g}{\mathrm{d} y} &amp;= \frac{\partial g}{\partial p}\frac{\partial p}{\partial y} + \frac{\partial g}{\partial q}\frac{\partial q}{\partial y} \longrightarrow \frac{\mathrm{d} g}{\mathrm{d} y}\bigg|_{x=3, y=1} = 18\cdot 9 + (-147) \cdot 1 = 15
+\end{align}</div></div>
+</div>
+<div class="section" id="Autodifferentiation-and-the-Chain-Rule">
+<h2>Autodifferentiation and the Chain Rule<a class="headerlink" href="#Autodifferentiation-and-the-Chain-Rule" title="Permalink to this headline">¶</a></h2>
+<p>Autodifferentiation libraries, like MyGrad, naturally use the chain rule to compute derivatives of composite functions. See that it reproduces the exact same values for derivatives as indicated above.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using MyGrad to evaluate the partial derivatives</span>
+<span class="c1"># of a composite multivariable function</span>
+
+<span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+
+<span class="c1"># Initializes x and y as tensors</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">q</span> <span class="o">**</span> <span class="mi">3</span>
+
+<span class="c1"># Computes the derivatives of g with respect to all</span>
+<span class="c1"># variables that it depends on</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores ∂g/∂p @ x=3, y=1</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">18.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores ∂g/∂q @ x=3, y=1</span>
+<span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">147.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores dg/dx @ x=3, y=1</span>
+<span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">186.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores dg/dy @ x=3, y=1</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">15.</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Chain Rule With a Multivariable Function</strong></p>
+<p>For <span class="math notranslate nohighlight">\(g(p(x,y), q(x,y))\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+g(p, q) &amp;= p^2\cdot q, \\
+p(x, y) &amp;= 4y - x, \\
+q(x, y) &amp;= 3xy - 4y,
+\end{align}</div><p>calculate <span class="math notranslate nohighlight">\(\frac{\mathrm{d} f}{\mathrm{d} y}\big|_{x=5, y=4}\)</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Chain Rule With a Multivariable Function With MyGrad</strong></p>
+<p>Calculate the same partial derivative from the previous question (<strong>Chain Rule With a Multivariable Function</strong>), but this time, compute it using MyGrad. Verify that this gives the same result as doing the math by hand.</p>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Proof of Chain Rule With Multiple Composite Functions: Solution</strong></p>
+<p>We are given that <span class="math notranslate nohighlight">\(\frac{\mathrm{d}(g \circ f)}{\mathrm{d}x} = \frac{\mathrm{d}g}{\mathrm{d}f}\frac{\mathrm{d}f}{\mathrm{d}x}\)</span>.</p>
+<p>Performing one iteration of the chain rule on the given function, we get that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} (f_1 \circ f_2 \circ \cdots \circ f_n)}{\mathrm{d}x} = \frac{\mathrm{d}f_1}{\mathrm{d}f_2}\frac{\mathrm{d}f_2}{\mathrm{d}x}.
+\end{equation}</div><p>Performing the chain rule on <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f_2}{\mathrm{d}x}\)</span>, we find that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f_2}{\mathrm{d}x} = \frac{\mathrm{d}f_2}{\mathrm{d}f_3}\frac{\mathrm{d}f_3}{\mathrm{d}x}.
+\end{equation}</div><p>Substituting this into the previous equation, we get that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} (f_1 \circ f_2 \circ \cdots \circ f_n)}{\mathrm{d}x} = \frac{\mathrm{d}f_1}{\mathrm{d}f_2}\frac{\mathrm{d}f_2}{\mathrm{d}f_3}\frac{\mathrm{d}f_3}{\mathrm{d}x}.
+\end{equation}</div><p>We can keep repeating this process and we will find that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} (f_1 \circ f_2 \circ \cdots \circ f_n)}{\mathrm{d}x} = \frac{\mathrm{d}f_1}{\mathrm{d}f_2}\frac{\mathrm{d}f_2}{\mathrm{d}f_3} \cdots \frac{\mathrm{d}f_{n-1}}{\mathrm{d}f_n}\frac{\mathrm{d}f_n}{\mathrm{d}x}.
+\end{equation}</div><p><strong>Chain Rule With a Multivariable Function: Solution</strong></p>
+<p>The multivariable chain rule states that</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} g}{\mathrm{d} y} = \frac{\partial g}{\partial p}\frac{\partial p}{\partial y} +  \frac{\partial g}{\partial q}\frac{\partial q}{\partial y}
+\end{equation}</div><p>We can now find the partial derivatives of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span> and evaluate at <span class="math notranslate nohighlight">\((x,y)=(5,4)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\partial g}{\partial p}\bigg|_{x=5,y=4} &amp;= 2\cdot p(5, 4) \cdot q(5, 4) = 2\cdot (4*4 - 5)\cdot (3\cdot 5\cdot 4 - 4\cdot 4) = 968\\
+\frac{\partial g}{\partial q}\bigg|_{x=5,y=4} &amp;= p(5, 4)^2 = (4\cdot 4 - 5)^2 = 121\\
+\end{align}</div><p>Finally, the partial derivatives of <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span> with respect to <span class="math notranslate nohighlight">\(y\)</span> can be found and evaluated as</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\frac{\partial p}{\partial y}\bigg|_{x=5,y=4} &amp;= 4\\
+\frac{\partial q}{\partial y}\bigg|_{x=5,y=4} &amp;= 3(5) - 4 = 11\\
+\end{align}</div><p>Therefore</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d} g}{\mathrm{d} y}\bigg|_{x=5,y=4} = 968 \cdot 4 + 121 \cdot 11 = 5203\\
+\end{equation}</div><hr class="docutils" />
+<p><strong>Chain Rule With a Multivariable Function With MyGrad: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using MyGrad to evaluate the partial derivatives of a multivariable function</span>
+<span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+
+
+<span class="c1"># Initializes x and y as tensors</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">y</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">q</span>
+
+<span class="c1"># Computes the derivatives of g with respect to all</span>
+<span class="c1"># variables that it depends on</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores ∂g/∂p @ x=5, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">968.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores ∂g/∂q @ x=5, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">121.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores dg/dx @ x=5, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">484.</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># stores dg/dy @ x=5, y=4</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">5203.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../audio.html" class="btn btn-neutral float-right" title="Audio Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Multivariable_Calculus.html" class="btn btn-neutral float-left" title="Multivariable Calculus: Partial Derivatives &amp; Gradients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

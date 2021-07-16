@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: matching audio, Category: Section" name="description" />
+<meta content="fingerprint, audio matching, local maxima" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Matching Audio Recordings &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exercises: Finding Local Peaks in a 2-D Array" href="Exercises/PeakFinding.html" />
+    <link rel="prev" title="Exercise: Creating Our Own Spectrogram" href="Exercises/spectrogram.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Matching Audio Recordings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Extracting-Robust-and-Reliable-Features">Extracting Robust and Reliable Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Local-Maxima">Local Maxima</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Forming-the-Fingerprints-of-a-Recording">Forming the Fingerprints of a Recording</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#The-Relationship-Between-Two-Peaks">The Relationship Between Two Peaks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-Fingerprint">The Fingerprint</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#The-Fingerprint-Database">The Fingerprint Database</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Storing-Fingerprints-in-the-Database">Storing Fingerprints in the Database</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Querying-the-Database-for-a-Match">Querying the Database for a Match</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Conclusion">Conclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Code-For-Reproducing-Figures">Code For Reproducing Figures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Local-Peak-Landscape">Local Peak Landscape</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Matching Audio Recordings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Audio/audio_features.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Source Material</strong>:</p>
+<p>The approach for song fingerprinting and matching presented here was developed by <a class="reference external" href="https://willdrevo.com/fingerprinting-and-audio-recognition-with-python/#">Will Drevo</a>, creator of the <a class="reference external" href="https://github.com/worldveil/dejavu">dejavu</a> project. Although the actual implementation and presentation of CogWorks’ song fingerprinting project was created anew, overall attribution belongs to Will – the roadmap that his project provided was invaluable to this course.</p>
+</div>
+<div class="section" id="Matching-Audio-Recordings">
+<h1>Matching Audio Recordings<a class="headerlink" href="#Matching-Audio-Recordings" title="Permalink to this headline">¶</a></h1>
+<p>Spectrogram analysis enables us to transform our audio recordings to highlight a song’s most salient qualities: a song’s spectrogram reveals, quantitatively, the notes that are being played and the times at which they are being played. We ought to recognize the power (and beauty) of pure mathematics here – Fourier analysis is the driving force behind all of this. No amount of clever programming tricks could have gotten us here without this theoretical foundation; this is the power of applied
+mathematics in full force. But I digress. (Oh, and let’s not forget the critical role that physics played in guiding our intuition of breaking down sounds waves into superpositions of pure tones, and in the design of our microphone. Whoops! Did I digress again?)</p>
+<p>Now it is time to put on our “programmer” caps and devise a pragmatic approach to matching audio recordings based on the information stored in their respective spectrograms. The approach that we will take here is not <em>the</em> solution to this problem, it is simply <em>a</em> solution and it is a solution that can certainly be improved upon. The song-matching algorithm that we devise should be:</p>
+<ul class="simple">
+<li><p>Reliable and robust: we hope to successfully match brief recordings that are taken amidst moderate temporal noise.</p></li>
+<li><p>Efficient: matching should be able to be performed in real-time.</p></li>
+<li><p>Simple: the most sophisticated logic in the algorithm should be relegated to spectrogram analysis.</p></li>
+<li><p>Modifiable: our code should enable us to experiment and iterate on aspects of our methods with ease.</p></li>
+</ul>
+<p>Our project has two main modes of operation that it must facilitate:</p>
+<ol class="arabic simple">
+<li><p>Populating a database with song-IDs and their audio fingerprints, derived from “pristine” studio tracks.</p></li>
+<li><p>Matching an audio recording, taken in real time, against said fingerprint database to identify the song being played.</p></li>
+</ol>
+<div style="text-align: center">
+<p>
+<img src="../_images/songfp_diagram.png" alt="Diagrammatic overview of the song fingerprinting project" width="800">
+</p>
+</div><p>Our first task is to distill from a song’s spectrum its most robust and salient features. This will ultimately enable us to efficiently compare songs to one another and maintain a database of song fingerprints that does not “break the bank” in terms of storage size.</p>
+<div class="section" id="Extracting-Robust-and-Reliable-Features">
+<h2>Extracting Robust and Reliable Features<a class="headerlink" href="#Extracting-Robust-and-Reliable-Features" title="Permalink to this headline">¶</a></h2>
+<p>When we hold out a microphone to record an audio clip – so that we can identify the song being played – the spectrogram of that recording will contain the prominent features of the song amidst other ambient noises (maybe a chatty sibling in the background or a rumbling air conditioning unit). By comparison, the studio track, which we will use to populate our fingerprint database with that song, should have more fine musical details in its recording, in lieu of the background chatter. How can we
+distill from the spectrograms of the ambient recording and of the studio track the robust “markers” that are common between the two?</p>
+<div class="section" id="Local-Maxima">
+<h3>Local Maxima<a class="headerlink" href="#Local-Maxima" title="Permalink to this headline">¶</a></h3>
+<p>A simple appeal to our intuitions can serve us well here: <strong>the loudest aspects of a song are those that will be picked up by a microphone amidst other noises, and consistent patterns among these “peaks” in our spectrogram will likely manifest across both our ambient and studio recordings</strong>. Remember that our spectrogram stores amplitude values, <span class="math notranslate nohighlight">\(|a_k|\)</span>, across times and frequencies – these exactly reflect how loud or soft a pure tone frequency is in a song. Clearly, it will not suffice to
+merely extract <em>the</em> loudest feature, <span class="math notranslate nohighlight">\((f_{|a|_{max}}, t_{|a|_{max}})\)</span>, from the song; rather, we will want to extract “local” peaks (i.e. local maxima) from the spectrogram. The “local” qualifier is an important one – it will ultimately be up to us to define the “neighborhood” that we will look at to assess if a point in our spectrogram is a local maximum.</p>
+<p>We will identify a point as a “local” maximum by centering a neighborhood at that point and asking:</p>
+<ol class="arabic simple">
+<li><p>Is the value associated with that point larger than some minimum threshold?</p></li>
+<li><p>Is the value associated with that point the maximum value in the neighborhood (even if other points in that neighborhood have the same maximum value)?</p></li>
+</ol>
+<p>If we can say “yes” to both of these questions, then that point is a local maximum. We apply this set of conditions to every point under consideration to identify all of the local maxima in the landscape of data.</p>
+<p>Let’s take a moment to view some amplitudes along just a single dimension so that we can find local peaks using a concrete example. Based on the stipulations made above, try to identify the local maxima in the following figure given: a neighborhood of size three and a <span class="math notranslate nohighlight">\(0\)</span>-threshold, and a neighborhood of size five and a threshold of <span class="math notranslate nohighlight">\(15\)</span>. Note that a neighborhood of size <span class="math notranslate nohighlight">\(3\)</span> means that: when you are centered on a point it’s neighborhood includes a point to either side of it
+(hence the neighborhood includes three points in total).</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/1d_peaks.png" alt="1D landscape to demonstrate local peaks" width="600">
+</p>
+</div><p>The following figure reveals the local maxima under the prescribed conditions</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/local_peaks_example.png" alt="Identify local peaks undeer various configurations" width="600">
+</p>
+</div><p>Keep in mind that we will need to extend this process into two dimensions. The exercises on the next page in this site will step us through this process. We will be identifying the time and the frequency that locates each respective local peak among the Fourier coefficient magnitudes in the spectrogram. As mentioned earlier: these are the so-called “features” that we expect to remain salient across various recordings of a given song. Once we have done this, we will no longer be working with a
+full spectrogram’s worth of data to describe a song. Rather, we will only be dealing with these sparse features.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/spectrogram_peaks_only.png" alt="Local peaks extracted from a spectrogram" width="650">
+</p>
+</div><p>The spectrogram depicted above has its local peaks indicated by red dots. Our hope is to extract succinct, and robust patterns among these dots – i.e. fingerprints – that will manifest consistently across different recordings of the same song.</p>
+</div>
+</div>
+<div class="section" id="Forming-the-Fingerprints-of-a-Recording">
+<h2>Forming the Fingerprints of a Recording<a class="headerlink" href="#Forming-the-Fingerprints-of-a-Recording" title="Permalink to this headline">¶</a></h2>
+<p>It is time for us to extract the “fingerprints” of an audio recording. These should be immutable patterns among the local peaks of a song’s spectrogram, which exist within brief, contiguous segments of the song. Critically, these fingerprints should describe brief sections of the recording; i.e. even if we play only a ten second clip from halfway through the song, we should be able to distill from that clip numerous salient fingerprints that can be used for matching.</p>
+<p>In our approach to forming these fingerprints, let’s make a couple of important observations:</p>
+<ol class="arabic simple">
+<li><p>Assuming that the speed of a song’s playback is consistent across recordings, the frequency values of the prominent notes in the song should not differ appreciably between recordings. Thus, the frequency values of notes in a song are absolute: they can be incorporated directly into a given fingerprint.</p></li>
+<li><p>The absolute time at which a note is played, which is measured from a song’s true beginning, cannot be known from any recorded clip. That being said, the time interval <em>between</em> notes will be consistent across recordings; thus our fingerprints should incorporate time only as a <em>relative</em> quantity.</p></li>
+</ol>
+<div class="section" id="The-Relationship-Between-Two-Peaks">
+<h3>The Relationship Between Two Peaks<a class="headerlink" href="#The-Relationship-Between-Two-Peaks" title="Permalink to this headline">¶</a></h3>
+<p>With these considerations in place, let’s encode the relationship between two peaks. Consider local peak-<span class="math notranslate nohighlight">\(i\)</span>, which resides at time <span class="math notranslate nohighlight">\(t_i\)</span> and frequency <span class="math notranslate nohighlight">\(f_i\)</span> – i.e. located at <span class="math notranslate nohighlight">\((f_i, t_i)\)</span> in our spectrogram (keep in mind that the rows of the spectrogram correspond to distinct frequencies, and the columns correspond to distinct times). And consider a subsequent peak, peak-<span class="math notranslate nohighlight">\(j\)</span> that resides at <span class="math notranslate nohighlight">\((f_j, t_j)\)</span>, which either co-occurs with or occurs after
+peak-<span class="math notranslate nohighlight">\(i\)</span>; i.e. <span class="math notranslate nohighlight">\(t_i \leq t_j\)</span>. Then we can encode the relationship between these two peaks with the following simple expression:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(f_i, f_j, \Delta t_{ij})
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\Delta t_{ij} = t_j - t_i\)</span>. In accordance with our earlier considerations, this encoding treats time as a relative quantity: the temporal offset between two prominent notes should be consistent across recordings regardless of when the recordings begin within the song. Otherwise, we are able to record the frequencies of these peaks directly, since they should be immutable across recordings played back at the same speed.</p>
+<p>We have arrived at a simple encoding that captures the relationship between two peaks in a recording. Our encoding was designed so that we are likely to see this simple pair feature occur in two recordings of the same song, and that we are less likely to see this pair feature manifest in different songs. That being said, there are considerations that must be made as to <em>which</em> pairs of peaks we will record from a recording’s spectrogram. It would be prohibitively cumbersome to record <em>all</em> pairs
+of peaks from a recording in this way. Furthermore, information about pairs of peaks separated by, say, one minute in a song, will be tenuous and clearly will not aid us in matching to a song based off of a brief recorded clip of that song.</p>
+</div>
+<div class="section" id="The-Fingerprint">
+<h3>The Fingerprint<a class="headerlink" href="#The-Fingerprint" title="Permalink to this headline">¶</a></h3>
+<p>We must be selective about the particular pairs of peaks that we record in order to summarize patterns in a given recording. Given a peak, we will record the pair encodings with that peak and the next <span class="math notranslate nohighlight">\(n_\text{fanout}\)</span> nearest neighboring peaks. The following plot illustrates the fingerprint associated with the peak occurring near the <span class="math notranslate nohighlight">\(0.6\)</span> second mark, using a “fanout” value of <span class="math notranslate nohighlight">\(n_\text{fanout} = 5\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/fingerprint_fanout.png" alt="A fingerprint for a peak, using a fanout of 5" width="650">
+</p>
+</div><p>Here, <strong>peaks are traversed in order of ascending frequency and then ascending time</strong> .</p>
+<p>In general, peak-<span class="math notranslate nohighlight">\(m\)</span>, which occurs at the location <span class="math notranslate nohighlight">\((f_m, t_m)\)</span> in the spectrogram, contributes the following <strong>“fanout” pattern</strong> to the recording’s fingerprint:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\text{fanout}_m \rightarrow \begin{cases}
+(f_m, f_{m+1}, \Delta t_{m,m+1})\\
+(f_m, f_{m+2}, \Delta t_{m,m+2})\\
+\qquad\quad\vdots\\
+(f_m, f_{m+n_{\text{fanout}}}, \Delta t_{m,m+n_{\text{fanout}}})\\
+\end{cases}
+\end{equation}</div><p>As we will soon see, it is also necessary to record the absolute time associated with this fingerprint, <span class="math notranslate nohighlight">\(t_m\)</span>, measured from the beginning of the recording. <strong>These fanout patterns, collected in aggregate for all peaks in the audio recording, form the fingerprint for that recording.</strong></p>
+<p>Note that these neighboring peaks may occur at either the same frequency or time as peak-<span class="math notranslate nohighlight">\(m\)</span>, but obviously at least one of these quantities will be distinct. We limit the number peak-pairs that we will record, for a given peak, to <span class="math notranslate nohighlight">\(n_{\text{fanout}}\)</span> pairs. This also roughly limits the span of frequencies and times that a fingerprint will likely involve, although we could also include explicit restrictions to enforce this (e.g. stop recording pairs if <span class="math notranslate nohighlight">\(\Delta t_{i,j}\)</span>
+exceeds five seconds).</p>
+<p>With this approach to fingerprinting in-hand, let’s discuss how we can store fingerprints in a database and perform the matching process.</p>
+</div>
+</div>
+<div class="section" id="The-Fingerprint-Database">
+<h2>The Fingerprint Database<a class="headerlink" href="#The-Fingerprint-Database" title="Permalink to this headline">¶</a></h2>
+<p>Our fingerprint database needs to hold the fingerprints of various songs, and we need to be able to efficiently query the database using new fingerprints in order to see if they match against any of our recorded songs. <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_II_Dictionaries.html">Python’s built-in dictionary object</a> will elegantly fill this role for us. That is, <strong>our database will simply be a Python dictionary</strong> that stores fingerprints as follows:</p>
+<ul class="simple">
+<li><p>its keys will be peak-pair encodings from the recording fingerprints: <span class="math notranslate nohighlight">\((f_i, f_j, \Delta t_{ij})\)</span></p></li>
+<li><p><strong>each key will map to a list of song-IDs</strong> of all the songs containing that peak-pair encoding, along with the time associated with that fanout pattern in the recording: <span class="math notranslate nohighlight">\([\dots, (\text{song-ID}, t_i), \dots]\)</span></p></li>
+</ul>
+<p>This will afford us quick, <span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span> <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures.html#Describing-Algorithm-Complexity">lookups</a> in our song database, meaning that the time to check if a fingerprint exists in our database will not grow with the size of our database. This is of critical importance to the performance of our song-matching algorithm! Furthermore, <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/WorkingWithFiles.html#Saving-&amp;-Loading-Python-Objects:-pickle">Python’s pickle
+module</a> provides us with a mechanism to save and load our dictionary. These are the essential elements of a fingerprint database!</p>
+<div class="section" id="Storing-Fingerprints-in-the-Database">
+<h3>Storing Fingerprints in the Database<a class="headerlink" href="#Storing-Fingerprints-in-the-Database" title="Permalink to this headline">¶</a></h3>
+<p>It is likely that multiple songs will contain <em>some</em> identical peak-pairs, i.e. a given <span class="math notranslate nohighlight">\((f_m, f_n, \Delta t_{mn})\)</span> may be shared by multiple songs. Thus, <strong>we will need to maintain a list of associated song-IDs for all of the songs that a given peak-pair occurred in, along with the absolute time associated with each fanout pattern</strong> (measured from the beginning of its recording). A song-ID can be any unique identifier (a string, an integer, etc.) that distinguishes all of the songs in the
+database.</p>
+<p>For example, suppose that we are adding the fanout pattern associated with peak <span class="math notranslate nohighlight">\((t_m, f_m)\)</span> of song-<span class="math notranslate nohighlight">\(j\)</span> to our database. We will append <span class="math notranslate nohighlight">\((\text{song-}j, t_m)\)</span> to the list associated with each key from this peak’s fanout pattern:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\text{store }(\text{fanout}_m) \rightarrow \begin{cases}
+(f_m, f_{m+1}, \Delta t_{m,m+1}) &amp;\rightarrow \text{append }(\text{song-}j, t_m)\\
+(f_m, f_{m+2}, \Delta t_{m,m+2}) &amp;\rightarrow \text{append }(\text{song-}j, t_m)\\
+\qquad\quad\vdots \\
+(f_m, f_{m+n_{\text{fanout}}}, \Delta t_{m,m+n_{\text{fanout}}}) &amp;\rightarrow \text{append }(\text{song-}j, t_m)\\
+\end{cases}
+\end{equation}</div><p>We can write this in pseudocode as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Adding fanout-m for song-j to the database</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">dt</span><span class="p">),</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">fanout_m</span><span class="p">:</span>
+    <span class="n">database</span><span class="p">[(</span><span class="n">fm</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">dt</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;song-j&quot;</span><span class="p">,</span> <span class="n">tm</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>As a concrete example, suppose that our dictionary database contains the mapping: <span class="math">\begin{equation}
+(100\;\mathrm{Hz}, 120\;\mathrm{Hz}, 1\;\text{sec}) \rightarrow [(\text{song-2}, 40\;\text{sec}),\; (\text{song-2}, 180\;\text{sec}),\; (\text{song-9}, 10\;\text{sec})]
+\end{equation}</span> Then this means that the peak-pair with frequencies <span class="math notranslate nohighlight">\(100\;\mathrm{Hz}\)</span> and <span class="math notranslate nohighlight">\(120\;\mathrm{Hz}\)</span> – separated by a temporal gap of <span class="math notranslate nohighlight">\(1\)</span> second – occurs twice in song-<span class="math notranslate nohighlight">\(2\)</span> (at the <span class="math notranslate nohighlight">\(40\)</span> and <span class="math notranslate nohighlight">\(180\)</span> second marks of the pristine studio recording) and once in song-<span class="math notranslate nohighlight">\(9\)</span> (at the <span class="math notranslate nohighlight">\(10\)</span> second mark).</p>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Storing Unitless Numbers</strong></p>
+<p>Each local peak <span class="math notranslate nohighlight">\((f_i, t_i)\)</span> occurring in a spectrogram has associated integer-valued bin-indices <span class="math notranslate nohighlight">\((m, n)\)</span>, which indicate the row and column at which the peak resides in the spectrogram. Given that we always use the same configurations to produce the spectrogram for the recording, the scaling factors that relate time to a column-index and frequency to a row-index will be constant across all spectrograms. Thus we can use these integer-valued unitless quantities in our database in
+lieu of the physical temporal and frequency measures. Using the unitless integers help to prevent floating-point precision issues when performing matching, and they also take up less space in storage.</p>
+</div>
+</div>
+<div class="section" id="Querying-the-Database-for-a-Match">
+<h3>Querying the Database for a Match<a class="headerlink" href="#Querying-the-Database-for-a-Match" title="Permalink to this headline">¶</a></h3>
+<p>Presuming that we have populated our database with the fingerprints of various songs, we can now query it for matches against another recording – this could be a song playing in the background that we want to identify. We do this by extracting the fingerprint of this recording, checking for the peak-pair encodings that match existing keys in the database, and tallying which song in the database has the most <em>aligned</em> peak-pairs in common with the recording. Let’s explain what is meant by
+“aligned” peak pairs.</p>
+<p>Suppose that you begin recording the song starting <span class="math notranslate nohighlight">\(25\)</span> seconds after the song’s beginning, and that you record a clip for <span class="math notranslate nohighlight">\(10\)</span> seconds. The temporal locations of all of the common features between the full song and the clip should be offset by <span class="math notranslate nohighlight">\(25\)</span> seconds. E.g. a salient local peak that occurs <span class="math notranslate nohighlight">\(32\)</span> seconds into the full song would manifest <span class="math notranslate nohighlight">\(7\)</span> seconds into the clip. While we will not necessarily know when we begin recording any given clip, we can look for a
+consistent temporal offset between the clip’s peak-pair encodings and their matches in the database. In this way we can look to see that the fingerprints between a song and a clip are <strong>aligned</strong> consistently with a specific temporal offset. This is why we recorded the absolute time associated with a fingerprint in addition to the song’s ID.</p>
+<p>Thus when we query a database with the fingerprints from the clip, we will tally the occurrences of <span class="math notranslate nohighlight">\((\text{song-ID}, \Delta t^{\text{offset}})\)</span>. I.e. with a peak-pair taken from a fingerprint of the clip, we perform the following:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+(f_i, f_j, \Delta t_{ij}) \xrightarrow[\text{database}]{\text{query}} [\dots,\;(\text{song-ID},\;t^{\text{song}}_k), \; \dots] \xrightarrow{\text{tally}} \dots, \; \{(\text{song-ID},\Delta t^{\text{offset}}_{\text{i,k}})\,|\;\textbf{count}\}, \; \dots
+\end{equation}</div><p>where <span class="math notranslate nohighlight">\(\Delta t^{\text{offset}}_{\text{i,k}} = t^{\text{song}}_k - t^{\text{clip}}_i\)</span> is the temporal offset between when a peak-pair encoding occurred in the song (i.e. the database recording) and when it occurred in the clip. <strong>The</strong> <span class="math notranslate nohighlight">\((\text{song-ID}, \Delta t^{\text{offset}})\)</span> <strong>instance with the highest tally indicates the song that most likely matches our clip.</strong> Our hope here is that we are filtering out spurious matches against partial fingerprints from other songs, and even
+spurious matches against the proper song – it is possible to match against the wrong part of the correct song after all – such that ensemble of matches provides a clear consensus as to which song we are hearing.</p>
+</div>
+</div>
+<div class="section" id="Conclusion">
+<h2>Conclusion<a class="headerlink" href="#Conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Finally we have all of the requisite pieces for our song-matching algorithm. We will use spectrogram analysis on each full song and on any recorded clip, and extract from them local peaks in the amplitude matrix of the spectrogram; from these peaks we form the fingerprint for an audio recording. In association with each peak, we record a so-called fanout pattern, which encapsulates information about that peak and its nearest neighbors. The collection of the fanout patterns associated with all of
+the peaks of an audio recording represents the fingerprint for that recording.</p>
+<p>A simple Python dictionary will suffice as a database. Its keys are the peak pairs that form the fanout patterns, <span class="math notranslate nohighlight">\((f_i, f_j, \Delta t_{ij})\)</span>, and each key maps to a list containing the song-IDs of the songs that feature this peak pair, along with the absolute time at which the pair occurs in each song. Once we have populated our database with the fingerprints of a number of songs, we can “name that tune” by querying our database with the fingerprint of the audio clip in question. We will
+tally the song-ID and time-offset pairs that are returned from our database as we query it; the most common song-ID and time-offset pair indicates the most likely match from our database!</p>
+</div>
+<div class="section" id="Code-For-Reproducing-Figures">
+<h2>Code For Reproducing Figures<a class="headerlink" href="#Code-For-Reproducing-Figures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Local-Peak-Landscape">
+<h3>Local Peak Landscape<a class="headerlink" href="#Local-Peak-Landscape" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mygrad</span> <span class="kn">import</span> <span class="n">sliding_window_view</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">notebook</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c1"># plot inital landscape without peaks</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">10</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Position&quot;</span><span class="p">)</span>
+
+
+<span class="n">threshold</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">maxes</span> <span class="o">=</span> <span class="n">sliding_window_view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">is_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">maxes</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">maxes</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">threshold</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">maxes</span> <span class="o">=</span> <span class="n">sliding_window_view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">is_max2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">maxes</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">maxes</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_max</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">is_max</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;local maximum&quot;</span><span class="p">)</span>
+
+<span class="c1"># plot peaks with neighborhood-3, threshold-0</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Position&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Neighborhood size: 3 | Threshold: 0&quot;</span><span class="p">)</span>
+
+<span class="c1"># plot peaks with neighborhood-5, threshold-15</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_max2</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">is_max2</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;local maximum&quot;</span><span class="p">)</span>
+
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Position&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Neighborhood size: 5 | Threshold: 15&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Exercises/PeakFinding.html" class="btn btn-neutral float-right" title="Exercises: Finding Local Peaks in a 2-D Array" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Exercises/spectrogram.html" class="btn btn-neutral float-left" title="Exercise: Creating Our Own Spectrogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

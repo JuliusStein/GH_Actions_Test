@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Math supplement, Difficulty: Easy, Category: Section" name="description" />
+<meta content="sums, sigma notation, python" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sequences and Summations &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fundamentals of Linear Algebra" href="LinearAlgebra.html" />
+    <link rel="prev" title="Functions" href="Functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sequences and Summations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Sequence-Notation">Sequence Notation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Summation-Notation">Summation Notation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Kronecker-Delta">Kronecker Delta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Sequences and Summations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/Series.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Sequences-and-Summations">
+<h1>Sequences and Summations<a class="headerlink" href="#Sequences-and-Summations" title="Permalink to this headline">¶</a></h1>
+<p>It is important that we are comfortable with reading and manipulating mathematical formulas that involve sequences and sums, because these topics appear frequently in the world of scientific computing and applied mathematics. This section will introduce the notation that we will be using for sequences and summations and how we work with these objects in Python.</p>
+<div class="section" id="Sequence-Notation">
+<h2>Sequence Notation<a class="headerlink" href="#Sequence-Notation" title="Permalink to this headline">¶</a></h2>
+<p>Before we go into sequences and summations, it is important that we understand the basics of sequences. Very simply, a sequence is an ordered collection of numbers. For example, <span class="math notranslate nohighlight">\((0, 1, 2, 3, 4, 5)\)</span> is a sequence containing six items. The sequence <span class="math notranslate nohighlight">\((0, 2, 3, 1, 5, 4)\)</span> is a different sequence, because although it contains the same elements as the previous sequence, its elements are in a different order. Elements of a sequence are allowed to repeat. For example,
+<span class="math notranslate nohighlight">\((4, 2, 7, 8, 4, 1, 7)\)</span> is a valid sequence.</p>
+<p>If we define the sequence <span class="math">\begin{equation}
+x = (-2, -4, -6, -8, -10, 13),
+\end{equation}</span> then we can access each element by using subscripts (which, similar to Python, begin at 0 and end at <span class="math notranslate nohighlight">\(n-1\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of elements in the sequence). Therefore, <span class="math">\begin{equation}
+x_0 = -2,\: x_1 = -4,\: x_2 = -6,\: x_3 = -8,\: x_4 = -10, \:\text{and}\; x_5 = 13.
+\end{equation}</span></p>
+<p>The notation <span class="math notranslate nohighlight">\((x_i)_{i=0}^{n-1}\)</span> is often used to represent all of the elements of the sequence <span class="math notranslate nohighlight">\(x\)</span>. For our previous example, <span class="math notranslate nohighlight">\((x_i)_{i=0}^{n-1}\)</span> represents <span class="math notranslate nohighlight">\((-2, -4, -6, -8, -10, 13)\)</span>. This notation is useful because it also gives us a way to represent a <em>subsequence</em> of <span class="math notranslate nohighlight">\(x\)</span>. For example, <span class="math notranslate nohighlight">\((x_i)_{i=0}^{3}\)</span> represents only the first four elements of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\((-2, -4, -6, -8)\)</span>, while <span class="math notranslate nohighlight">\((x)_{i=2}^{4}\)</span> would represent only the elements
+<span class="math notranslate nohighlight">\((-6, -8, -10)\)</span>.</p>
+</div>
+<div class="section" id="Summation-Notation">
+<h2>Summation Notation<a class="headerlink" href="#Summation-Notation" title="Permalink to this headline">¶</a></h2>
+<p>In order to more efficiently denote sums, especially sums over long sequences, we can use summation notation, also known as sigma notation due to the use of the Greek letter “sigma”: <span class="math notranslate nohighlight">\(\Sigma\)</span>.</p>
+<p>There are several elements involved in summation notation. First, consider a sequence of <span class="math notranslate nohighlight">\(n\)</span> numbers <span class="math notranslate nohighlight">\((x_i)_{i=0}^{n-1}\)</span>. We will start our index at 0, to remain in accordance with Python/NumPy’s index system, so <span class="math notranslate nohighlight">\(x_i\)</span> is the general <span class="math notranslate nohighlight">\((i+1)^\text{th}\)</span> number in the sequence. We will utilize this <span class="math notranslate nohighlight">\(i\)</span> index in our summation notation. Suppose we were to calculate the sum of all <span class="math notranslate nohighlight">\(n\)</span> numbers in the sequence. We write this sum as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+x_0+x_1+ \cdots +x_{n-1} = \sum_{i=0}^{n-1} x_i.
+\end{equation}</div><div class="line-block">
+<div class="line">Let’s parse this equation. First, <span class="math notranslate nohighlight">\(\Sigma\)</span> is the summation sign, indicating that we are summing a sequence. Then, <span class="math notranslate nohighlight">\(i\)</span> is the index of summation that is being iterated over, with <span class="math notranslate nohighlight">\(i\)</span> being used to index <span class="math notranslate nohighlight">\(x\)</span>. We start our summation at <span class="math notranslate nohighlight">\(0\)</span> because the first element we want in our sum is <span class="math notranslate nohighlight">\(x_0\)</span> (the lower bound of the sum is <span class="math notranslate nohighlight">\(i=0\)</span>). The upper bound for our sum, or our stopping point is <span class="math notranslate nohighlight">\(n-1\)</span>, since the final element in our summation is
+<span class="math notranslate nohighlight">\(x_{n-1}\)</span>.</div>
+<div class="line">This is indicated by writing <span class="math notranslate nohighlight">\(n-1\)</span> on top of the <span class="math notranslate nohighlight">\(\Sigma\)</span> symbol. Finally, <span class="math notranslate nohighlight">\(x_i\)</span> indicates the quantity that we are summing.</div>
+</div>
+<p>One way to think about this is in terms of a for-loop. This summation concept is equivalent to a for-loop over all integers in the range from the lower bound to the upper bound, indexed into the sequence <span class="math notranslate nohighlight">\(x\)</span>. Thus, the code for our previous sum is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="c1"># i = 0, 1, ..., n-1</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="c1"># this is equivalent to</span>
+<span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">total</span></code> in either case will be <span class="math notranslate nohighlight">\(12\)</span>.</p>
+<p>It is probably easiest to build an intuition by looking through a few more examples of summation notation.</p>
+<p><em>Example 1:</em></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=1}^{n} i^2= 1 + 4+ \cdots n^2 = \frac{n(n+1)(2n+1)}{6}
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">55</span>
+</pre></div>
+</div>
+<p><em>Example 2:</em></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=3}^{6} x_i^2 = x_3^2+x_4^2+x_5^2+x_6^2
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="go">143</span>
+</pre></div>
+</div>
+<p><em>Example 3:</em></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=1}^{5} i^2-i = (1-1) + (4-2) + (9-3) + (16-4) + (25-5) =  0+2+6+12+20=40
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">((</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="go">40</span>
+</pre></div>
+</div>
+<p>We can also sum over several different sequences. Consider the sequences <span class="math notranslate nohighlight">\((a_i)_{i=0}^m\)</span> and <span class="math notranslate nohighlight">\((b_j)_{j=0}^n\)</span>. Then, we can calculate the sum of the product of each value in <span class="math notranslate nohighlight">\((a_i)_{i=0}^m\)</span> with each value in <span class="math notranslate nohighlight">\((b_j)_{j=0}^n\)</span> (a sum over <span class="math notranslate nohighlight">\(m \times n\)</span> products). Because the <span class="math notranslate nohighlight">\(i\)</span> index only appears in association with <span class="math notranslate nohighlight">\((a_i)_{i=0}^m\)</span>, and the <span class="math notranslate nohighlight">\(j\)</span> index with <span class="math notranslate nohighlight">\((b_j)_{j=0}^n\)</span>, we can group these summations as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} a_i \cdot b_j = \left(\sum_{i=0}^{m-1} a_i\right) \cdot \left(\sum_{j=0}^{n-1} b_j\right) = (a_0+a_1 + a_2 + \cdots + a_{m-1}) \cdot (b_0 + b_1 + b_2 + \cdots b_{n-1}).
+\end{equation}</div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">B</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Note that the following does <strong>not</strong> hold</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=0}^{m-1} a_i \cdot a_i \neq \left(\sum_{i=0}^{m-1} a_i\right) \cdot \left(\sum_{i=0}^{m-1} a_i\right)
+\end{equation}</div><p>because this would treat the index <span class="math notranslate nohighlight">\(i\)</span> in the first term independently from the <span class="math notranslate nohighlight">\(i\)</span> in the second term of the product. Notice that in the right side of the equation, we could have interchanged the index <span class="math notranslate nohighlight">\(i\)</span> in the second summation with <span class="math notranslate nohighlight">\(j\)</span>, without changing any of the mathematics. The sum on the left represents the summation of <span class="math notranslate nohighlight">\(m\)</span> terms of <span class="math notranslate nohighlight">\(a_{i}^2\)</span>, whereas the sum on the right represents the summation of <span class="math notranslate nohighlight">\(m \times m\)</span> terms - products between all
+possible pairs of A’s terms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Mathematicians are lazy. This means writing as little as possible to communicate, so note that typically when someone writes <span class="math notranslate nohighlight">\(\sum_{i} x_i\)</span>, this is just the sum of all values in the sequence <span class="math notranslate nohighlight">\((x_i)_{i=0}^{n-1}\)</span> and is the same as writing <span class="math notranslate nohighlight">\(\sum_{i=0}^{n-1} x_i\)</span>, where the value of <span class="math notranslate nohighlight">\(n\)</span> is known.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Arithmetic Mean</strong></p>
+<p>Using the introduced summation notation, write the mean of a sequence <span class="math notranslate nohighlight">\((x_i)_{i=0}^{n-1}\)</span>, which contains <span class="math notranslate nohighlight">\(n\)</span> numbers.</p>
+<p>Next, write a Python function called <code class="docutils literal notranslate"><span class="pre">mean</span></code>, which takes in a collection of numbers (a list, tuple, set, etc.) called <code class="docutils literal notranslate"><span class="pre">seq</span></code> and returns the mean of the sequence using a for-loop. Use this method to calculate the mean of the tuple <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">9,</span> <span class="pre">2,</span> <span class="pre">5,</span> <span class="pre">8,</span> <span class="pre">1)</span></code>.</p>
+</div>
+</div>
+<div class="section" id="Kronecker-Delta">
+<h2>Kronecker Delta<a class="headerlink" href="#Kronecker-Delta" title="Permalink to this headline">¶</a></h2>
+<p>To make notation for working with summations even simpler (especially those involving matrices), we can use the Kronecker delta function, named after Prussian mathematician Leopold Kronecker. We use <span class="math notranslate nohighlight">\(\delta_{ij}\)</span> to denote the Kronecker delta function, defined as:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\delta_{ij}=\begin{cases}
+ 0 &amp; \text{if } i \neq j\\
+1 &amp; \text{if } i=j
+\end{cases}
+\end{equation}</div><p>See that a Kronecker delta can “collapse” a sum. If <span class="math notranslate nohighlight">\(j\)</span> be an integer between 0 and <span class="math notranslate nohighlight">\(n-1\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\sum_{i=0}^{n-1} \delta_{ij} a_i = 0 \cdot a_0  + \cdots + 1 \cdot a_j + 0 \cdot a_{j+1}+ \cdots + 0 \cdot  a_{n-1}= a_{j}.
+\end{equation}</div><p>See also that the identity matrix, <span class="math notranslate nohighlight">\(I\)</span>, can be written as <span class="math notranslate nohighlight">\(I_{ij}=\delta_{ij}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+I =
+\begin{bmatrix}
+1   &amp; 0 &amp; \cdot &amp; \cdot &amp; 0  \\
+0 &amp; 1 &amp; 0 &amp;  \cdot  &amp; \cdot \\
+\cdot &amp; 0 &amp; 1 &amp; 0 &amp; \cdot \\
+\cdot &amp; \cdot &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; \cdot &amp; \cdot &amp; 0 &amp; 1
+\end{bmatrix}
+\end{equation}</div><div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Kronecker Delta</strong></p>
+<p>Write a function named <code class="docutils literal notranslate"><span class="pre">kronecker</span></code>. It should accept two input argument, named <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>, which will be integers. Have the function return <span class="math notranslate nohighlight">\(1\)</span> if the arguments are equal and <span class="math notranslate nohighlight">\(0\)</span> if they are not equal.</p>
+<p>Then, use this function to collapse a sum. Make 2 lists of 5 elements each. The first list, called <code class="docutils literal notranslate"><span class="pre">a</span></code>, should contain the numbers <code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">6,</span> <span class="pre">7,</span> <span class="pre">1,</span> <span class="pre">8]</span></code> and the other list, called <code class="docutils literal notranslate"><span class="pre">b</span></code>, should contain <code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">7,</span> <span class="pre">1,</span> <span class="pre">3,</span> <span class="pre">8]</span></code>. Use the <code class="docutils literal notranslate"><span class="pre">kronecker</span></code> function to compute and print the sum <span class="math">\begin{equation}
+\sum_{i=0}^{4} a_i \cdot b_i.
+\end{equation}</span></p>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arithmetic Mean: Solution</strong></p>
+<p>The equation for computing the mean of a collection of numbers, using summation notation, is <span class="math">\begin{equation}
+\frac{1}{N} \cdot \sum_{k=0}^{N-1} x_k.
+\end{equation}</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq : Iterable</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The mean of the given sequence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sum_</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
+        <span class="n">sum_</span> <span class="o">+=</span> <span class="n">num</span>
+    <span class="k">return</span> <span class="n">sum_</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">4.625</span>
+</pre></div>
+</div>
+<p><strong>Kronecker Delta: Solution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">kronecker</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    i : int</span>
+<span class="sd">    j : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        returns 1 if `i` and `j` are equal and returns 0 otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Recall that `int(True)` returns 1 and `int(False)` returns 0.</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">kronecker</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="LinearAlgebra.html" class="btn btn-neutral float-right" title="Fundamentals of Linear Algebra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Functions.html" class="btn btn-neutral float-left" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

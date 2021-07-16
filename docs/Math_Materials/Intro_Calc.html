@@ -1,0 +1,1031 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction to Single-Variable Calculus &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multivariable Calculus: Partial Derivatives &amp; Gradients" href="Multivariable_Calculus.html" />
+    <link rel="prev" title="Complex Numbers" href="ComplexNumbers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction to Single-Variable Calculus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Instantaneous-Slope-and-Derivatives">Instantaneous Slope and Derivatives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#The-(Informal)-Definition-of-a-Derivative">The (Informal) Definition of a Derivative</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Leibniz-Notation">Leibniz Notation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Linearity-of-the-Derivative">Linearity of the Derivative</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Common-Derivatives">Common Derivatives</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Uses-for-the-Derivative">Uses for the Derivative</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Automatic-Differentiation">Automatic Differentiation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction-to-MyGrad">Introduction to MyGrad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Vectorized-Auto-Differentiation">Vectorized Auto-Differentiation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-the-Derivative">Visualizing the Derivative</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Seek-and-Derive">Seek and Derive</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Introduction to Single-Variable Calculus</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/Intro_Calc.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Introduction-to-Single-Variable-Calculus">
+<h1>Introduction to Single-Variable Calculus<a class="headerlink" href="#Introduction-to-Single-Variable-Calculus" title="Permalink to this headline">¶</a></h1>
+<p>Calculus is a branch of mathematics that develops the concepts, language, and tools that enable us to describe continuous changes in quantities. Among these, the concept of the derivative empowers us to precisely quantify “cause and effect” between phenomena. For example, in physics, the derivative can be used to describe how far a falling object will move if time advances by an arbitrarily-small amount (i.e. it describes the object’s speed). In machine learning, we use the derivative to assess
+how a minuscule change to a neural network’s mathematical parameters will affect the quality of its predictions. It is difficult to overstate the importance of calculus and its influence on the STEM fields.</p>
+<p>This section aims to provide a brief introduction to the concepts from single-variable calculus that will be vital this course. This is <em>not</em> by any means a comprehensive treatment of single-variable calculus; the goal of this section is to provide the reader with a sufficient background and familiarity with derivatives. <em>A lot</em> will be swept under the rug here, as it would be unreasonable to present a full Calculus-1 course-worth of material. The following topics <strong>will not</strong> be covered here:</p>
+<ul class="simple">
+<li><p>limits, continuity, and the formal definition of the derivative.</p></li>
+<li><p>the product and chain rules (the quotient rule is bad and can always be replaced with these two).</p></li>
+<li><p>common derivatives (polynomials, exponentials, and sinusoids).</p></li>
+<li><p>the mean value theorem, intermediate value theorem, L’Hôpital’s rule, and other theorems.</p></li>
+<li><p>topics that build off of derivatives: integration, differential equations, etc.</p></li>
+</ul>
+<p>That being said, this section will provide:</p>
+<ul class="simple">
+<li><p>an intuitive introduction to the derivative</p></li>
+<li><p>a discussion of notation used to represent derivatives</p></li>
+<li><p>a handful of applications of the derivative</p></li>
+<li><p>a table of common derivatives (with no derivation of these)</p></li>
+</ul>
+<p>While it may seem surprising that we can proceed with such a brief treatment of calculus, it will turn out that, thanks to so-called auto-differentiation libraries, these ideas will be all we need to make headway through the rest of this course. As such, auto-differentiation libraries will also be introduced here.</p>
+<div class="section" id="Instantaneous-Slope-and-Derivatives">
+<h2>Instantaneous Slope and Derivatives<a class="headerlink" href="#Instantaneous-Slope-and-Derivatives" title="Permalink to this headline">¶</a></h2>
+<p>The fundamental idea behind the derivative is <em>slope</em>. As we know from a typical high-school algebra course, the slope of a line tells us how steep said line is, or how quickly the height of the line is changing in relation to our position on the horizontal axis. In particular, the slope tells us <em>the proportion by which</em> our line grows vertically when we vary our position horizontally. A slope greater than <span class="math notranslate nohighlight">\(1\)</span> means that the line grows faster vertically than horizontally, and a slope less
+than <span class="math notranslate nohighlight">\(1\)</span> (but greater than <span class="math notranslate nohighlight">\(0\)</span>) means that the line grows faster horizontally than vertically. A negative slope means that our line declines along the vertical axis as we move in the positive horizontal direction.</p>
+<p>With this idea of slope in mind, let’s consider what it means to find the slope of a non-linear function <span class="math notranslate nohighlight">\(f(x)\)</span> at a given point <span class="math notranslate nohighlight">\(p\)</span>. If we only look at a (infinitesimally) small interval surrounding <span class="math notranslate nohighlight">\(p\)</span>, we would see that the function resembles a line in this tiny neighborhood. To measure the slope of this apparent line, within this small interval, is to measure the so-called <em>instantaneous slope</em> of <span class="math notranslate nohighlight">\(f(x)\)</span> at <span class="math notranslate nohighlight">\(p\)</span>. This is perhaps best illustrated as below, where
+we are measuring the instantaneous slope of some function at <span class="math notranslate nohighlight">\(x = 1.93\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/intro_calc_inst_slope.png" alt="Zoom of function to see linear nature" width="600">
+</p>
+</div><p>From afar, the bends of this function seem to preclude us from identifying any sort of line whose slope we can measure. However if we “zoom in” close enough, we see that the function does indeed look linear; in the small neighborhood around <span class="math notranslate nohighlight">\(x=1.93\)</span>, we can measure the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> to be roughly <span class="math notranslate nohighlight">\(0.164\)</span>.</p>
+<div class="section" id="The-(Informal)-Definition-of-a-Derivative">
+<h3>The (Informal) Definition of a Derivative<a class="headerlink" href="#The-(Informal)-Definition-of-a-Derivative" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>derivative</strong> of a function <span class="math notranslate nohighlight">\(f(x)\)</span> is <em>another</em> function, which we can denote as <span class="math notranslate nohighlight">\(f'(x)\)</span>, that “stores” the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> for any and all values of <span class="math notranslate nohighlight">\(x\)</span>. For example, supposing we have access to <span class="math notranslate nohighlight">\(f'(x)\)</span> for our function, evaluating <span class="math notranslate nohighlight">\(f'(2.5)\)</span> will tell us what the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> is at <span class="math notranslate nohighlight">\(x = 2.5\)</span>. The key point here is that <em>the derivative of a function is itself a function</em>.</p>
+<p>Let’s take a look at a few simple examples to get comfortable with this idea. Take the linear function <span class="math notranslate nohighlight">\(f(x)=2x\)</span>. Since <span class="math notranslate nohighlight">\(f(x)\)</span> is simply a line, it has the same slope everywhere. This then means that the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> is the constant function <span class="math notranslate nohighlight">\(f'(x)=2\)</span>, since the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> is the same at every point. Congratulations, you just computed your first derivative!</p>
+<p>Now consider the slightly more complicated function <span class="math notranslate nohighlight">\(f(x)=x\ln(x)\)</span> (red curve), which, along with it’s derivative (blue curve), is depicted below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/intro_calc_xlnx.png" alt="Plot of f(x)=xln(x)" width="500">
+</p>
+</div><p>Close to <span class="math notranslate nohighlight">\(x\approx0.4\)</span>, we can see that the function has a minimum, meaning that a (infinitesimal) change in <span class="math notranslate nohighlight">\(x\)</span> would not affect the function value. This indicates that the instantaneous slope at <span class="math notranslate nohighlight">\(x\approx0.4\)</span> is <span class="math notranslate nohighlight">\(0\)</span>, as seen in the diagram above. Thus we would expect to find that <span class="math notranslate nohighlight">\(f'(0.4)\approx 0\)</span>. Furthermore, given that <span class="math notranslate nohighlight">\(f(x)\)</span> is a decreasing function on the interval <span class="math notranslate nohighlight">\(0\leq x\lessapprox0.4\)</span>, we expect that the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> at
+any point in this interval is negative. Indeed, we see that <span class="math notranslate nohighlight">\(f'(x)\)</span> takes on negative values here. Similarly, <span class="math notranslate nohighlight">\(f'(x)\)</span> will yield positive values for <span class="math notranslate nohighlight">\(x\gtrapprox0.4\)</span>, where <span class="math notranslate nohighlight">\(f(x)\)</span> is increasing.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>The derivative of a function <span class="math notranslate nohighlight">\(f(x)\)</span> is itself a function, <span class="math notranslate nohighlight">\(f'(x)\)</span>, that indicates the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> at any point. Evaluating <span class="math notranslate nohighlight">\(f'(x)\)</span> at a specific point will yield the instantaneous slope of <span class="math notranslate nohighlight">\(f(x)\)</span> at said point.</p>
+<p>Since the derivative is related to slope, which is a measure of rate of change, the derivative also indicates how quickly a function is changing. This also means that if the sign of the derivative is positive at a point, then the function is increasing at that point, while if the sign of the derivative is negative at a point, the function is decreasing at that point.</p>
+</div>
+</div>
+<div class="section" id="Leibniz-Notation">
+<h3>Leibniz Notation<a class="headerlink" href="#Leibniz-Notation" title="Permalink to this headline">¶</a></h3>
+<p>Up to now we have used a functional notation for the derivative, i.e. we have written the derivative as the function <span class="math notranslate nohighlight">\(f'(x)\)</span>. However, later in our journey through functions of multivariable calculus, we will be glad to adopt the powerful Leibniz notation for derivatives. In Leibniz notation, the derivative of <span class="math notranslate nohighlight">\(f\)</span> is written as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}.
+\end{equation}</div><p>It must be noted that <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span> is still a function; it is no different than <span class="math notranslate nohighlight">\(f'(x)\)</span>. If we wanted to indicate we are finding the instantaneous slope of our function at a specific point <span class="math notranslate nohighlight">\(x=p\)</span>, we can use a vertical bar to denote the “evaluated” derivative:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=p}.
+\end{equation}</div><p>All this vertical bar means is that we first find the derivative (as a function of <span class="math notranslate nohighlight">\(x\)</span>), and then evaluate the derivative at the point <span class="math notranslate nohighlight">\(x=p\)</span>. We would have denoted this using the previous notation as <span class="math notranslate nohighlight">\(f'(p)\)</span>.</p>
+<p>We will primarily be using Leibniz notation to represent derivatives moving forward.</p>
+</div>
+<div class="section" id="Linearity-of-the-Derivative">
+<h3>Linearity of the Derivative<a class="headerlink" href="#Linearity-of-the-Derivative" title="Permalink to this headline">¶</a></h3>
+<p>As briefly mentioned in the discussion of the <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/LinearAlgebra.html#The-Dot-Product">dot product</a>, an operation is <em>linear</em> if:</p>
+<ol class="arabic simple">
+<li><p>we can multiply by a scalar before or after applying the operation: <span class="math notranslate nohighlight">\(\mathrm{d}(cf)=c\mathrm{d}(f)\)</span>.</p></li>
+<li><p>the operation applied to a sum is equal to the sum of the operation applied to each summand: <span class="math notranslate nohighlight">\(\mathrm{d}(f+g)=\mathrm{d}(f)+\mathrm{d}(g)\)</span>.</p></li>
+</ol>
+<p>An attentive reader may have noticed I wrote these properties with the operation <span class="math notranslate nohighlight">\(\mathrm{d}\)</span>, much like that which appears in our Leibniz notation. We will not go into the details here, but the process of taking the derivative is in fact linear. This means that we can (1) multiply a function by a scalar before or after taking the derivative</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}(cf)}{\mathrm{d}x}=c\frac{\mathrm{d}f}{\mathrm{d}x},
+\end{equation}</div><p>and (2) find the derivative of a sum of functions by summing the individual derivatives of the functions</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}(f+g)}{\mathrm{d}x}=\frac{\mathrm{d}f}{\mathrm{d}x}+\frac{\mathrm{d}g}{\mathrm{d}x}.
+\end{equation}</div><p>As before, these derivatives are still functions. Multiplying a scalar by a function simply means, when the function is evaluated at a point, multiply the resulting value by the scalar. Adding two functions is similar: once both functions are evaluated at a given point, sum the results.</p>
+</div>
+<div class="section" id="Common-Derivatives">
+<h3>Common Derivatives<a class="headerlink" href="#Common-Derivatives" title="Permalink to this headline">¶</a></h3>
+<p>Below is a table of common derivatives, as well as a summary of useful rules when computing derivatives. The chain rule, included here for completeness, will also be discussed later. It is not important to have these memorized, as we will often be using auto-differentiation libraries that have been programmed specifically to compute these derivatives.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(f(x)\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span></p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(c\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p>Constant <span class="math notranslate nohighlight">\(c\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(x^n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(nx^{n-1}\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\cos(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-\sin(x)\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\sin(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\cos(x)\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(e^x\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(e^x\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\ln(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{1}{x}\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(cg(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(c\frac{\mathrm{d}g}{\mathrm{d}x}\)</span></p></td>
+<td><p>Linearity of derivative</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(g(x)+h(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\mathrm{d}g}{\mathrm{d}x}+\frac{\mathrm{d}h}{\mathrm{d}x}\)</span></p></td>
+<td><p>Linearity of derivative</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(g(x)\cdot h(x)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(g(x)\cdot\frac{\mathrm{d}h}{\mathrm{d}x}+h(x)\cdot\frac{\mathrm{d}g}{\mathrm{d}x}\)</span></p></td>
+<td><p>Product rule</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(g(h(x))\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\mathrm{d}g}{\mathrm{d}h}\frac{\mathrm{d}h}{\mathrm{d}x}\)</span></p></td>
+<td><p>Chain rule</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Taking Derivatives</strong>:</p>
+<p>Using the above table, and the fact that differentiation is linear, find the derivatives of the following functions, and evaluate these at <span class="math notranslate nohighlight">\(x=5\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f(x)=x^3+e^x-2\ln(x)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(x)=3+\sin(x)-\frac{1}{2}\cos(x)\)</span></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="Uses-for-the-Derivative">
+<h3>Uses for the Derivative<a class="headerlink" href="#Uses-for-the-Derivative" title="Permalink to this headline">¶</a></h3>
+<p>The derivative is an extremely useful tool that can be leveraged to find the <strong>extrema</strong> (i.e. maxima and minima) of functions. Recall the earlier example <span class="math notranslate nohighlight">\(f(x)=x\ln(x)\)</span>, where we noted that the derivative was <span class="math notranslate nohighlight">\(0\)</span> at the local minimum around <span class="math notranslate nohighlight">\(x\approx0.4\)</span>.</p>
+<p>This observation – that the derivative vanishes where the function has an extrema – allows us to solve for these points explicitly. In fact, let’s try to find the exact minimum of the function <span class="math notranslate nohighlight">\(f(x)\)</span>. If you are familiar with the process of differentiation from a previous calculus course, you can validate this derivative yourself. You may also refer to the product rule in the previous table. I claim, however, that the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> is</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}=\ln(x)+1.
+\end{equation}</div><p>We can now set <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span> to <span class="math notranslate nohighlight">\(0\)</span>, and algebraically solve for <span class="math notranslate nohighlight">\(x\)</span>, thus giving us the value of <span class="math notranslate nohighlight">\(x\)</span> for which the derivative vanishes (and hence the function is minimized).</p>
+<div class="math notranslate nohighlight">
+\begin{align}
+\ln(x)+1&amp;=0 \\
+\ln(x)&amp;=-1 \\
+x&amp;=e^{-1}.
+\end{align}</div><p>In decimal form, <span class="math notranslate nohighlight">\(\frac{1}{e}\approx0.36\)</span>, very close to our initially observed value. If we wanted to know what the value of <span class="math notranslate nohighlight">\(f(x)\)</span> is at the minimum, we could simply plug <span class="math notranslate nohighlight">\(x=\frac{1}{e}\)</span> into <span class="math notranslate nohighlight">\(f(x)\)</span> as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(e^{-1})=e^{-1}\ln\big(e^{-1}\big)=-\frac{1}{e}.
+\end{equation}</div><p>Another useful application of derivatives is that of making <em>linear approximations</em>. In our introduction to derivatives, we imagined zooming in on our function until it appeared linear, and then finding the slope of this line. The idea behind making linear approximations is similar: for a given point, we will say that our function looks close enough to a line that, for a small surrounding interval, we can estimate the function value from our derivative. In particular, for a function <span class="math notranslate nohighlight">\(f(x)\)</span>
+and a point <span class="math notranslate nohighlight">\(p\)</span>, we can approximate <span class="math notranslate nohighlight">\(f(x)\)</span> in a small interval surrounding <span class="math notranslate nohighlight">\(p\)</span> as <span class="math">\begin{equation}
+f(x)\approx f(p)+(x-p)\cdot\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=p}.
+\end{equation}</span></p>
+<p>Let’s look at a brief example. Take the function <span class="math notranslate nohighlight">\(f(x)=\sin(x)\)</span>, and consider a region near <span class="math notranslate nohighlight">\(x=0\)</span>. I claim that the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> is <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}=\cos(x)\)</span>, in which case <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=0}=1\)</span>. Thus, for this example, we will approximate <span class="math notranslate nohighlight">\(\sin(x)\)</span> as <span class="math">\begin{equation}
+f(x)\approx f(0)+(x-0)\cdot\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=0}=\sin(0)+(x-0)\cos(0)=x,
+\end{equation}</span></p>
+<p>for a small interval surrounding <span class="math notranslate nohighlight">\(x=0\)</span>. How accurate is this approximation? We can see in the plot below.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/intro_calc_xeqsinx.png" alt="Plot of f(x)=sin(x) and f(x)=x" width="600">
+</p>
+</div><p>Indeed, our linear approximation appears quite good for small values of <span class="math notranslate nohighlight">\(x\)</span>. This idea of using derivatives to make approximations is related to the concept of <em>Taylor series</em>, which are not necessary for this course. We will, however, see later the idea of using derivatives to make linear approximations resurface.</p>
+</div>
+</div>
+<div class="section" id="Automatic-Differentiation">
+<h2>Automatic Differentiation<a class="headerlink" href="#Automatic-Differentiation" title="Permalink to this headline">¶</a></h2>
+<p>Over the past decade, there has been an explosion of interest in machine learning models known as neural networks. A neural network is a flexible mathematical structure that can tune its own numerical parameters through a process called “gradient-based learning”, to improve its performance on a mathematical modeling task in an automated way. We will discuss gradient-based learning in detail later, but suffice it to say that this process requires that the neural network be able to automatically
+evaluate derivatives with respect to its mathematical parameters so that it can optimize their values.</p>
+<p>The tremendous surge of activity in neural networks and gradient-based learning has led to development of popular and highly-powerful <strong>automatic differentiation libraries</strong>, such as <a class="reference external" href="https://pytorch.org/">PyTorch</a>, <a class="reference external" href="https://www.tensorflow.org/">TensorFlow</a>, and <a class="reference external" href="https://mxnet.apache.org/">MXNet</a>. These “auto-diff” libraries are able to evaluate the derivatives of arbitrary compositions of a broad range of standard functions, like polynomials, exponentials, and trigonometric functions,
+expressed across multiple variables. To be clear: an auto-diff library <em>does not</em> produce derivatives of functions, which would require that it produce the a symbolic function as an output (recall that the derivative of a function <em>is another function</em>). Instead, an auto-diff library automatically <em>evaluates the derivative of a function at a given input</em>. It is more appropriate to say that these auto-diff libraries can tell us the instantaneous slope of any function at any point, more so than
+saying that they can “take the derivative” of any function.</p>
+<p>We will get some hands-on experience with an auto-diff library to solidify the foundation in calculus that we have been building.</p>
+<div class="section" id="Introduction-to-MyGrad">
+<h3>Introduction to MyGrad<a class="headerlink" href="#Introduction-to-MyGrad" title="Permalink to this headline">¶</a></h3>
+<p>In this course, we will be making frequent use of the auto-diff library called <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/">MyGrad</a>, which is designed to behave just like NumPy, but with auto-differentiation added on top. If you already have NumPy installed in your Python environment, you can simply install MyGrad with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install mygrad
+</pre></div>
+</div>
+<p>Let’s jump right in with a simple example of using MyGrad to evaluate the derivative of a function at a specific point. We’ll take our function to be <span class="math notranslate nohighlight">\(f(x)=x^2\)</span>, and let’s compute its instantaneous slope at <span class="math notranslate nohighlight">\(x=5\)</span>, i.e. <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=5}\)</span>. From the earlier table of derivatives, we know that the derivative of this function is <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}=2x\)</span>, thus <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=5} = 10\)</span>. Let’s reproduce this
+result via auto-differentiation using MyGrad.</p>
+<p>We need to begin by creating a <code class="docutils literal notranslate"><span class="pre">mygrad.Tensor</span></code>. This is MyGrad’s analog to <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/IntroducingTheNDarray.html">numpy’s ndarray</a>. MyGrad’s <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> behaves just like NumPy’s array in just about every way that you can think of, e.g. it supports multi-dimensional indexing (both <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Basic-Indexing">basic</a> and
+<a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AdvancedIndexing.html">advanced</a>), reshaping, and vectorized operations with broadcasting semantics, but it is also capable of facilitating automatic differentiation. This <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> will <em>store the point(s) at which we wish to evaluate our function and its derivative</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># `mygrad.Tensor` behaves like `numpy.array` but it supports auto-diff</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mygrad</span> <span class="kn">as</span> <span class="nn">mg</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then pass this <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> into our desired function, thus evaluating the function at the specified point(s). Much like NumPy, MyGrad provides a wide array of mathematical functions that we can apply to <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>s. In this example, our function is <span class="math notranslate nohighlight">\(f(x)=x^2\)</span>. We can compute this just as we would with NumPy: either with <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">**</span> <span class="pre">2</span></code> or with <code class="docutils literal notranslate"><span class="pre">mygrad.square(x)</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluating f(5)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span>
+<span class="n">Tensor</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fx</span></code> stores the value of our function at the given evaluation points, which in this case is <span class="math notranslate nohighlight">\(f(5)=5^2=25\)</span>.</p>
+<p>Now we can use MyGrad to evaluate the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> at <span class="math notranslate nohighlight">\(x=5\)</span>. Invoking <code class="docutils literal notranslate"><span class="pre">fx.backward()</span></code> instructs MyGrad to evaluate the derivative of <code class="docutils literal notranslate"><span class="pre">fx</span></code> <em>for each variable that</em> <code class="docutils literal notranslate"><span class="pre">fx</span></code> <em>depends on</em>. We will see in the next section how to differentiate a multivariable function both by hand and with MyGrad. However, in this case, <span class="math notranslate nohighlight">\(x\)</span> is the only such variable.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># trigger auto-differentiation of `fx` with respect to</span>
+<span class="c1"># all of the variables that it depends on</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The value of <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=5}\)</span> is stored in the attribute <code class="docutils literal notranslate"><span class="pre">x.grad</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># accessing df/dx @ x=5</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="n">array</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As expected, MyGrad computes the appropriate value for the evaluated derivative: <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=5}=2 \times 5=10\)</span>. Note that all <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> instances have a <code class="docutils literal notranslate"><span class="pre">grad</span></code> attribute, but prior to invoking <code class="docutils literal notranslate"><span class="pre">fx.backward()</span></code>, <code class="docutils literal notranslate"><span class="pre">x.grad</span></code> would have simply returned <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>It is important to reiterate that MyGrad <em>never produced the actual function</em> <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\)</span>. As covered in the discussion on <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Functions.html">functions</a>, when we wish to work with mathematical functions in Python, we must <em>sample</em> the function, rather than manipulate its symbolic form, in our code. Since the derivative is itself a function, MyGrad must sample it, and will do so at whichever points we initially provide.
+This is a common thread across auto-diff libraries: <em>the derivative can only be computed at specific evaluation points</em>.</p>
+</div>
+<div class="section" id="Vectorized-Auto-Differentiation">
+<h3>Vectorized Auto-Differentiation<a class="headerlink" href="#Vectorized-Auto-Differentiation" title="Permalink to this headline">¶</a></h3>
+<p>In accordance with mirroring NumPy’s design, MyGrad supports <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/VectorizedOperations.html">vectorized operations</a>, allowing us to evaluate the derivative of a function at multiple points simultaneously. Let’s again take the function <span class="math notranslate nohighlight">\(f(x)=x^2\)</span>, which has the derivative <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}=2x\)</span>. Now, instead of passing in a single number to <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>, we can pass in a list of values corresponding to all the
+points at which we want the compute the derivative. We can then find the instantaneous slope of our function at these points, just as before. First we will pass <code class="docutils literal notranslate"><span class="pre">x</span></code> into our function of interest, namely <span class="math notranslate nohighlight">\(f(x)=x^2\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using vectorized operations to evaluate a function</span>
+<span class="c1"># at multiple locations</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span>
+<span class="n">Tensor</span><span class="p">([</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Here MyGrad vectorizes the operation, performing it element-wise:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f\big([2,\, -4,\, 1,\, 3]\big) =  \big[f(2),\, f(-4),\, f(1),\, f(3)\big].
+\end{equation}</div><p>We can elegantly exploit this vectorization to find the derivative of <span class="math notranslate nohighlight">\(f(x)\)</span> evaluated at each point in <code class="docutils literal notranslate"><span class="pre">x</span></code> by invoking <code class="docutils literal notranslate"><span class="pre">fx.backward()</span></code>. This will trigger the vectorized computation</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\bigg[\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=2},\: \frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=-4},\: \frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=1},\: \frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=3} \bigg],
+\end{equation}</div><p>which will be stored in <code class="docutils literal notranslate"><span class="pre">x.grad</span></code>. It is important to recognize that <code class="docutils literal notranslate"><span class="pre">x.grad[i]</span></code> stores the derivative of <code class="docutils literal notranslate"><span class="pre">fx</span></code> evaluated at <code class="docutils literal notranslate"><span class="pre">x[i]</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trigger vectorized auto-differentiation</span>
+<span class="c1"># Computes the instantaneous slope of</span>
+<span class="c1"># f(x) = x ** 2 at 2, 4, 1, and 3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span> <span class="c1"># df/dx @ x = 2, -4, 1, and 3, respectively</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">4.</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>As expected, MyGrad finds the appropriate value for the derivative evaluated at each respective element in <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>Auto-differentiation libraries will compute the derivative of a function at specified points, provided by the user. In MyGrad, <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>s are the building blocks, storing the points at which functions and derivatives will be evaluated. Operations in MyGrad are vectorized, like in NumPy, to make element-wise operations extremely quick. To signal to MyGrad to compute the derivative of a function, invoke <code class="docutils literal notranslate"><span class="pre">backward</span></code> on the output of the desired function. The derivative evaluated at the original
+points will be stored in the <code class="docutils literal notranslate"><span class="pre">grad</span></code> attribute of the original <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>, with each element in <code class="docutils literal notranslate"><span class="pre">grad</span></code> being the derivative of the function evaluated at the corresponding element in the original <code class="docutils literal notranslate"><span class="pre">Tensor</span></code>.</p>
+</div>
+</div>
+<div class="section" id="Visualizing-the-Derivative">
+<h3>Visualizing the Derivative<a class="headerlink" href="#Visualizing-the-Derivative" title="Permalink to this headline">¶</a></h3>
+<p>The following code block demonstrates how easy it is to visualize a function’s derivative by using MyGrad. Note MyGrad’s <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> stores a NumPy-array of its data, which can be accessed via the <code class="docutils literal notranslate"><span class="pre">.data</span></code> attribute. Any time a library needs to be passed a NumPy array, you can access this array from a tensor through this attribute.</p>
+<p>Study the plot displayed below: notice that the derivative is always <span class="math notranslate nohighlight">\(0\)</span> when the function has a horizontal slope, and that the derivative takes on a positive value wherever the parent function has a positive slope.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">mygrad</span> <span class="k">as</span> <span class="nn">mg</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mg</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="k">def</span> <span class="nf">plot_func_and_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;f(x)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;df/dx&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+<span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Intro_Calc_30_0.png" src="../_images/Math_Materials_Intro_Calc_30_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Seek-and-Derive">
+<h3>Seek and Derive<a class="headerlink" href="#Seek-and-Derive" title="Permalink to this headline">¶</a></h3>
+<p>Computers equipped with automatic differentiation libraries can make short work of derivatives that are well-beyond the reach of mere mortals. Let’s finish with an example demonstrating how powerful MyGrad is, and why we would want to use it. Take the pathological function <span class="math">\begin{equation}
+f(x)=e^{(\arctan(82x^3+\ln(x)))}\sqrt{25x^{\frac{1}{22930}}+39e^{\frac{2}{x}}-\sin(x)},
+\end{equation}</span></p>
+<p>the derivative of which would be miserable to do by hand. Thankfully we can have MyGrad compute the derivative at a collection of points for us, just as we did before (using vectorization)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tensor containing the values x = 1, 2, ..., 10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+
+<span class="c1"># Evaluated function at points x = 1, 2, ..., 10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">82</span> <span class="o">*</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">mg</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span> <span class="o">*=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">25</span> <span class="o">*</span> <span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">22930</span><span class="p">)</span> <span class="o">+</span> <span class="mi">39</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">mg</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>  <span class="c1"># df/dx evaluated at x = 1, 2, ..., 10</span>
+<span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">7.44764313e+01</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.09475963e+01</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.78281290e+00</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.86451297e+00</span><span class="p">,</span>
+       <span class="o">-</span><span class="mf">1.29207692e+00</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.07197583e+00</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.90459238e-01</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.96212428e-01</span><span class="p">,</span>
+       <span class="o">-</span><span class="mf">8.16203127e-02</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.17648949e-02</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Even though it would be a pain to differentiate <span class="math notranslate nohighlight">\(f(x)\)</span> by hand, MyGrad can handle taking the derivative with no problems. To find the derivative of a complex function, we simply must chain together the relevant functions and sit back – MyGrad will handle the rest. It accomplishes this feat by dutifully applying <a class="reference external" href="https://rsokl.github.io/CogWeb/Math_Materials/Chain_Rule.html">the chain rule</a> over and over, using a simple algorithm called “back-propagation”. The authors of MyGrad had to
+write down the symbolic derivative for each elementary function (e.g., <span class="math notranslate nohighlight">\(e^x\)</span>, <span class="math notranslate nohighlight">\(\sqrt{x}\)</span>, <span class="math notranslate nohighlight">\(\arctan(x)\)</span>, etc.), but MyGrad’s code is responsible for systematically carrying out the chain rule to evaluate derivatives of arbitrarily-complex compositions of these functions.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Auto-differentiation</strong>:</p>
+<p>Using MyGrad, compute the derivatives of the following functions. Have MyGrad evaluate the derivatives on the interval <span class="math notranslate nohighlight">\([-2,4]\)</span> at <span class="math notranslate nohighlight">\(30\)</span> evenly spaced points using <code class="docutils literal notranslate"><span class="pre">mygrad.linspace</span></code>. Additionally, plot these functions and their derivatives on the same domains, but using more densely-spaced points</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f(x)=\frac{e^x}{e^x+1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f(x)=e^{-\frac{(x-1)^2}{10}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f(x)=\frac{\sin(x)}{x}-x^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f(x)=9\sqrt{1+\frac{x^2}{9}}-9\)</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Taking Derivatives: Solution</strong></p>
+<p>Using the table, the derivative of the first function can be found as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}=\frac{\mathrm{d}x^3}{\mathrm{d}x}+\frac{\mathrm{d}e^x}{\mathrm{d}x}-2\frac{\mathrm{d}\ln(x)}{\mathrm{d}x}=3x^2+e^x-\frac{2}{x}.
+\end{equation}</div><p>Thus, <span class="math notranslate nohighlight">\(\frac{\mathrm{d}f}{\mathrm{d}x}\big|_{x=5}\)</span> can be computed as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=5}=2(5)^2+e^5-\frac{2}{5}=198.01.
+\end{equation}</div><p>The derivative of the second function can be found as</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}=\frac{\mathrm{d}(3)}{\mathrm{d}x}+\frac{\mathrm{d}\sin(x)}{\mathrm{d}x}-\frac{1}{2}\frac{\mathrm{d}\cos(x)}{\mathrm{d}x}=0+\cos(x)+\frac{1}{2}\sin(x)=\cos(x)+\frac{1}{2}\sin(x).
+\end{equation}</div><p>Evaluating the derivative at <span class="math notranslate nohighlight">\(x=5\)</span>,</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\frac{\mathrm{d}f}{\mathrm{d}x}\bigg|_{x=5}=-0.196.
+\end{equation}</div><p><strong>Auto-differentiation: Solution</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.10499359, 0.12233146, 0.14104602, 0.16067062, 0.18052503,
+       0.19972311, 0.21721938, 0.2319002 , 0.24271321, 0.2488147 ,
+       0.24970297, 0.24530344, 0.23598166, 0.22248044, 0.20579899,
+       0.18704635, 0.167303  , 0.14751557, 0.12843546, 0.11059942,
+       0.09434168, 0.07982542, 0.0670819 , 0.05604927, 0.04660642,
+       0.03859972, 0.03186277, 0.02622978, 0.02154407, 0.01766271])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">f</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Intro_Calc_38_0.png" src="../_images/Math_Materials_Intro_Calc_38_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mg</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 0.2439418 ,  0.25603855,  0.2649823 ,  0.27016051,  0.2710269 ,
+        0.26713309,  0.25815818,  0.24393438,  0.22446663,  0.19994461,
+        0.1707458 ,  0.13742886,  0.10071733,  0.06147402,  0.02066753,
+       -0.02066753, -0.06147402, -0.10071733, -0.13742886, -0.1707458 ,
+       -0.19994461, -0.22446663, -0.24393438, -0.25815818, -0.26713309,
+       -0.2710269 , -0.27016051, -0.2649823 , -0.25603855, -0.2439418 ])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">f</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Intro_Calc_40_0.png" src="../_images/Math_Materials_Intro_Calc_40_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mg</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 3.5       ,  3.08231909,  2.88185434,  2.87154224,  2.9562879 ,
+        2.99759486,  2.85459947,  2.42860038,  1.69642019,  0.72117344,
+       -0.36375522, -1.39291332, -2.21717854, -2.74695958, -2.97654586,
+       -2.98223402, -2.89552134, -2.86072901, -2.99117993, -3.3379685 ,
+       -3.88059233, -4.54104218, -5.21509113, -5.80917978, -6.27018042,
+       -6.59861798, -6.84225739, -7.07396645, -7.36293903, -7.75      ])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">f</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Intro_Calc_42_0.png" src="../_images/Math_Materials_Intro_Calc_42_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">mg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">9</span><span class="p">)</span> <span class="o">-</span> <span class="mi">9</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">fx</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-1.66410059, -1.53913231, -1.40226235, -1.25319963, -1.09198696,
+       -0.91909001, -0.73547021, -0.54262408, -0.34257202, -0.13778548,
+        0.0689473 ,  0.27470313,  0.47662691,  0.6721239 ,  0.85901208,
+        1.03561618,  1.20079858,  1.35393517,  1.49485163,  1.62373797,
+        1.74105718,  1.8474593 ,  1.9437076 ,  2.03061964,  2.10902314,
+        2.1797249 ,  2.24349055,  2.30103263,  2.35300473,  2.4       ])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_func_and_deriv</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">f</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Math_Materials_Intro_Calc_44_0.png" src="../_images/Math_Materials_Intro_Calc_44_0.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Multivariable_Calculus.html" class="btn btn-neutral float-right" title="Multivariable Calculus: Partial Derivatives &amp; Gradients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ComplexNumbers.html" class="btn btn-neutral float-left" title="Complex Numbers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

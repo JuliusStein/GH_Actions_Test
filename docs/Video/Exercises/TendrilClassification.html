@@ -1,0 +1,811 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Our Model &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Our Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Video/Exercises/TendrilClassification.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import mygrad as mg
+from mygrad.nnet.initializers.he_normal import he_normal
+
+from datasets import ToyData
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<p>In this notebook, we will be training a two-layer neural network to solve a <em>classification</em> problem on a toy data set. We will generate a spiral-formation of 2D data points. This spiral will have grouped “tendrils”, and we will want our neural network to classify <em>to which tendril a given point belongs</em>.</p>
+<p>Read the documentation for <code class="docutils literal notranslate"><span class="pre">ToyData</span></code>. Run the following cells to view the spiral data set.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Constructing the spiral dataset and its labels.
+num_tendril = 3
+data = ToyData(num_classes=num_tendril)
+
+# Convert the data and labels to a datatype suitable for an `oxen` model.
+xtrain, ytrain, xtest, ytest = data.load_data()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = data.plot_spiraldata()
+</pre></div>
+</div>
+</div>
+<p>View the contents of <code class="docutils literal notranslate"><span class="pre">xtrain</span></code> and <code class="docutils literal notranslate"><span class="pre">ytrain</span></code>. What do these arrays correspond to? See that <code class="docutils literal notranslate"><span class="pre">xtrain</span></code> stores the 2D data points in the spiral, and <code class="docutils literal notranslate"><span class="pre">ytrain</span></code> stores the Tendril-ID associated with that point. How many points are in our training data? How are the labels specified for this dataset? Which label corresponds to which tendril? Discuss with your neighbor.</p>
+<p><em>SOLUTION HERE</em></p>
+<div class="section" id="Our-Model">
+<h1>Our Model<a class="headerlink" href="#Our-Model" title="Permalink to this headline">¶</a></h1>
+<p>We will extend the universal function approximation function to make a <em>classification</em> prediction. That is, given a 2D point <span class="math notranslate nohighlight">\(\vec{x}\)</span>, our model will product <span class="math notranslate nohighlight">\(\vec{y}_{pred} = [y_0, y_1, y_2]\)</span>, where <span class="math notranslate nohighlight">\(y_i\)</span> indicates how “confident” our model is that <span class="math notranslate nohighlight">\(\vec{x}\)</span> belongs to tendril-<span class="math notranslate nohighlight">\(i\)</span>.</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+F(\{\vec{v}_i\}, \{\vec{w}_i\}, \{b_i\}; \vec{x}) = \sum_{i=1}^{N} \vec{v}_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i}) = \vec{y}_{pred}
+\end{equation}</div><p>Notice here that <span class="math notranslate nohighlight">\(\vec{v}_i\)</span> is now a <em>vector</em>, whereas in the original universal function approximation theorem it was a scalar. This is in accordance with the fact that we now want to <em>predict</em> a vector, <span class="math notranslate nohighlight">\(\vec{y}_{pred}\)</span>, instead of a single number <span class="math notranslate nohighlight">\(y_{pred}\)</span>.</p>
+<p>What should the dimensionality of each <span class="math notranslate nohighlight">\(\vec{v}_i\)</span> be? Discuss with a neighbor.</p>
+<p>Create a two-layer dense neural network that closely resembles that one that you constructed as the universal approximator for the 1D functions. This time, however, <span class="math notranslate nohighlight">\(\vec{x}\)</span> will be a 2D point instead of a single number. Thus a batch of our training data will have a shape <span class="math notranslate nohighlight">\((M, 2)\)</span> instead of <span class="math notranslate nohighlight">\((M, 1)\)</span>.</p>
+<p>Because we are classifying which of three tendrils a 2D point belongs to, we now <strong>want our model to predict *three* numbers</strong>, rather than one, as its prediction (that is, it will produce three number per 2D point in the training batch). These three numbers will be the three “scores” that our model predicts for a point: one for each tendril. If score-0 is the largest score, then our model is predicting that the 2D point belongs to tendril 0. And so on. Thus the final layer of our network will
+have the shape <span class="math notranslate nohighlight">\((M, 3)\)</span> rather than <span class="math notranslate nohighlight">\((M, 1)\)</span>.</p>
+</div>
+<div class="section" id="The-“Activation”-Function">
+<h1>The “Activation” Function<a class="headerlink" href="#The-“Activation”-Function" title="Permalink to this headline">¶</a></h1>
+<p>We will be using the so-called “activation function” known as a “rectified linear unit”, or ReLU for short:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\varphi_{\text{relu}}(x) =
+\begin{cases}
+      0, \quad x &lt; 0 \\
+      x, \quad 0 \leq x
+\end{cases}
+\end{equation}</div><p>This is a very popular activation function in the world of deep learning. We will not have time to go into why here, but it is worthwhile to read about. <code class="docutils literal notranslate"><span class="pre">mygrad</span></code> has this function: <code class="docutils literal notranslate"><span class="pre">mygrad.nnet.activations.relu</span></code>.</p>
+<p>(The astute reader will note that ReLU does not satisfy the requirements on <span class="math notranslate nohighlight">\(\varphi(x)\)</span>, as dictated by the universal function theorem. Which requirement does this violate?)</p>
+<p>Import the relu function from <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>, and plot it on <span class="math notranslate nohighlight">\(x \in [-3, 3]\)</span>. What does the derivative of this function look like? Plot it as well.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="section" id="Initializing-Our-Model-Parameters">
+<h2>Initializing Our Model Parameters<a class="headerlink" href="#Initializing-Our-Model-Parameters" title="Permalink to this headline">¶</a></h2>
+<p>We will be using a intialization technique known as “He-normal” initialization (pronounced “hey”). Essentially we will draw all of our dense-layer parameters from a scaled normal distribution, where the distribution will scaled by an additional <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{2N}}\)</span>, where <span class="math notranslate nohighlight">\(N\)</span> is dictates that number of parameters among <span class="math notranslate nohighlight">\(\{\vec{v}_i\}_{i=0}^{N-1}\)</span>, <span class="math notranslate nohighlight">\(\{\vec{w}_i\}_{i=0}^{N-1}\)</span>, and <span class="math notranslate nohighlight">\(\{b_i\}_{i=0}^{N-1}\)</span>, respectively. This will aid us when we begin training neural
+networks with large numbers of neurons.</p>
+<p>Import this initialization function from <code class="docutils literal notranslate"><span class="pre">MyNN</span></code>: <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">mygrad.nnet.initializers.he_normal</span> <span class="pre">import</span> <span class="pre">he_normal</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>class Model:
+    def __init__(self, num_neurons, num_classes):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+        num_neurons : int
+            The number of &#39;neurons&#39;, N, to be included in the model.
+
+        num_classes : int
+            The number of distinct classes that you want your model to predict.
+        &quot;&quot;&quot;
+        # set self.N equal to `num_neurons
+        self.N = num_neurons  # STUDENT CODE HERE
+
+    def __call__(self, x):
+        &quot;&quot;&quot;
+        Performs a so-called &#39;forward pass&#39; through the model
+        on the specified data. I.e. uses the linear model to
+        make a prediction based on `x`.
+
+        Parameters
+        ----------
+        x : array_like, shape-(M, 2)
+            An array of M observations, each a 2D point.
+
+        Returns
+        -------
+        prediction : mygrad.Tensor, shape-(M, num_classes)
+            A corresponding tensor of M predictions based on
+            the form of the universal approximation theorem.
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+    def initialize_params(self):
+        &quot;&quot;&quot;
+        Randomly initializes and sets values for  `self.w`,
+        `self.b`, and `self.v`.
+
+        Uses `mygrad.nnet.initializers.normal to draw tensor
+        values w, v from the he-normal distribution, using a gain of 1.
+
+        The b-values are all initialized to zero.
+
+        self.w : shape-???  ... using he-normal (default params)
+        self.b : shape-???  ... as a tensor of zeros
+        self.v : shape-???  ... using he-normal (default params)
+
+        where `N` is the number of neurons in the model.
+        &quot;&quot;&quot;
+        # assign `self.m` and `self.b` each a tensor value drawn from
+        # the appropriate distribution
+        # STUDENT CODE HERE
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model.
+
+        This can be accessed as an attribute, via `model.parameters`
+
+        Returns
+        -------
+        Tuple[Tensor, ...]
+            A tuple containing all of the learnable parameters for our model&quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+    def load_parameters(self, w, b, v):
+        self.w = w
+        self.b = b
+        self.v = v
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Computing-Accuracy">
+<h1>Computing Accuracy<a class="headerlink" href="#Computing-Accuracy" title="Permalink to this headline">¶</a></h1>
+<p>Because we are solving a classification problem rather than a regression problem, we can measure the accuracy of our predictions. Write an <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> function which accepts our models predictive scores for a batch of data, shape-(M, 3), and the “truth” labels for that batch, shape-(M,).</p>
+<p>Thus, if score-0 for some point is the maximum score, and the label for that point is 0, then the prediction for that point is correct.</p>
+<p>The function should return the mean classification accuracy for that batch of predictions (a single number between 0 and 1). Write a simple test for your function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def accuracy(predictions, truth):
+    &quot;&quot;&quot;
+    Returns the mean classification accuracy for a batch of predictions.
+
+    Parameters
+    ----------
+    predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
+        The scores for D classes, for a batch of M data points
+
+    truth : numpy.ndarray, shape=(M,)
+        The true labels for each datum in the batch: each label is an
+        integer in [0, D)
+
+    Returns
+    -------
+    float
+        The accuracy: the fraction of predictions that your model got correct,
+        which should be in [0, 1]&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Our-Loss-Function">
+<h1>Our Loss Function<a class="headerlink" href="#Our-Loss-Function" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="The-softmax-activation-function">
+<h2>The softmax activation function<a class="headerlink" href="#The-softmax-activation-function" title="Permalink to this headline">¶</a></h2>
+<p>We will be using the “cross-entropy” function for our loss. This loss function is derived from the field of information theory, and is designed to compare probability distributions. This means that we will want to convert the numbers of <span class="math notranslate nohighlight">\(\vec{y}_{pred} = F(\{\vec{v}_i\}, \{\vec{w}_i\}, \{b_i\}; \vec{x})\)</span>, into numbers that behave like probabilities. To do this, we will use the “softmax” function:</p>
+<p>Given an <span class="math notranslate nohighlight">\(m\)</span>-dimensional vector <span class="math notranslate nohighlight">\(\vec{y}\)</span>, the softmax function returns a a vector, <span class="math notranslate nohighlight">\(\vec{p}\)</span> of the same dimensionality:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\text{softmax}(\vec{y}) = \vec{p}
+\end{equation}</div><p>where</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+p_i = \frac{e^{y_{i}}}{\sum_{j=0}^{m-1}{e^{y_{j}}}}
+\end{equation}</div><p>Convince yourself that the elements of <span class="math notranslate nohighlight">\(\vec{p}\)</span> do indeed satisfy the basic requirements of being a probability distribution. I.e. :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(0 \leq p_i \leq 1\)</span>, for each <span class="math notranslate nohighlight">\(p_i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sum_{i=0}^{m-1}{p_i} = 1\)</span></p></li>
+</ul>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is the number of classes in our classification problem.</p>
+</div>
+<div class="section" id="The-cross-entropy-loss-function">
+<h2>The cross-entropy loss function<a class="headerlink" href="#The-cross-entropy-loss-function" title="Permalink to this headline">¶</a></h2>
+<p>So, armed with the softmax function, we can convert our classification scores, <span class="math notranslate nohighlight">\(\vec{y}\)</span>, to classification probabilities, <span class="math notranslate nohighlight">\(\vec{p}\)</span> (or at the very least, numbers that <em>act</em> like probabilities. This opens the door for us to utilize the <a class="reference external" href="https://en.wikipedia.org/wiki/Cross_entropy">cross-entropy loss</a>.</p>
+<p>Given our prediction probabilities for the <span class="math notranslate nohighlight">\(m\)</span> classes in our problem, <span class="math notranslate nohighlight">\(\vec{p}\)</span>, we have the associated “true” probabilities <span class="math notranslate nohighlight">\(\vec{t}\)</span> (since we are solving a supervised learning problem). E.g.,</p>
+<ul class="simple">
+<li><p>if our point <span class="math notranslate nohighlight">\(\vec{x}\)</span> resides in tendril-0, then <span class="math notranslate nohighlight">\(\vec{t} = [1., 0., 0.]\)</span></p></li>
+<li><p>if our point <span class="math notranslate nohighlight">\(\vec{x}\)</span> resides in tendril-1, then <span class="math notranslate nohighlight">\(\vec{t} = [0., 1., 0.]\)</span></p></li>
+<li><p>if our point <span class="math notranslate nohighlight">\(\vec{x}\)</span> resides in tendril-2, then <span class="math notranslate nohighlight">\(\vec{t} = [0., 0., 1.]\)</span></p></li>
+</ul>
+<p>In terms of our predictions, <span class="math notranslate nohighlight">\(\vec{p}\)</span>, and our truth-values, <span class="math notranslate nohighlight">\(\vec{t}\)</span>, the cross-entropy loss is:</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+\mathscr{L}(\vec{p}, \vec{t}) = -\sum_{i=0}^{m}{t_{i}\log{p_{i}}}
+\end{equation}</div><p>This loss function measures <em>how different two probability distributions, :math:`vec{p}` and :math:`vec{t}` are</em>. The loss gets larger as the two probability distributions become more disparate, and the loss is a minimum (0) when the two distributions are identical.</p>
+<p>In the case we only have two classes, such that <span class="math notranslate nohighlight">\(\vec{p}=\begin{bmatrix}p, &amp; 1-p\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\vec{t}=\begin{bmatrix}t, &amp; 1-t\end{bmatrix}\)</span>, we can actually visualize our loss function as below:</p>
+<p><img alt="loss" src="../../_images/loss.png" /></p>
+<hr class="docutils" />
+<p>Is this what you expect to see from the loss function? Discuss with a partner.</p>
+</div>
+</div>
+<div class="section" id="The-softmax-crossentropy-function">
+<h1>The softmax-crossentropy function<a class="headerlink" href="#The-softmax-crossentropy-function" title="Permalink to this headline">¶</a></h1>
+<p>Because it is very common to perform the softmax on the outputs of your model, to “convert them to probabilities”, and then pass those probabilities to a cross-entropy function, it is more efficient to have a function that does both of these steps. This is what <code class="docutils literal notranslate"><span class="pre">mygrad</span></code>’s <a class="reference external" href="https://mygrad.readthedocs.io/en/latest/generated/mygrad.nnet.softmax_crossentropy.html">softmax_crossentropy</a> function does. Take the time to read its documentation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad.nnet.losses import softmax_crossentropy
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Defining-your-gradient-descent-and-forward-pass-functions">
+<h1>Defining your gradient descent and forward pass functions<a class="headerlink" href="#Defining-your-gradient-descent-and-forward-pass-functions" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def grad_descent(params, learning_rate):
+    &quot;&quot;&quot; Update tensors according to vanilla gradient descent.
+
+    Parameters
+    ----------
+    params : Sequence[mygrad.Tensor]
+        A list/tuple of learnable parameters to be updated
+
+    learning_rate : float
+        The &#39;step size&#39; to use during the descent
+
+    Returns
+    -------
+    None
+        Each parameter in the list should be updated &#39;in-place&#39;&quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Initialize your noggin plotter so that it will track two metrics: loss and accuracy</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">create_plot</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Also, initialize your model parameters and batch-size. - Start off with a small number of neurons in your layer - try <span class="math notranslate nohighlight">\(N=3\)</span>. Increase number of parameters in your model to improve the quality of your result. You can use the visualization that we provide at the end of this notebook to get a qualitative feel for your notebook - A batch-size of 50 is fine, but feel free to experiment.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># Running this code will recreate your model, re-initializing all of its parameters
+# Thus you must re-run this cell if you want to train your model from scratch again.
+
+# - Create the noggin figure using the code snippet above
+# - Set `batch_size = 50`: the number of predictions that we will make in each training step
+# - Create your model
+
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Referring to the code that you used to train your universal function approximator, write code to train your model on the spiral dataset for a specified number of epochs. Remember to shuffle your training data before you form batches out of it. Also, remember to use the the <code class="docutils literal notranslate"><span class="pre">softmax_crossentropy</span></code> loss.</p>
+<p>Try training your model for 1000 epochs. A learning rate <span class="math notranslate nohighlight">\(\approx 0.1\)</span> is a sensible starting point. Watch the loss and accuracy curves evolve as your model trains.</p>
+<p>Below, you will be able to visualize the “decision boundaries” that your neural network learned. Try adjusting the number of neurons in your model, the number of epochs trained, the batch size, and the learning rate.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># import the loss function from mygrad, as directed above
+# STUDENT CODE HERE
+
+# specify your learning rate
+# STUDENT CODE HERE
+
+for epoch_cnt in range(1000):
+
+    # `idxs` will store shuffled indices, used to randomize the batches for
+    # each epoch
+    idxs = np.arange(len(xtrain))  # -&gt; array([0, 1, ..., 9999])
+    np.random.shuffle(idxs)
+
+    for batch_cnt in range(0, len(xtrain) // batch_size):
+
+        # get the batch-indices from `idxs` (refer to the universal function approx notebook)
+        # STUDENT CODE HERE
+
+        # index into `xtrain` and `ytrain` with these indices to produce
+        # the batch of data and the associated tendril-labels for this batch
+        # STUDENT CODE HERE
+
+        # make predictions with your model
+        # STUDENT CODE HERE
+
+        # Compute the loss associated with our predictions
+        # The loss should be a Tensor so that you can do back-prop
+        # STUDENT CODE HERE
+
+        # Trigger back-propagation through your computational graph,
+        # so that dL/dw, dL/db, and dL/dv are computed
+        loss.backward()  # &lt;COGINST&gt;
+
+        # Perform gradient descent
+        # STUDENT CODE HERE
+
+        # Compute the accuracy of the predictions
+        # The accuracy should just be a floating point number
+        # STUDENT CODE HERE
+
+        plotter.set_train_batch(
+            {&quot;loss&quot;: loss.item(), &quot;accuracy&quot;: acc}, batch_size=batch_size
+        )
+plotter.plot()
+</pre></div>
+</div>
+</div>
+<p>This cell will allow you to visualize the decision boundaries that your model learned. We must define a function whose only input is the data, and whose out output is the softmax (<strong>not</strong> softmax crossentropy) of your classification scores.</p>
+<p>For this to work, the parameters that you defined for your model must have the names <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, as used below (ask for help if this isn’t working for you).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def dummy_function(x):
+    from mygrad.nnet.activations import softmax
+    return softmax(model(x)).data
+
+fig, ax = data.visualize_model(dummy_function, entropy=False);
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

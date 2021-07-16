@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fun With Word Embeddings &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Fun With Word Embeddings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/FunWithWordEmbeddings.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Fun-With-Word-Embeddings">
+<h1>Fun With Word Embeddings<a class="headerlink" href="#Fun-With-Word-Embeddings" title="Permalink to this headline">¶</a></h1>
+<p>Word embeddings (or “word vectors”) are mappings from discrete word tokens (e.g., the word “kitten”) to numerical vectors, e.g., a 50-dimensional vector of real numbers. The goal is for words that are related (such as “scared” and “afraid”) to map to points that are close together in the 50-dimensional space.</p>
+<p>These continous representations for words have proven very helpful in many NLP tasks. For example, they can help deal with synonyms that would otherwise have been considered totally unrelated in the bag of words approach to representing documents.</p>
+<p>There are several approaches for finding such an embedding. One approach is to analyze the contexts that words appear in over a large corpus and then find embeddings that map words with similar contexts to similar points in the space. For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="n">am</span> <span class="n">scared</span> <span class="n">of</span> <span class="n">dogs</span><span class="o">.</span>
+<span class="n">I</span> <span class="n">am</span> <span class="n">scared</span> <span class="n">of</span> <span class="n">bees</span><span class="o">.</span>
+<span class="n">I</span> <span class="n">am</span> <span class="n">afraid</span> <span class="n">of</span> <span class="n">dogs</span><span class="o">.</span>
+<span class="n">I</span> <span class="n">am</span> <span class="n">afraid</span> <span class="n">of</span> <span class="n">bees</span><span class="o">.</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>The words “scared” and “afraid” both appear in the contexts</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;I am ... of dogs&quot;</span>
+</pre></div>
+</div>
+<p>and</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;I am ... of bees&quot;</span>
+</pre></div>
+</div>
+<p>so it’s likely that the words are related in some way. The relationship can be semantic (related to meaning) or syntactic (e.g., often occur between a determiner and a noun) In this case, “scared” and “afraid” are related semantically (similar meaning) and also syntactically (both adjectives).</p>
+<p>One really neat thing that researchers discovered is that word embeddings can be used to solve analogies, e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&quot;puppy&quot; is to &quot;dog&quot; as &quot;kitten&quot; is to ?
+</pre></div>
+</div>
+<p>Amazingly, this kind of puzzle can be solved by doing computations on word vectors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wv</span><span class="p">[</span><span class="s2">&quot;kitten&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">wv</span><span class="p">[</span><span class="s2">&quot;puppy&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">wv</span><span class="p">[</span><span class="s2">&quot;dog&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and finding the most similar word to the result, <code class="docutils literal notranslate"><span class="pre">wv[&quot;cat&quot;]</span></code> in this case.</p>
+<p>The reason is that the vector <code class="docutils literal notranslate"><span class="pre">(wv[&quot;dog&quot;]</span> <span class="pre">-</span> <span class="pre">wv[&quot;puppy&quot;])</span></code> represents a direction in the space the often takes the youth version of a concept to the adult version. So starting with “kitten” and moving in that direction winds up in an area of the space similar to “cat”.</p>
+<div class="section" id="0-Imports">
+<h2>0 Imports<a class="headerlink" href="#0-Imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from collections import defaultdict
+import numpy as np
+import time
+import gensim
+from gensim.models.keyedvectors import KeyedVectors
+from sklearn.decomposition import TruncatedSVD
+import matplotlib.pyplot as plt
+%matplotlib inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1-Load-pre-trained-GloVe-embeddings-using-gensim-library">
+<h2>1 Load pre-trained GloVe embeddings using gensim library<a class="headerlink" href="#1-Load-pre-trained-GloVe-embeddings-using-gensim-library" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://radimrehurek.com/gensim/">gensim</a> library is a great tool for working with word embeddings and doing other things with text (like analyzing latent topics). If you need to install gensim, try:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">gensim</span>
+</pre></div>
+</div>
+<p>We’re going to use gensim to explore some pre-trained word embeddings trained with an algorithm called <a class="reference external" href="https://nlp.stanford.edu/projects/glove/">GloVe</a>. First, download the some 50-dimensional embeddings from the first link in this list:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.dropbox.com/s/c6m006wzrzb2p6t/glove.6B.50d.txt.w2v.zip?dl=0">glove.6B.50d.txt.w2v.zip</a> (67 MB)</p></li>
+<li><p><a class="reference external" href="https://www.dropbox.com/s/2g4895t426z28qa/glove.6B.100d.txt.w2v.zip?dl=0">glove.6B.100d.txt.w2v.zip</a> (131 MB)</p></li>
+<li><p><a class="reference external" href="https://www.dropbox.com/s/3clt5qi13fxkg3g/glove.6B.200d.txt.w2v.zip?dl=0">glove.6B.200d.txt.w2v.zip</a> (258 MB)</p></li>
+<li><p><a class="reference external" href="https://www.dropbox.com/s/u0ij0eogko4zdp1/glove.6B.300d.txt.w2v.zip?dl=0">glove.6B.300d.txt.w2v.zip</a> (385 MB)</p></li>
+</ul>
+<p>Once you’ve downloaded the file, unzip it and update <code class="docutils literal notranslate"><span class="pre">path</span></code> to point to where you saved the unzipped version (glove.6B.50d.txt.w2v).</p>
+<p>The following code will now use gensim to load the word vectors into a variable called <code class="docutils literal notranslate"><span class="pre">glove</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>path = r&quot;./dat/glove.6B.50d.txt.w2v&quot;
+t0 = time.time()
+glove = KeyedVectors.load_word2vec_format(path, binary=False)
+t1 = time.time()
+print(&quot;elapsed %ss&quot; % (t1 - t0))
+# 50d: elapsed 17.67420792579651s
+# 100d:
+</pre></div>
+</div>
+</div>
+<p>You can get the word vector for a word (string) with the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">glove</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Print out the word vector for your favorite word. Note: you can check that the word is in the 400K lowercased vocabulary with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;word&quot;</span> <span class="ow">in</span> <span class="n">glove</span>
+</pre></div>
+</div>
+<p>What’s the type of the word vector (e.g. a numpy array, a tuple)? What’s its shape?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>It’s not clear how to (or even if we can) interpret what the individual dimensions mean. But we can gain some intuition by looking at the relationships between whole word vectors.</p>
+</div>
+<div class="section" id="2-Finding-most-similar-words">
+<h2>2 Finding most similar words<a class="headerlink" href="#2-Finding-most-similar-words" title="Permalink to this headline">¶</a></h2>
+<p>You can use</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">glove</span><span class="o">.</span><span class="n">most_similar</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to find the words that the model considers most similar to a specified word (according to cosine similarity). Try it out on “funny” and “pencil” and some other words.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What do you notice about the relationships of the similars words to the query word? Are they all the same part of speech (e.g., all adjectives or all verbs)? Are they synonyms or near synonyms? Are they all objects of the same type (e.g., all tools)?</p>
+</div>
+<div class="section" id="3-Visualization-through-dimensionality-reduction">
+<h2>3 Visualization through dimensionality reduction<a class="headerlink" href="#3-Visualization-through-dimensionality-reduction" title="Permalink to this headline">¶</a></h2>
+<p>It’s difficult to visualize high-dimensional data like the 50-dimensional GloVe embeddings. So we’re going to use (truncated) Singular Value Decomposition (SVD) to reduce the dimensions down to 2, which we can then easily plot.</p>
+<p>We’ll be using scikit-learn’s <code class="docutils literal notranslate"><span class="pre">TruncatedSVD</span></code> implementation. When creating the object, you provide the number of desired dimensions, e.g.,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">svd</span> <span class="o">=</span> <span class="n">TruncatedSVD</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you fit the dimensionality reduction model to data with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">svd</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, to transform a 50-dimensional matrix (or single vector) down to 2-dimensions according to the model, you call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_reduced</span> <span class="o">=</span> <span class="n">svd</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="Get-all-embeddings-into-a-matrix">
+<h3>Get all embeddings into a matrix<a class="headerlink" href="#Get-all-embeddings-into-a-matrix" title="Permalink to this headline">¶</a></h3>
+<p>First, we’ll copy all of the word embeddings into a single matrix. Note: It’s a little wasteful to have loaded the embeddings using gensim (which is storing them internally already) and then copying them into a numpy array in order to apply dimensionality reduction. But it was handy to use gensim for loading and for some of it’s convenient lookup methods…</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>n = len(glove.key_to_index)
+d = glove.vector_size
+X_glove = np.zeros((n, d))
+for i, word in enumerate(glove.key_to_index.keys()):
+    X_glove[i,:] = glove[word]
+print(X_glove.nbytes)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Fit-TruncatedSVD-on-the-X_glove-matrix.">
+<h3>Fit <code class="docutils literal notranslate"><span class="pre">TruncatedSVD</span></code> on the <code class="docutils literal notranslate"><span class="pre">X_glove</span></code> matrix.<a class="headerlink" href="#Fit-TruncatedSVD-on-the-X_glove-matrix." title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The following helper function will help us visualize word pairs in the reduced 2-dimensional version of the word embedding space:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def plot_pairs(words, word_vectors, svd):
+    &quot;&quot;&quot; Plots pairs of words in 2D.
+
+    Parameters
+    ----------
+    words: list[str]
+        A list with an even number of words, where pairs of words have some common relationship
+        (like profession and tool), e.g., [&quot;carpenter&quot;, &quot;hammer&quot;, &quot;plumber&quot;, &quot;wrench&quot;].
+
+    word_vectors: KeyedVectors instance
+        A word embedding model in gensim&#39;s KeyedVectors wrapper.
+
+    svd: TruncatedSVD instance
+        A truncated SVD instance that&#39;s already been fit (with n_components=2).
+    &quot;&quot;&quot;
+
+    # map specified words to 2D space
+    d = word_vectors.vector_size
+    words_temp = np.zeros((len(words), d))
+    for i, word in enumerate(words):
+        words_temp[i,:] = word_vectors[word]
+    words_2D = svd.transform(words_temp)
+
+    # plot points
+    plt.scatter(words_2D[:,0], words_2D[:,1])
+
+    # plot labels
+    for i, txt in enumerate(words):
+        plt.annotate(txt, (words_2D[i, 0], words_2D[i, 1]))
+
+    # plot lines
+    for i in range(int(len(words)/2)):
+        plt.plot(words_2D[i*2:i*2+2,0], words_2D[i*2:i*2+2,1], linestyle=&#39;dashed&#39;, color=&#39;k&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Visualize:-Male-vs-Female">
+<h3>Visualize: Male vs Female<a class="headerlink" href="#Visualize:-Male-vs-Female" title="Permalink to this headline">¶</a></h3>
+<p>Try plotting these pairs and then adding some more to see how consistent the relationship is.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>words = [&quot;man&quot;, &quot;woman&quot;, &quot;king&quot;, &quot;queen&quot;, &quot;uncle&quot;, &quot;aunt&quot;, &quot;nephew&quot;, &quot;niece&quot;, &quot;brother&quot;, &quot;sister&quot;, &quot;sir&quot;, &quot;madam&quot;]
+plot_pairs(words, glove, svd)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Visualize:-Adjective-vs-Comparative">
+<h3>Visualize: Adjective vs Comparative<a class="headerlink" href="#Visualize:-Adjective-vs-Comparative" title="Permalink to this headline">¶</a></h3>
+<p>Try plotting these pairs and then adding some more to see how consistent the relationship is.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>words = [&quot;short&quot;, &quot;shorter&quot;, &quot;strong&quot;, &quot;stronger&quot;, &quot;good&quot;, &quot;better&quot;]
+plot_pairs(words, glove, svd)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Visualize:-Cellular-Biology-Metaphors">
+<h3>Visualize: Cellular Biology Metaphors<a class="headerlink" href="#Visualize:-Cellular-Biology-Metaphors" title="Permalink to this headline">¶</a></h3>
+<p>Try plotting these pairs and then adding some more to see how consistent the relationship is.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>words = [&quot;mitochondria&quot;, &quot;cell&quot;, &quot;powerhouse&quot;, &quot;town&quot;]
+plot_pairs(words, glove, svd)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="4-Introduction-to-Analogies">
+<h2>4 Introduction to Analogies<a class="headerlink" href="#4-Introduction-to-Analogies" title="Permalink to this headline">¶</a></h2>
+<p>Let’s try applying word embeddings to solve analogies of the form: <span class="math notranslate nohighlight">\(a\)</span> is to <span class="math notranslate nohighlight">\(b\)</span> as <span class="math notranslate nohighlight">\(c\)</span> is to ?</p>
+<p>We’ll exploit the directions in the embedding space by finding the closest vector to <span class="math notranslate nohighlight">\(c + (b - a)\)</span>, or equivalently <span class="math notranslate nohighlight">\(c - a + b\)</span>.</p>
+<p>A common example is: “puppy” is to “dog” as “kitten” is to ?</p>
+<p>This can be solved by finding the closest vector to: “kitten” - “puppy” + “dog”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>query = glove[&quot;kitten&quot;] - glove[&quot;puppy&quot;] + glove[&quot;dog&quot;]
+glove.similar_by_vector(query)
+</pre></div>
+</div>
+</div>
+<p>Note that the most similar word (other than “dog” itself) is “cat”!</p>
+<p>Now try solving: “france” is to “paris” as “germany” is to ?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Note that the gensim library has convenience methods for doing analogies. For example,</p>
+<p>“kitten” - “puppy” + “dog”</p>
+<p>can be solved with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">glove</span><span class="o">.</span><span class="n">most_similar_cosmul</span><span class="p">(</span><span class="n">positive</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kitten&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">],</span> <span class="n">negative</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;puppy&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This uses a slightly more advanced technique for solving analogies that has “less susceptibility to one large distance dominating the calculation”. See most_similar_cosmul() documentation for more details.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>glove.most_similar_cosmul(positive=[&#39;kitten&#39;, &#39;dog&#39;], negative=[&#39;puppy&#39;])
+</pre></div>
+</div>
+</div>
+<p>Try experimenting with some other kinds of word relationships (e.g., plurals, ing forms, etc.).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

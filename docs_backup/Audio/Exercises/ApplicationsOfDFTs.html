@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Discrete Fourier Transforms, Category: Exercises" name="description" />
+<meta content="applications, examples, dft, Fourier spectrum" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercises: Applications of DFTs &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Introduction to Spectrogram Analysis" href="../intro_spectrograms.html" />
+    <link rel="prev" title="Exercises: DFTs of Various Signals" href="DFTOfVariousSignals.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Exercises: Applications of DFTs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Sunspot-Data-Analysis">Sunspot Data Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Analyzing-Audio-Signals-from-Instruments">Analyzing Audio Signals from Instruments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Smoothing-Stock-Market-Data">Smoothing Stock Market Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Exercises: Applications of DFTs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Audio/Exercises/ApplicationsOfDFTs.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="admonition warning">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Source Material</strong>:</p>
+<p>The following exercises are adapted from Chapter 7 of <a class="reference external" href="http://www-personal.umich.edu/~mejn/cp/">Mark Newman’s book, “Computational Physics”</a></p>
+</div>
+<div class="section" id="Exercises:-Applications-of-DFTs">
+<h1>Exercises: Applications of DFTs<a class="headerlink" href="#Exercises:-Applications-of-DFTs" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+import matplotlib.pyplot as plt
+from typing import Tuple
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Sunspot-Data-Analysis">
+<h2>Sunspot Data Analysis<a class="headerlink" href="#Sunspot-Data-Analysis" title="Permalink to this headline">¶</a></h2>
+<p>(1.6.1a) Read in the <code class="docutils literal notranslate"><span class="pre">sunspots.txt</span></code> data as a 2-D array. This file contains the number of recorded sunspots in a given month over a timespan of hundreds of years.</p>
+<p>There are two columns of numbers (separated by tabs) in the data. The first column is the number of the recorded month. The second column is the number of sunspots recorded in that month.</p>
+<p>Use the following code to read in this data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/sunspots.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">F</span><span class="p">:</span>
+    <span class="c1"># Produces a shape-(N, 2) array</span>
+    <span class="c1"># column-0: month number</span>
+    <span class="c1"># column-1: count of sunspots that month</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">j</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">F</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Once you read in the data, determine: how many months are accounted for in this dataset? What are the range (minimum and maximum) of number of sunspots per month recorded in this dataset?</p>
+<p>Plot this data with labeled axes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.1b) Estimate the frequency of the slowly-oscillating pattern in the data that manifests between the major peaks that we see in the plot. Do this by visual inspection (you can click on the box button in the bottom-left of the plot to do a box-zoom); determine roughly the number of months that separate consecutive peaks, and then convert this into a frequency (with units of 1/month).</p>
+<blockquote>
+<div><p>1.6.1b Solution: <em>SOLUTION HERE</em></p>
+</div></blockquote>
+<p>(1.6.2) Take a DFT of this real-valued data and consult the power spectrum, <span class="math notranslate nohighlight">\(|a_{k}|\)</span> vs <span class="math notranslate nohighlight">\(\nu_{k}\)</span>, to evaluate the periodicity of the data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.3) What is the cause of the large peak at <span class="math notranslate nohighlight">\(k = 0\)</span>? Study the form of the equation for the discrete Fourier transform, specifically for <span class="math notranslate nohighlight">\(c_{k=0}\)</span>. What is the simple relationship between <span class="math notranslate nohighlight">\(c_{k=0}\)</span> and the data <span class="math notranslate nohighlight">\(({y_{n}})_{n=0}^{N-1}\)</span>? Uniformly adjust the sunspot data so that <span class="math notranslate nohighlight">\(c_{k=0} \approx 0\)</span> when you take the Fourier transform of this updated data, and plot the Fourier spectrum of the new data.</p>
+<blockquote>
+<div><p><em>SOLUTION HERE</em></p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Analyzing-Audio-Signals-from-Instruments">
+<h2>Analyzing Audio Signals from Instruments<a class="headerlink" href="#Analyzing-Audio-Signals-from-Instruments" title="Permalink to this headline">¶</a></h2>
+<p>(1.6.4) Read in the digital audio signal for a trumpet, from <code class="docutils literal notranslate"><span class="pre">data/trumpet.txt</span></code>, as an array of integers. This signal was recorded at a rate of <span class="math notranslate nohighlight">\(44.1\;\mathrm{kHz}\)</span>, which is the defacto standard for audio sampling (as implemented by Sony).</p>
+<p>You can read in the digital samples with the code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/trumpet.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">R</span><span class="p">:</span>
+    <span class="c1"># each sample is written to a single line in the text file</span>
+    <span class="c1"># this reads them in as a single integer-valued numpy array</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">R</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Plot the signal on an <span class="math notranslate nohighlight">\(x\)</span>-axis labeled <code class="docutils literal notranslate"><span class="pre">&quot;Time</span> <span class="pre">(sec)&quot;</span></code> - be sure that the axis is scaled appropriately such that it reflects units of seconds. <strong>There is too much data to be plotted, so plot only every</strong> <span class="math notranslate nohighlight">\(100\text{th}\)</span> <strong>datapoint</strong>. Then, play the audio using</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>from IPython.display import Audio
+Audio(data, rate=???)
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># plot signal
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># playing audio signal
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.5) Plot the frequency spectrum, <span class="math notranslate nohighlight">\(|a_{k}|\)</span> vs <span class="math notranslate nohighlight">\(\nu_{k}\)</span>, for the first <span class="math notranslate nohighlight">\(10,000\)</span> <span class="math notranslate nohighlight">\(k\)</span>-values. Be sure to use a FFT (not the plain DFT) for real-valued data - we are working with a lot of data. <a class="reference external" href="http://www.phy.mtu.edu/~suits/notefreqs.html">What notes are being played</a>? Make sure that the <span class="math notranslate nohighlight">\(k\)</span>-axis of your spectrum is scaled to be in units of <span class="math notranslate nohighlight">\(\mathrm{Hz}\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Let’s try manipulating this audio signal.</p>
+<p>First, make a copy of the complex-valued Fourier coefficients to a new array. Then find all of the coefficient such that <span class="math notranslate nohighlight">\(|a_{k}| &gt; 100\)</span> and <strong>set those complex-valued coefficients to 0</strong>. Next, take the inverse Fourier transform (<code class="docutils literal notranslate"><span class="pre">np.fft.irfft</span></code>) of the now-modified set of complex-valued Fourier coefficients, to produce a “mutated” collection of samples <span class="math notranslate nohighlight">\((y^{\text{mutated}}_n)_{n=0}^{N-1}\)</span>. This is a new set of audio samples, but with those Fourier components missing!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>The result of this is a mutated version of the digital trumpet signal. Plot the wave form of this mutated signal against time (seconds). Only plot every <span class="math notranslate nohighlight">\(100^\text{th}\)</span> point!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Play the audio from this new sample. Consider what filtering you performed on the Fourier coefficients and how this affected the audio sample. Does this make sense to you? Chat with a neighbor about this.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.6) Repeat this work for the piano audio signal, but be creative with how you mutate its audio.</p>
+<p>Consider plotting the Fourier spectrum on a log-scale, with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># plot signal
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># play audio signal
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># fourier transform
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># mutate signal
+# STUDENT CODE HERE
+
+# play audio signal
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Smoothing-Stock-Market-Data">
+<h2>Smoothing Stock Market Data<a class="headerlink" href="#Smoothing-Stock-Market-Data" title="Permalink to this headline">¶</a></h2>
+<p>(1.6.7) Read in the stock market data from <code class="docutils literal notranslate"><span class="pre">data/dow.txt</span></code>. Each data point corresponds to the daily closing value of the Dow Jones Industrial Average (starting in late 2006 and ending in late 2010). Use the following code to read in the data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/dow.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">R</span><span class="p">:</span>
+    <span class="c1"># Each row of the txt file contains the closing value of the market</span>
+    <span class="c1"># This data is read in as a numpy array of floating point values</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">R</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Plot the data on labeled axes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.8a) Note that this data looks roughly like a single period of a sine-wave. What, roughly, are the frequency and amplitude of this sine wave? Answer with appropriate units.</p>
+<blockquote>
+<div><p>1.6.8a Solution: <em>SOLUTION HERE</em></p>
+</div></blockquote>
+<p>(1.6.8b) Perform an FFT on this real-valued data, and plot the Fourier spectrum for this data. The <span class="math notranslate nohighlight">\(\nu_{k}\)</span>-axis should be scaled to be in units of <span class="math notranslate nohighlight">\(\frac{1}{\text{days}}\)</span>. Label your axes.</p>
+<p>Some tips:</p>
+<ul class="simple">
+<li><p>Zero-center your data (such that its mean-value is <span class="math notranslate nohighlight">\(0\)</span>) so that <span class="math notranslate nohighlight">\(|a_0|\)</span> doesn’t dominate your Fourier spectrum</p></li>
+<li><p>Plot on the domain <span class="math notranslate nohighlight">\([0, 0.04]\)</span> (units 1 / days)</p></li>
+</ul>
+<p>Do you see a peak in correspondence to the sinusoidal form discussed in 1.6.8a? Does the frequency and amplitude of this prominent peak make sense?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.9) We want to smooth this stock market data. We can do this by “removing” the high-frequency coefficients of its Fourier spectrum. Try zeroing-out the top <span class="math notranslate nohighlight">\(90\%\)</span> high-frequency coefficients, and then perform an inverse FFT using these altered coefficients. Plot the “recovered” signal on top of a semi-transparent version of the original data (use the plot parameter <code class="docutils literal notranslate"><span class="pre">alpha=0.5</span></code>). Then repeat this, but with zeroing out the top <span class="math notranslate nohighlight">\(98\%\)</span> coefficients. In both of these cases, on what
+scale are the fluctuations being filtered out?</p>
+<blockquote>
+<div><p><em>SOLUTION HERE</em></p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># filter top 90% high frequencies
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># filter top 98% high frequencies
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>(1.6.10) Now repeat this process but zero-out the bottom <span class="math notranslate nohighlight">\(10\%\)</span> <strong>low-frequency</strong> coefficients. What do you see? Why is there a huge down-shift in the recovered data? (Hint: recall the role of <span class="math notranslate nohighlight">\(c_{k=0}\)</span>). What would happen if you filtered out the bottom <span class="math notranslate nohighlight">\(10\%\)</span> low-frequency coefficients <strong>except</strong> for <span class="math notranslate nohighlight">\(c_{0}\)</span>? Try this.</p>
+<blockquote>
+<div><p><em>SOLUTION HERE</em></p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># filter bottom 10% low frequencies
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># filter bottom 10% low frequencies, except c0
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../intro_spectrograms.html" class="btn btn-neutral float-right" title="Introduction to Spectrogram Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DFTOfVariousSignals.html" class="btn btn-neutral float-left" title="Exercises: DFTs of Various Signals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

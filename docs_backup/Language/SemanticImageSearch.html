@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Language Module Capstone: Semantic Image Search &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cheat Sheets" href="../cheat_sheet.html" />
+    <link rel="prev" title="RNNs" href="RNN.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../language.html">Language Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NLP.html">Natural Language Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WordEmbeddings.html">Word Embeddings and Autoencoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RNN.html">RNNs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Language Module Capstone: Semantic Image Search</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Embedding-Text">Embedding Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Embedding-Images">Embedding Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Approach:-Employing-an-Autoembedder">Approach: Employing an Autoembedder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Training-our-Autoembedder">Training our Autoembedder</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Team-Tasks">Team Tasks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../language.html">Language Module</a> &raquo;</li>
+        
+      <li>Language Module Capstone: Semantic Image Search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Language/SemanticImageSearch.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Language-Module-Capstone:-Semantic-Image-Search">
+<h1>Language Module Capstone: Semantic Image Search<a class="headerlink" href="#Language-Module-Capstone:-Semantic-Image-Search" title="Permalink to this headline">¶</a></h1>
+<p>Now that we’re familiar with different methods for understanding language through word embeddings, let’s apply these skills to semantically search a database of images based on a query. This project will bring together different concepts we’ve covered so far, including word embeddings and image embeddings (descriptors). Basically, we want to pull up the top images associated with some query like Google Images does. If our query is “orange juice”, we expect images of orange juice, and possibly
+oranges or juice to be pulled up, but not an image of a truck.</p>
+<p>We’ve seen many examples of embeddings, or vectors meant to describe an object, throughout the course. These include GloVe word embeddings, FaceNet facial descriptors, and bag of words vectors. The common theme for these embeddings is that similar objects (synonymous words or images of the same face from different angles) have similar embeddings (this can be determined using cosine similarity).</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig1.png" alt="word and face space" width=700>
+</p>
+</div><p>In order to semantically search through a database of images, we’re going to apply this same concept but across different object types. Namely, we want to find <em>images</em> that are semantically similar to <em>words</em>. Instead of relying on embeddings in the word space to find similar words or the face space to find similar faces, we are going to search the <em>semantic space</em> to find <em>images</em> that are similar to <em>words</em>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig2.png" alt="semantic space" width=600>
+</p>
+</div><p>Let’s break this down into some concrete steps</p>
+<ol class="arabic simple">
+<li><p>Embed our query text: <code class="docutils literal notranslate"><span class="pre">se_text()</span></code></p></li>
+<li><p>Embed the images in our database: <code class="docutils literal notranslate"><span class="pre">se_image()</span></code></p></li>
+<li><p>Compute the similarity between our query embedding, <code class="docutils literal notranslate"><span class="pre">se_text(query)</span></code>, and all image embeddings <code class="docutils literal notranslate"><span class="pre">se_image(img)</span></code> in the database</p></li>
+<li><p>Return the top k most similar images (images with the highest cosine similarity)</p></li>
+</ol>
+<p>Before diving into each of these steps, let’s take a look at the dataset of captioned images that we’ll make use of, called COCO (Common Objects in Context). COCO is a dataset that, among other things, provides images with 5 captions each, where each caption is a human-generated phrase describing the image. We want to map both images and captions to our semantic space such that captions that are good descriptions for an image have a similar embedding and captions that are not have a very
+different embedding. This way, our text embedder <code class="docutils literal notranslate"><span class="pre">se_text()</span></code> will be able to not only map captions close to their respective images, but also to map new query text to a space that is near semantically similar images.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig3.png" alt="COCO" width=700>
+</p>
+</div><div class="section" id="Embedding-Text">
+<h2>Embedding Text<a class="headerlink" href="#Embedding-Text" title="Permalink to this headline">¶</a></h2>
+<p>We will use GloVe-50 to generate embeddings for our image captions and query text. This will produce 50-dimensional semantic embeddings for our text. We will weight our embeddings by each word’s inverse document frequency (IDF). This essentially weights terms depending on the number of documents in which they appear in a corpus such that specialized, rare terms have a higher weighting than more commonplace, general terms. Let’s call this function that generates the GloVe-50 embedding and weights
+it according to the IDF <code class="docutils literal notranslate"><span class="pre">se_text()</span></code>.</p>
+</div>
+<div class="section" id="Embedding-Images">
+<h2>Embedding Images<a class="headerlink" href="#Embedding-Images" title="Permalink to this headline">¶</a></h2>
+<p>We will use a pre-trained computer vision neural network on ImageNet to generate descriptor vectors for our images. More specifically, we’ll utilize an 18-layer convolutional neural network called ResNet18. Note that we will remove the final classification layer (the softmax layer) to obtain a 512-dimensional descriptor vector for each image.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig4.png" alt="ResNet18" width=700>
+</p>
+</div><p>Now that we have image descriptor vectors, we need to perform dimensionality reduction in order to obtain 50-dimensional image embeddings in the same semantic space as the word embeddings that we get from <code class="docutils literal notranslate"><span class="pre">se_text()</span></code>. As you know, autoencoders are quite handy for dimensionality reduction…</p>
+<div class="section" id="Approach:-Employing-an-Autoembedder">
+<h3>Approach: Employing an Autoembedder<a class="headerlink" href="#Approach:-Employing-an-Autoembedder" title="Permalink to this headline">¶</a></h3>
+<p>So far, we have text that is mapped to semantically similar text in the word space (50-dimensional GloVe embeddings) and images that are mapped to similar images according to abstract features in the image space (512-dimensional ResNet18 descriptor vectors). In order to accomplish our goal of mapping query text to semantically similar images, we need an autoencoder that can map 512-dimensional image descriptor vectors to 50-dimensional embeddings in the semantic space that our text is in.</p>
+<p>Our autoembedder will consist of a dense layer that takes a 512-dimensional input and compresses it to a 50-dimensional embedding. Note that this is not a complete autoencoder because it does not have a mirroring layer to decompress the embedding back to a recovered descriptor vector. We will train the embedder to map images to our 50-dimensional semantic space such that they are “close to” their relevant captions (i.e. have similar embeddings - can be verified using cosine similarity). We’ll
+call this trained model <code class="docutils literal notranslate"><span class="pre">se_image()</span></code>. Thus, we will be able to use our trained weight matrix, <span class="math notranslate nohighlight">\(M\)</span>, and bias vector, <span class="math notranslate nohighlight">\(b\)</span>, from the dense layer to efficiently compress all of the images in our database to the semantic space where our captions and queries lie.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig5.png" alt="dense layer" width=700>
+</p>
+</div><p>Once we have accomplished this, we can simply embed a query using <code class="docutils literal notranslate"><span class="pre">se_text()</span></code> and return the <span class="math notranslate nohighlight">\(k\)</span> closest images, or the <span class="math notranslate nohighlight">\(k\)</span> images with embeddings most similar to <code class="docutils literal notranslate"><span class="pre">se_text(query)</span></code> according to cosine similarity.</p>
+<p>Now that we know exactly what we want our autoembedder to do, let’s dive into training it.</p>
+</div>
+<div class="section" id="Training-our-Autoembedder">
+<h3>Training our Autoembedder<a class="headerlink" href="#Training-our-Autoembedder" title="Permalink to this headline">¶</a></h3>
+<p>In order to train an autoembedder to cluster images based on their relevance to textual embeddings that already exist in the semantic space, we need some way to determine if an image embedding is close to “good” textual embeddings and far from “bad” textual embeddings. In other words, we want to train our autoembedder to produce image embeddings that are similar to the embeddings of valid captions/text and very different from embeddings of irrelevant captions/text. This can be done by choosing a
+random good caption for an image (an actual caption of the image) and a random bad caption (not one of the image’s captions) then embedding the image using the dense layer and comparing the similarity between the image embedding and the good caption’s embeddings (we’ll call this <code class="docutils literal notranslate"><span class="pre">sg</span></code>) vs. the image embedding and the bad caption’s embedding (we’ll call this <code class="docutils literal notranslate"><span class="pre">sb</span></code>). We want <code class="docutils literal notranslate"><span class="pre">sg</span></code> to be considerably greater than <code class="docutils literal notranslate"><span class="pre">sb</span></code>. This becomes an important concept in our loss function because we want
+there to be more loss when <code class="docutils literal notranslate"><span class="pre">sg</span></code> and <code class="docutils literal notranslate"><span class="pre">sb</span></code> are too close (and especially when <code class="docutils literal notranslate"><span class="pre">sb</span></code> is greater than <code class="docutils literal notranslate"><span class="pre">sg</span></code>). This type of loss function is called <strong>margin ranking loss</strong>.</p>
+<p>As the name implies, margin ranking loss relies on the <em>margin</em> of different between the “good” and “bad” similarity calculations. Essentially, the loss function works by assessing <code class="docutils literal notranslate"><span class="pre">sg</span> <span class="pre">-</span> <span class="pre">sb</span></code> and weighting the loss based on how close they are, below a certain margin. If our margin is <span class="math notranslate nohighlight">\(0.1\)</span>, any difference between <code class="docutils literal notranslate"><span class="pre">sg</span></code> and <code class="docutils literal notranslate"><span class="pre">sb</span></code> (such that <code class="docutils literal notranslate"><span class="pre">sg</span></code> is higher) that is greater than <span class="math notranslate nohighlight">\(0.1\)</span> is considered acceptably different, so there is no loss (the parameters <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(b\)</span>
+are not modified). On the other hand, if <code class="docutils literal notranslate"><span class="pre">sg</span></code> and <code class="docutils literal notranslate"><span class="pre">sb</span></code> are less than <span class="math notranslate nohighlight">\(0.1\)</span> apart (including when <code class="docutils literal notranslate"><span class="pre">sb</span></code> is higher), there is loss that depends on exactly how small <code class="docutils literal notranslate"><span class="pre">sg-sb</span></code> is. This effectively creates more drastic loss when the autoembedder produces image embeddings that map images closer to invalid text than valid text.</p>
+<p>The process of calculating margin ranking loss loss based on sets of triplets <code class="docutils literal notranslate"><span class="pre">(text,good_img,bad_img)</span></code> can be visualized as follows</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day4-fig6.png" alt="margin ranking loss" width=800>
+</p>
+</div></div>
+</div>
+<div class="section" id="Team-Tasks">
+<h2>Team Tasks<a class="headerlink" href="#Team-Tasks" title="Permalink to this headline">¶</a></h2>
+<p>Below you’ll find a list of tasks that your team needs to cover to successfully complete this capstone project.</p>
+<ul class="simple">
+<li><p>embed caption and query text (using GloVe-50)</p></li>
+<li><p>create a MyNN model for embedding images</p></li>
+<li><p>extract sets of triples (training and validation sets)</p></li>
+<li><p>write function to compute loss (margin ranking loss) and accuracy</p></li>
+<li><p>train the model</p>
+<ul>
+<li><p>embed the caption</p></li>
+<li><p>embed the good image</p></li>
+<li><p>embed the bad image</p></li>
+<li><p>compute similarities (caption and good image, caption and bad image)</p></li>
+<li><p>compute loss and accuracy</p></li>
+<li><p>take optimization step</p></li>
+</ul>
+</li>
+<li><p>generate image feature vectors (descriptors) using ResNet18</p></li>
+<li><p>create image database by mapping image feature vectors to semantic embeddings with trained model</p></li>
+<li><p>write function to query database with a caption-embedding and return the top-k images</p></li>
+<li><p>write function to display set of images given COCO image ids</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../cheat_sheet.html" class="btn btn-neutral float-right" title="Cheat Sheets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="RNN.html" class="btn btn-neutral float-left" title="RNNs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

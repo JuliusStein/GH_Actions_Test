@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Math supplement, Difficulty: Easy, Category: Section" name="description" />
+<meta content="function, function composition, graphing, matplotlib" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Functions &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sequences and Summations" href="Series.html" />
+    <link rel="prev" title="Supplemental Math Materials" href="../supplemental_math.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Review-of-Mathematical-Functions">Review of Mathematical Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Function-Composition">Function Composition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Graphing-Functions">Graphing Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Functions-with-Multiple-Inputs">Functions with Multiple Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Links-to-Other-Resources">Links to Other Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Series.html">Sequences and Summations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearAlgebra.html">Fundamentals of Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComplexNumbers.html">Complex Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Intro_Calc.html">Introduction to Single-Variable Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Multivariable_Calculus.html">Multivariable Calculus: Partial Derivatives &amp; Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chain_Rule.html">Chain Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../supplemental_math.html">Supplemental Math Materials</a> &raquo;</li>
+        
+      <li>Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Math_Materials/Functions.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Functions">
+<h1>Functions<a class="headerlink" href="#Functions" title="Permalink to this headline">¶</a></h1>
+<p>By now, you should be familiar with <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/Functions.html">Python functions</a>. In this section, we will explore mathematical functions and how they relate to Python functions. We will also discuss graphing of Python functions.</p>
+<div class="section" id="Review-of-Mathematical-Functions">
+<h2>Review of Mathematical Functions<a class="headerlink" href="#Review-of-Mathematical-Functions" title="Permalink to this headline">¶</a></h2>
+<p>There are a number of ways to think about and define a function, but at its core, a function is a relationship between two sets of numbers. A function maps every element in the first set of numbers, called the function’s <strong>domain</strong>, to exactly one element in the second set, called the function’s <strong>codomain</strong>. Intuitively, we can think of the domain as the input to the function, the codomain as the output, and the function itself as the set of instructions (or operations) that tells us how to
+move a specific input to a specific output.</p>
+<p>The notation of a function should be familiar. We write <span class="math notranslate nohighlight">\(f(x)\)</span> to state that our function is called <span class="math notranslate nohighlight">\(f\)</span> and that it operates on the input <span class="math notranslate nohighlight">\(x\)</span>. A function that adds five to the input, for example, would be written as <span class="math notranslate nohighlight">\(f(x) = x+5\)</span>. Note that, very strictly speaking, in modern mathematics <span class="math notranslate nohighlight">\(f\)</span> refers to the function, while <span class="math notranslate nohighlight">\(f(x)\)</span> refers to the value of the function evaluated at the point <span class="math notranslate nohighlight">\(x\)</span>; we will, however, abuse our notation and instead write
+<span class="math notranslate nohighlight">\(f(x)\)</span> to mean both the function and the value of the function evaluated at <span class="math notranslate nohighlight">\(x\)</span>. It is conventional to give a function a lower-case, one-letter name, such as <span class="math notranslate nohighlight">\(f(x)\)</span>, <span class="math notranslate nohighlight">\(g(x)\)</span>, or <span class="math notranslate nohighlight">\(\zeta(x)\)</span>, but some special functions, such as <span class="math notranslate nohighlight">\(\sin(x)\)</span> and <span class="math notranslate nohighlight">\(\ln(x)\)</span>, have multi-character names.</p>
+<p>We can, for example, define a function <span class="math notranslate nohighlight">\(f(x)\)</span> that returns the cube of the input minus nine times the input as <span class="math notranslate nohighlight">\(f(x) = x^3 - 9x\)</span>.</p>
+<p>In Python, functions are analogous to mathematical functions. Much like a mathematical function, we can write Python functions that give instructions to map one set of numbers to another. If we want to evaluate this mapping, we pass the function explicit and discrete arguments. The Python function then performs some operations on the input and yields some value!</p>
+<p>If we want to write the function <span class="math notranslate nohighlight">\(f(x)=x^3-9x\)</span> in Python, we would simply write</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : Union[int, float]</span>
+<span class="sd">        A number in the domain of our function,</span>
+<span class="sd">        in this case, the set of real numbers</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">        A number in the codomain of our function,</span>
+<span class="sd">        again the set of real numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">x</span>
+</pre></div>
+</div>
+<p>To evaluate our function we pass in an element of the domain, which is, in this case, any int or float:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>Functions are powerful tools that map sets of numbers to each other. The <span class="math notranslate nohighlight">\(f(x)\)</span> notation allows us to define mathematical functions and the operations they perform. Python functions give the instructions for how to map input to output, and we can use them to evaluate functions at discrete points.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: Fun with Functions</strong></p>
+<p>Using the <span class="math notranslate nohighlight">\(f(x)\)</span> notation, write a function that doubles the input, then adds five to it.</p>
+</div>
+</div>
+<div class="section" id="Function-Composition">
+<h2>Function Composition<a class="headerlink" href="#Function-Composition" title="Permalink to this headline">¶</a></h2>
+<p>When the output of a function is used as the input of another function, we say that the two functions are composed. Function composition allows us to chain together functions, which we can use to create complex mappings while maintaining modularity and readability.</p>
+<p>Imagine that you are the owner of a pizza shop, and you want to write a mathematical formula for what you should charge customers. Specifically, you want to write a mathematical function that takes in the raw price of food and applies both sales tax and coupon discounts to it. Call the raw price of the food in dollars <span class="math notranslate nohighlight">\(p\)</span>. The sales tax rate is <span class="math notranslate nohighlight">\(6.25\%\)</span>, so the price of the food after tax is applied is given by the function <span class="math notranslate nohighlight">\(t(p) = 1.0625 \cdot p\)</span>. Some customers also have a
+coupon that takes <span class="math notranslate nohighlight">\(\$5\)</span> off of their meal, so their price should be <span class="math notranslate nohighlight">\(c(p) = p - 5\)</span>. However, customers with a coupon still need to pay taxes on the entire meal! In order to calculate the appropriate price to charge customers, we can compose our two functions <span class="math notranslate nohighlight">\(t(p)\)</span> and <span class="math notranslate nohighlight">\(c(p)\)</span>.</p>
+<p>First, we want to calculate the price after tax. Then, we want to subtract five dollars from the pre-coupon price. By chaining these functions together, we can determine the final cost of a pizza. This way we can keep the functions as two separate, modular processes, while still using both to determine the final cost. After all, not every customer will have a coupon so it is still useful to know how to compute the price only after tax.</p>
+<p>Since we first want to compute the price after tax, then the price after applying coupons, we want to use the output of <span class="math notranslate nohighlight">\(t(p)\)</span> as the input of <span class="math notranslate nohighlight">\(c(p)\)</span>. We could write this as <span class="math notranslate nohighlight">\(c(t(p))\)</span>, but this can quickly turn into a mess of parentheses if we were to compose more functions. In order to maintain readability, we instead write <span class="math notranslate nohighlight">\(c(t(p))\)</span> as <span class="math notranslate nohighlight">\((c \circ t)(p)\)</span>.</p>
+<p>More generally, we can write the composition of the functions <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(g(x)\)</span> as <span class="math notranslate nohighlight">\((f \circ g)(x)\)</span>, read as “<span class="math notranslate nohighlight">\(f\)</span> of <span class="math notranslate nohighlight">\(g\)</span> of <span class="math notranslate nohighlight">\(x\)</span>”. This states that we should take the output of <span class="math notranslate nohighlight">\(g(x)\)</span> and use it as the input for <span class="math notranslate nohighlight">\(f(x)\)</span>. This powerful notation allows us to compose as many functions as we’d like without overloading on parentheses! Consider the composition of five functions: <span class="math notranslate nohighlight">\((f \circ g \circ h \circ i \circ j)(x)\)</span> is much easier to read and
+interpret than <span class="math notranslate nohighlight">\(f(g(h(i(j(x)))))\)</span>!</p>
+<p>When writing Python, function composition allows us to keep our code readable and modular. Rather than writing one big function, we write several small functions, each of which completes one specific, self-contained task. We can then compose these smaller functions to form the behavior of the full function!</p>
+<p>As an example, let’s look at how we’d write our pizza shop functions in Python.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p : Union[int, float]</span>
+<span class="sd">        Price of pizza before tax</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">        Price of pizza after 6.25% tax applied</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">1.0625</span> <span class="o">*</span> <span class="n">p</span>
+
+
+<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p : Union[int, float]</span>
+<span class="sd">        Price of pizza before coupon discount</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">        Price of pizza after $5 discount applied</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">5</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="mf">21.25</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="p">(</span><span class="mf">21.25</span><span class="p">)</span>
+<span class="mf">16.25</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<span class="mf">16.25</span>
+</pre></div>
+</div>
+<p>Writing code like this has many advantages. Imagine that the tax rate changed to <span class="math notranslate nohighlight">\(7\%\)</span> and you needed to update the code. Rather than searching through a longer function, you could simply update the <code class="docutils literal notranslate"><span class="pre">t(p)</span></code> function! Code written like this is more readable, more modular, and much easier to debug than a version that doesn’t use function composition.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Takeaway</strong>:</p>
+<p>Function composition allows us to chain functions together. This can simplify calculations and improve the quality of our code. The notation <span class="math notranslate nohighlight">\((f \circ g)(x)\)</span> is used in lieu of <span class="math notranslate nohighlight">\(f(g(x))\)</span> to create readable function compositions.</p>
+</div>
+</div>
+<div class="section" id="Graphing-Functions">
+<h2>Graphing Functions<a class="headerlink" href="#Graphing-Functions" title="Permalink to this headline">¶</a></h2>
+<p>In order to graph a mathematical function, the input of the function is graphed on the <span class="math notranslate nohighlight">\(x\)</span>-axis, and the output of the function is graphed on the <span class="math notranslate nohighlight">\(y\)</span>-axis. For example, below is the graph of the sine function <span class="math notranslate nohighlight">\(f(x) = \sin(x)\)</span>.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/function_sine_graph.png" alt="Graph of f(x) = sin(x)" width="400">
+</p>
+</div><p>Often, when we graph a mathematical function by hand, we calculate just a few points, plot them, then fill in the rest with whatever looks right. If we were to draw a sine wave by hand, for example, it would make sense to plot the peaks and valleys of the function as well as the zeros. Once that’s done, it’s easy to roughly fill in the curve by hand. This method is easy, but imprecise.</p>
+<p>It gets more accurate as we calculate more points, but it’s not possible for us to calculate every single point! In order to graph a function in Python, we’ll take a similar approach by evaluating the function at a few sampled points, plotting those points, and connecting them.</p>
+<p>To graph functions, we will use NumPy and Matplotlib. If you need a refresher for these libraries, please refer to the Python Like You Mean It sections on <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_3.html">the essentials of NumPy</a> and <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">using Matplotlib</a>.</p>
+<p>First, we will sample the domain of the function by picking points regularly spaced throughout the interval we wish to plot on. We will then calculate the value of the function at each of those sampled points. Finally, we will plot all of these points on the <span class="math notranslate nohighlight">\(x\)</span>-<span class="math notranslate nohighlight">\(y\)</span> plane, using Matplotlib to connect them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># We will take ten samples of the function.</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># np.linspace samples the domain of the function, then we evaluate the function on those samples.</span>
+<span class="n">domain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>
+<span class="n">codomain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+<span class="c1"># finally, we graph the function</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">codomain</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Running this code will give us the following graph.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/function_sine_blocky.png" alt="Blocky graph of sin(x)" width="300">
+</p>
+</div><p>As you can see, Matplotlib fills in the gaps between the points with straight lines. With only <span class="math notranslate nohighlight">\(10\)</span> samples though, our curve is quite rough. For a smoother graph, we can increase the number of samples, thus making each of the connecting lines smaller and less sharply angled from one another. Running the code with <code class="docutils literal notranslate"><span class="pre">samples</span> <span class="pre">=</span> <span class="pre">100</span></code> gives us the following graph.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/function_sine_smooth.png" alt="Smooth graph of sin(x)" width="300">
+</p>
+</div><p>The graphed function appears to be smooth, but it’s still just sampled points connected by straight lines. If we were to zoom in enough, we would see the rough edges we saw when using <span class="math notranslate nohighlight">\(10\)</span> samples. However, by “densely” sampling the domain, we are able to give graphs the appearance of being continuous and smooth on the desired interval.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle"><strong>Reading Comprehension: The Plot Thickens</strong></p>
+<p>Use Python to graph the <span class="math notranslate nohighlight">\(f(x) = x^3 - 9x\)</span>. Use <span class="math notranslate nohighlight">\(100\)</span> samples, and graph it on the interval <span class="math notranslate nohighlight">\([-5, 5]\)</span>.</p>
+</div>
+</div>
+<div class="section" id="Functions-with-Multiple-Inputs">
+<h2>Functions with Multiple Inputs<a class="headerlink" href="#Functions-with-Multiple-Inputs" title="Permalink to this headline">¶</a></h2>
+<p>Many functions have many inputs. We call these functions multivariable functions, because their output depends on multiple variables. For a multivariable function with two inputs, we would write <span class="math notranslate nohighlight">\(f(x,y)\)</span>, where <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are two distinct variables. For instance, <span class="math notranslate nohighlight">\(f(x, y) = 2x-3y\)</span> is a multivariable function, since the function uses two inputs to produce a single output. Multivariable functions are not limited to only two variables though and can have any amount of
+inputs.</p>
+<p>We can construct multivariable functions in Python as well. We simply must take in additional arguments for each variable our function depends on. We can write <span class="math notranslate nohighlight">\(f(x, y) = 2x -3y\)</span> in Python as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : Union[int, float]</span>
+<span class="sd">    y : Union[int, float]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>In order to evaluate our function, we must pass in a value for each argument; passing in only one argument will throw an error:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">4.</span><span class="p">)</span>
+<span class="go">-2.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="go">TypeError: f() missing 1 required positional argument: &#39;y&#39;</span>
+</pre></div>
+</div>
+<p>As we continue our study of machine learning, we will frequently encounter complex, high-dimensional data and need to make liberal use of multivariable and composite functions.</p>
+</div>
+<div class="section" id="Links-to-Other-Resources">
+<h2>Links to Other Resources<a class="headerlink" href="#Links-to-Other-Resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Python Like You Mean It: <a class="reference external" href="(https://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/Functions.html).">Basics of Functions</a></p></li>
+<li><p>Python Like You Mean It: <a class="reference external" href="https://www.pythonlikeyoumeanit.com/module_3.html">The Essentials of NumPy</a></p></li>
+<li><p>Python Like You Mean It: <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Matplotlib.html">Matplotlib</a></p></li>
+</ul>
+</div>
+<div class="section" id="Reading-Comprehension-Exercise-Solutions">
+<h2>Reading Comprehension Exercise Solutions<a class="headerlink" href="#Reading-Comprehension-Exercise-Solutions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Fun with Functions: Solution</strong></p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+f(x) = 2x - 5
+\end{equation}</div><p><strong>The Plot Thickens: Solution</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : Union[int, float]</span>
+<span class="sd">        A value from the domain of f(x)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[int, float]</span>
+<span class="sd">        A value in the codomain of f(x)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">x</span>
+
+
+<span class="n">samples</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">domain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>
+<span class="n">codomain</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">codomain</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x1dc66d47fd0&gt;]
+</pre></div></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Series.html" class="btn btn-neutral float-right" title="Sequences and Summations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../supplemental_math.html" class="btn btn-neutral float-left" title="Supplemental Math Materials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

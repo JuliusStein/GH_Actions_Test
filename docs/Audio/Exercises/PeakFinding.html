@@ -1,0 +1,955 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercises: Finding Local Peaks in a 2-D Array &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Capstone Project: Song Recognition" href="../capstone_summary.html" />
+    <link rel="prev" title="Matching Audio Recordings" href="../audio_features.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Exercises: Finding Local Peaks in a 2-D Array</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Toy-Problem">Toy Problem</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Using-SciPy’s-generate_binary_structure">Using SciPy’s generate_binary_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Finding-the-Actual-Peaks">Finding the Actual Peaks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Identifying-“Foreground”-vs-“Background”-in-Real-Data">Identifying “Foreground” vs “Background” in Real Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Exercises: Finding Local Peaks in a 2-D Array</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Audio/Exercises/PeakFinding.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+.. meta::
+    :description: Topic: matching audio, Category: Exercises
+    :keywords: fingerprint, audio matching, local maxima<div class="section" id="Exercises:-Finding-Local-Peaks-in-a-2-D-Array">
+<h1>Exercises: Finding Local Peaks in a 2-D Array<a class="headerlink" href="#Exercises:-Finding-Local-Peaks-in-a-2-D-Array" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+
+import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+
+from scipy.ndimage.filters import maximum_filter
+from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
+from scipy.ndimage.morphology import iterate_structure
+
+from typing import Tuple, Callable, List
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Toy-Problem">
+<h2>Toy Problem<a class="headerlink" href="#Toy-Problem" title="Permalink to this headline">¶</a></h2>
+<p>We want to find the primary points of contact made by puppy-paws on a pressure-sensor. There are <span class="math notranslate nohighlight">\(4\)</span> images that are each <span class="math notranslate nohighlight">\(11\times14\)</span> pixels. Let’s load and visualize this data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># loads four images of puppy paw print pressure data
+paws = np.loadtxt(&quot;data/paws.txt&quot;).reshape(4, 11, 14)
+print(paws.shape)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># plots the paw prints
+fig, ax = plt.subplots(nrows=2, ncols=2)
+for n, (i, j) in enumerate([(0, 0), (0, 1), (1, 0), (1, 1)]):
+    ax[i, j].imshow(paws[n])
+</pre></div>
+</div>
+</div>
+<p>For each “toe”, we want to find the pixel with the maximum pressure. This corresponds to a finding the local peaks in a 2-D image. This is much more nuanced than finding the global maximum. The term “local peak” is also not completely well defined - we need to specify what we mean by “local”.</p>
+<div class="section" id="Using-SciPy’s-generate_binary_structure">
+<h3>Using SciPy’s generate_binary_structure<a class="headerlink" href="#Using-SciPy’s-generate_binary_structure" title="Permalink to this headline">¶</a></h3>
+<p>We will use <code class="docutils literal notranslate"><span class="pre">scipy.ndimage.morphology.generate_binary_structure</span></code> to help us define the local neighborhood that we will consider when looking for 2-D peaks.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_binary_structure</span></code> produces the “footprint” in which we look for neighbors. This is simply a 2-D array of boolean values that indicate where we want to look within the footprint (i.e. <code class="docutils literal notranslate"><span class="pre">False</span></code> means ignore). Using <code class="docutils literal notranslate"><span class="pre">generate_binary_structure(rank=2,connectivity=1)</span></code> means that, for a given pixel, we will check its two vertical and two horizontal neighbors when checking for the local maximum, aka, the “local peak”.</p>
+<p>Let’s generate and visualize this specific footprint</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>generate_binary_structure(rank=2, connectivity=1)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = plt.subplots()
+ax.imshow(generate_binary_structure(rank=2, connectivity=1))
+ax.set_title(&quot;Rank-2, Connectivity-1\nNeighborhood&quot;)
+ax.get_xaxis().set_ticks([])
+ax.get_yaxis().set_ticks([]);
+</pre></div>
+</div>
+</div>
+<p>(1.8.1) What is the “footprint” produced by <code class="docutils literal notranslate"><span class="pre">generate_binary_structure(rank=2,connectivity=2)</span></code>? (The plot may be misleading, try printing out the array)</p>
+<p>Boolean arrays behave like a binary mask when multiplied with a numerical array. Try multiplying the rank-<span class="math notranslate nohighlight">\(2\)</span>, connectivity-<span class="math notranslate nohighlight">\(1\)</span> binary structure (which is a 2-D array of booleans) by <span class="math notranslate nohighlight">\(2\)</span>. Try to predict what the result will be before running your code.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What if we want to use a larger footprint? We can make use of <code class="docutils literal notranslate"><span class="pre">scipy.ndimage.morphology.iterate_structure</span></code>. This allows us to set roughly the number of nearest neighbors (along a given direction) that that we want to included in the footprint.</p>
+<p>For instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">generate_binary_structure</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iterate_structure</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[False, False,  True, False, False],</span>
+<span class="go">       [False,  True,  True,  True, False],</span>
+<span class="go">       [ True,  True,  True,  True,  True],</span>
+<span class="go">       [False,  True,  True,  True, False],</span>
+<span class="go">       [False, False,  True, False, False]], dtype=bool)</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = plt.subplots()
+fp = iterate_structure(generate_binary_structure(2, 1), 2)
+ax.imshow(fp)
+ax.set_title(&quot;Iterated Neighborhood (nearest neighbor=2)&quot;)
+ax.get_xaxis().set_ticks([])
+ax.get_yaxis().set_ticks([]);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Finding-the-Actual-Peaks">
+<h3>Finding the Actual Peaks<a class="headerlink" href="#Finding-the-Actual-Peaks" title="Permalink to this headline">¶</a></h3>
+<p>The following code slides this “local neighborhood mask” over our grid of 2D data (e.g. our spectrogram of amplitudes). For whichever element the neighborhood is centered on, we see if:</p>
+<ul class="simple">
+<li><p>That center element is larger than some minimum threshold, which must be exceeded as a requirement to be considered “a peak”</p></li>
+<li><p>No neighbor (as defined by the neighborhood) is larger than that center element</p></li>
+</ul>
+<p>If these conditions are true, then that center element is considered to be a local peak. We then iterate to the next element in the 2D array and repeat the process; ultimately we will have iterated over the entire 2D array of data to so identify all of the local peaks. Note that this is a relatively simple way of doing local peak-finding, and is certainly not the most optimal algorithm to do so.</p>
+<p>Doing for-loops over large numpy arrays is typically something that we avoid doing due to considerations of speed. But we do not have access to a vectorized peak-finding algorithm, so for-loops are what we have to stick with. Fortunately, we can leverage a package called Numba to help speed up this code. Numba provides a “just in time” (JIT) compiler that is able to translate (some aspects of) Python code into optimized machine code. That is, whereas we have typically avoided writing for-loops
+over large arrays of data in Python in favor of vectorization, Numba enables us to write plain Python code using for-loops, but obtain a function that will run quickly, as if it had been implemented in a fast, compiled language like C.</p>
+<p>Study the following code to understand what is going on.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from numba import njit
+
+# `@njit` &quot;decorates&quot; the `_peaks` function. This tells Numba to
+# compile this function using the &quot;low level virtual machine&quot; (LLVM)
+# compiler. The resulting object is a Python function that, when called,
+# executes optimized machine code instead of the Python code
+#
+# The code used in _peaks adheres strictly to the subset of Python and
+# NumPy that is supported by Numba&#39;s jit. This is a requirement in order
+# for Numba to know how to compile this function to more efficient
+# instructions for the machine to execute
+@njit
+def _peaks(
+    data_2d: np.ndarray, rows: np.ndarray, cols: np.ndarray, amp_min: float
+) -&gt; List[Tuple[int, int]]:
+    &quot;&quot;&quot;
+    A Numba-optimized 2-D peak-finding algorithm.
+
+    Parameters
+    ----------
+    data_2d : numpy.ndarray, shape-(H, W)
+        The 2D array of data in which local peaks will be detected.
+
+    rows : numpy.ndarray, shape-(N,)
+        The 0-centered row indices of the local neighborhood mask
+
+    cols : numpy.ndarray, shape-(N,)
+        The 0-centered column indices of the local neighborhood mask
+
+    amp_min : float
+        All amplitudes at and below this value are excluded from being local
+        peaks.
+
+    Returns
+    -------
+    List[Tuple[int, int]]
+        (row, col) index pair for each local peak location.
+    &quot;&quot;&quot;
+    peaks = []  # stores the (row, col) locations of all the local peaks
+
+    # Iterate over the 2-D data in col-major order
+    # we want to see if there is a local peak located at
+    # row=r, col=c
+    for c, r in np.ndindex(*data_2d.shape[::-1]):
+        if data_2d[r, c] &lt;= amp_min:
+            # The amplitude falls beneath the minimum threshold
+            # thus this can&#39;t be a peak.
+            continue
+
+        # Iterating over the neighborhood centered on (r, c)
+        # dr: displacement from r
+        # dc: discplacement from c
+        for dr, dc in zip(rows, cols):
+            if dr == 0 and dc == 0:
+                # This would compare (r, c) with itself.. skip!
+                continue
+
+            if not (0 &lt;= r + dr &lt; data_2d.shape[0]):
+                # neighbor falls outside of boundary
+                continue
+
+            # mirror over array boundary
+            if not (0 &lt;= c + dc &lt; data_2d.shape[1]):
+                # neighbor falls outside of boundary
+                continue
+
+            if data_2d[r, c] &lt; data_2d[r + dr, c + dc]:
+                # One of the amplitudes within the neighborhood
+                # is larger, thus data_2d[r, c] cannot be a peak
+                break
+        else:
+            # if we did not break from the for-loop then (r, c) is a peak
+            peaks.append((r, c))
+    return peaks
+
+# `local_peak_locations` is responsible for taking in the boolean mask `neighborhood`
+# and converting it to a form that can be used by `_peaks`. This &quot;outer&quot; code is
+# not compatible with Numba which is why we end up using two functions:
+# `local_peak_locations` does some initial pre-processing that is not compatible with
+# Numba, and then it calls `_peaks` which contains all of the jit-compatible code
+def local_peak_locations(data_2d: np.ndarray, neighborhood: np.ndarray, amp_min: float):
+    &quot;&quot;&quot;
+    Defines a local neighborhood and finds the local peaks
+    in the spectrogram, which must be larger than the specified `amp_min`.
+
+    Parameters
+    ----------
+    data_2d : numpy.ndarray, shape-(H, W)
+        The 2D array of data in which local peaks will be detected
+
+    neighborhood : numpy.ndarray, shape-(h, w)
+        A boolean mask indicating the &quot;neighborhood&quot; in which each
+        datum will be assessed to determine whether or not it is
+        a local peak. h and w must be odd-valued numbers
+
+    amp_min : float
+        All amplitudes at and below this value are excluded from being local
+        peaks.
+
+    Returns
+    -------
+    List[Tuple[int, int]]
+        (row, col) index pair for each local peak location.
+
+    Notes
+    -----
+    Neighborhoods that overlap with the boundary are mirrored across the boundary.
+
+    The local peaks are returned in column-major order.
+    &quot;&quot;&quot;
+    rows, cols = np.where(neighborhood)
+    assert neighborhood.shape[0] % 2 == 1
+    assert neighborhood.shape[1] % 2 == 1
+
+    # center neighborhood indices around center of neighborhood
+    rows -= neighborhood.shape[0] // 2
+    cols -= neighborhood.shape[1] // 2
+
+    return _peaks(data_2d, rows, cols, amp_min=amp_min)
+</pre></div>
+</div>
+</div>
+<p>Complete the following function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def local_peaks_mask(data: np.ndarray, cutoff: float) -&gt; np.ndarray:
+    &quot;&quot;&quot;Find local peaks in a 2D array of data.
+
+    Parameters
+    ----------
+    data : numpy.ndarray, shape-(H, W)
+
+    cutoff : float
+         A threshold value that distinguishes background from foreground
+
+    Returns
+    -------
+    Binary indicator, of the same shape as `data`. The value of
+    1 indicates a local peak.&quot;&quot;&quot;
+    # Generate a rank-2, connectivity-2 binary mask
+    # STUDENT CODE HERE
+
+    # Use that neighborhood to find the local peaks in `data`.
+    # Pass `cutoff` as `amp_min` to `local_peak_locations`.
+    # STUDENT CODE HERE
+
+    # Turns the list of (row, col) peak locations into a shape-(N_peak, 2) array
+    # Save the result to the variable `peak_locations`
+    peak_locations = np.array(peak_locations)
+
+    # create a mask of zeros with the same shape as `data`
+    mask = np.zeros(data.shape, dtype=bool)
+
+    # populate the local peaks with `1`
+    mask[peak_locations[:, 0], peak_locations[:, 1]] = 1
+    return mask
+</pre></div>
+</div>
+</div>
+<p>Here is a function that will plot the paw prints next to the binary indicator of the local peaks.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def plot_compare(
+    data: np.ndarray,
+    peak_finding_function: Callable[[np.ndarray], np.ndarray],
+    cutoff: float = -np.inf,
+) -&gt; Tuple[plt.Figure, plt.Axes]:
+    &quot;&quot;&quot;Plot the original data side-by-side with the binary indicator
+    for the local peaks.
+
+    Parameters
+    ----------
+    data : numpy.ndarray, shape=(N, H, W)
+        N 2D arrays of shape (H, W)
+
+    peak_finding_function : Callable[[ndarray], ndarray]
+        Returns local peak indicator for 2D array
+
+    cutoff : float, optional (default=-np.inf)
+         A threshold value that distinguishes background from foreground
+
+    Returns
+    -------
+    Tuple[matplotlib.Figure, matplotlib.Axes]
+        The figure and axes objects of the plot
+    &quot;&quot;&quot;
+    fig, ax = plt.subplots(nrows=len(data), ncols=2)
+    for i, dat in enumerate(data):
+        ax[i, 0].imshow(dat)
+        ax[i, 1].imshow(peak_finding_function(dat, cutoff=cutoff))
+    return fig, ax
+</pre></div>
+</div>
+</div>
+<p>(1.8.5) Now plot a comparison to assess how well our peak-finding function works.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>What do you see in these right-column images? Are these precisely the results we are looking for? What seems to be off?</p>
+<blockquote>
+<div><p><em>SOLUTION HERE</em></p>
+</div></blockquote>
+<p>Inspect the paw print data. What value is used to represent the background of the image? What is the default value for <code class="docutils literal notranslate"><span class="pre">cutoff</span></code> in <code class="docutils literal notranslate"><span class="pre">plot_compare</span></code> for distinguishing between foreground and background? Try adjusting this value in order to exclude the background from the peak-finding algorithm.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Success! We are now finding local peaks in 2-D data!</p>
+<p>To summarize this process, we:</p>
+<ul class="simple">
+<li><p>Determined a neighborhood that was appropriate for measuring local peaks.</p></li>
+<li><p>Created a max-filtered version of our data.</p></li>
+<li><p>Demanded that our local peaks be in the “foreground” of our data.</p></li>
+</ul>
+<p>This will be very useful to help us find the “fingerprint features” of a song, given its spectrogram (frequency vs time) data.</p>
+</div>
+</div>
+<div class="section" id="Identifying-“Foreground”-vs-“Background”-in-Real-Data">
+<h2>Identifying “Foreground” vs “Background” in Real Data<a class="headerlink" href="#Identifying-“Foreground”-vs-“Background”-in-Real-Data" title="Permalink to this headline">¶</a></h2>
+<p>Although this puppy paw print data set is pretty adorable, the fact that the paw print features are neatly embedded in a background of <span class="math notranslate nohighlight">\(0\)</span>s is too convenient. In reality, we will likely face data where distinguishing background from a salient foreground is subtle (or perhaps entirely ill-posed).</p>
+<p>Let’s consider, for instance, the spectrogram data for the trumpet waveform.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># running this cell loads the PCM-encoded data for the trumpet clip
+import librosa
+
+trumpet_audio, sampling_rate = librosa.load(&quot;data/trumpet.wav&quot;, sr=44100, mono=True)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># using matplotlib&#39;s built-in spectrogram function
+fig, ax = plt.subplots()
+
+S, freqs, times, im = ax.specgram(
+    trumpet_audio,
+    NFFT=4096,
+    Fs=sampling_rate,
+    window=mlab.window_hanning,
+    noverlap=4096 // 2,
+)
+fig.colorbar(im)
+
+ax.set_xlabel(&quot;Time (sec)&quot;)
+ax.set_ylabel(&quot;Frequency (Hz)&quot;)
+ax.set_title(&quot;Spectrogram of Audio Recording&quot;)
+ax.set_ylim(0, 6000);
+</pre></div>
+</div>
+</div>
+<p>To help us identify a “foreground” in the log-amplitudes of the spectrogram, we will plot the <em>cumulative distribution</em> of the log-amplitudes. This will allow us to identify a useful percentile below which we can consider all amplitudes to be “background”.</p>
+<p>The following function can be used to compute <a class="reference external" href="https://en.wikipedia.org/wiki/Empirical_distribution_function">an empirical cumulative distribution function</a> (ECDF) of our data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+
+def ecdf(data):
+    &quot;&quot;&quot;Returns (x) the sorted data and (y) the empirical cumulative-proportion
+    of each datum.
+
+    Parameters
+    ----------
+    data : numpy.ndarray, size-N
+
+    Returns
+    -------
+    Tuple[numpy.ndarray shape-(N,), numpy.ndarray shape-(N,)]
+        Sorted data, empirical CDF values&quot;&quot;&quot;
+    data = np.asarray(data).ravel()  # flattens the data
+    y = np.linspace(1 / len(data), 1, len(data))  # stores the cumulative proportion associated with each sorted datum
+    x = np.sort(data)
+    return x, y
+</pre></div>
+</div>
+</div>
+<p>Let’s get a feel for what <code class="docutils literal notranslate"><span class="pre">ecdf</span></code> does by using it to plot the cumulative distribution of our log-scaled spectrogram amplitudes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>fig, ax = plt.subplots()
+
+x, y = ecdf(np.log(S))
+ax.plot(x, y)
+
+ax.set_xlabel(r&quot;$\log(|a_{k}|)$&quot;)
+ax.set_ylabel(r&quot;Cumulative proportion&quot;)
+ax.set_title(&quot;Cumulative distribution of log-amplitudes&quot;)
+ax.grid(True)
+</pre></div>
+</div>
+</div>
+<p>This cumulative distribution permits us to look up the percentiles of the log-amplitudes. For example, we can find the log-amplitude below which <span class="math notranslate nohighlight">\(80\%\)</span> of all the other present log-amplitudes fall (roughly <span class="math notranslate nohighlight">\(-2.9\)</span>). According to the plot above, we see that roughly <span class="math notranslate nohighlight">\(90\%\)</span> of all the log-amplitudes in our spectrogram fall beneath the value <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<p><strong>Consulting the shape of this cumulative distribution can help us distinguish a sensible threshold value to distinguish foreground and background</strong>. Here we see an “elbow” in the distribution just beyond the <span class="math notranslate nohighlight">\(60^\text{th}\)</span> percentile. We can identify the amplitude associated with this percentile with ease: just sort the amplitude data and extract the value at the integer index closest to <code class="docutils literal notranslate"><span class="pre">len(data)</span> <span class="pre">*</span> <span class="pre">0.6</span></code>.</p>
+<p>Let’s find the log-amplitude associated with the <span class="math notranslate nohighlight">\(90\%\)</span> percentile. Read the documentation for <code class="docutils literal notranslate"><span class="pre">numpy.partition</span></code>, this function will enable us to rapidly find the amplitude associated with the desired percentile without having to sort all of our data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>log_S = np.log(S).ravel()  # ravel flattens 2D spectrogram into a 1D array
+ind = round(len(log_S) * 0.9)  # find the index associated with the 90th percentile log-amplitude
+cutoff_log_amplitude = np.partition(log_S, ind)[ind]  # find the actual 90th percentile log-amplitude
+cutoff_log_amplitude
+</pre></div>
+</div>
+</div>
+<p>We see that <span class="math notranslate nohighlight">\(90\%\)</span> of all the log-amplitudes in the spectrogram fall below <span class="math notranslate nohighlight">\(-0.346\)</span>. Thus <span class="math notranslate nohighlight">\(90\%\)</span> of all of the Fourier coefficient amplitudes in this audio clip, <span class="math notranslate nohighlight">\(|a_{k}|\)</span>, fall beneath <span class="math notranslate nohighlight">\(e^{-0.346} \approx 0.71\)</span>.</p>
+<p>We could use <span class="math notranslate nohighlight">\(-0.346\)</span> as a cutoff value for distinguishing foreground from background when finding peaks in the log-amplitude spectrogram for our trumpet audio clip!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../capstone_summary.html" class="btn btn-neutral float-right" title="Capstone Project: Song Recognition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../audio_features.html" class="btn btn-neutral float-left" title="Matching Audio Recordings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

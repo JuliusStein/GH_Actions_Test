@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Word Embeddings and Autoencoders &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RNNs" href="RNN.html" />
+    <link rel="prev" title="Natural Language Processing" href="NLP.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../language.html">Language Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NLP.html">Natural Language Processing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Word Embeddings and Autoencoders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Introduction-to-Word-Embeddings">Introduction to Word Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Introduction-to-Autoencoders">Introduction to Autoencoders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Training-Your-Own-Word-Embeddings:-Unsupervised-Learning">Training Your Own Word Embeddings: Unsupervised Learning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Approaches-to-Training-Word-Embeddings">Approaches to Training Word Embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Sentiment-Analysis">Sentiment Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="RNN.html">RNNs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SemanticImageSearch.html">Language Module Capstone: Semantic Image Search</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../language.html">Language Module</a> &raquo;</li>
+        
+      <li>Word Embeddings and Autoencoders</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Language/WordEmbeddings.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Word-Embeddings-and-Autoencoders">
+<h1>Word Embeddings and Autoencoders<a class="headerlink" href="#Word-Embeddings-and-Autoencoders" title="Permalink to this headline">¶</a></h1>
+<p>So far, we have experimented with the bag-of-words approach to analyze documents and determine their similarity to other documents. This is a good starting point for understanding the contents of a document, but falls short on two accounts: it fails to consider word order and synonyms.</p>
+<ol class="arabic simple">
+<li><p>ignores word order</p></li>
+</ol>
+<p>Say we have <code class="docutils literal notranslate"><span class="pre">doc1</span> <span class="pre">=</span> <span class="pre">&quot;the</span> <span class="pre">boy</span> <span class="pre">gave</span> <span class="pre">the</span> <span class="pre">book</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">girl&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">doc2</span> <span class="pre">=</span> <span class="pre">&quot;the</span> <span class="pre">girl</span> <span class="pre">gave</span> <span class="pre">the</span> <span class="pre">book</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">boy&quot;</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>boy</p></th>
+<th class="head"><p>book</p></th>
+<th class="head"><p>gave</p></th>
+<th class="head"><p>girl</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>doc1</p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>doc2</p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">doc1</span></code> and <code class="docutils literal notranslate"><span class="pre">doc2</span></code> appear totally identical!</p>
+<ol class="arabic simple" start="2">
+<li><p>ignores synonyms</p></li>
+</ol>
+<p>Say we have <code class="docutils literal notranslate"><span class="pre">doc1</span> <span class="pre">=</span> <span class="pre">&quot;the</span> <span class="pre">woman</span> <span class="pre">was</span> <span class="pre">happy&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">doc2</span> <span class="pre">=</span> <span class="pre">&quot;the</span> <span class="pre">lady</span> <span class="pre">was</span> <span class="pre">glad&quot;</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>glad</p></th>
+<th class="head"><p>happy</p></th>
+<th class="head"><p>lady</p></th>
+<th class="head"><p>woman</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>doc1</p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>doc2</p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">doc1</span></code> and <code class="docutils literal notranslate"><span class="pre">doc2</span></code> appear totally different!</p>
+<p>In this lecture, we’re going to be exploring a very important building block for representing text called “word embeddings”.</p>
+<div class="section" id="Introduction-to-Word-Embeddings">
+<h2>Introduction to Word Embeddings<a class="headerlink" href="#Introduction-to-Word-Embeddings" title="Permalink to this headline">¶</a></h2>
+<p>Word embeddings are a technique for mapping discrete words to a continuous space.</p>
+<ul class="simple">
+<li><p>e.g., “happy” –&gt; [0.2, -0.3] maps the word “happy” in a 2-dimensional space</p></li>
+</ul>
+<p>Creating embeddings for words is a more desirable way to process language than the bag-of-words approach because</p>
+<ol class="arabic simple">
+<li><p>Using word embeddings can help with synonym problem (since techniques for learning word embeddings tend to map similar words to similar embeddings)</p>
+<ul class="simple">
+<li><p>e.g., “glad” –&gt; [0.19, -0.32]</p></li>
+</ul>
+</li>
+</ol>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-fig1.png" alt="plotting word embeddings in a 2D space" width=500>
+</p>
+</div><ol class="arabic simple" start="2">
+<li><p>Models can have fewer parameters</p></li>
+</ol>
+<p>For example, suppose we wanted to use a simple NN for language modeling that predicts the next word given the previous two. As we know from working with neural networks in past weeks, we must find have some numerical representation of each word that we pass into it. One way we can do this is with one-hot encodings. A one-hot encoding is a vector of dimension <span class="math notranslate nohighlight">\(n\)</span> where there are <span class="math notranslate nohighlight">\(n\)</span> words in your vocabulary. A vocabulary is simply the set of all words in all the documents you are
+considering. The one-hot encoding for a word is comprised of all zeros except for 1 in slot corresponding to the word. inputs would be size 2 * |vocab| since each of the two previous words is represented by a vector of size |vocab|.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-fig2.png" alt="Visualizing a NN that uses one-hot encoding" width=500>
+</p>
+</div><p>This becomes an issue because the vocabulary you are working with can often have tens of thousands to hundreds of thousands of words in it.</p>
+<p>If we instead rely on <strong>word embeddings</strong> as our input, we can have a constant input size regardless of the vocabulary size. For example, if we use word embeddings of dimension 50 (mapping each word in a 50-dimensional space), our input size will be 100 regardless of the size of our vocabulary. Recall that we saw a similar idea during the computer vision capstone project when we used face <em>descriptor vectors</em> to represent a face. Similar faces should have similar face descriptors, or
+<em>embeddings</em>. This week, we will rely on <em>word embeddings</em> to represent a word, and thus similar words should have similar embeddings.</p>
+</div>
+<div class="section" id="Introduction-to-Autoencoders">
+<h2>Introduction to Autoencoders<a class="headerlink" href="#Introduction-to-Autoencoders" title="Permalink to this headline">¶</a></h2>
+<p>In cogworks, we try to demystify everything and do as much from scratch as possible, so we’d like to look at a way to perform a dimensionality reduction with a model called an “autoencoder”. An autoencoder is a type of neural network that aims to “learn” how to represent input data in a dimensionally reduced form. The neural network is essentially trained to focus on the most important “features” of input data to find an encoding that effectively distinguishes it from other input data while
+reducing dimensionality.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-fig4.png" alt="an autoencoder" width=500>
+</p>
+</div><p>We will see that autoencoders prove helpful in reducing the dimension of word embeddings via <em>unsupervised learning</em>…</p>
+</div>
+<div class="section" id="Training-Your-Own-Word-Embeddings:-Unsupervised-Learning">
+<h2>Training Your Own Word Embeddings: Unsupervised Learning<a class="headerlink" href="#Training-Your-Own-Word-Embeddings:-Unsupervised-Learning" title="Permalink to this headline">¶</a></h2>
+<p>Now that we know what word embeddings and autoencoders are, we can begin exploring how to compute our own embeddings. First, let’s talk about <strong>supervised</strong> vs <strong>unsupervised</strong> learning. <strong>Supervised learning</strong> involves training a model where there are known “answers” or truth values for each data point. In other words, there are input-output pairs so we can directly assess whether or not our model produced the correct answer. The work you did with the CIFAR-10 dataset during the Audio module
+involved supervised learning because each image had a label.</p>
+<p><strong>Unsupervised learning</strong> involves training a model where there is not “answer” or truth value. This is often visualized as clustering data in a continuous space without being provided any labels. For example, a model that takes in student profiles may produce clusters that contain athletes, musicians, artists, etc. without having been provided any actual labels. In general, we turn to unsupervised learning when we want to find similarities among our data, but there is no concrete value we want
+to achieve. Unsupervised learning is great because the data is cheaper and easier to collect since we don’t need to label each data point with a truth value, like how someone had to label each image CIFAR-10.</p>
+<p>As you may have guessed, many word embedding techniques rely on unsupervised learning to cluster words in continuous space based on their context to each other. Unsupervised learning proves to be very convenient for embedding words because there is a large amount of existing text out there and we don’t need to add target labels.</p>
+<p><strong>Note</strong>: technically this is an example of “self-supervised” learning because the target labels (embeddings) are automatically extracted from the data itself. To achieve dimensionality reduction in our word embeddings via an autoencoder, we will utilize a loss function that essentially compares the inputted embedding to the outputted/recovered embedding according to the following equation</p>
+<div class="math notranslate nohighlight">
+\begin{equation}
+L(x_\text{recovered},x_\text{original}) = \frac{1}{N} \sum_{i=0}^{N-1} (x_\text{recovered} - x_\text{original})^2
+\end{equation}</div><p>Thus, we are utilizing self-supervised learning to extract “truth values” from the data itself in order to train our autoencoder to produce effective word embeddings.</p>
+<div class="section" id="Approaches-to-Training-Word-Embeddings">
+<h3>Approaches to Training Word Embeddings<a class="headerlink" href="#Approaches-to-Training-Word-Embeddings" title="Permalink to this headline">¶</a></h3>
+<p>There are many interesting approaches for training word embeddings. Many rely on the idea that words that appear in similar contexts are similar. Let’s cover a few different methods for training word embeddings</p>
+<p><strong>One-hot encoding</strong>, as we mentioned earlier, is a very simple way to create word embeddings based on a vocabulary of <span class="math notranslate nohighlight">\(n\)</span> words. Each word is represented by an <span class="math notranslate nohighlight">\(n\)</span>-dimensional vector of zeros with a single <span class="math notranslate nohighlight">\(1\)</span> in the alphabetical location corresponding to the word. Say we have a vocabulary of <span class="math notranslate nohighlight">\(1000\)</span> words and the phrase “glass of orange juice” We can form the one-hot encodings as follows</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-onehot.png" alt="one-hot encodings" width=600>
+</p>
+</div><p>We can use one-hot encodings to help us (1) predict the next word given a history of words, (2) predict the middle word given the context words to the left and right, and (3) predict the context words given a word in the middle.</p>
+<p>Say we have a history “glass of” and want to predict the next word. Recall that we are working with a vocabulary of 1000 words.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-predictnextword.png" alt="one-hot encodings" width=700>
+</p>
+</div><p>Now, say we want to use a target word to predict the context words. This is done using an unsupervised learning technique called a skip-gram, which takes the target word as an input and outputs context words. Given the target word “orange”, the probabilities of the skip-gram producing various words as contextually related are as follows</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-skipgram.png" alt="skip-gram" width=300>
+</p>
+</div><p>Finally, say we want to use the context words to predict the word in middle. This is done using a method called CBOW (Common Bag of Words), which takes context words as input and outputs the target word. Given the context words “glass”, “of”, and “juice”, our neural network will look like</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-cbow.png" alt="cbow" width=600>
+</p>
+</div><p>One final method is to create embeddings by mapping words to a continuous space based on their “semantic similarity” or the similarity of their meanings. This is done by directly modeling <span class="math notranslate nohighlight">\(X_{ij}\)</span> (the number of times word <span class="math notranslate nohighlight">\(j\)</span> occurs in the context of word <span class="math notranslate nohighlight">\(i\)</span>). Essentially, the dot product of <span class="math notranslate nohighlight">\(w_i\)</span> and <span class="math notranslate nohighlight">\(w_j\)</span> (plus biases) approximates <span class="math notranslate nohighlight">\(log(X_{ij})\)</span>. The bias terms are vectors that we initialize with a normal distribution to help achieve the best fit as a
+model is training. This has already been done via unsupervised learning techniques and is known as the Global Vectors for Word Representation (GloVe).</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/nlp-day2-glove.png" alt="GloVe encodings" width=600>
+</p>
+</div><p>We’re going to employ the concept of an autoencoder to do a dimensionality reduction on a global matrix of words by contexts. By reducing the dimension of the GloVe embeddings, the autoencoder effectively distills critical relational features, making the embeddings more concise.</p>
+</div>
+</div>
+<div class="section" id="Sentiment-Analysis">
+<h2>Sentiment Analysis<a class="headerlink" href="#Sentiment-Analysis" title="Permalink to this headline">¶</a></h2>
+<p><strong>didn’t do in 2019?</strong></p>
+<p>Now that we know where word embeddings come from, what can we use them for?</p>
+<ul class="simple">
+<li><p>language modeling</p></li>
+<li><p>representing/encoding documents</p></li>
+<li><p>averaging word embeddings of words in a sentence is an option</p>
+<ul>
+<li><p>but not great since ignores word order</p></li>
+</ul>
+</li>
+<li><p>can use CNN, RNNs</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="RNN.html" class="btn btn-neutral float-right" title="RNNs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="NLP.html" class="btn btn-neutral float-left" title="Natural Language Processing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

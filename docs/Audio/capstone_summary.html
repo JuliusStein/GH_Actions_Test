@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Capstone Project: Song Recognition &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Vision Module" href="../vision.html" />
+    <link rel="prev" title="Exercises: Finding Local Peaks in a 2-D Array" href="Exercises/PeakFinding.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../audio.html">Audio Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Capstone Project: Song Recognition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Capstone-Tasks">Capstone Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Advice-and-Gotchyas">Advice and Gotchyas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Configuration-Parameters">Configuration Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Spectrogram">Spectrogram</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Analyzing-and-Testing-Performance">Analyzing and Testing Performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../audio.html">Audio Module</a> &raquo;</li>
+        
+      <li>Capstone Project: Song Recognition</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Audio/capstone_summary.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Capstone-Project:-Song-Recognition">
+<h1>Capstone Project: Song Recognition<a class="headerlink" href="#Capstone-Project:-Song-Recognition" title="Permalink to this headline">¶</a></h1>
+<p>The capstone project for the audio module, as stated at its outset, is to create an installable Python package that can be used to recognize songs being played from brief clips of audio. The following is a diagrammatic overview of the capstone project that we will be developing; this conveys the major capabilities that the final product should have.</p>
+<div style="text-align: center">
+<p>
+<img src="../_images/capstone_diagram.png" alt="Diagrammatic overview of song-recognition capstone project" width="650">
+</p>
+</div><p>Many of the core pieces here were already developed in the reading and exercises for this module:</p>
+<ul class="simple">
+<li><p>Converting various forms of audio recordings to numpy arrays of samples</p></li>
+<li><p>Producing a spectrogram from the samples</p></li>
+<li><p>Extracting local peaks from the spectrogram</p></li>
+</ul>
+<p>These can be leveraged from the previous exercises nearly unchanged for this project. The process of forming “fanout” patterns among a spectrogram’s local peaks, and thus rendering a fingerprint for the recording, will require novel work from the reader. This was described in the section on “Matching Audio Recordings”. Developing code around our so-called database, which is rooted in a plain Python dictionary, will also require some creativity.</p>
+<p>It is recommended that this capstone project be tackled as a group project among three to five students. While it is certainly doable for an individual to complete this project by theirself, there is great value participating in the collaborative process of divvying up the project and working to bring its various pieces together. Students are advised to use <a class="reference external" href="https://guides.github.com/introduction/git-handbook/">git and GitHub</a> to work on a shared code base.</p>
+<div class="section" id="Capstone-Tasks">
+<h2>Capstone Tasks<a class="headerlink" href="#Capstone-Tasks" title="Permalink to this headline">¶</a></h2>
+<p>It is strongly recommended that students work through <a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Modules_and_Packages.html">this section of PLYMI</a> (completing the reading comprehension exercises) to learn how they are to structure their code as an installable / importable Python package.</p>
+<p>Groups might break tasks down along the following lines:</p>
+<ul class="simple">
+<li><p>Creating functions for converting all variety of audio recordings, be them recorded from the microphone or digital audio files, into a NumPy-array of digital samples.</p></li>
+<li><p>Creating a function that takes in digital samples of a song/recording and produces a spectrogram of log-scaled amplitudes and extracts local peaks from it</p></li>
+<li><p>Creating a function that takes the peaks from the spectrogram and forms fingerprints via “fanout” patterns among the peaks.</p></li>
+<li><p>Devising a scheme for organizing song metadata, e.g. associating song titles and artist names with a recording, and associating these with unique song-IDs to be used within the database.</p></li>
+<li><p>Writing the core functionality for storing fingerprints in the database, as well as querying the database and tallying the results of the query.</p></li>
+<li><p>Designing an interface for the database, including the following functionality:</p>
+<ul>
+<li><p><a class="reference external" href="https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/WorkingWithFiles.html#Saving-&amp;-Loading-Python-Objects:-pickle">saving and loading the database</a></p></li>
+<li><p>inspecting the list of songs (and perhaps artists) that exist in the database</p></li>
+<li><p>providing the ability to switch databases (optional)</p></li>
+<li><p>deleting a song from a database (optional)</p></li>
+<li><p>guarding against the adding the same song to the database multiple times (optional)</p></li>
+</ul>
+</li>
+<li><p>Recording long clips of songs under various noise conditions (e.g. some should be clips from studio recordings, others recorded with little background noise, some with moderate background noise, etc.) so that you can begin to test and analyze the performance of your algorithm.</p></li>
+<li><p>Creating a function that can take an array of audio samples from a long (e.g. one minute) recording and produce random clips of it at a desired, shorter length. This can help with experimentation/analysis. For example you can record a 1 minutes clip of a song, played from your phone and then create many random 10 second clips from it and see if they all successfully match against your database.</p></li>
+</ul>
+</div>
+<div class="section" id="Advice-and-Gotchyas">
+<h2>Advice and Gotchyas<a class="headerlink" href="#Advice-and-Gotchyas" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Configuration-Parameters">
+<h3>Configuration Parameters<a class="headerlink" href="#Configuration-Parameters" title="Permalink to this headline">¶</a></h3>
+<p>There are several “tunable” aspects of the algorithm that we are implementing, such as the minimum amplitude threshold in peak finding. Here are some viable starting values for these; you can start with these and try experimenting with them to improve the performance of your song-matching algorithm:</p>
+<ul class="simple">
+<li><p><strong>Defining the local neighborhood for finding the peaks in the spectrogram</strong>: Use a rank-<span class="math notranslate nohighlight">\(2\)</span> connectivity-<span class="math notranslate nohighlight">\(1\)</span> binary structure, and iterate that structure <span class="math notranslate nohighlight">\(20\)</span> times (looks at roughly the <span class="math notranslate nohighlight">\(15\)</span> nearest bins as the neighborhood).</p></li>
+<li><p><strong>Finding an appropriate background/foreground amplitude threshold for identifying peaks in the spectrogram</strong>: this can be obtained for a given recording by identifying the ~<span class="math notranslate nohighlight">\(75^\text{th}\)</span> percentile amplitude and using that as the threshold.</p></li>
+<li><p><strong>Setting the size of the fanout pattern for forming the fingerprints</strong>: a fanout size of <span class="math notranslate nohighlight">\(15\)</span> nearest neighbors can be appropriate.</p></li>
+</ul>
+</div>
+<div class="section" id="Spectrogram">
+<h3>Spectrogram<a class="headerlink" href="#Spectrogram" title="Permalink to this headline">¶</a></h3>
+<p>For the spectrogram, it is advisable that students use matplotlib’s <code class="docutils literal notranslate"><span class="pre">mlab.specgram</span></code> function, which does not produce a plot by default.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.mlab</span> <span class="kn">as</span> <span class="nn">mlab</span>
+
+<span class="n">spectrogram</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">times</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">specgram</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span>
+    <span class="n">NFFT</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
+    <span class="n">Fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span>
+    <span class="n">noverlap</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">4096</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">samples</span></code> is the NumPy array of audio samples and <code class="docutils literal notranslate"><span class="pre">sampling_rate</span></code> is the integer-valued sampling rate used to obtain <code class="docutils literal notranslate"><span class="pre">samples</span></code> (i.e. typically 44,100 Hz). The other settings determine properties about the size/properties of the FFT windows being using to produce the spectrogram; these should be held constant across recordings.</p>
+<p><code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> is the shape-<span class="math notranslate nohighlight">\((F, T)\)</span> array of amplitudes, <code class="docutils literal notranslate"><span class="pre">freqs</span></code> is the shape-<span class="math notranslate nohighlight">\((F,)\)</span> array of frequency values corresponding to the vertical bins of the spectrogram and <code class="docutils literal notranslate"><span class="pre">times</span></code> is a shape-<span class="math notranslate nohighlight">\((T,)\)</span> array of time values corresponding to the horizontal bins of the spectrogram.</p>
+<p>Before extracting peaks from the spectrogram, it is recommended that you take the logarithm of its values so that these amplitudes reflect the audible decibel scale. There may be zeros in the spectrogram, which will produces NaNs (Not-a-Numbers) when you take its logarithm. To avoid this, first replace all zeros in the spectrogram with a very small value, e.g. <code class="docutils literal notranslate"><span class="pre">1E-20</span></code>, and then take the logarithm.</p>
+</div>
+</div>
+<div class="section" id="Analyzing-and-Testing-Performance">
+<h2>Analyzing and Testing Performance<a class="headerlink" href="#Analyzing-and-Testing-Performance" title="Permalink to this headline">¶</a></h2>
+<p>Ideally, students will take time to analyze and characterize the performance of their algorithm. This means conducting experiments that vary one or multiple of the following:</p>
+<ul class="simple">
+<li><p>the length of the clip being recording for matching (e.g. how short of a clip can be matched against the database?)</p></li>
+<li><p>the noise level of the clip (e.g. how well does a studio-quality clip, low-noise clip, …, or very noisy clip match against the database?)</p></li>
+<li><p>the number of songs in your database (e.g. does adding more songs to the database create “confusers” that cause false-matches)</p></li>
+</ul>
+<p>Assess how these factors affect the reliability of your algorithm’s performance.</p>
+<p>It is also a good idea to assess, in a quantifiable way, the quality of your algorithm’s matches. When your algorithm does produce the appropriate match, how large is the leading tally for this match? How much larger is the next-largest tally? How can you guard against false-matches? Perhaps you can intentionally try to match a clip from a song that <em>does not</em> exist in your database - does your algorithm predict a match regardless? Maybe there is a minimum tally that is necessary to help
+distinguish a false match from a true one. It may be that the ratio between the <span class="math notranslate nohighlight">\(1^\text{st}\)</span> and <span class="math notranslate nohighlight">\(2^\text{nd}\)</span> largest tallies can be an indicator of quality.</p>
+<p>Feel free to tweak the tunable parameters, like the size/shape of your peak-finding neighborhood or the fanout-size of the fingerprint formation process, to improve the quality of your algorithm.</p>
+<p>Finally, consider documenting the results of this analysis, providing visualizations of the data that led you to your conclusions.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../vision.html" class="btn btn-neutral float-right" title="Vision Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Exercises/PeakFinding.html" class="btn btn-neutral float-left" title="Exercises: Finding Local Peaks in a 2-D Array" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

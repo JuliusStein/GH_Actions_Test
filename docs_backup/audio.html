@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta content="Topic: Audio Processing, Category: Introduction" name="description" />
+<meta content="introduction, signal, fingerprint, fourier transform, analog to digital, spectrogram" name="keywords" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Audio Module &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Prerequisites" href="Audio/prereqs.html" />
+    <link rel="prev" title="Chain Rule" href="Math_Materials/Chain_Rule.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Audio Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html">The Basics of Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/recording_sound.html">Microphones: Recording Sound as an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/digitizing_signals.html">Digitizing an Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/intro_spectrograms.html">Introduction to Spectrogram Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html">Matching Audio Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/capstone_summary.html">Capstone Project: Song Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Audio Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/audio.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Audio-Module">
+<h1>Audio Module<a class="headerlink" href="#Audio-Module" title="Permalink to this headline">¶</a></h1>
+<p>Nowadays, most phones come with software that lets them do a pretty neat trick: if you’re out and about and some music catches your ear, you can hold your phone up in the air and ask it to name that tune! Your phone is able to do this even though there are millions of songs out there and despite the loud chatter of your friends in the background. It manages to pinpoint the song being played after catching a whiff of it for mere seconds. This is an impressive trick indeed, but how in the world
+does it work?</p>
+<p>The first module of the CogWorks course is all about working with audio data; it will give us all of the tools needed to code up our own song-recognition app <em>from scratch</em>! As is the CogWorks way, we will do our best to achieve this goal without relying on any “black boxes” in our solution. As such, we will begin from square one and discuss the question: what is sound and how do we record it? This will amount to <strong>a brief physics lesson in sound waves and microphones</strong>. Please note that these
+lessons do not require a background in physics, but hopefully they will spur an interest in the reader. We’ll follow this thread down the path of understanding <strong>the basics of digitizing an analog signal</strong>, which will give us insight into how audio files “store sounds” to be played back later.</p>
+<p>With digitized audio data in hand, we’ll find ourselves with a real mess; in its raw form, it is hard to visually discern any salient qualities from an audio signal’s waveform besides stark changes in loudness. This sets the stage for the power house of signal processing: <strong>Fourier transforms</strong>. Critically, Fourier transforms will allow us to identify what <em>notes</em> (frequencies, to be more precise) are present in an audio recording. This will be a huge leap forward for us in our quest to create a
+song-recognition app: we can finally begin to characterize the distinguishing qualities of songs in a quantifiable way.</p>
+<p>In order to extract identifiable features from songs, we will want to pinpoint the prominent frequencies (notes) of that song along with <em>when</em> those frequencies occur in the song. The process of distilling a frequency-time breakdown of our audio recording is known as <strong>spectrogram analysis</strong>. We will code up our own tooling to apply Fourier transforms over small temporal windows of audio data so that we can view <strong>spectrograms</strong> for our songs. A song’s spectrogram can reveal intuitive, and
+often unique, patterns – in it, we will be able to literally see the recurrence of the song’s chorus, the emergence of a loud guitar solo (or some Fortnite bass drop, or whatever youths listen to nowadays), and other key identifiable features. At this point, we will never have been closer to being able to “identify” a song based on reliable, quantifiable features.</p>
+<p>Finally, we will need to figure out some heuristic for extracting a sparse set of identifiable features of a song – its “fingerprints” – that we can store in a database. This, as we’ll see, will boil down to <strong>locating the local maxima</strong> in a song’s spectrogram. Once populated with a library of songs, we can query this song-fingerprint database with a clip of a song and have it name the tune!</p>
+<p>The following is a simple illustration of a road map for this module. Its purpose is to help us make note of the major landmarks that we will be encountering during our journey through the land of audio processing. I worked pretty hard on these drawings, please don’t make fun of them.</p>
+<div style="text-align: center">
+<p>
+<img src="./_images/audio_fig_intro.png" alt="Overview of the Audio Module" width="600">
+</p>
+</div><div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Audio/prereqs.html">Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/prereqs.html#Installs">Installs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/prereqs.html#Math-Supplements">Math Supplements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/physics-of-sound.html">The Basics of Sound</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html#Air-and-Pressure">Air and Pressure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html#Sound-Waves">Sound Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html#Quantifying-Sound:-Pure-Tones">Quantifying Sound: Pure Tones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html#Realistic-Sounds-and-the-Principle-of-Superposition">Realistic Sounds and the Principle of Superposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/physics-of-sound.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/AudioSignalBasics.html">Exercises: Basics of Sound Waves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/recording_sound.html">Microphones: Recording Sound as an Analog Signal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/recording_sound.html#Electric-Fields-and-Volts">Electric Fields and Volts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/recording_sound.html#The-Workings-of-a-Dynamic-Microphone">The Workings of a Dynamic Microphone</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/digitizing_signals.html">Digitizing an Analog Signal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/digitizing_signals.html#Sampling-Rate">Sampling Rate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/digitizing_signals.html#Bit-Depth">Bit Depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/digitizing_signals.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/digitizing_signals.html#Code-For-Reproducing-Figures">Code For Reproducing Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/WorkingWithMic.html">Exercises: Working with the Microphone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/WorkingWithMic.html#Using-the-Microphone-Python-Package">Using the Microphone Python Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/WorkingWithMic.html#Writing-Our-Own-Audio-Files-(Using-NumPy)">Writing Our Own Audio Files (Using NumPy)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/WorkingWithMic.html#Visualizing-an-Audio-Recording">Visualizing an Audio Recording</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html">Exercises: Analog to Digital Encoding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html#Describing-Our-Analog-Signal">Describing Our Analog Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html#Reviewing-the-Sampling-Utilities-from-the-Reading-Materials">Reviewing the Sampling Utilities from the Reading Materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html#Creating-an-End-to-End-Analog-to-Digital-Conversion-Function">Creating an End-to-End Analog-to-Digital Conversion Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/AnalogToDigital.html#Hearing-the-Effects-of-Sampling-Rate-and-Bit-Depth">Hearing the Effects of Sampling Rate and Bit-Depth</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/fourier_analysis.html">Decomposing Audio Signals: Fourier Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Some-Preliminary-Remarks-About-This-Material">Some Preliminary Remarks About This Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Retracing-Our-Steps">Retracing Our Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#A-Cacophony-of-Data:-The-Need-for-Frequency-Decomposition">A Cacophony of Data: The Need for Frequency Decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Fourier-Series">Fourier Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/fourier_analysis.html#Code-for-Reproducing-Figures">Code for Reproducing Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/discrete_fourier_transforms.html">The Discrete Fourier Transform (DFT)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#The-Details-of-Sampling">The Details of Sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#The-Details-of-the-Discrete-Fourier-Transform">The Details of the Discrete Fourier Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#The-Inverse-Discrete-Fourier-Transform-(IDFT)">The Inverse Discrete Fourier Transform (IDFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#Fast-Fourier-Transforms">Fast Fourier Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#Summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/discrete_fourier_transforms.html#Code-for-Reproducing-Figures">Code for Reproducing Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/BasicsOfDFT.html">Exercises: Basics of DFTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/DFTOfVariousSignals.html">Exercises: DFTs of Various Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/ApplicationsOfDFTs.html">Exercises: Applications of DFTs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/ApplicationsOfDFTs.html#Sunspot-Data-Analysis">Sunspot Data Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/ApplicationsOfDFTs.html#Analyzing-Audio-Signals-from-Instruments">Analyzing Audio Signals from Instruments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/ApplicationsOfDFTs.html#Smoothing-Stock-Market-Data">Smoothing Stock Market Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/intro_spectrograms.html">Introduction to Spectrogram Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/intro_spectrograms.html#Leveraging-Our-Methods-of-Audio-Analysis">Leveraging Our Methods of Audio Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/intro_spectrograms.html#Conveying-Time-and-Frequency:-The-Spectrogram">Conveying Time and Frequency: The Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/intro_spectrograms.html#Reading-Comprehension-Exercise-Solutions">Reading Comprehension Exercise Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/spectrogram.html">Exercise: Creating Our Own Spectrogram</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/spectrogram.html#Accessing-Time-and-Frequency:-Building-an-Intuition-for-Spectrograms">Accessing Time <em>and</em> Frequency: Building an Intuition for Spectrograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/spectrogram.html#Digging-into-Spectrograms">Digging into Spectrograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/spectrogram.html#Creating-Your-Own-Spectrogram">Creating Your Own Spectrogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/audio_features.html">Matching Audio Recordings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html#Extracting-Robust-and-Reliable-Features">Extracting Robust and Reliable Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html#Forming-the-Fingerprints-of-a-Recording">Forming the Fingerprints of a Recording</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html#The-Fingerprint-Database">The Fingerprint Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html#Conclusion">Conclusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/audio_features.html#Code-For-Reproducing-Figures">Code For Reproducing Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/Exercises/PeakFinding.html">Exercises: Finding Local Peaks in a 2-D Array</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/PeakFinding.html#Toy-Problem">Toy Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/Exercises/PeakFinding.html#Identifying-“Foreground”-vs-“Background”-in-Real-Data">Identifying “Foreground” vs “Background” in Real Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Audio/capstone_summary.html">Capstone Project: Song Recognition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Audio/capstone_summary.html#Capstone-Tasks">Capstone Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/capstone_summary.html#Advice-and-Gotchyas">Advice and Gotchyas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Audio/capstone_summary.html#Analyzing-and-Testing-Performance">Analyzing and Testing Performance</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Audio/prereqs.html" class="btn btn-neutral float-right" title="Prerequisites" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Math_Materials/Chain_Rule.html" class="btn btn-neutral float-left" title="Chain Rule" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Train Your Own Word Embeddings With Autoencoders &mdash; CogWorks</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CogWorks
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CogWorks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_reqs.html">Course Pre-Requisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplemental_math.html">Supplemental Math Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">Audio Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vision.html">Vision Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheat_sheet.html">Cheat Sheets</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CogWorks</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Train Your Own Word Embeddings With Autoencoders</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Language/Exercises/AutoencoderWordEmbeddings.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Train-Your-Own-Word-Embeddings-With-Autoencoders">
+<h1>Train Your Own Word Embeddings With Autoencoders<a class="headerlink" href="#Train-Your-Own-Word-Embeddings-With-Autoencoders" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>import numpy as np
+from noggin import create_plot
+from gensim.models.keyedvectors import KeyedVectors
+import codecs
+from nltk.tokenize import word_tokenize
+
+%matplotlib notebook
+</pre></div>
+</div>
+</div>
+<div class="section" id="Quantifying-Context">
+<h2>Quantifying Context<a class="headerlink" href="#Quantifying-Context" title="Permalink to this headline">¶</a></h2>
+<p>We will begin by ascribing words numerical representations based solely on the contexts in which they occur; that is, we will represent words based on the words that commonly occur around them.</p>
+<p>For example, the sentences “dogs are loud pets” and “cats are quiet pets” not only draw similarities and distinctions between cats and dogs, but these sentences also begin to convey some meaning for the word “pet”. By tracking the words that commonly occur in the midst of “pet” across many documents, we hope to arrive at a coherent numerical representation of “pet” that is able encode that the words “cat”, “dog”, “parakeet”, “owner”, “care”, “train” are all relevant to the concept of “pet”.</p>
+<p>Obviously, we will need to define what we mean by “context”, and define a window size that we use when “scanning” our text.</p>
+<p>To begin, we will construct a “context matrix” of the counts of words appearing within a certain distance of other words. More specifically, for each word in our corpus, we will count the appearances of all other words within a context window.</p>
+<p>Each row of the context matrix corresponds to a unique word in our corpus; we will update that word’s row when it occurs in the center of a context window. For a given row, the values of the content matrix are the tallies of the appearances of other words within the context window (the number of co-occurences of context words). So, if <span class="math notranslate nohighlight">\(X_{i,j}\)</span> is the value of element <span class="math notranslate nohighlight">\((i,j)\)</span>, our context matrix can be interpreted as: &gt; for all appearances of word <span class="math notranslate nohighlight">\(i\)</span> in the center of the
+context window, word <span class="math notranslate nohighlight">\(j\)</span> had <span class="math notranslate nohighlight">\(X_{i,j}\)</span> number of co-occurences with <span class="math notranslate nohighlight">\(i\)</span> (<span class="math notranslate nohighlight">\(j\)</span> appeared <span class="math notranslate nohighlight">\(x\)</span> number of times within the specified context window around word <span class="math notranslate nohighlight">\(i\)</span>)</p>
+<p>As an example, for the sentence &gt; i am scared of dogs</p>
+<p>the word “scared” is in the center of a context window of <span class="math notranslate nohighlight">\(2\)</span> words on either side. Then for each of the words contained within the context window, we would increment the element in the row corresponding to “scared” and the column corresponding to the context word.</p>
+<p>Because this matrix can grow very large as the vocabulary size grows, we will restrict the size of the vocabulary to the most frequent <code class="docutils literal notranslate"><span class="pre">max_vocab_words</span></code> words (again removing the common “glue” words that help make language interpretable, but not meaningful). To make it feasible to train our model, we will also restrict the number words that we consider context words to the most frequent <code class="docutils literal notranslate"><span class="pre">max_context_words</span></code> words. Note that this <code class="docutils literal notranslate"><span class="pre">max_context_words</span></code> restriction is not the same as reducing
+the length of our context window: we are actually limiting the vocabulary size of context words to the most common <code class="docutils literal notranslate"><span class="pre">max_context_words</span></code> words in the full vocabulary.</p>
+<p>Once again, we will use <code class="docutils literal notranslate"><span class="pre">nltk</span></code> to tokenize our data. However, because each of our vocab words will correspond to a row in our context matrix, we should assign a unique integer code to each unique word. Below are three convinience functions for this conversion.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_sorted_words</span></code> will sort our tokens by count so that more frequent words will correspond to lower value codes (and thus smaller indices in the context matrix). This will make it much easier to filter our <code class="docutils literal notranslate"><span class="pre">max_vocab_words</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_word2code</span></code> will take in a list of words sorted by number of appearances and assign each unique word to an integer code.</p>
+<p>Lastly, <code class="docutils literal notranslate"><span class="pre">convert_tokens_to_codes</span></code> will take an unordered list of tokens and return a list of the corresponding codes for each token.</p>
+<p>Complete the functions below, and test to make sure that each works as desired.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def generate_sorted_words(tokens):
+    &quot;&quot;&quot; Create list of unique words sorted by count in descending order
+
+    Parameters
+    ----------
+    tokens: List[str]
+        A list of tokens (words), e.g., [&quot;the&quot;, &quot;cat&quot;, &quot;in&quot;, &quot;the&quot;, &quot;in&quot;, &quot;the&quot;]
+
+    Returns
+    -------
+    List[str]
+        A list of unique tokens sorted in descending order of occurence, e.g., [&quot;the&quot;, &quot;in&quot;, cat&quot;]
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def generate_word2code(sorted_words):
+    &quot;&quot;&quot; Create a dictionary that maps a word to its position in the count-sorted list of words
+
+    Parameters
+    ---------
+    sorted_words: List[str]
+        A count-sorted list of unique words, e.g., [&quot;bat&quot;, &quot;apple&quot;, &quot;cat&quot;]
+
+    Returns
+    -------
+    Dict[str, int]
+        A dictionary that maps a word to an integer code, e.g., {&quot;bat&quot;: 0, &quot;apple&quot;: 1, &quot;cat&quot;: 2}
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>def convert_tokens_to_codes(tokens, word2code):
+    &quot;&quot;&quot; Convert tokens to codes.
+
+        Parameters
+    ---------
+    tokens: List[str]
+        A list of N words, e.g., [&quot;bat&quot;, &quot;cat&quot;, &quot;apple&quot;]
+
+    word2code: Dict[str, int]
+        A dictionary mapping words to integer codes, e.g., {&quot;apple&quot;: 0, &quot;bat&quot;: 1, &quot;cat&quot;: 2}
+
+    Returns
+    -------
+    np.ndarray, shape-(N,)
+        An array of integer codes corresponding to the input words, e.g., [1, 2, 0].
+    &quot;&quot;&quot;
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>For the example tokens <code class="docutils literal notranslate"><span class="pre">[&quot;a&quot;,</span> <span class="pre">&quot;a&quot;,</span> <span class="pre">&quot;b&quot;,</span> <span class="pre">&quot;c&quot;,</span> <span class="pre">&quot;c&quot;,</span> <span class="pre">&quot;c&quot;,</span> <span class="pre">&quot;c&quot;,</span> <span class="pre">&quot;a&quot;,</span> <span class="pre">&quot;b&quot;,</span> <span class="pre">&quot;c&quot;]</span></code>, what do you expect the output of each of your functions to be? Do your functions match this expected behaviour?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>tokens = [&quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;c&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+# STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>We will use the following function, <code class="docutils literal notranslate"><span class="pre">generate_word_by_context</span></code>, to construct our context matrix. See the pseudo-code below for tally up co-occurrence counts between words using nested for-loops:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initialize</span> <span class="n">a</span> <span class="mi">2</span><span class="n">D</span> <span class="n">array</span> <span class="n">of</span> <span class="n">zeros</span><span class="p">,</span> <span class="k">with</span> <span class="n">shape</span><span class="o">-</span><span class="p">(</span><span class="n">max_vocab_words</span><span class="p">,</span> <span class="n">max_context_words</span><span class="p">)</span>
+
+<span class="n">Slide</span> <span class="n">window</span> <span class="n">along</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">starting</span> <span class="k">with</span> <span class="n">the</span> <span class="n">first</span> <span class="n">center</span> <span class="n">word</span><span class="p">,</span> <span class="ow">and</span> <span class="n">begin</span> <span class="n">tallying</span>
+    <span class="n">co</span><span class="o">-</span><span class="n">occurrences</span> <span class="n">between</span> <span class="n">words</span> <span class="n">within</span> <span class="n">a</span> <span class="n">context</span> <span class="n">window</span><span class="o">.</span>
+
+<span class="k">if</span> <span class="n">code</span> <span class="n">of</span> <span class="n">center</span> <span class="n">word</span> <span class="ow">is</span> <span class="o">&gt;=</span> <span class="n">max_vocab_words</span><span class="p">:</span>
+    <span class="n">skip</span>
+
+<span class="k">for</span> <span class="n">each</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">context</span> <span class="p">(</span><span class="n">on</span> <span class="n">left</span> <span class="ow">and</span> <span class="n">right</span> <span class="n">sides</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="n">of</span> <span class="n">context</span> <span class="n">word</span> <span class="o">&lt;</span> <span class="n">max_context_words</span>
+        <span class="n">add</span> <span class="mf">1.0</span> <span class="n">to</span> <span class="n">matrix</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">row</span><span class="o">-</span><span class="p">(</span><span class="n">center</span> <span class="n">word</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span><span class="o">-</span><span class="p">(</span><span class="n">context</span> <span class="n">word</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="k">if</span> <span class="n">weighting</span> <span class="n">by</span> <span class="n">distance</span><span class="p">)</span>
+        <span class="n">add</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">distance</span> <span class="kn">from</span> <span class="nn">center</span> <span class="n">to</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As an example, assume context_size is <span class="math notranslate nohighlight">\(2\)</span> (i.e., <span class="math notranslate nohighlight">\(2\)</span> words to left and <span class="math notranslate nohighlight">\(2\)</span> words to right of the center word). If our vocabulary is just <code class="docutils literal notranslate"><span class="pre">[&quot;a&quot;,</span> <span class="pre">&quot;b&quot;,</span> <span class="pre">&quot;c&quot;]</span></code>, the following diagram shows how we slide out window across the text as well as the various numerical representations (i.e. word-code and word-position) for the text.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;a&quot;</span> <span class="s2">&quot;a&quot;</span> <span class="s2">&quot;b&quot;</span> <span class="s2">&quot;c&quot;</span> <span class="s2">&quot;c&quot;</span> <span class="s2">&quot;c&quot;</span> <span class="s2">&quot;c&quot;</span> <span class="s2">&quot;a&quot;</span> <span class="s2">&quot;b&quot;</span> <span class="s2">&quot;c&quot;</span>   <span class="c1"># sequence of words (for this example, we use letters)</span>
+ <span class="mi">1</span>   <span class="mi">1</span>   <span class="mi">2</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">1</span>   <span class="mi">2</span>   <span class="mi">0</span>    <span class="c1"># corresponding sequence of word-codes; determined by word-count</span>
+ <span class="mi">0</span>   <span class="mi">1</span>   <span class="mi">2</span>   <span class="mi">3</span>   <span class="mi">4</span>   <span class="mi">5</span>   <span class="mi">6</span>   <span class="mi">7</span>   <span class="mi">8</span>   <span class="mi">9</span>    <span class="c1"># position in sequence</span>
+<span class="p">[</span>        <span class="o">^</span>        <span class="p">]</span>                       <span class="c1"># first window: centered on position 2; center word has code 2</span>
+    <span class="p">[</span>        <span class="o">^</span>        <span class="p">]</span>                   <span class="c1"># second window: centered on position 3; center word has code 0</span>
+                <span class="o">...</span>
+                    <span class="p">[</span>        <span class="o">^</span>        <span class="p">]</span>   <span class="c1"># last window: centered on position 7; center word has code 1</span>
+</pre></div>
+</div>
+<p>This will lead to slow performance in pure Python. <strong>Write your function using for-loops anyway and verify that it passes the test cases provided below.</strong></p>
+<p><strong>Once your function passes the test cases</strong>, we will use a special decorator, <code class="docutils literal notranslate"><span class="pre">numba.njit</span></code> to compile an optimized version of your function. Import <code class="docutils literal notranslate"><span class="pre">njit</span></code> via: <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">numba</span> <span class="pre">import</span> <span class="pre">njit</span></code>. Then decorate your function by adding <code class="docutils literal notranslate"><span class="pre">&#64;njit</span></code> to the top of the function definition:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">generate_word_by_context</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="n">max_vocab_words</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_context_words</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                             <span class="n">context_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">weight_by_distance</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+   <span class="o">...</span>
+</pre></div>
+</div>
+<p>and re-run the cell to redefine your function. Try running your now-decorated function on the test cases again. If you get an error, or your Jupyter kernel dies without warning, have an instructor come by to help make your code numba compatible.</p>
+<p>How does <code class="docutils literal notranslate"><span class="pre">njit</span></code> improve the performance of our function though? Numba is a library designed to compile a subset of Python/NumPy code down to optimized instructions for low-level virtual machine (LLVM). You can call your function as usual, but it will be executed in this LLVM. This can accelerate your code greatly: here, we will see a speedup of ~<span class="math notranslate nohighlight">\(100\)</span>x (<span class="math notranslate nohighlight">\(2\)</span> minutes <span class="math notranslate nohighlight">\(\rightarrow\)</span> <span class="math notranslate nohighlight">\(2\)</span> seconds). Sadly Numba only supports a small subset of the Python language, and so we
+cannot simply throw the <code class="docutils literal notranslate"><span class="pre">njit</span></code> decorator on all our code.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from numba import njit
+
+
+@njit
+def generate_word_by_context(
+    codes,
+    max_vocab_words=1000,
+    max_context_words=1000,
+    context_size=2,
+    weight_by_distance=True,
+):
+    &quot;&quot;&quot; Creates array of vocab word by context word (possibly weighted) co-occurrence counts.
+
+    Parameters
+    ----------
+    codes: numpy.ndarray, shape-(N,)
+        A sequence of word codes (integers).
+
+    max_vocab_words: int
+        The max number of words to include in vocabulary (will correspond to rows in matrix).
+        This is equivalent to the max word code that will be considered/processed as the center
+        word in a window.
+
+    max_context_words: int
+        The max number of words to consider as possible context words (will correspond to columns
+        in a 2D array).
+        This is equivalent to the max word code that will be considered/processed when scanning
+        over contexts.
+
+    context_size: int
+        The number of words to consider on both sides (i.e., to the left and to the right) of the
+        center word in a window.
+
+    weight_by_distance: bool
+        Whether or not the contribution of seeing a context word near a center word should be
+        (down-)weighted by their distance:
+
+            False --&gt; contribution is 1.0
+            True  --&gt; contribution is 1.0 / (distance between center-word position and context-word)
+
+        For example, suppose [&quot;i&quot;, &quot;am&quot;, &quot;scared&quot;, &quot;of&quot;, &quot;dogs&quot;] has codes [45, 10, 222, 25, 88].
+
+        With weighting False,
+            X[222, 45], X[222, 10], X[222, 25], and X[222, 88] all get incremented by 1.
+
+        With weighting True,
+            X[222, 45] += 1.0/2  &lt;-- distance between &quot;i&quot; and &quot;scared&quot; is 2
+            X[222, 10] += 1.0/1  &lt;-- distance between &quot;am&quot; and &quot;scared&quot; is 1
+            X[222, 25] += 1.0/1  &lt;-- distance between &quot;of&quot; and &quot;scared&quot; is 1
+            X[222, 88] += 1.0/2  &lt;-- distance between &quot;dogs&quot; and &quot;scared&quot; is 2
+
+    Returns
+    -------
+    ndarray, shape=(max_vocab_words, max_context_words)
+        An array where rows are vocab words, columns are context words, and values are
+        (possibly weighted) co-occurrence counts.
+    &quot;&quot;&quot;
+    # initialize 2d array of zeros (with dtype=np.float32 to reduce required memory)
+    # STUDENT CODE HERE
+
+    # slide window along sequence and count &quot;center word code&quot; / &quot;context word code&quot; co-occurrences
+    # Hint: let main loop index indicate the center of the window
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>You can test your implementation of <code class="docutils literal notranslate"><span class="pre">generate_word_by_context</span></code> below, using the sequence <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">9,</span> <span class="pre">6,</span> <span class="pre">7]</span></code>. The value of <code class="docutils literal notranslate"><span class="pre">context_matrix</span></code> should be</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">1.</span>  <span class="mf">1.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">1.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>since there are only two full windows as we slide along: <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">9,</span> <span class="pre">6]</span></code> and <code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">4,</span> <span class="pre">9,</span> <span class="pre">6,</span> <span class="pre">7]</span></code>.</p>
+<p>In the first window, the code of the center word is 4, and it co-occurs with codes 2 and 3 on its left and codes 9 and 6 on its right. Since code 9 is greater than the maximum context words, its co-occurence is not encoded into the matrix.</p>
+<p>In the second window, the code of the center word is 9, with co-occurences of 3 and 4 on the left and 6 and 7 on the right. However, as 9 is also outside the maximum number of vocabulary codes, this entire window is excluded from <code class="docutils literal notranslate"><span class="pre">context_matrix</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># assume this sequence already contains word codes
+sequence = np.array([2, 3, 4, 9, 6, 7])
+context_matrix = generate_word_by_context(
+    sequence,
+    max_vocab_words=8,
+    max_context_words=8,
+    context_size=2,
+    weight_by_distance=False,
+)
+print(context_matrix)
+</pre></div>
+</div>
+</div>
+<p>Now test with <code class="docutils literal notranslate"><span class="pre">weight_by_distance=True</span></code>. When weighting by distance, <code class="docutils literal notranslate"><span class="pre">context_matrix</span></code> should have the value:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.5</span>  <span class="mf">1.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.5</span>  <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span>   <span class="mf">0.</span> <span class="p">]]</span>
+</pre></div>
+</div>
+<p>There is still only one full window which contributes to <code class="docutils literal notranslate"><span class="pre">context_matrix</span></code>, but now context words that are farther away from the center word contribute a lower weight. Directly adjacent context words will still contribute <span class="math notranslate nohighlight">\(\frac{1}{1}=1\)</span>, but context words on the edge of the window will now only contribute <span class="math notranslate nohighlight">\(\frac{1}{2}=0.5\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># turn on weighting
+context_matrix = generate_word_by_context(
+    sequence,
+    max_vocab_words=8,
+    max_context_words=8,
+    context_size=2,
+    weight_by_distance=True,
+)
+print(context_matrix)
+</pre></div>
+</div>
+</div>
+<p>Now let’s load in the data we will train on. We’ll use the same Wikipedia data we used when training our n-gram model. We will also use <code class="docutils literal notranslate"><span class="pre">nltk</span></code>’s tokenizer, while leaving in punctuation (which GloVe does as well).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>path_to_wikipedia = &quot;./dat/wikipedia2text-extracted.txt&quot;  # update this path if necessary
+with open(path_to_wikipedia, &quot;rb&quot;) as f:
+    wikipedia = f.read().decode().lower()
+print(f&quot;{len(wikipedia)} character(s)&quot;)
+
+tokens = word_tokenize(wikipedia.lower())
+print(f&quot;{len(tokens)} tokens(s)&quot;)
+</pre></div>
+</div>
+</div>
+<p>Using the functions you created earlier, convert the tokens into codes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now create your context matrix, choosing your <code class="docutils literal notranslate"><span class="pre">max_vocab_words</span></code> and <code class="docutils literal notranslate"><span class="pre">max_context_words</span></code>. Take caution though and consider how big of an array will be created! Also choose a context window size.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Before we start training a neural network to learn word embeddings, take the <span class="math notranslate nohighlight">\(\log_{10}\)</span> of the context matrix. This has been shown to improve performance, as the data are scaled to a more reasonable domain for the network to learn on. However, since the vast majority of elements in our context matrix will be <span class="math notranslate nohighlight">\(0\)</span>, we will want to shift all elements in our context matrix by a constant. If we want all the elements that are initially <span class="math notranslate nohighlight">\(0\)</span> to once again be <span class="math notranslate nohighlight">\(0\)</span> after taking the
+logarithm, what should we choose this constant to be?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Setting-Up-Our-Autoencoder">
+<h2>Setting Up Our Autoencoder<a class="headerlink" href="#Setting-Up-Our-Autoencoder" title="Permalink to this headline">¶</a></h2>
+<p>We will train a linear autoencoder using a two-layer dense network, as we had before.</p>
+<p>Create your MyNN model below. Use the <code class="docutils literal notranslate"><span class="pre">glorot_normal</span></code> initializer as the weight initializer for both the encoder and decoder. Do <strong>not</strong> include a bias term for either layer and do <strong>not</strong> include an activation function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mynn.layers.dense import dense
+from mynn.initializers.glorot_normal import glorot_normal
+
+class Autoencoder:
+    def __init__(self, context_words, d):
+        &quot;&quot;&quot; Initializes all of the encoder and decoder layers in our model, setting them
+        as attributes of the model.
+
+        Parameters
+        ----------
+        context_words : int
+            The number of context words included in our vocabulary
+
+        d : int
+            The dimensionality of our word embeddings
+        &quot;&quot;&quot;
+        # STUDENT CODE HERE
+
+
+    def __call__(self, x):
+        &#39;&#39;&#39; Passes data as input to our model, performing a &quot;forward-pass&quot;.
+
+        This allows us to conveniently initialize a model `m` and then send data through it
+        to be classified by calling `m(x)`.
+
+        Parameters
+        ----------
+        x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, context_words)
+            A batch of data consisting of M words from the context matrix,
+                each tracking the number of co-occurences with `context_words` words.
+
+        Returns
+        -------
+        mygrad.Tensor, shape=(M, context_words)
+            The result of passing the data through borth the encoder and decoder.
+        &#39;&#39;&#39;
+        # STUDENT CODE HERE
+
+
+    @property
+    def parameters(self):
+        &quot;&quot;&quot; A convenience function for getting all the parameters of our model.
+
+        This can be accessed as an attribute, via `model.parameters`
+
+        Returns
+        -------
+        Tuple[Tensor, ...]
+            A tuple containing all of the learnable parameters for our model&quot;&quot;&quot;
+        # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Below, instantiate your model such that it will learn a 200-dimensional embedding, and initialize an optimizer. Use the <code class="docutils literal notranslate"><span class="pre">Adam</span></code> optimizer from MyNN with a learning rate of <code class="docutils literal notranslate"><span class="pre">1e-4</span></code>. Also, create a <code class="docutils literal notranslate"><span class="pre">noggin</span></code> plotter to track the loss as we train.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now train your autoencoder! To start, try a batch size of <span class="math notranslate nohighlight">\(100\)</span>, trained for <span class="math notranslate nohighlight">\(5\)</span> epochs. Use MyNN’s <code class="docutils literal notranslate"><span class="pre">mean_squared_loss</span></code> as your loss function.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Now that we have a trained autoencoder, let’s create our actual word embeddings. Pass in our full dataset <strong>to the encoder only</strong> and assign the result to <code class="docutils literal notranslate"><span class="pre">my_vectors</span></code>. This will return a tensor - retrieve the underlying NumPy array.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>from mygrad import no_autodiff
+
+with no_autodiff:
+    # STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Check out first 10 elements of the vector for “king”</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Let’s save and load back our word vectors into <code class="docutils literal notranslate"><span class="pre">gensim</span></code> so we can use some <code class="docutils literal notranslate"><span class="pre">gensim</span></code> functionality for exploring our word embeddings.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>d = 200 # this is the dimensionality of your word embeddings
+
+# save in word2vec format (first line has vocab_size and dimension; other lines have word followed by embedding)
+with codecs.open(f&quot;my_vectors_{d}.txt&quot;, &quot;w&quot;, &quot;utf-8&quot;) as f:
+    f.write(str(max_vocab_words) + &quot; &quot; + str(d) + &quot;\n&quot;)
+
+    for i in range(max_vocab_words):
+        f.write(sorted_words[i] + &quot; &quot; + &quot; &quot;.join([str(x) for x in my_vectors[i,:]]) + &quot;\n&quot;)
+
+# load back in
+embeddings = KeyedVectors.load_word2vec_format(&quot;my_vectors_200.txt&quot;, binary=False)
+</pre></div>
+</div>
+</div>
+<p>Let’s check out some of the relationships our word embeddings learned. As we did before, use <code class="docutils literal notranslate"><span class="pre">similar_by_word</span></code> to find which words are considered most similar to a specified word. Also, create some analogies and use <code class="docutils literal notranslate"><span class="pre">similar_by_vector</span></code> to find the closest matches.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># STUDENT CODE HERE
+</pre></div>
+</div>
+</div>
+<p>Let’s put our word embeddings to the test! The gensim library comes with some methods for qualitatively evaluating how well particular word embeddings do on established benchmark datasets for word similarity and analogy solving. We’ll use the <code class="docutils literal notranslate"><span class="pre">gensim</span></code>’s <code class="docutils literal notranslate"><span class="pre">KeyedVectors.accuracy</span></code> method to score our embeddings on a set of analogies from the word2vec researchers.</p>
+<p>Each non-comment line of the file is a tuple of 4 words, e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Athens</span> <span class="n">Greece</span> <span class="n">Baghdad</span> <span class="n">Iraq</span>
+</pre></div>
+</div>
+<p>This correponds to the analogy:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&quot;Athens&quot; is to &quot;Greece&quot; as &quot;Baghdad&quot; is to ?
+</pre></div>
+</div>
+<p>The accuracy method will try to solve each of the 10000+ analogies in the file, which can take a while. Feel free to derive a shorter set of analogies to speed up the testing if you want.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span># code for unpacking results from: https://gist.github.com/iamaziz/8d8d8c08c7eeda707b9e
+def unpack_accuracy(results):
+    sum_corr = len(results[-1][-1][&#39;correct&#39;])
+    sum_incorr = len(results[-1][-1][&#39;incorrect&#39;])
+    total = sum_corr + sum_incorr
+    percent = lambda a: round(a / total * 100, 2)
+    print(f&#39;Total sentences: {total}, Correct: {percent(sum_corr)}%, Incorrect: {percent(sum_incorr)}%&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>results = embeddings.evaluate_word_analogies(&quot;./dat/questions-words.txt&quot;)
+unpack_accuracy(results)
+</pre></div>
+</div>
+</div>
+<p>Is the percentage correct good? Note that the form of these analogies are fill in the blank instead of multiple choice (like the style that used to be on the SAT). How might random guessing compare? Discuss with a neighbor.</p>
+<p>Try comparing the results of our embeddings to those of the GloVe embeddings. You might notice that the quality isn’t as good. This isn’t too surprising given that we trained on a much smaller number of words (10M vs 6B) and also truncated the context matrix (due to memory limitations) before even training our autoencoder to learn word embeddings. In any case, our embeddings definitely show evidence of learning something about word relationships!</p>
+<p>Try changing some of the hyperparamters we set earlier to see if you can improve the performance of the model. Just be cautious not to blow up your memory!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ryan Soklaski
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
