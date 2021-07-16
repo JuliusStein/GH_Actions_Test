@@ -6,6 +6,8 @@ name: Demo Cogbooks
 on:
   push:
     branches: [ main ]
+      paths:
+      - 'website_src'
 
 jobs:
   build:
@@ -29,6 +31,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
     - name: Run cogbooks on changed files
       # ------------ TOGGLE THIS TO ONLY ECHO FILENAMES ------------
       # run: |
