@@ -30,15 +30,17 @@ jobs:
       with:
         fetch-depth: 0
     - name: Run cogbooks on changed files
-      # run: echo "$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})"
-      run: |
-        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-          echo "${changed_file} was updated.";
-        done
+      # ------------ TOGGLE THIS TO ONLY ECHO FILENAMES ------------
       # run: |
       #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-      #     cogbooks ${changed_file} --force;
+      #     echo "${changed_file} was updated.";
       #   done
+
+      # ------------ TOGGLE THIS TO RUN COGBOOKS ON ALL ------------
+      run: |
+        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+          cogbooks ${changed_file} --force;
+        done
 
     # - name: get updated and new files (take 2)
     #   id: files
