@@ -40,6 +40,17 @@ jobs:
       #   done
 
       # ------------ TOGGLE THIS TO RUN COGBOOKS ON ALL ------------
+      # Cogbooks Syntax --dir out_directory
+      #
+      # if [[ ${changed_file} == *"/Audio"*]]; then
+      #     cogbooks ${changed_file} --force --dir docs/Audio
+      # elif [[ ${changed_file} == *"/Video"*]]; then
+      #     cogbooks ${changed_file} --force --dir docs/Video
+      # elif [[ ${changed_file} == *"/Language"*]]; then
+      #     cogbooks ${changed_file} --force --dir docs/Language
+      # elif [[ ${changed_file} == *"/Math_Materials"*]]; then
+      #     cogbooks ${changed_file} --force --dir docs/Math_Materials
+      # fi
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
           cogbooks ${changed_file} --force;
