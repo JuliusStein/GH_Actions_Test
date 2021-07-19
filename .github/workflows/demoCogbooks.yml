@@ -46,6 +46,7 @@ jobs:
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})
         do
+          echo ${changed_file}
           if [[ ${changed_file} -eq *"/Audio"*]]
           then
               cogbooks ${changed_file} --force --dir test_outputs/Audio
