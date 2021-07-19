@@ -84,7 +84,7 @@ jobs:
       with:
         source-directory: 'test-output'
         destination-github-username: 'JuliusStein'
-        destination-repository-name: 'GH-Actions-Output'
+        destination-repository-name: 'GH_Actions_Output'
         user-email: juliusastein@gmail.com
         commit-message: 'Automated student notebook update'
         target-branch: main
