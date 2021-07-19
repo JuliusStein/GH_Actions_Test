@@ -86,7 +86,6 @@ jobs:
         destination-github-username: 'JuliusStein'
         user-name: 'JuliusStein'
         destination-repository-username: 'JuliusStein'
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         destination-repository-name: 'GH_Actions_Output'
         user-email: juliusastein@gmail.com
         commit-message: Automated student notebook update
