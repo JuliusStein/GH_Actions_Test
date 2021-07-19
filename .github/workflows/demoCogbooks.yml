@@ -41,8 +41,6 @@ jobs:
       #
 
       # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
-      # Cogbooks Syntax --dir out_directory
-      #
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
           if [[ ${changed_file} == *"/Audio"* ]]; then
@@ -55,15 +53,15 @@ jobs:
               cogbooks ${changed_file} --force --dir test_outputs/Math_Materials
           fi
         done
+
       # ------------ TOGGLE THIS TO RUN COGBOOKS ON ALL ------------
       # run: |
       #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
       #     cogbooks ${changed_file} --force;
       #   done
 
-    # - name: Run cogbooks on single file
-    #   run: cogbooks AudioSignalBasics.md --force
 
+    # ------------ COMMIT AND PUSH TO SOURCE REPO (OLD) ------------
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
@@ -76,3 +74,16 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
+
+    # ------------- COMMIT AND PUSH TO DEST REPO (NEW) -------------
+    # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
+    - name: Push to student repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'test-output'
+          destination-github-username: 'JuliusStein'
+          destination-repository-name: 'GH-Actions-Output'
+          user-email: juliusastein@gmail.com
+          target-branch: main
