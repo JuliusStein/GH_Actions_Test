@@ -21,7 +21,7 @@ jupyter:
     :keywords: analog, digital, pcm, pulse code modulation, sample rate, bit depth, nyquist
 <!-- #endraw -->
 
-# Exercises: Analog to Digital Encoding
+# Exercises: Analog to Digital Encoding --- FORCING DIFF
 
 ```python
 import numpy as np
@@ -48,12 +48,12 @@ Note that the choice of this function is not particularly important, and the rem
 def analog_signal(times: np.ndarray) -> np.ndarray:
     """
     Given an array of times, returns the value of an analog signal at those times.
-    
+
     Parameters
     ----------
     times : numpy.ndarray
         The time(s) at which to evaluate the analog signal.
-    
+
     Returns
     -------
     numpy.ndarray
@@ -174,9 +174,9 @@ def quantize(samples: np.ndarray, bit_depth: int) -> np.ndarray:
 * bit-depth ($N_d$)
 * signal duration ($T$)
 
-and yields a tuple containing 
+and yields a tuple containing
 
-1. the times, $(t_n)_{n=0}^{N-1}$, at which the samples were taken 
+1. the times, $(t_n)_{n=0}^{N-1}$, at which the samples were taken
 2. the corresponding digital samples, $(f(t_n))_{n=0}^{N-1}$, extracted from the analog signal at those times
 
 Hint: you will first want to extract temporal samples from the analog signal, then quantize those samples.
@@ -195,23 +195,23 @@ def analog_to_digital(
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Digitizes a given analog signal based on desired sampling rate and bit-depth.
-    
+
     Parameters
     ----------
     analog_signal : Callable[[ndarray], ndarray]
         Another Python function, f(t), which accepts a time value (in seconds) as
         an input and returns a measurement (in volts) as an output.
-    
+
     sampling_rate : float
         The sampling rate specified in Hertz.
-    
+
     bit_depth: int
         The bit-depth, M, used to quantize the samples among
         2**M evenly spaced values spanning [samples.min(), samples.max()].
-    
+
     duration : float
         The duration of the signal, specified in seconds (a non-negative float).
-    
+
     Returns
     -------
     (times, digital_signal) : Tuple[ndarray, ndarray]
@@ -235,7 +235,7 @@ Let's test out our work so far.
 The following cell will plot a "continuous" version of $f(t)$ (`analog_signal`), and then will use our implementation of `analog_to_digital` to plot discrete samples of the function on top of it.
 
 The duration ($T$), sampling rate ($f_s$), and bit-depth ($N_d$) are set at the top of the code cell.
-Based on these values, do the plotted discrete samples occur at the appropriate time intervals given $f_s$? 
+Based on these values, do the plotted discrete samples occur at the appropriate time intervals given $f_s$?
 Are there the appropriate number of distinct measurement values, given $N_d$?
 
 Try changing these values to see that `analog_to_digital` continues to produce the appropriate output.
@@ -340,7 +340,7 @@ fig.tight_layout()
 **A Quick Aside: Raw Strings**
 
 We are going to be be writing strings as paths to files on our computers.
-This can lead to some unexpected complications that can be quite confusing at first. 
+This can lead to some unexpected complications that can be quite confusing at first.
 Consider the following Windows-format path:
 
 ```
@@ -382,7 +382,7 @@ D:\Music\new_song.mp3
 Thus it is prudent to store string paths as raw strings throughout our code.
 <!-- #endregion -->
 
-**Back to Digitizing Signals!** 
+**Back to Digitizing Signals!**
 
 Finally let's take a look at how we can modify music files that have already been recorded.
 We can use Librosa to work with music files in Python.
@@ -391,7 +391,7 @@ Start by picking out a song you have on your computer, and use Librosa to load t
 Note that on Windows, you can hold Shift and right-click on your audio file; among the options that pop-up, there should be a "Copy as path" option, which is a convenient way to get a string representation of the path to that file on your computer.
 On MacOS, this can be similarly accomplished by right-clicking then holding Option - in the menu will be a "Copy <file name> as Pathname", which will copy the file path to your clipboard.
 ```python
-# using librosa to read in audio samples from a sound file (e.g. .mp3 or .wav) as a numpy array 
+# using librosa to read in audio samples from a sound file (e.g. .mp3 or .wav) as a numpy array
 
 # The r in front to the string is to treat the string as a "raw string".
 # This guarantees that characters like `\n` get interpreted literally,
@@ -405,13 +405,13 @@ samples, sampling_rate = librosa.load(local_song_path, sr=44100, mono=True, dura
 ```
 
 (1.3.4) Write some simple code to investigate the following:
- 
+
  - What is the data type of the array `samples`?
- - What is the shape of `samples`? 
+ - What is the shape of `samples`?
    - Does the number of elements in the array make sense based on the sampling rate and the duration of the clip?
  - What are the minimum and maximum values stored in the array?
    - What does this imply about the relative "loudness" songs that are loaded by librosa in this way?
- 
+
 
 ```python
 # <COGINST>
@@ -527,8 +527,8 @@ bit_depth = 4
 
 
 # Use your code from (1.4) to resample the song clip at
-# the desired sampling rate. Then apply `quantize` to 
-# these samples with the appropriatebit-depth. Call 
+# the desired sampling rate. Then apply `quantize` to
+# these samples with the appropriatebit-depth. Call
 # the result `new_signal`.
 
 # <COGINST>

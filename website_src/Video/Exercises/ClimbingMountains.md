@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Climbing Down Mountains with MyGrad
+# Climbing Down Mountains with MyGrad --- FORCING DIFF
 
 ```python
 import mygrad as mg
@@ -27,30 +27,30 @@ import noggin as nog
 
 In this notebook we will be using mygrad's auto-differentiation functionality to perform gradient descent in various scenarios.
 
-This notebook will also introduce you to [noggin](https://noggin.readthedocs.io/en/latest/), which will permit us to conveniently record and plot our data in real-time! 
+This notebook will also introduce you to [noggin](https://noggin.readthedocs.io/en/latest/), which will permit us to conveniently record and plot our data in real-time!
 
 
 ### Write a gradient-descent function
-Write a gradient descent function that takes in a tensor (`param`) and a *learning rate* ($\delta$). 
+Write a gradient descent function that takes in a tensor (`param`) and a *learning rate* ($\delta$).
 
-This function assumes that you already have created some computational graph, and that you have already used back-propagation to compute the relevant derivatives of the terminal node in the computational graph with respect to the tensor quantities that it depends on. 
+This function assumes that you already have created some computational graph, and that you have already used back-propagation to compute the relevant derivatives of the terminal node in the computational graph with respect to the tensor quantities that it depends on.
 
 That is, `param.grad` stores the derivatives that you want to use to update `param` itself via gradient-descent.
 
-For the tensor, update its *underlying numpy array* according to the gradient descent. Use the augmented-update operator `-=` to update the array in-place (Why is this desirable? Chat with a neighbor). Because you are modifying the data of these tensors in-place, this function need not return anything. 
+For the tensor, update its *underlying numpy array* according to the gradient descent. Use the augmented-update operator `-=` to update the array in-place (Why is this desirable? Chat with a neighbor). Because you are modifying the data of these tensors in-place, this function need not return anything.
 
 ```python
 def grad_descent(param, learning_rate):
     """ Update tensors according to vanilla gradient descent.
-    
+
     Parameters
     ----------
     param : mygrad.Tensor
         The tensor to be updated using gradient-descent
-    
+
     learning_rate : float
         The learning rate
-    
+
     Returns
     -------
     None
@@ -89,7 +89,7 @@ print(x)
 
 ```python
 # run this cell
-# `plotter` is an object produced by noggin; it can be used to 
+# `plotter` is an object produced by noggin; it can be used to
 # record and plot our value of `x` as we update it
 
 # read the docstring for `create_plot`. What does `max_fraction_spent_plotting` do?
@@ -98,7 +98,7 @@ plotter, fig, ax = nog.create_plot("x^2", max_fraction_spent_plotting=1.)
 
 We are going to use gradient-descent to find the minimum value of $f(x) = x^2$ (which we should find to be $x=0$).
 
-Let's pick a starting value of $x=5.$ and a learning-rate of $\delta=0.1$. We will need to compute derivatives with respect to $x$, so $x$ will need to be a mygrad-tensor. Define these values here: 
+Let's pick a starting value of $x=5.$ and a learning-rate of $\delta=0.1$. We will need to compute derivatives with respect to $x$, so $x$ will need to be a mygrad-tensor. Define these values here:
 
 ```python
 plotter.max_fraction_spent_plotting = .7  # you can reduce this value to speed-up plotting
@@ -165,13 +165,13 @@ Now let's set up a `noggin` plot that will allow us to track the values of each 
 plotter, fig, ax = nog.create_plot(["x", "x^2", "x^3"], max_fraction_spent_plotting=1.)
 ```
 
-Now how can we actually minimize our functions? Well, if we apply each of our functions to the elements in our tensor, when we call `backward`, the `grad` attribute will store the corresponding derivative for each function. Thus, after the first call of `backward`, `grad` will be of the form: 
+Now how can we actually minimize our functions? Well, if we apply each of our functions to the elements in our tensor, when we call `backward`, the `grad` attribute will store the corresponding derivative for each function. Thus, after the first call of `backward`, `grad` will be of the form:
 
 \begin{equation}
 \begin{bmatrix}\frac{d(x)}{dx}\Bigr|_{x=10} & \frac{d(x^2)}{dx}\Bigr|_{x=10} & \frac{d(x^3)}{dx}\Bigr|_{x=10}\end{bmatrix}
 \end{equation}
 
-Just as before, we will make repeated gradient descent steps to try to minimize our functions. But now, instead of our simply calling our function as `f = x ** 2`, we need to raise each element to a different power. Given that `mygrad` mirrors numpy's vectorization, is there a quick way we can do this (that doesn't require us to manually raise each element to a power)? 
+Just as before, we will make repeated gradient descent steps to try to minimize our functions. But now, instead of our simply calling our function as `f = x ** 2`, we need to raise each element to a different power. Given that `mygrad` mirrors numpy's vectorization, is there a quick way we can do this (that doesn't require us to manually raise each element to a power)?
 
 For hyper-parameters, try using `num_steps` of $300$ and `lr` of $0.01$.
 
@@ -186,15 +186,15 @@ num_steps = 300
 for cnt in range(num_steps):
     # Evaluate f for the current value of x (i.e. perform a "forward-pass")
     f = x ** np.array([1, 2, 3]) # <COGLINE>
-    
+
     # Use mygrad to compute df/dx
     f.backward() # <COGLINE>
-    
+
     # Update `x` using gradient descent so that `f` will be smaller
     grad_descent(x, lr) # <COGLINE>
-    
+
     # this will log our current value of `x` for each of our functions and plot it
-    plotter.set_train_batch({"x": x[0].item(), 
+    plotter.set_train_batch({"x": x[0].item(),
                              "x^2": x[1].item(),
                              "x^3": x[2].item()}, batch_size=1)
 
@@ -244,15 +244,15 @@ num_steps = 300
 for cnt in range(num_steps):
     # Evaluate f for the current value of x (i.e. perform a "forward-pass")
     f = (v**2).sum() # <COGLINE>
-    
+
     # Use mygrad to compute df/dx
     f.backward() # <COGLINE>
-    
+
     # Update both `x` and `y` using gradient descent so that `f` will be smaller
     grad_descent(v, lr) # <COGLINE>
-    
+
     # this will log our current value of `x` for each of our functions and plot it
-    plotter.set_train_batch({"x": v[0].item(), 
+    plotter.set_train_batch({"x": v[0].item(),
                              "y": v[1].item()}, batch_size=1)
 
 # This ensures that we have plotted our most up-to-date data
