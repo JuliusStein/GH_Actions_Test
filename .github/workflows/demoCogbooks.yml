@@ -80,7 +80,8 @@ jobs:
     - name: Push to student repository
       uses: cpina/github-action-push-to-another-repository@main
       env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        # API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
         source-directory: 'test_outputs'
         destination-github-username: 'JuliusStein'
