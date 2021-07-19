@@ -76,7 +76,7 @@ jobs:
         branch: main
 
     # ------------- COMMIT AND PUSH TO DEST REPO (NEW) -------------
-    # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
+    # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR 
     - name: Push to student repository
       uses: cpina/github-action-push-to-another-repository@main
       env:
