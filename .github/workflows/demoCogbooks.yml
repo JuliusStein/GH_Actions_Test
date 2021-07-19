@@ -82,7 +82,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
       with:
-        source-directory: 'test-output'
+        source-directory: 'test_outputs'
         destination-github-username: 'JuliusStein'
         destination-repository-name: 'GH_Actions_Output'
         user-email: juliusastein@gmail.com
