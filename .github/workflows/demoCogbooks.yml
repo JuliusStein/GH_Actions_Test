@@ -44,25 +44,14 @@ jobs:
       # Cogbooks Syntax --dir out_directory
       #
       run: |
-        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})
-        do
-          if [[ ${changed_file} -eq *"/Audio"* ]]
-          then
+        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+          if [[ ${changed_file} == *"/Audio"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Audio
-          fi
-
-          if [[ ${changed_file} -eq *"/Video"* ]]
-          then
+          elif [[ ${changed_file} == *"/Video"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Video
-          fi
-
-          if [[ ${changed_file} -eq *"/Language"* ]]
-          then
+          elif [[ ${changed_file} == *"/Language"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Language
-          fi
-
-          if [[ ${changed_file} -eq *"/Math_Materials"* ]]
-          then
+          elif [[ ${changed_file} == *"/Math_Materials"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Math_Materials
           fi
         done
