@@ -67,7 +67,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
-        git diff-index --quiet HEAD || git commit -m "auto-updated student notebooks" -a
+        git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
 
     - name: Push changed files
       uses: ad-m/github-push-action@v0.6.0
@@ -78,12 +78,13 @@ jobs:
     # ------------- COMMIT AND PUSH TO DEST REPO (NEW) -------------
     # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
     - name: Push to student repository
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: 'test-output'
-          destination-github-username: 'JuliusStein'
-          destination-repository-name: 'GH-Actions-Output'
-          user-email: juliusastein@gmail.com
-          target-branch: main
+      uses: cpina/github-action-push-to-another-repository@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source-directory: 'test-output'
+        destination-github-username: 'JuliusStein'
+        destination-repository-name: 'GH-Actions-Output'
+        user-email: juliusastein@gmail.com
+        commit-message: 'Automated student notebook update'
+        target-branch: main
