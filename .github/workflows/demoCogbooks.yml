@@ -87,6 +87,6 @@ jobs:
         user-name: 'JuliusStein'
         destination-repository-username: 'JuliusStein'
         destination-repository-name: 'GH_Actions_Output'
-        user-email: juliusastein@gmail.com
+        user-email: 'juliusastein@gmail.com'
         commit-message: Automated student notebook update
         target-branch: main
