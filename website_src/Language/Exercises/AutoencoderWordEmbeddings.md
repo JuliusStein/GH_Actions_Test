@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Train Your Own Word Embeddings With Autoencoders
+# Train Your Own Word Embeddings With Autoencoders --
 
 ```python
 import numpy as np
@@ -30,11 +30,11 @@ from nltk.tokenize import word_tokenize
 ## Quantifying Context
 
 <!-- #region -->
-We will begin by ascribing words numerical representations based solely on the contexts in which they occur; that is, we will represent words based on the words that commonly occur around them. 
+We will begin by ascribing words numerical representations based solely on the contexts in which they occur; that is, we will represent words based on the words that commonly occur around them.
 
 For example, the sentences "dogs are loud pets" and "cats are quiet pets" not only draw similarities and distinctions between cats and dogs, but these sentences also begin to convey some meaning for the word "pet". By tracking the words that commonly occur in the midst of "pet" across many documents, we hope to arrive at a coherent numerical representation of "pet" that is able encode that the words "cat", "dog", "parakeet", "owner", "care", "train" are all relevant to the concept of "pet".  
 
-Obviously, we will need to define what we mean by "context", and define a window size that we use when "scanning" our text. 
+Obviously, we will need to define what we mean by "context", and define a window size that we use when "scanning" our text.
 
 To begin, we will construct a "context matrix" of the counts of words appearing within a certain distance of other words. More specifically, for each word in our corpus, we will count the appearances of all other words within a context window.
 
@@ -46,12 +46,12 @@ For a given row, the values of the content matrix are the tallies of the appeara
 As an example, for the sentence
 > i am scared of dogs
 
-the word "scared" is in the center of a context window of $2$ words on either side. Then for each of the words contained within the context window, we would increment the element in the row corresponding to "scared" and the column corresponding to the context word. 
+the word "scared" is in the center of a context window of $2$ words on either side. Then for each of the words contained within the context window, we would increment the element in the row corresponding to "scared" and the column corresponding to the context word.
 
 Because this matrix can grow very large as the vocabulary size grows, we will restrict the size of the vocabulary to the most frequent `max_vocab_words` words (again removing the common "glue" words that help make language interpretable, but not meaningful). To make it feasible to train our model, we will also restrict the number words that we consider context words to the most frequent `max_context_words` words. Note that this `max_context_words` restriction is not the same as reducing the length of our context window: we are actually limiting the vocabulary size of context words to the most common `max_context_words` words in the full vocabulary.
 <!-- #endregion -->
 
-Once again, we will use `nltk` to tokenize our data. However, because each of our vocab words will correspond to a row in our context matrix, we should assign a unique integer code to each unique word. Below are three convinience functions for this conversion. 
+Once again, we will use `nltk` to tokenize our data. However, because each of our vocab words will correspond to a row in our context matrix, we should assign a unique integer code to each unique word. Below are three convinience functions for this conversion.
 
 `generate_sorted_words` will sort our tokens by count so that more frequent words will correspond to lower value codes (and thus smaller indices in the context matrix). This will make it much easier to filter our `max_vocab_words`.
 
@@ -64,7 +64,7 @@ Complete the functions below, and test to make sure that each works as desired.
 ```python
 def generate_sorted_words(tokens):
     """ Create list of unique words sorted by count in descending order
-        
+
     Parameters
     ----------
     tokens: List[str]
@@ -77,7 +77,7 @@ def generate_sorted_words(tokens):
     """
     # <COGINST>
     from collections import Counter
-    
+
     counter = Counter(tokens)
     words = [word for word, count in counter.most_common()]
     return words
@@ -87,7 +87,7 @@ def generate_sorted_words(tokens):
 ```python
 def generate_word2code(sorted_words):
     """ Create a dictionary that maps a word to its position in the count-sorted list of words
-    
+
     Parameters
     ---------
     sorted_words: List[str]
@@ -104,12 +104,12 @@ def generate_word2code(sorted_words):
 ```python
 def convert_tokens_to_codes(tokens, word2code):
     """ Convert tokens to codes.
-    
+
         Parameters
     ---------
     tokens: List[str]
         A list of N words, e.g., ["bat", "cat", "apple"]
-        
+
     word2code: Dict[str, int]
         A dictionary mapping words to integer codes, e.g., {"apple": 0, "bat": 1, "cat": 2}
 
@@ -138,16 +138,16 @@ print(codes)
 ```
 
 <!-- #region -->
-We will use the following function, `generate_word_by_context`, to construct our context matrix. See the pseudo-code below for tally up co-occurrence counts between words using nested for-loops: 
+We will use the following function, `generate_word_by_context`, to construct our context matrix. See the pseudo-code below for tally up co-occurrence counts between words using nested for-loops:
 ```
 Initialize a 2D array of zeros, with shape-(max_vocab_words, max_context_words)
 
 Slide window along sequence, starting with the first center word, and begin tallying
     co-occurrences between words within a context window.
-    
+
 if code of center word is >= max_vocab_words:
     skip
-    
+
 for each word in context (on left and right sides)
     if code of context word < max_context_words
         add 1.0 to matrix element in row-(center word) and column-(context word)
@@ -157,7 +157,7 @@ for each word in context (on left and right sides)
 
 As an example, assume context_size is $2$ (i.e., $2$ words to left and $2$ words to right of the center word). If our vocabulary is just `["a", "b", "c"]`, the following diagram shows how we slide out window across the text as well as the various numerical representations (i.e. word-code and word-position) for the text.
 
-```python 
+```python
 "a" "a" "b" "c" "c" "c" "c" "a" "b" "c"   # sequence of words (for this example, we use letters)
  1   1   2   0   0   0   0   1   2   0    # corresponding sequence of word-codes; determined by word-count
  0   1   2   3   4   5   6   7   8   9    # position in sequence
@@ -170,18 +170,18 @@ As an example, assume context_size is $2$ (i.e., $2$ words to left and $2$ words
 <!-- #endregion -->
 
 <!-- #region -->
-This will lead to slow performance in pure Python. **Write your function using for-loops anyway and verify that it passes the test cases provided below.** 
+This will lead to slow performance in pure Python. **Write your function using for-loops anyway and verify that it passes the test cases provided below.**
 
 **Once your function passes the test cases**, we will use a special decorator, `numba.njit` to compile an optimized version of your function. Import `njit` via: `from numba import njit`. Then decorate your function by adding `@njit` to the top of the function definition:
 
 ```python
 @njit
-def generate_word_by_context(codes, max_vocab_words=1000, max_context_words=1000, 
+def generate_word_by_context(codes, max_vocab_words=1000, max_context_words=1000,
                              context_size=2, weight_by_distance=True):
    ...
 ```
 
-and re-run the cell to redefine your function. Try running your now-decorated function on the test cases again. If you get an error, or your Jupyter kernel dies without warning, have an instructor come by to help make your code numba compatible. 
+and re-run the cell to redefine your function. Try running your now-decorated function on the test cases again. If you get an error, or your Jupyter kernel dies without warning, have an instructor come by to help make your code numba compatible.
 
 How does `njit` improve the performance of our function though? Numba is a library designed to compile a subset of Python/NumPy code down to optimized instructions for low-level virtual machine (LLVM). You can call your function as usual, but it will be executed in this LLVM. This can accelerate your code greatly: here, we will see a speedup of ~$100$x ($2$ minutes $\rightarrow$ $2$ seconds). Sadly Numba only supports a small subset of the Python language, and so we cannot simply throw the `njit` decorator on all our code.
 <!-- #endregion -->
@@ -199,40 +199,40 @@ def generate_word_by_context(
     weight_by_distance=True,
 ):
     """ Creates array of vocab word by context word (possibly weighted) co-occurrence counts.
-    
+
     Parameters
     ----------
     codes: numpy.ndarray, shape-(N,)
         A sequence of word codes (integers).
-        
+
     max_vocab_words: int
         The max number of words to include in vocabulary (will correspond to rows in matrix).
-        This is equivalent to the max word code that will be considered/processed as the center 
+        This is equivalent to the max word code that will be considered/processed as the center
         word in a window.
-        
+
     max_context_words: int
-        The max number of words to consider as possible context words (will correspond to columns 
+        The max number of words to consider as possible context words (will correspond to columns
         in a 2D array).
-        This is equivalent to the max word code that will be considered/processed when scanning 
+        This is equivalent to the max word code that will be considered/processed when scanning
         over contexts.
-        
+
     context_size: int
-        The number of words to consider on both sides (i.e., to the left and to the right) of the 
+        The number of words to consider on both sides (i.e., to the left and to the right) of the
         center word in a window.
-        
+
     weight_by_distance: bool
-        Whether or not the contribution of seeing a context word near a center word should be 
+        Whether or not the contribution of seeing a context word near a center word should be
         (down-)weighted by their distance:
 
             False --> contribution is 1.0
             True  --> contribution is 1.0 / (distance between center-word position and context-word)
 
-        For example, suppose ["i", "am", "scared", "of", "dogs"] has codes [45, 10, 222, 25, 88]. 
+        For example, suppose ["i", "am", "scared", "of", "dogs"] has codes [45, 10, 222, 25, 88].
 
-        With weighting False, 
+        With weighting False,
             X[222, 45], X[222, 10], X[222, 25], and X[222, 88] all get incremented by 1.
 
-        With weighting True, 
+        With weighting True,
             X[222, 45] += 1.0/2  <-- distance between "i" and "scared" is 2
             X[222, 10] += 1.0/1  <-- distance between "am" and "scared" is 1
             X[222, 25] += 1.0/1  <-- distance between "of" and "scared" is 1
@@ -253,10 +253,10 @@ def generate_word_by_context(
     # iterate over center-words
     for word_pos in range(context_size, len(codes) - context_size):
         center_code = codes[word_pos]
-        
+
         if center_code >= max_vocab_words:
             continue
-        
+
         # iterate within window
         for j in range(-context_size, context_size + 1):
             if j == 0:
@@ -374,7 +374,7 @@ x_wiki = generate_word_by_context(
 # </COGINST>
 ```
 
-Before we start training a neural network to learn word embeddings, take the $\log_{10}$ of the context matrix. 
+Before we start training a neural network to learn word embeddings, take the $\log_{10}$ of the context matrix.
 This has been shown to improve performance, as the data are scaled to a more reasonable domain for the network to learn on.
 However, since the vast majority of elements in our context matrix will be $0$, we will want to shift all elements in our context matrix by a constant.
 If we want all the elements that are initially $0$ to once again be $0$ after taking the logarithm, what should we choose this constant to be?
@@ -398,12 +398,12 @@ class Autoencoder:
     def __init__(self, context_words, d):
         """ Initializes all of the encoder and decoder layers in our model, setting them
         as attributes of the model.
-        
+
         Parameters
         ----------
         context_words : int
             The number of context words included in our vocabulary
-            
+
         d : int
             The dimensionality of our word embeddings
         """
@@ -411,34 +411,34 @@ class Autoencoder:
         self.encode = dense(context_words, d, weight_initializer=glorot_normal, bias=False)
         self.decode = dense(d, context_words, weight_initializer=glorot_normal, bias=False)
         # </COGINST>
-    
-    
+
+
     def __call__(self, x):
         ''' Passes data as input to our model, performing a "forward-pass".
-        
+
         This allows us to conveniently initialize a model `m` and then send data through it
         to be classified by calling `m(x)`.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, context_words)
             A batch of data consisting of M words from the context matrix,
                 each tracking the number of co-occurences with `context_words` words.
-                
+
         Returns
         -------
         mygrad.Tensor, shape=(M, context_words)
             The result of passing the data through borth the encoder and decoder.
         '''
         return self.decode(self.encode(x)) # <COGLINE>
-    
-    
+
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
@@ -470,11 +470,11 @@ batch_size = 100
 for epoch_cnt in range(5):
     idxs = np.arange(len(x_wiki))
     np.random.shuffle(idxs)  
-    
+
     for batch_cnt in range(0, len(x_wiki) // batch_size):
         batch_indices = idxs[(batch_cnt * batch_size):((batch_cnt + 1) * batch_size)]
         batch = x_wiki[batch_indices]
-        
+
         pred = model(batch)
         loss = mean_squared_loss(pred, batch)
 
@@ -509,7 +509,7 @@ d = 200 # this is the dimensionality of your word embeddings
 # save in word2vec format (first line has vocab_size and dimension; other lines have word followed by embedding)
 with codecs.open(f"my_vectors_{d}.txt", "w", "utf-8") as f:
     f.write(str(max_vocab_words) + " " + str(d) + "\n")
-    
+
     for i in range(max_vocab_words):
         f.write(sorted_words[i] + " " + " ".join([str(x) for x in my_vectors[i,:]]) + "\n")
 
@@ -534,10 +534,10 @@ Each non-comment line of the file is a tuple of 4 words, e.g.,
 
     Athens Greece Baghdad Iraq
 
-This correponds to the analogy: 
+This correponds to the analogy:
 
     "Athens" is to "Greece" as "Baghdad" is to ?
-    
+
 The accuracy method will try to solve each of the 10000+ analogies in the file, which can take a while. Feel free to derive a shorter set of analogies to speed up the testing if you want.
 
 ```python

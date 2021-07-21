@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Manually Training a Simple RNN for the Even Odd Problem
+# Manually Training a Simple RNN for the Even Odd Problem --
 
 ```python
 import numpy as np
@@ -37,11 +37,11 @@ h_t = f_h(x_t W_{xh} + h_{t-1} W_{hh} + b_h) \\
 y_t = f_y(h_t W_{hy} + b_y)
 \end{equation}
 
-where $h_t$ is the hidden (or recurrent) state of the cell and $x_t$ is the sequence-element at step-$t$, for $t=0, 1, \dots, T-1$ (with $T$ as the length of our sequence). $y_{T-1}$ is the final output. The $W$ and $b$ parameters are the *learnable parameters of our model*. Specifically: 
+where $h_t$ is the hidden (or recurrent) state of the cell and $x_t$ is the sequence-element at step-$t$, for $t=0, 1, \dots, T-1$ (with $T$ as the length of our sequence). $y_{T-1}$ is the final output. The $W$ and $b$ parameters are the *learnable parameters of our model*. Specifically:
 
 - $x_t$ is a descriptor-vector for entry-$t$ in our sequence of data. It has a shape-$(1, C)$.
 - $h_t$ is a "hidden-descriptor", which encodes information about $x_t$ *and* information about the preceding entries in our sequence of data, via $h_{t-1}$. It has a shape-$(1, D)$, where $D$ is the dimensionality that we choose for our hidden descriptors (akin to layer size).
-- $W_{xh}$ and $b_h$ hold dense-layer weights and biases, respectively, which are used to process our data $x_t$ in order to form $h_t$. Thus $W_{xh}$ has shape $(C, D)$ and $b_h$ has shape-$(1,D)$. 
+- $W_{xh}$ and $b_h$ hold dense-layer weights and biases, respectively, which are used to process our data $x_t$ in order to form $h_t$. Thus $W_{xh}$ has shape $(C, D)$ and $b_h$ has shape-$(1,D)$.
 - $W_{hh}$ hold dense-layer weights, which are used to process our previous hidden-descriptor $h_{t-1}$ in order to form $h_t$. Thus $W_{hh}$ has shape $(D, D)$.
 - $W_{hy}$ and $b_y$ hold dense-layer weights and biases, respectively, which are used to process our final hidden-descriptor $h_T$ in order to produce our classification scores, $y_T$. Thus $W_{hy}$ has shape $(D, K)$ and $b_h$ has shape-$(1,K)$. Where $K$ is our number of classes. See that, given our input sequence $x$, we are ultimately producing $y_{T-1}$ of shape-$(1, K)$.
 
@@ -65,7 +65,7 @@ Let the output $y_t$ of the RNN cell at sequence-step $t$ be 1 if there have bee
 | 0         | 1     | 1       | odd so far, see 1, now even |
 | 0         | 0     | 0       | odd so far, see 0, stay odd |
 
-This should look familiar: it's exactly the XOR problem! If you aren't familiar with the XOR problem, know that it is simply a type of boolean operation, much like AND or OR. XOR will only return True (or alternatively 1) if both inputs have *different* boolean values. 
+This should look familiar: it's exactly the XOR problem! If you aren't familiar with the XOR problem, know that it is simply a type of boolean operation, much like AND or OR. XOR will only return True (or alternatively 1) if both inputs have *different* boolean values.
 
 The XOR problem cannot be solved by a neural network that has no hidden layers. Instead, the network needs intermediate "helpers" (nodes in a hidden layer) that compute OR and NAND (which can then be combined into the final XOR).
 
@@ -77,9 +77,9 @@ h_t = \begin{bmatrix}h^\text{OR}_t & h^\text{NAND}_t\end{bmatrix}
 
 where
 * $h^\text{OR}_t$ will mean that the previous output $y_{t-1}$ was 1 ("even") **OR** the current input $x_t$ is 1, or both
-* $h^\text{NAND}_t$ will mean it's **NOT** the case that previous output $y_{t-1}$ was 1 ("even") **AND** the current input $x_t$ is 1 
+* $h^\text{NAND}_t$ will mean it's **NOT** the case that previous output $y_{t-1}$ was 1 ("even") **AND** the current input $x_t$ is 1
 
-So the hidden variables and output at time $t$ are related to certain values from time $t-1$: 
+So the hidden variables and output at time $t$ are related to certain values from time $t-1$:
 
 > $h^\text{OR}_{t}$ is a function of $y_{t-1}$ and $x_t$
 
@@ -171,7 +171,7 @@ Looking at just $h^\text{OR}_t$ for now, we have
 h^\text{OR}_t = \text{hardsigmoid}\left(x_t W_{xh}^{(0,0)} +  h^\text{OR}_{t-1}\cdot W_{hh}^{(0,0)}  + h^\text{NAND}_{t-1}\cdot W_{hh}^{(1,0)}  + b^\text{OR}\right)
 \end{equation}
 
-Incorporating actual values from the table and focusing on the sign of the input to $f$ (hard-sigmoid), we ultimately arrive at a system of six constraints: 
+Incorporating actual values from the table and focusing on the sign of the input to $f$ (hard-sigmoid), we ultimately arrive at a system of six constraints:
 
 \begin{equation}
 \begin{bmatrix}
@@ -204,7 +204,7 @@ where the 3 columns correspond to $x_t$, $h^\text{OR}_{t-1}$, and $h^\text{NAND}
 Now find (by hand!) a set of weights that satisfy these constraints!
 
 ```python
-# here's the matrix from the equation above, 
+# here's the matrix from the equation above,
 # you can use for experimenting and testing
 A = np.array([[1, 1, 1],
               [0, 1, 1],
@@ -372,35 +372,35 @@ def step(W_xh, W_hh, b_h, W_hy, b_y, h, x):
     Applies forward pass of simple RNN according to equations:
         h_t = hardsigmoid(x_t W_{xh} + h_{t-1} W_{hh} + b_h)
         y_t = hardsigmoid(h_t W_{hy} + b_y)
-    
+
     Parameters
     ----------
     W_xh: ndarray, shape=(1, 2)
         The weights used in computing h_t from the current value in the sequence
-    
+
     W_hh: ndarray, shape=(2, 2)
         The weights used in computing h_t from the previous hidden state
-    
+
     b_h: ndarray, shape=(1, 2)
         The bias used for computing the current hidden state
-    
+
     W_hy: ndarray, shape=(2, 1)
         The weights used for computing y_t from h_t
-    
+
     b_y: ndarray, shape=(1, 1)
         The bias for computing the y term
-    
+
     h: ndarray, shape=(1, 2)
         The hidden state of the previous time step
-    
+
     x: int
         The current value (1 or 0) in the even-odd sequence
-    
+
     Returns
     -------
     h_t: ndarray, shape=(1, 2)
         The hidden state of the current time step
-    
+
     y_t: ndarray, shape=(1, 1)
         An integer tracking whether the sequence is even (y=1) or odd (y=0)
     """
@@ -458,7 +458,7 @@ ys = []
 for x in xs:
     y, h = step(W_xh, W_hh, b_h, W_hy, b_y, h, x)
     ys.append(y.item())
-    
+
 ys
 # </COGINST>
 ```

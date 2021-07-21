@@ -16,7 +16,7 @@ jupyter:
 ---
 
 <!-- #region -->
-# Fun With Word Embeddings
+# Fun With Word Embeddings --
 
 Word embeddings (or "word vectors") are mappings from discrete word tokens (e.g., the word "kitten") to numerical vectors, e.g., a 50-dimensional vector of real numbers. The goal is for words that are related (such as "scared" and "afraid") to map to points that are close together in the 50-dimensional space.
 
@@ -40,10 +40,10 @@ and
 
 so it's likely that the words are related in some way. The relationship can be semantic (related to meaning) or syntactic (e.g., often occur between a determiner and a noun) In this case, "scared" and "afraid" are related semantically (similar meaning) and also syntactically (both adjectives).
 
-One really neat thing that researchers discovered is that word embeddings can be used to solve analogies, e.g., 
+One really neat thing that researchers discovered is that word embeddings can be used to solve analogies, e.g.,
 
     "puppy" is to "dog" as "kitten" is to ?
-    
+
 Amazingly, this kind of puzzle can be solved by doing computations on word vectors:
 ````python
 wv["kitten"] - wv["puppy"] + wv["dog"]
@@ -68,7 +68,7 @@ import matplotlib.pyplot as plt
 
 ## 1 Load pre-trained GloVe embeddings using gensim library
 
-The [gensim](https://radimrehurek.com/gensim/) library is a great tool for working with word embeddings and doing other things with text (like analyzing latent topics). If you need to install gensim, try: 
+The [gensim](https://radimrehurek.com/gensim/) library is a great tool for working with word embeddings and doing other things with text (like analyzing latent topics). If you need to install gensim, try:
 
     pip install gensim
 
@@ -90,11 +90,11 @@ glove = KeyedVectors.load_word2vec_format(path, binary=False)
 t1 = time.time()
 print("elapsed %ss" % (t1 - t0))
 # 50d: elapsed 17.67420792579651s
-# 100d: 
+# 100d:
 ```
 
 <!-- #region -->
-You can get the word vector for a word (string) with the following: 
+You can get the word vector for a word (string) with the following:
 ````python
 glove["word"]
 ````
@@ -184,16 +184,16 @@ The following helper function will help us visualize word pairs in the reduced 2
 ```python
 def plot_pairs(words, word_vectors, svd):
     """ Plots pairs of words in 2D.
-    
+
     Parameters
     ----------
     words: list[str]
         A list with an even number of words, where pairs of words have some common relationship
         (like profession and tool), e.g., ["carpenter", "hammer", "plumber", "wrench"].
-        
+
     word_vectors: KeyedVectors instance
         A word embedding model in gensim's KeyedVectors wrapper.
-        
+
     svd: TruncatedSVD instance
         A truncated SVD instance that's already been fit (with n_components=2).
     """
@@ -207,7 +207,7 @@ def plot_pairs(words, word_vectors, svd):
 
     # plot points
     plt.scatter(words_2D[:,0], words_2D[:,1])
-    
+
     # plot labels
     for i, txt in enumerate(words):
         plt.annotate(txt, (words_2D[i, 0], words_2D[i, 1]))

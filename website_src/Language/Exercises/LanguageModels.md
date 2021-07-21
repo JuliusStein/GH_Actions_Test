@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Language Models
+# Language Models --
 
 This notebook explores using character-level n-grams to model language. We will learn how to train models by analyzing a body of text, and then use them for a fun task: generating new language in the style of a model.
 
@@ -40,18 +40,18 @@ We will need to make use of this `unzip` function. Try playing with this functio
 def unzip(pairs):
     """
     "unzips" of groups of items into separate tuples.
-    
+
     Example: pairs = [("a", 1), ("b", 2), ...] --> (("a", "b", ...), (1, 2, ...))
-    
+
     Parameters
     ----------
     pairs : Iterable[Tuple[Any, ...]]
         An iterable of the form ((a0, b0, c0, ...), (a1, b1, c1, ...))
-    
+
     Returns
     -------
     Tuple[Tuples[Any, ...], ...]
-       A tuple containing the "unzipped" contents of `pairs`; i.e. 
+       A tuple containing the "unzipped" contents of `pairs`; i.e.
        ((a0, a1, ...), (b0, b1, ...), (c0, c1), ...)
     """
     return tuple(zip(*pairs))
@@ -64,7 +64,7 @@ Ever wonder why the bonus round of Wheel of Fortune automatically gives the cont
 
 Let's find out by analyzing a particular corpus of English text: Wikipedia. Thanks to Evan Jones for providing a clean text-only version of top Wikipedia articles (based on the Wikipedia "release version" project): http://www.evanjones.ca/software/wikipedia2text.html
 
-Load the entire contents of "wikipedia2text-extracted.txt" into a single string. Because some of these articles contain non-[ASCII](http://www.asciitable.com/) characters (for instance, some Chinese characters), you will need to open the file in binary-read mode: `mode='rb'`. Instead of reading in a typical string, this will read in a `bytes` object, which is simply your machine's memory-encoding for the characters. To make a long story short, you can simply call the method `decode` on this bytes-instance to decode the bytes into a familiar string. E.g. 
+Load the entire contents of "wikipedia2text-extracted.txt" into a single string. Because some of these articles contain non-[ASCII](http://www.asciitable.com/) characters (for instance, some Chinese characters), you will need to open the file in binary-read mode: `mode='rb'`. Instead of reading in a typical string, this will read in a `bytes` object, which is simply your machine's memory-encoding for the characters. To make a long story short, you can simply call the method `decode` on this bytes-instance to decode the bytes into a familiar string. E.g.
 
 ```python
 with open(path_to_wikipedia, "rb") as f:
@@ -73,7 +73,7 @@ with open(path_to_wikipedia, "rb") as f:
 ```
 After decoding from bytes to a string, **make all of the characters in the string lowercase** (you do not need a for-loop for this!)
 
-Confirm that there are over 63 million characters total, in the string. 
+Confirm that there are over 63 million characters total, in the string.
 <!-- #endregion -->
 
 ```python
@@ -148,7 +148,7 @@ Create a variable called `freqs`, which is also a list of tuples, but instead co
      ('a', 0.0865778000521603),
      ...
      ('q', 0.0010429083984244488)]
-     
+
 You should **not** iterate over the entire corpus to get the total letter count.
 
 ```python
@@ -168,7 +168,7 @@ print(sum(freq for _, freq in freqs))
 <!-- #region -->
 ### 1.2 Plot letter frequency histogram
 
-Using 
+Using
 ```
 fig, ax = plt.subplots()
 ```
@@ -213,7 +213,7 @@ print(tokens[:10])
 # </COGINST>
 ```
 
-As you did above with characters, count the occurences of all of the different words. 
+As you did above with characters, count the occurences of all of the different words.
 
 ```python
 # <COGINST>
@@ -229,11 +229,11 @@ word_counter.most_common()[:20]
 # </COGINST>
 ```
 
-What do you notice about this list? Do you see any people, places, or other distinguishing words in towards the top of this list? Can you discern anything about the content of the articles from these words (other than the fact that they predominantly contain English)? 
+What do you notice about this list? Do you see any people, places, or other distinguishing words in towards the top of this list? Can you discern anything about the content of the articles from these words (other than the fact that they predominantly contain English)?
 
 These abundant "glue" words, **referred to as "stop words" in NLP applications**, are ubiquitous to modern English. They provide the necessary glue needed for a coherent grammar, but do not provide actual meaning to text. Often, we will want to filter them out, so that we can get at the "meaningful" words in a corpus.
 
-See https://en.wikipedia.org/wiki/Stop_words for more details. 
+See https://en.wikipedia.org/wiki/Stop_words for more details.
 
 
 ## 3 Creating an n-gram language model
@@ -250,8 +250,8 @@ Just as we did above, we will want to take a counter of `letter -> count` pairs,
 
 ```python
 def normalize(counter):
-    """ Convert a `letter -> count` counter to a list 
-   of (letter, frequency) pairs, sorted in descending order of 
+    """ Convert a `letter -> count` counter to a list
+   of (letter, frequency) pairs, sorted in descending order of
    frequency.
 
     Parameters
@@ -281,7 +281,7 @@ def normalize(counter):
     # </COGINST>
 ```
 
-In the following, we will want to make some serious use of Python's `collections` module. Not only do we want to use the `Counter` class again, we also will want to use a [defaultdict](http://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_III_Sets_and_More.html#Default-Dictionary). 
+In the following, we will want to make some serious use of Python's `collections` module. Not only do we want to use the `Counter` class again, we also will want to use a [defaultdict](http://www.pythonlikeyoumeanit.com/Module2_EssentialsOfPython/DataStructures_III_Sets_and_More.html#Default-Dictionary).
 
 
 Now we'll create the function to actually analyze the n-grams (a length-n sequence of characters) that occur in a text:
@@ -307,7 +307,7 @@ Here's an illustration of the process for analyzing the text "cacao" in terms of
     history is "cac", next char is "a", increment counts["cac"]["a"]
     history is "aca", next char is "o", increment counts["aca"]["o"]
     history is "cao", next char does not exists. End process
-    
+
 Thus our "model" simply keeps track of all length-(n-1) histories in a given text, and the counts of the various characters that follow each history
 
 So we will want to our model to be a default dictionary, whose default value is an empty `Counter` instance. Thus any time we encounter a new history, our model will create an empty counter for that history.
@@ -321,7 +321,7 @@ from collections import defaultdict
 
 def train_lm(text, n):
     """ Train character-based n-gram language model.
-        
+
     This will learn: given a sequence of n-1 characters, what the probability
     distribution is for the n-th character in the sequence.
 
@@ -336,20 +336,20 @@ def train_lm(text, n):
          '~c': [('a', 1.0)],
          '~~': [('c', 1.0)]}
 
-    Tildas ("~") are used for padding the history when necessary, so that it's 
-    possible to estimate the probability of a seeing a character when there 
+    Tildas ("~") are used for padding the history when necessary, so that it's
+    possible to estimate the probability of a seeing a character when there
     aren't (n - 1) previous characters of history available.
 
     So, according to this text we trained on, if you see the sequence 'ac',
     our model predicts that the next character should be 'a' 100% of the time.
 
-    For generating the padding, recall that Python allows you to generate 
-    repeated sequences easily: 
+    For generating the padding, recall that Python allows you to generate
+    repeated sequences easily:
        `"p" * 4` returns `"pppp"`
 
     Parameters
     -----------
-    text: str 
+    text: str
         A string (doesn't need to be lowercased).
     n: int
         The length of n-gram to analyze.
@@ -358,8 +358,8 @@ def train_lm(text, n):
     -------
     Dict[str, List[Tuple[str, float]]]
       {n-1 history -> [(letter, normalized count), ...]}
-    A dict that maps histories (strings of length (n-1)) to lists of (char, prob) 
-    pairs, where prob is the probability (i.e frequency) of char appearing after 
+    A dict that maps histories (strings of length (n-1)) to lists of (char, prob)
+    pairs, where prob is the probability (i.e frequency) of char appearing after
     that specific history.
 
     Examples
@@ -373,17 +373,17 @@ def train_lm(text, n):
     # <COGINST>
     raw_lm = defaultdict(Counter)
     history = "~" * (n - 1)
-    
+
     # count number of times characters appear following different histories
     # `raw_lm`: {history -> Counter}
     for char in text:
         raw_lm[history][char] += 1
         # slide history window to the right by one character
         history = history[1:] + char
-    
+
     # create final dictionary, normalizing the counts for each history
     lm = {history : normalize(counter) for history, counter in raw_lm.items()}
-    
+
     return lm
     # </COGINST>
 ```
@@ -400,9 +400,9 @@ lm
 Now let's test our function on more serious example: a small snippet of text from "The Cat in the Hat" by Dr. Seuss.
 
 ```python
-text = """The sun did not shine, it was too wet to play, 
-so we sat in the house all that cold, cold wet day. 
-I sat there with Sally. We sat here we two 
+text = """The sun did not shine, it was too wet to play,
+so we sat in the house all that cold, cold wet day.
+I sat there with Sally. We sat here we two
 and we said 'How we wish we had something to do.'"""
 ```
 
@@ -433,32 +433,32 @@ lm3["th"]
 <!-- #region -->
 ## 4 Generating text
 
-A fun thing to do with language models is to generate random text in the style of the model by generating letters using the learned probability distributions. 
+A fun thing to do with language models is to generate random text in the style of the model by generating letters using the learned probability distributions.
 
 First we'll create a function to randomly draw a single letter given a particular history, based on the probabilities stored in our language model.
 
 Hint: `np.random.choice(choices, p=probabilities)` will return an element from choices according to the specified probabilities. For example, `np.random.choice(["a", "b"], [0.25, 0.75])` will return an "a" 25% of the time and a "b" 75% of the time.
 
-Complete the following function. You will want to make use of the `unzip` function defined above to perform the following: 
+Complete the following function. You will want to make use of the `unzip` function defined above to perform the following:
 
 ```[(char0, prob0), (char1, prob1), ...] -> ((char0, char1, ...), (prob0, prob1, ...))```
 <!-- #endregion -->
 
 ```python
 def generate_letter(lm, history):
-    """ Randomly picks letter according to probability distribution associated with 
+    """ Randomly picks letter according to probability distribution associated with
     the specified history, as stored in your language model.
 
     Note: returns dummy character "~" if history not found in model.
 
     Parameters
     ----------
-    lm: Dict[str, List[Tuple[str, float]]] 
-        The n-gram language model. 
+    lm: Dict[str, List[Tuple[str, float]]]
+        The n-gram language model.
         I.e. the dictionary: history -> [(char, freq), ...]
 
     history: str
-        A string of length (n-1) to use as context/history for generating 
+        A string of length (n-1) to use as context/history for generating
         the next character.
 
     Returns
@@ -500,14 +500,14 @@ and so on. The text generated so far would be "There".
 
 ```python
 def generate_text(lm, n, nletters=100):
-    """ Randomly generates `nletters` of text by drawing from 
-    the probability distributions stored in a n-gram language model 
+    """ Randomly generates `nletters` of text by drawing from
+    the probability distributions stored in a n-gram language model
     `lm`.
 
     Parameters
     ----------
     lm: Dict[str, List[Tuple[str, float]]]
-        The n-gram language model. 
+        The n-gram language model.
         I.e. the dictionary: history -> [(char, freq), ...]
     n: int
         Order of n-gram model.

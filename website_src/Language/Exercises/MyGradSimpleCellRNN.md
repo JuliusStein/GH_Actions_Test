@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 %matplotlib notebook
 ```
 
-# Simple RNN Cell in MyGrad
+# Simple RNN Cell in MyGrad --
 
 In this notebook, we will implement a simple RNN model that can be used for sequence classification problems.
 We'll apply this RNN to the **classification problem of determining if a sequence of digits (0-9) is the concatentation of two identical halves.**
@@ -42,7 +42,7 @@ For example:
 - `[1, 2, 3, 1, 2, 3]` -> contains identical halves
 - `[1, 9, 2, 1, 8, 3]` -> does not contain identical halves
 
-Our model will take a single sequence of data ($x$) of shape $(T, C)$, where $T$ is the length of our sequence and $C$ is the dimensionality of each entry in our sequence, and produce $K$ classification scores (assuming there are $K$ classes for the problem). 
+Our model will take a single sequence of data ($x$) of shape $(T, C)$, where $T$ is the length of our sequence and $C$ is the dimensionality of each entry in our sequence, and produce $K$ classification scores (assuming there are $K$ classes for the problem).
 
 In the context of word-embeddings, if each word in our vocabulary has a 50-dimensional word-embedding representation, and we have with a sentence containing 8 words, then $x$ would have a shape $(8, 50$) - representing that sentence numerically. Our model would produce $K$ classification scores for this input data.
 
@@ -56,11 +56,11 @@ We'll be using the following update equations for a simple RNN cell:
 <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $y_{T-1} = h_{T-1} W_{hy} + b_y$
 
-where $h_t$ is the hidden (or recurrent) state of the cell and $x_t$ is the sequence-element at step-$t$, for $t=0, 1, \dots, T-1$. ($T$ is the length of our sequence.) $y_{T-1}$ is the output. The $W$ and $b$ parameters are the *learnable parameters of our model*. Specifically: 
+where $h_t$ is the hidden (or recurrent) state of the cell and $x_t$ is the sequence-element at step-$t$, for $t=0, 1, \dots, T-1$. ($T$ is the length of our sequence.) $y_{T-1}$ is the output. The $W$ and $b$ parameters are the *learnable parameters of our model*. Specifically:
 
 - $x_t$ is a descriptor-vector for entry-$t$ in our sequence of data. It has a shape-$(1, C)$.
 - $h_t$ is a "hidden-descriptor", which encodes information about $x_t$ *and* information about the preceding entries in our sequence of data, via $h_{t-1}$. It has a shape-$(1, D)$, where $D$ is the dimensionality that we choose for our hidden descriptors (akin to layer size).
-- $W_{xh}$ and $b_h$ hold dense-layer weights and biases, respectively, which are used to process our data $x_t$ in order to form $h_t$. Thus $W_{xh}$ has shape $(C, D)$ and $b_h$ has shape-$(1,D)$. 
+- $W_{xh}$ and $b_h$ hold dense-layer weights and biases, respectively, which are used to process our data $x_t$ in order to form $h_t$. Thus $W_{xh}$ has shape $(C, D)$ and $b_h$ has shape-$(1,D)$.
 - $W_{hh}$ hold dense-layer weights, which are used to process our previous hidden-descriptor $h_{t-1}$ in order to form $h_t$. Thus $W_{hh}$ has shape $(D, D)$.
 - $W_{hy}$ and $b_y$ hold dense-layer weights and biases, respectively, which are used to process our final hidden-descriptor $h_T$ in order to produce our classification scores, $y_T$. Thus $W_{hy}$ has shape $(D, K)$ and $b_h$ has shape-$(1,K)$. Where $K$ is our number of classes. See that, given our input sequence $x$, we are ultimately producing $y_{T-1}$ of shape-$(1, K)$.
 
@@ -98,15 +98,15 @@ class RNN():
     end of the sequence of input data."""
     def __init__(self, dim_input, dim_recurrent, dim_output):
         """ Initializes all layers needed for RNN
-        
+
         Parameters
         ----------
-        dim_input: int 
+        dim_input: int
             Dimensionality of data passed to RNN (C)
-        
+
         dim_recurrent: int
             Dimensionality of hidden state in RNN (D)
-        
+
         dim_output: int
             Dimensionality of output of RNN (K)
         """
@@ -118,19 +118,19 @@ class RNN():
         self.fc_h2h = dense(dim_recurrent, dim_recurrent, weight_initializer=glorot_normal, bias=False)
         self.fc_h2y = dense(dim_recurrent, dim_output, weight_initializer=glorot_normal)
         # </COGINST>
-    
-    
+
+
     def __call__(self, x):
         """ Performs the full forward pass for the RNN.
-        
+
         Note that we only care about the last y - the final classification scores for the full sequence.
-        
-        
+
+
         Parameters
         ----------
         x: Union[numpy.ndarray, mygrad.Tensor], shape=(T, C)
             The one-hot encodings for the sequence
-        
+
         Returns
         -------
         mygrad.Tensor, shape=(1, K)
@@ -140,9 +140,9 @@ class RNN():
         #
         # You will want to loop over each x_t to compute the corresponding h_t.
         #
-        # A standard for-loop is appropriate here. Be mindful of what the shape 
+        # A standard for-loop is appropriate here. Be mindful of what the shape
         # of x_t should be versus the shape of the item that it produced by the
-        # for-loop. 
+        # for-loop.
         #
         # Note that you can do a for-loop over a mygrad-tensor and it will
         # produce sub-tensors that are tracked by the computational graph.
@@ -151,17 +151,17 @@ class RNN():
         h = np.zeros((1, self.fc_h2h.weight.shape[0]), dtype=np.float32)
         for x_t in x:
             h = relu(self.fc_x2h(x_t[np.newaxis]) + self.fc_h2h(h))
-        
+
         return self.fc_h2y(h)
         # </COGINST>
-    
-    
+
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
@@ -186,8 +186,8 @@ We will be representing each digit using the so-called "**one-hot encoding**"
  * 3 $\longrightarrow$ [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
  * $\vdots$
  * 9 $\longrightarrow$ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
- 
-Thus a sequence of $T$ one-hot encoded digits will be represented by a shape-$(T,C=10)$ array. 
+
+Thus a sequence of $T$ one-hot encoded digits will be represented by a shape-$(T,C=10)$ array.
 
 For example, the sequence
 ```python
@@ -236,25 +236,25 @@ array([2, 0, 2, 0])
 def generate_sequence(pattern_length_min=1, pattern_length_max=10, palindrome=False):
     """
     Randomly generate a sequence consisting of two equal-length patterns of digits,
-    concatenated end-to-end. 
-    
-    There should be a 50% chance that the two patterns are *identical* and a 50% 
+    concatenated end-to-end.
+
+    There should be a 50% chance that the two patterns are *identical* and a 50%
     chance that the two patterns are distinct.
-    
+
     Parameters
     ----------
     pattern_length_min : int, optional (default=1)
-       The smallest permissable length of the pattern (half the length of the 
+       The smallest permissable length of the pattern (half the length of the
        smallest sequence)
-       
+
     pattern_length_max : int, optional (default=10)
-       The longest permissable length of the pattern (half the length of the 
+       The longest permissable length of the pattern (half the length of the
        longest sequence)
-       
+
     palindome : bool, optional (default=False)
         If `True`, instead of a sequence with the two identical patterns, generate
         a palindrome instead.
-    
+
     Returns
     -------
     Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]
@@ -266,7 +266,7 @@ def generate_sequence(pattern_length_min=1, pattern_length_max=10, palindrome=Fa
     pattern_length = np.random.randint(pattern_length_min, pattern_length_max + 1)
     pattern = np.random.randint(0, 10, pattern_length)
     match = np.random.rand() >= 0.5
-    
+
     sequence = np.zeros(2 * pattern_length, dtype=np.int64)
     sequence[:pattern_length] = pattern
     if match:
@@ -277,7 +277,7 @@ def generate_sequence(pattern_length_min=1, pattern_length_max=10, palindrome=Fa
         while np.array_equal(second_half, pattern):
             second_half = np.random.randint(0, 10, pattern_length)
         sequence[pattern_length:] = second_half
-    
+
     # one-hot encoding of digits 0 through 9
     # x = np.zeros(pattern_length * 2, 10, dtype)
     x = np.zeros((len(sequence), 10), dtype=np.float32)
@@ -285,7 +285,7 @@ def generate_sequence(pattern_length_min=1, pattern_length_max=10, palindrome=Fa
 
     for i, ch in enumerate(sequence):
         x[i, ch] = 1
-    
+
     return x, y, sequence
     # </COGINST>
 ```
@@ -332,11 +332,11 @@ optimizer = Adam(model.parameters)
 <!-- #region -->
 Train the model for 100000 iterations. Instead of pre-generating a set of training sequences, we'll use a strategy of randomly sampling a new input sequence every iteration using the method you created earlier. Use pattern_length_min = 1 and pattern_length_max = 10.
 
-**Do not plot batch-level metrics. We will be processing so many sequences, that plotting all the losses and accuracies will become a performance bottleneck**. You can set your loss and accuracy for each batch without plotting, using 
+**Do not plot batch-level metrics. We will be processing so many sequences, that plotting all the losses and accuracies will become a performance bottleneck**. You can set your loss and accuracy for each batch without plotting, using
 
 ```python
-plotter.set_train_batch({"loss":loss.item(), "accuracy":acc}, 
-                        batch_size=1, 
+plotter.set_train_batch({"loss":loss.item(), "accuracy":acc},
+                        batch_size=1,
                         plot=False)
 ```
 
@@ -355,18 +355,18 @@ plot_every = 500
 
 for k in range(100000):
     x, target, sequence = generate_sequence(palindrome=False)
-    
+
     output = model(x)
-        
+
     loss = softmax_crossentropy(output, target)
-    
+
     loss.backward()
     optimizer.step()
-    
+
     acc = float(np.argmax(output.squeeze()) == target.item())
 
     plotter.set_train_batch({"loss":loss.item(), "accuracy":acc}, batch_size=1, plot=False)
-    
+
     if k % plot_every == 0 and k > 0:
         plotter.set_train_epoch()
 # </COGINST>
@@ -387,7 +387,7 @@ with mg.no_autodiff:
     for i in range(100000):
         if i % 5000 == 0:
             print("i = %s" % i)
-        
+
         x, target, sequence = generate_sequence()
         output = model(x).squeeze()
 

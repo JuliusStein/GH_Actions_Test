@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Introduction to Autoencoders
+# Introduction to Autoencoders --
 
 ```python
 import mygrad as mg
@@ -39,7 +39,7 @@ import matplotlib.pyplot as plt
 ### 1.1 What Exactly Is An Autoencoder?
 
 
-Autoencoders are a family of neural networks that can be leveraged to learn dense, abstract representations of data. These representations can often be used to make salient important, high-level features about our data. As an example of an encoder network, Facenets's facial-recognition model could take a picture of a face and **encode it** into a 512-dimensional vector that allowed us to tell the difference between individuals based on their personal appearances. 
+Autoencoders are a family of neural networks that can be leveraged to learn dense, abstract representations of data. These representations can often be used to make salient important, high-level features about our data. As an example of an encoder network, Facenets's facial-recognition model could take a picture of a face and **encode it** into a 512-dimensional vector that allowed us to tell the difference between individuals based on their personal appearances.
 
 We can think of an autoencoder as two separate neural nets: an encoder and a decoder. We pass in data to our encoder, which generates a useful, abstract representation for the data. This abstract representation of the data is then passed into the decoder, which will try to recover the original data. We train the encoder and decoder simultaneously, with the autoencoder learning to how to compress and uncompress the data in the most lossless way possible.
 
@@ -68,35 +68,35 @@ class LinearAutoencoder:
     def __init__(self, D_full, D_hidden):
         """ This initializes all of the layers in our model, and sets them
         as attributes of the model.
-        
+
         Parameters
         ----------
         D_full : int
             The size of the inputs.
-            
+
         D_hidden : int
             The size of the 'bottleneck' layer (i.e., the reduced dimensionality).
         """
         # Initialize the encoder and decorder dense layers using the `he_normal` initialization
         # schemes.
-        # What should the input and output dimensions of each layer be? 
+        # What should the input and output dimensions of each layer be?
         # <COGINST>
         self.dense1 = dense(D_full, D_hidden, weight_initializer=he_normal, bias=False)
         self.dense2 = dense(D_hidden, D_full, weight_initializer=he_normal, bias=False)
         # </COGINST>
-        
+
     def __call__(self, x):
         '''Passes data as input to our model, performing a "forward-pass".
-        
+
         This allows us to conveniently initialize a model `m` and then send data through it
         to be classified by calling `m(x)`.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, D_full)
             A batch of data consisting of M pieces of data,
             each with a dimentionality of D_full.
-            
+
         Returns
         -------
         mygrad.Tensor, shape=(M, D_full)
@@ -105,13 +105,13 @@ class LinearAutoencoder:
         # keep in mind that this is a linear model - there is no "activation function"
         # involved here
         return self.dense2(self.dense1(x)) # <COGLINE>
-        
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
@@ -124,7 +124,7 @@ class LinearAutoencoder:
 
 We will use the Iris dataset, in which each datum is a 4-dimensional vector, and train an Autoencoder that will learn to compress the data into a 2-dimensional space. By reducing the dimensionality of the data, we will be able to visually identify clusters within the dataset.
 
-The Iris dataset consists of 150 4-dimensional feature vectors describing three classes of Iris flowers. Each sample is a row vector 
+The Iris dataset consists of 150 4-dimensional feature vectors describing three classes of Iris flowers. Each sample is a row vector
 \begin{equation}
 \vec{x}=\begin{bmatrix}\text{sepal length} & \text{sepal width} & \text{petal length} & \text{petal width}\end{bmatrix}
 \end{equation}
@@ -167,21 +167,21 @@ batch_size = 25
 for epoch_cnt in range(num_epochs):
     idxs = np.arange(len(iris))
     np.random.shuffle(idxs)
-    
+
     for batch_cnt in range(0, len(iris)//batch_size):
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
         batch = iris[batch_indices]
 
-        prediction = model(batch) 
+        prediction = model(batch)
         truth = iris[batch_indices]
-        
+
         loss = mean_squared_loss(prediction, truth)
         loss.backward()
-        
+
         optim.step()
 
         plotter.set_train_batch({"loss" : loss.item()}, batch_size=batch_size)
-        
+
     # epoch loss
     if epoch_cnt % 100 == 0:
         with mg.no_autodiff:
@@ -193,7 +193,7 @@ for epoch_cnt in range(num_epochs):
 # </COGINST>
 ```
 
-To obtain a reduced-dimensional embedding of a datum **only apply the encoder** to that datum. 
+To obtain a reduced-dimensional embedding of a datum **only apply the encoder** to that datum.
 That is, do not perform a full forward pass of your model - instead, only apply the first dense layer to the dataset.
 
 ```python

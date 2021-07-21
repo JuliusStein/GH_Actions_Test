@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Notebook of Failure 
+# Notebook of Failure --
 
 (aka "Even Odd Problem with Feed Forward Networks")
 
@@ -68,10 +68,10 @@ def generate_dataset(N, T):
     ----------
     N : int
         The number of even/odd sequences to generate
-        
+
     T : int
         The length of each even/odd sequence
-    
+
     Returns
     -------
     Tuple[numpy.ndarray, numpy.ndarray], shapes=(N, T) & (T,)
@@ -158,12 +158,12 @@ class Model:
 
     def __call__(self, x):
         """ The model's forward pass functionality.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(N, T)
             The batch of size-N.
-            
+
         Returns
         -------
         mygrad.Tensor, shape=(N, 2)
@@ -197,16 +197,16 @@ Now, create an accuracy function to compare your predictions to your labels.
 def accuracy(predictions, truth):
     """
     Returns the mean classification accuracy for a batch of predictions.
-    
+
     Parameters
     ----------
     predictions : Union[numpy.ndarray, mg.Tensor], shape=(N, 2)
         The scores for 2 classes, for a batch of N data points
-        
+
     truth : numpy.ndarray, shape=(N,)
         The true labels for each datum in the batch: each label is an
         integer in [0, 1]
-    
+
     Returns
     -------
     float
@@ -232,7 +232,7 @@ num_epochs = 1500
 for epoch_cnt in range(num_epochs):
     idxs = np.arange(len(xtrain))
     np.random.shuffle(idxs)  
-    
+
     for batch_cnt in range(0, len(xtrain) // batch_size):
         # random batch of our training data
         # <COGINST>
@@ -243,33 +243,33 @@ for epoch_cnt in range(num_epochs):
 
         # perform the forward pass on our batch
         prediction = model(batch) # <COGLINE>
-        
+
         # calculate the loss
         loss = softmax_crossentropy(prediction, truth) # <COGLINE>
-        
+
         # perform backpropagation
         loss.backward() # <COGLINE>
-        
+
         # update your parameters
         optim.step() # <COGLINE>
-        
+
         # calculate the accuracy
         acc = accuracy(prediction, truth) # <COGLINE>
-        
+
         plotter.set_train_batch({"loss" : loss.item(), "accuracy" : acc}, batch_size=batch_size)
-    
+
     for batch_cnt in range(0, len(xtest) // batch_size):
         idxs = np.arange(len(xtest))
         batch_indices = idxs[batch_cnt * batch_size : (batch_cnt + 1) * batch_size]
         batch = xtest[batch_indices]
         truth = ytest[batch_indices]
-        
+
         with mg.no_autodiff:
             prediction = model(batch)
             acc = accuracy(prediction, truth)
-        
+
         plotter.set_test_batch({"accuracy" : acc}, batch_size=batch_size)
-    
+
     plotter.set_train_epoch()
     plotter.set_test_epoch()  
 ```
