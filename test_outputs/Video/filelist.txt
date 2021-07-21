@@ -1,0 +1,14 @@
+Order of notebooks: LANGUAGE
+
+1. LanguageModels
+2. BagOfWords
+3. LanguageIdentification
+4. FunWithWordEmbeddings
+5. LinearAutoencoder
+6. IMDB_Sentiment
+7. CNNSentimentAnalysis
+8. NotebookOfFailure
+9. ManuallyTrainingSimpleRNN
+10. MyGradSimpleCellRNN
+11. RNN_simple_gating_pytorch
+

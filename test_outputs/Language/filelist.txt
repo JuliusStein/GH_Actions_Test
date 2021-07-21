@@ -1,0 +1,11 @@
+Order of notebooks: VIDEO
+
+1. Data_Exploration
+2. Autodiff_and_Grad_Descent
+3. Linear_Regression_Exercises
+4. UniversalFunctionApprox
+5. TendrilClassification
+6. TendrilClassificationMyNN
+7. Cifar10MyGrad
+8. WritingCNNOperations
+9. MyGradMNIST

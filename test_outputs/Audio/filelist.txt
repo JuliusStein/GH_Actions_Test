@@ -1,0 +1,9 @@
+Order of notebooks: AUDIO
+1.	AudioSignalBasics
+2.	WorkingWithMic
+3.	AnalogToDigital DAY 2
+4.	BasicsOfDFT
+5.	DFTOfVariousSignals
+6.	ApplicationsOfDFTs
+7.	spectrogram
+8.	PeakFinding
