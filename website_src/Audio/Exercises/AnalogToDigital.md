@@ -21,7 +21,7 @@ jupyter:
     :keywords: analog, digital, pcm, pulse code modulation, sample rate, bit depth, nyquist
 <!-- #endraw -->
 
-# Exercises: Analog to Digital Encoding --- FORCING DIFF --
+# Exercises: Analog to Digital Encoding --- FORCING DIFF
 
 ```python
 import numpy as np
