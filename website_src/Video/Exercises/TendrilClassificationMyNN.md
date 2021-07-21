@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# MyNN Implementation for Tendril Classification
+# MyNN Implementation for Tendril Classification --
 
 ```python
 import mygrad as mg
@@ -51,7 +51,7 @@ We'll reuse our accuracy function from the previous notebook that checked how ac
 def accuracy(predictions, truth):
     """
     Returns the mean classification accuracy for a batch of predictions.
-    
+
     Parameters
     ----------
     predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
@@ -59,7 +59,7 @@ def accuracy(predictions, truth):
     truth : numpy.ndarray, shape=(M,)
         The true labels for each datum in the batch: each label is an
         integer in [0, D)
-    
+
     Returns
     -------
     float
@@ -81,14 +81,14 @@ We were using fully-connected (dense) layers to solve our classification problem
 from mynn.layers.dense import dense
 ```
 
-MyNN allows us to conveniently create "layers" for our neural network - this is an object that initializes and stores the weights associated 
+MyNN allows us to conveniently create "layers" for our neural network - this is an object that initializes and stores the weights associated
 
 When we create a dense layer, we simply specify the desired shape of that layer. We can then call that layer like a function to pass data through it. As an example:
 
 ```python
 # This initializes a shape-(2, 3) Tensor, `weight`, and a shape-(3,) Tensor, `bias`
-# and stores these tensors in this "dense layer". The weights are drawn from 
-# default statistical distributions - we can also specify the distribution 
+# and stores these tensors in this "dense layer". The weights are drawn from
+# default statistical distributions - we can also specify the distribution
 # that we want
 dense_layer = dense(2, 3)
 ```
@@ -104,9 +104,9 @@ dense_layer.bias
 ```python
 data = np.random.rand(4, 2)
 
-# Calling `dense_layer(data)` multiplies the shape-(4, 2) matrix w/ our shape-(2, 3) 
+# Calling `dense_layer(data)` multiplies the shape-(4, 2) matrix w/ our shape-(2, 3)
 # layer produces a shape-(4, 3) result
-# This performs: `data @ w + b` 
+# This performs: `data @ w + b`
 dense_layer(data)
 ```
 
@@ -119,7 +119,7 @@ dense_layer.parameters
 # for gradient descent
 ```
 
-There are other types of layers (such as `conv`) packaged inside MyNN as well. 
+There are other types of layers (such as `conv`) packaged inside MyNN as well.
 
 You may have already thought to reuse some of the code that you wrote in the universal function approximator or in the Tendril classifier you wrote using plain MyGrad already; this is essentially all that MyNN is doing: packaging up useful chunks of code so that we can more easily, more quickly, and with fewer mistakes implement neural networks.
 
@@ -133,10 +133,10 @@ We'll also need to use our ReLU activation function. It and other activations ar
 from mygrad.nnet.activations import relu
 ```
 
-The final piece we need to create our model is a weight initializer. 
+The final piece we need to create our model is a weight initializer.
 
 ### Parameter-Initializers
-In MyGrad, we used a he-normal to initialize our weights, and initialized our bias to 0. By default, MyNN will initialize a bias to zero, but we will need to pass in an initializer for the weight matrix (by default, MyNN will use a uniform distribution). 
+In MyGrad, we used a he-normal to initialize our weights, and initialized our bias to 0. By default, MyNN will initialize a bias to zero, but we will need to pass in an initializer for the weight matrix (by default, MyNN will use a uniform distribution).
 
 The He-normal distribution and all other initializers are in `mygrad.nnet.initializers`. There are several other initialization schemes defined in that module. Feel free to poke around and explore.
 
@@ -159,48 +159,48 @@ class Model:
     def __init__(self, num_neurons, num_classes):
         """This initializes all of the layers in our model, and sets them
         as attributes of the model.
-        
+
         Parameters
         ----------
         n : int
             The size of our hidden layer
-            
+
         num_out : int
             The size of the outpur layer (i.e. the number
             of tendrils)."""
         self.dense1 = dense(2, num_neurons, weight_initializer=he_normal)
         self.dense2 = dense(num_neurons, num_classes, weight_initializer=he_normal, bias=False)
-        
+
     def __call__(self, x):
         '''Passes data as input to our model, performing a "forward-pass".
-        
+
         This allows us to conveniently initialize a model `m` and then send data through it
         to be classified by calling `m(x)`.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, 2)
             A batch of data consisting of M pieces of data,
             each with a dimentionality of 2.
-            
+
         Returns
         -------
         mygrad.Tensor, shape=(M, num_out)
             The model's prediction for each of the M pieces of data.
         '''
-        
-        # We pass our data through a dense layer, use the activation 
+
+        # We pass our data through a dense layer, use the activation
         # function relu and then pass it through our second dense layer
         # We don't have a second activation function because it happens
         # to be included in our loss function: softmax-crossentropy
         return self.dense2(relu(self.dense1(x)))
-        
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
@@ -256,24 +256,24 @@ We can use the same exact training loop structure as before. However, MyNN will 
 for epoch_cnt in range(5000):
     idxs = np.arange(len(xtrain))  # -> array([0, 1, ..., 9999])
     np.random.shuffle(idxs)  
-    
+
     for batch_cnt in range(0, len(xtrain)//batch_size):
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
-        
+
         batch = xtrain[batch_indices]  # random batch of our training data
         truth = ytrain[batch_indices]
 
         # `model.__call__ is responsible for performing the "forward-pass"
-        prediction = model(batch) 
-        
+        prediction = model(batch)
+
         loss = softmax_crossentropy(prediction, truth)
-        
+
         # you still must compute all the gradients!
         loss.backward()
-        
+
         # the optimizer is responsible for updating all of the parameters
         optim.step()
-        
+
         # we'll also compute the accuracy of our model as usual
         acc = accuracy(prediction, truth)
 
@@ -312,42 +312,42 @@ class SingleLayerModel:
     def __init__(self, num_out):
         """This initializes all of the layers in our model, and sets them
         as attributes of the model.
-        
+
         Parameters
         ----------
         num_out : int
             The size of the outpur layer (i.e. the number
             of tendrils)."""
         self.dense1 = dense(2, num_out, weight_initializer=he_normal)
-        
+
     def __call__(self, x):
         '''Passes data as input to our model, performing a "forward-pass".
-        
+
         This allows us to conveniently initialize a model `m` and then send data through it
         to be classified by calling `m(x)`.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, 2)
             A batch of data consisting of M pieces of data,
             each with a dimentionality of 2.
-            
+
         Returns
         -------
         mygrad.Tensor, shape=(M, num_out)
             The model's prediction for each of the M pieces of data.
         '''
-        
+
         # We don't have an activation function because it happens
         # to be included in our loss function: softmax-crossentropy
         return self.dense1(x)
-        
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
@@ -376,23 +376,23 @@ Let's train this 1-layer model.
 for epoch_cnt in range(5000):
     idxs = np.arange(len(xtrain))  # -> array([0, 1, ..., 9999])
     np.random.shuffle(idxs)  
-    
+
     for batch_cnt in range(0, len(xtrain)//batch_size):
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
         batch = xtrain[batch_indices]  # random batch of our training data
 
         # `model.__call__ is responsible for performing the "forward-pass"
-        prediction = model(batch) 
+        prediction = model(batch)
         truth = ytrain[batch_indices]
-        
+
         loss = softmax_crossentropy(prediction, truth)
-        
+
         # you still must compute all the gradients!
         loss.backward()
-        
+
         # the optimizer is responsible for updating all of the parameters
         optim.step()
-        
+
         acc = accuracy(prediction, truth)
 
         plotter.set_train_batch({"loss" : loss.item(),
@@ -414,13 +414,13 @@ fig, ax = spiral_data.visualize_model(dummy_function, entropy=False);
 
 Now print out the `weight` tensor of your single dense layer. What is its shape? Look back to the mathematical form of this neural network - what dot products are being performed by the matrix multiplication (are the rows of `weight` being used in the dot-product or the columns)?
 
-On paper, sketch the classification visualization that you see above. **Draw the vectors stored in `weight` on top of this sketch**. 
+On paper, sketch the classification visualization that you see above. **Draw the vectors stored in `weight` on top of this sketch**.
 
-Reflect on our discussion of the dot-product being a means of measuring how much two vectors *overlap*. What did this simple model learn and how is it doing its classification? 
+Reflect on our discussion of the dot-product being a means of measuring how much two vectors *overlap*. What did this simple model learn and how is it doing its classification?
 
 
-<COGINST>The *columns* of our dense-layer's `weight` are being dotted with each data point, $(x, y)$. 
-    
+<COGINST>The *columns* of our dense-layer's `weight` are being dotted with each data point, $(x, y)$.
+
 Column-0 of `weight` thus is a vector of length-2, and if the datapoint vector, $(x, y)$ has a large overlap with it, then our model will produce a large score for entry-0 of its predictions, which means that the model would predict that the point belongs to tendril 0.
 
 The same is true for column-1 of `weight` and column-2 of `weight`, respectively. Each column in `weight` points down the middle of its respective wedge in the classification diagram, and all of the points that are closest to that vector are classified as belonging to the class associated with that weight-vector. This explains the roughly equal-sized classification wedges that emerge in our visualization</COGINST>

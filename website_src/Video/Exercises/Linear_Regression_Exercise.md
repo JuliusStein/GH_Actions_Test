@@ -15,10 +15,10 @@ jupyter:
     execute: never
 ---
 
-# Exercises: Fitting a Linear Model with Gradient Descent
+# Exercises: Fitting a Linear Model with Gradient Descent --
 
 This notebook is a very important one.
-We will return to our favorite problem: modeling the relationship between an NBA player's height and his wingspan using a linear model. 
+We will return to our favorite problem: modeling the relationship between an NBA player's height and his wingspan using a linear model.
 
 Before, we found that we could exactly solve for the model parameters (i.e. the slope and y-intercept) that minimize the squared-residuals between our recorded data and our model's predictions. Now, we will act as if no such analytic solution exists, since this will almost always be the case in "real world" problems. Instead, we will use gradient descent to tune the parameters of our linear model, and we will do this by leveraging MyGrad's autodiff capabilities to compute the relevant gradients for this optimization process. The procedure that we exercise here will turn out to be almost exactly identical to the process for "training a neural network" using "supervised learning", which are concepts that we will dive into .
 
@@ -130,7 +130,7 @@ m, b = ordinary_least_squares(height, wingspan) # <COGLINE>
 ```
 
 Next, plot the data for this problem along with the resulting fitted linear model.
-Use `ax.scatter` to plot the original data and `ax.plot` to draw the model line; 
+Use `ax.scatter` to plot the original data and `ax.plot` to draw the model line;
 you will want to specify a distinct color for your linear model.
 Label your axes.
 
@@ -154,7 +154,7 @@ Take a moment to read its docstring and then run this cell to define the functio
 
 ```python
 # You don't need to modify this function at all. Just read
-# through it and run this cell 
+# through it and run this cell
 
 def graph_linear_regression_mse(
     x,
@@ -192,12 +192,12 @@ def graph_linear_regression_mse(
     sample_density : int, optional (default=500)
         The number of samples to calculate along each axis. Decreasing this speeds
         up the plot at the cost of visual quality.
-    
+
     Returns
     -------
     Tuple[Figure, Axis]
         Returns the matplotlib figure and axis that was created so
-        that the plot can be further manipulated or saved. 
+        that the plot can be further manipulated or saved.
     """
 
     def mse(x, y, m, b):
@@ -321,7 +321,7 @@ You can refer back to the solution at the bottom of the page for assistance with
 
 def gradient_step(tensors, learning_rate):
     """
-    Performs gradient-step in-place on each of the provides tensors 
+    Performs gradient-step in-place on each of the provides tensors
     according to the standard formulation of gradient descent.
 
     Parameters
@@ -366,7 +366,7 @@ import mygrad as mg
 def mean_squared_error_mygrad(y_pred, y_true):
     """ Computers the mean-squared error for a collection of predictions
     and corresponding true values.
-    
+
     Parameters
     ----------
     y_pred : mygrad.Tensor, shape-(N,)
@@ -374,12 +374,12 @@ def mean_squared_error_mygrad(y_pred, y_true):
 
     y_true : array_like, shape-(N,)
         An array of N corresponding true values
-    
+
     Returns
     -------
     mse : mygrad.Tensor, shape-()
         A scalar-tensor containing the mean-squared error.
-    
+
     Examples
     --------
     >>> pred = mg.Tensor([1., 2., 3.])
@@ -409,17 +409,17 @@ class LinearModel:
     """
     A linear model with parameters `self.m` and `self.b`
     """
-    
+
     def initialize_params(self):
         """
         Uses `mygrad.nnet.initializers.uniform` to draw tensor
-        values for both `self.m` and `self.b` from the uniform 
+        values for both `self.m` and `self.b` from the uniform
         distribution [-10, 10].
-        
+
         Both parameters should be shape-(1,) tensors; the call:
-        
+
            uniform(1, lower_bound=-10, upper_bound=10)
-        
+
         will draw a shape-(1,) tensor from this distribution
         """
         # Draw two values from the uniform distribution over [-10, 10]
@@ -428,53 +428,53 @@ class LinearModel:
         self.m = uniform(1, lower_bound=-10, upper_bound=10)
         self.b = uniform(1, lower_bound=-10, upper_bound=10)
         # </COGINST>
-        
+
     def __init__(self, m=None, b=None):
         """ Accepts initial values for m and b. If either are not
         specified, uses `self.initialize_params()` to draw them
         randomly
-        
+
         Parameters
         ----------
         m : Optional[mygrad.Tensor], shape-(1,)
             The slope for the linear model. If `None`, a random
             value is drawn.
-            
+
         b : Optional[mygrad.Tensor], shape-(1,)
             The y-intercept for the linear model. If `None`, a random
             value is drawn.
         """
         # Use `self.initialize_params()` to draw random values for
-        # `self.m` and `self.b`. 
+        # `self.m` and `self.b`.
         #
-        # If either parameter is provided as an input to this method, 
+        # If either parameter is provided as an input to this method,
         # use that specified value to overwrite the randomly drawn value
         #
         # `self.m` and `self.b` must be defined by this method
-        
+
         # <COGINST>
         self.initialize_params()
-        
+
         if m is not None:
             self.m = m
-        
+
         if b is not None:
             self.b = b
         # </COGINST>
-    
+
     def __call__(self, x):
         """
         Performs: m * x + b
-        
+
         This is known as a 'forward pass' through the model
         on the specified data. I.e. uses the linear model to
         make a prediction based on the input `x`.
-        
+
         Parameters
         ----------
         x : array_like, shape-(N,)
             An array or tensor of N observations.
-        
+
         Returns
         -------
         prediction : mygrad.Tensor, shape-(N,)
@@ -482,23 +482,23 @@ class LinearModel:
             the linear model.
         """
         return self.m * x + self.b # <COGLINE>
-    
+
     @property
     def parameters(self):
         """ Returns a tuple of the tensors associated with the model's
         parameters.
-        
+
         This is accessed as an attribute, via `model.parameters`
         *not* as a method (i.e. not as `model.parameters()`)
-        
+
         Returns
         -------
         Tuple[Tensor, Tuple]
             A tuple containing all of the learnable parameters for our model.
-            
-            This should return a tuple containing the slope and y-intercept 
+
+            This should return a tuple containing the slope and y-intercept
             associated with the model.
-        
+
         Examples
         --------
         >>> model = LinearModel()
@@ -512,7 +512,7 @@ Try initializing your model, `model = LinearModel()` and check that:
 
 - `model.m` and `model.b` are both defined and are shape-(1,) mygrad tensors
 - `model.parameters` returns both tensors
-- Calling `model(1.)` returns a mygrad tensor corresponding to: m * x + b 
+- Calling `model(1.)` returns a mygrad tensor corresponding to: m * x + b
 
 ```python
 # Check that your model class is working as-expected
@@ -550,15 +550,15 @@ true_params = np.array(ordinary_least_squares(height, wingspan))
 
 def dist_from_true(model_params, true_params) -> float:
     """ Computes sqrt[(m - m*)^2 + (b - b*)^2]
-    
+
     Parameters
     ----------
     model_params : Tuple[Tensor, Tensor]
         m and b
-    
+
     true_params : numpy.ndarray, shape-(2,)
         m* and b*
-    
+
     Returns
     -------
     float
@@ -575,7 +575,7 @@ wingspans = draft_data.wingspan.data       # our observed data: y [inches]
 # Assign it to the variable called `model`
 model = LinearModel()  # <COGLINE>
 
-# `trajectory` is a list that will store the sequence of estimated 
+# `trajectory` is a list that will store the sequence of estimated
 # model parameters that we compute during gradient descent:
 #           [(m0, b0), (m1, b1), ... ]
 trajectory = []
@@ -584,11 +584,11 @@ trajectory = []
 # and perform an update our model's parameters
 #
 # An "epoch" denotes our having processed the dataset in its
-# entirety once. Thus we will train our model by processing 
+# entirety once. Thus we will train our model by processing
 # our dataset in full`num_epoch` times.
 num_epochs = 10
 
-# The learning rate used for gradient descent. 
+# The learning rate used for gradient descent.
 #
 # This is a value that we need to choose. The following is simply
 # an educated guess of a good learning rate; there is a whole art
@@ -627,11 +627,11 @@ for n in range(num_epochs):
     # I.e. feed the model all N heights to produce N corresponding predictions
     # using your lineary model
     y_pred = model(heights)  # <COGLINE>
-    
+
     # Compute the mean-squared error of your model's predictions, compared
     # to the true wingspans. Assign this value to the variable `loss`
     loss = mean_squared_error_mygrad(y_pred, wingspans) # <COGLINE>
-    
+
     # Use mygrad's auto-differentiation abilities to compute the derivatives
     # of this error (a.k.a the loss) with respect to your model's parameters.
     # I.e. invoke "back-propagation" from the computed loss.
@@ -648,10 +648,10 @@ for n in range(num_epochs):
         ),
         batch_size=len(y_pred),
     )
-    
+
     # Appends the current model params to the "trajectory" list
     trajectory.append((model.m.item(), model.b.item()))
-    
+
     # Perform a single update to your model's parameters using
     # gradient descent  (recall that you defined `gradient_step` earlier)
     gradient_step(model.parameters, learning_rate=learning_rate)  # <COGLINE>
@@ -659,7 +659,7 @@ for n in range(num_epochs):
 # This ensures that noggin plots any lingering measurements
 plotter.plot()
 
-# When you run this cell, the noggin plot above will update in real time 
+# When you run this cell, the noggin plot above will update in real time
 ```
 
 What does the graph of `dist_from_target` tell us about our approximate solution?
@@ -761,7 +761,7 @@ If you are working with others, discuss this with a neighbor and note your theor
 <COGINST>
 The loss landscape reveals that $\mathscr{L}_{MSE}$ is far more sensitive to changes in $m$ than it is in $b$.
 This means that a step along the $m$ axis can have a substantial affect on $\mathscr{L}_{MSE}$, but a step of the same size along the $b$ access makes only a minute impact.
-    
+
 Put another way, the optimal parameter configuration $(m^*, b^*)$ lies on a "loss landscape" that is shaped like a valley that is flat along $b$.
 Thus $\frac{\partial \mathscr{L}_{MSE}}{\partial b} \approx 0$ in the neighborhood of the optimum.
 For this reason, updates to $b$ have negligible effects on the actual value of $b$.
@@ -782,13 +782,13 @@ See that the following function will normalize an array of data in this way.
 
 ```python
 def norm(x):
-    """Return `x_normed` such that x_normed.mean() is 0 
+    """Return `x_normed` such that x_normed.mean() is 0
     and x_normed.std() is 1.
-    
+
     Parameters
     ----------
     x : array_like, shape-(N,)
-    
+
     Returns
     -------
     normed_x : array_like, shape-(N,)
@@ -824,12 +824,12 @@ ax.scatter(normed_height, normed_wingspan)
 ax.grid()
 ```
 
-Note that the scales of the numbers on the x and y axes have changed: now our data is centered on $(0, 0)$ and most of the values fall within $[-1, 1]$. 
+Note that the scales of the numbers on the x and y axes have changed: now our data is centered on $(0, 0)$ and most of the values fall within $[-1, 1]$.
 That being said, the actual distribution of the data points relative to one another is entirely unchanged!
-That is, we have not in any way manipulated the patterns or relationships between height and wingspan that was encoded in the raw data. 
+That is, we have not in any way manipulated the patterns or relationships between height and wingspan that was encoded in the raw data.
 
 Let's try "training" our model again, but this time we will use our normalized data.
-Note how `dist_from_target` evolved here versus before - it should be very close to $0$ by then end of training. 
+Note how `dist_from_target` evolved here versus before - it should be very close to $0$ by then end of training.
 
 ```python
 plotter, fig, ax = create_plot(["loss", "m", "b", "dist_from_target"], ncols=2, last_n_batches=50)
@@ -948,7 +948,7 @@ I.e. it was trained to fit:
 \hat{y} = m \hat{x} + b
 \end{equation}
 
-where 
+where
 \begin{align}
 \hat{x} &= \frac{x - \bar{x}}{\mathrm{Std}[x]}\\
 \hat{y} &= \frac{y - \bar{y}}{\mathrm{Std}[y]}
@@ -973,38 +973,38 @@ def processed_predictions(
 ):
     """ Given one or more input heights, measured in inches, uses the provided linear
     model that was trainined on normalized data, to return the predicted wingspan in inches.
-    
+
     Parameters
     ----------
     model : Callable[[array_like], Tensor]
         The linear model trained on normalized data
-    
+
     new_x : array_like, shape-(N,)
         N observed height values, measured in inches
 
     height_mean : float
         The mean of the height training data [inches]
-    
+
     height_std : float
         The std-dev of the height training data  [inches]
-        
+
     wingspan_mean : float
         The mean of the wingspan training data  [inches]
-    
+
     wingspan_std : float
         The std-dev of the wingspan training data  [inches]
-    
+
     Returns
     -------
     numpy.ndarray, shape-(N,)
         The N predicted wingspans, in inches, produced by the model
-    
+
     Notes
     -----
     Call `.data` on your model's output so that it produces a numpy array
     and not a mygrad tensor.
     """
-    # First transform x into 𝑥̂ 
+    # First transform x into 𝑥̂
     # Then pass 𝑥̂  into your model, the ourput represents 𝑦̂
     # Finally, transform 𝑦̂ into y, and return this numpy array
     # <COGINST>
@@ -1048,8 +1048,8 @@ Namely, we:
 - Defined a mathematical model designed to transform observed data into useful predictions.
   - In this case the model was a simple linear model, but we could easily generalize it to more complicated mathematical forms.
   - It was natural for us to represent our model in terms of a [Python class](https://www.pythonlikeyoumeanit.com/module_4.html), since this allowed us to keep track of our model's parameters, our initialization scheme for the parameter values, and the code for performing a "forward pass" of our model on input data, all in one place.
-- Utilized automatic differentiation by using MyGrad's tensors and mathematical operations to store our model's parameters and to perform all of the mathematics associated with evaluating the model and the loss function for our problem. 
-   - This gave us easy access to the gradient of the loss function with respect to our model's parameters. 
+- Utilized automatic differentiation by using MyGrad's tensors and mathematical operations to store our model's parameters and to perform all of the mathematics associated with evaluating the model and the loss function for our problem.
+   - This gave us easy access to the gradient of the loss function with respect to our model's parameters.
 - Searched for optimal model parameter values - ones that minimize our loss function - by using gradient descent.
    - We were introduced to the term "epoch" as an indicator that we had processed our dataset in its entirety.
    - The selection of the learning rate was not informed by gradient descent or any obvious mathematics; we basically just made a guess at an appropriate value here (more on this later).

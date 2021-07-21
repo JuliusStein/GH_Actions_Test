@@ -15,14 +15,14 @@ jupyter:
     execute: never
 ---
 
-## Classifying MNIST with Le-Net (MyGrad and MyNN)
+## Classifying MNIST with Le-Net (MyGrad and MyNN) --
 
 
-In this notebook, we will be training a convolutional neural network (using the Le-Net design described in [this paper](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)) to classify hand-written digits. We will be using the [MNIST dataset](http://yann.lecun.com/exdb/mnist/), which contains labeled images of hand-written digits from 0 to 9. The MNIST dataset has a training set of 60,000 images and a test set of 10,000 images. 
+In this notebook, we will be training a convolutional neural network (using the Le-Net design described in [this paper](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)) to classify hand-written digits. We will be using the [MNIST dataset](http://yann.lecun.com/exdb/mnist/), which contains labeled images of hand-written digits from 0 to 9. The MNIST dataset has a training set of 60,000 images and a test set of 10,000 images.
 
 You should have downloaded the [DataSets repo](https://github.com/CogWorksBWSI/DataSets), installed it, and set it up using `python setup.py develop` within that directory. This provides you with the mnist dataset, and a function for loading it, which we will use below.
 
-We will be replicating the famous "LeNet" CNN architecture, which was one of the first convolutional neural network designs. We will explain the architecture and operations used in convolutional neural nets throughout this notebook. 
+We will be replicating the famous "LeNet" CNN architecture, which was one of the first convolutional neural network designs. We will explain the architecture and operations used in convolutional neural nets throughout this notebook.
 
 
 ```python
@@ -113,7 +113,7 @@ Complete the following classification accuracy function.
 def accuracy(predictions, truth):
     """
     Returns the mean classification accuracy for a batch of predictions.
-    
+
     Parameters
     ----------
     predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
@@ -122,7 +122,7 @@ def accuracy(predictions, truth):
     truth : numpy.ndarray, shape=(M,)
         The true labels for each datum in the batch: each label is an
         integer in [0, D)
-    
+
     Returns
     -------
     float
@@ -135,7 +135,7 @@ def accuracy(predictions, truth):
 
 
 
-In the convnet to classify MNIST images, we will construct a CNN with two convolutional layers each structured as: 
+In the convnet to classify MNIST images, we will construct a CNN with two convolutional layers each structured as:
 
 ```
 conv layer --> relu --> pooling layer
@@ -178,8 +178,8 @@ gain = {'gain': np.sqrt(2)}
 
 # E.g. initializing a dense layer with glorot-uniform initialization
 # and a gain of root-2
-dense(d1, d2, 
-      weight_initializer=glorot_uniform, 
+dense(d1, d2,
+      weight_initializer=glorot_uniform,
       weight_kwargs=gain)
 ```
 <!-- #endregion -->
@@ -205,62 +205,62 @@ class Model:
         ----------
         num_input_channels : int
             The number of channels for a input datum
-            
+
         f1 : int
             The number of filters in conv-layer 1
-        
+
         f2 : int
             The number of filters in conv-layer 2
 
         d1 : int
             The number of neurons in dense-layer 1
-        
+
         num_classes : int
             The number of classes predicted by the model.
         """
-        # Initialize your two convolution layers and two dense layers each 
+        # Initialize your two convolution layers and two dense layers each
         # as class attributes using the functions imported from MyNN
         #
         # We will use `weight_initializer=glorot_uniform` for all 4 layers
-        
+
         # Note that you will need to compute `input_size` for
         # dense layer 1 : the number of elements being produced by the preceding conv
         # layer
         # <COGINST>
         init_kwargs = {'gain': np.sqrt(2)}
-        self.conv1 = conv(num_input_channels, f1, 5, 5, 
-                          weight_initializer=glorot_uniform, 
+        self.conv1 = conv(num_input_channels, f1, 5, 5,
+                          weight_initializer=glorot_uniform,
                           weight_kwargs=init_kwargs)
         self.conv2 = conv(f1, f2, 5, 5 ,
-                          weight_initializer=glorot_uniform, 
+                          weight_initializer=glorot_uniform,
                           weight_kwargs=init_kwargs)
-        self.dense1 = dense(f2 * 5 * 5, d1, 
-                            weight_initializer=glorot_uniform, 
+        self.dense1 = dense(f2 * 5 * 5, d1,
+                            weight_initializer=glorot_uniform,
                             weight_kwargs=init_kwargs)
-        self.dense2 = dense(d1, num_classes, 
-                            weight_initializer=glorot_uniform, 
+        self.dense2 = dense(d1, num_classes,
+                            weight_initializer=glorot_uniform,
                             weight_kwargs=init_kwargs)
         # </COGINST>
 
 
     def __call__(self, x):
         ''' Defines a forward pass of the model.
-        
+
         Parameters
         ----------
         x : numpy.ndarray, shape=(N, 1, 32, 32)
             The input data, where N is the number of images.
-            
+
         Returns
         -------
         mygrad.Tensor, shape=(N, num_classes)
             The class scores for each of the N images.
         '''
-        
+
         # Define the "forward pass" for this model based on the architecture detailed above.
-        # Note that, to compute 
+        # Note that, to compute
         # We know the new dimension given the formula: out_size = ((in_size - filter_size)/stride) + 1
-    
+
         # <COGINST>
         x = relu(self.conv1(x))
         x = max_pool(x, (2, 2), 2)
@@ -317,7 +317,7 @@ batch_size = 100
 for epoch_cnt in range(1):
     idxs = np.arange(len(x_train))  # -> array([0, 1, ..., 9999])
     np.random.shuffle(idxs)  
-    
+
     for batch_cnt in range(len(x_train)//batch_size):
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
         batch = x_train[batch_indices]  # random batch of our training data
@@ -325,7 +325,7 @@ for epoch_cnt in range(1):
         # compute the predictions for this batch by calling on model
         prediction = model(batch)
 
-        # compute the true (a.k.a desired) values for this batch: 
+        # compute the true (a.k.a desired) values for this batch:
         truth = y_train[batch_indices]
 
         # compute the loss associated with our predictions(use softmax_cross_entropy)
@@ -336,37 +336,37 @@ for epoch_cnt in range(1):
 
         # execute gradient descent by calling step() of optim
         optim.step()
-        
-        # compute the accuracy between the prediction and the truth 
+
+        # compute the accuracy between the prediction and the truth
         acc = accuracy(prediction, truth)
-        
+
         # set the training loss and accuracy
         plotter.set_train_batch({"loss" : loss.item(),
                                  "accuracy" : acc},
                                  batch_size=batch_size)
-    
+
     # Here, we evaluate our model on batches of *testing* data
-    # this will show us how good our model does on data that 
+    # this will show us how good our model does on data that
     # it has never encountered
     # Iterate over batches of *testing* data
     for batch_cnt in range(0, len(x_test)//batch_size):
         idxs = np.arange(len(x_test))
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
-        batch = x_test[batch_indices] 
-        
+        batch = x_test[batch_indices]
+
         with mg.no_autodiff:
             # get your model's prediction on the test-batch
             prediction = model(batch)
-            
+
             # get the truth values for that test-batch
             truth = y_test[batch_indices]
-            
+
             # compute the test accuracy
             acc = accuracy(prediction, truth)
-        
+
         # log the test-accuracy in noggin
         plotter.set_test_batch({"accuracy": acc}, batch_size=batch_size)
-    
+
     plotter.set_train_epoch()
     plotter.set_test_epoch()
 plotter.plot()

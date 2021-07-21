@@ -16,11 +16,11 @@ jupyter:
 ---
 
 <!-- #region -->
-# Training a Two-Layer Neural Network on Cifar-10
+# Training a Two-Layer Neural Network on Cifar-10 --
 
 The tendril classification problem allowed us to use Neural Networks on a 2D toy dataset. In this notebook, we will work with an $n$-dimensional dataset of images, where $n$ is the total size (# pixels x # color-channels) of an image. We will be using the famed [cifar-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html), so that our  model can classify pictures of cars, planes, cats, dogs, frogs, and other items. There are 10 classes in total represented in this dataset. Each image has is an 32 pixels by 32 pixels RGB image of shape ``(3,32,32)``. Thus each image is a point or vector in $\mathbb{R}^{3072}$.
 
-We will be training a two-layer neural network. Our loss function is the cross-entropy loss. The first two layers will use the ReLU activation function and the last layer will use softmax activation. 
+We will be training a two-layer neural network. Our loss function is the cross-entropy loss. The first two layers will use the ReLU activation function and the last layer will use softmax activation.
 
 
 #### The Model in Full
@@ -75,7 +75,7 @@ for y, cls in enumerate(classes):
 plt.show()
 ```
 
-Flatten out x_train and x_test and use ``astype`` to convert your data to ``np.float32``. Your ``(3,32,32)`` image should now be ``(3072,)``. Additionally, find the mean image and standard deviation image of the training and test data. Then, zero-center your data by subtracting the mean image and normalize by dividing out by the standard deviation image. 
+Flatten out x_train and x_test and use ``astype`` to convert your data to ``np.float32``. Your ``(3,32,32)`` image should now be ``(3072,)``. Additionally, find the mean image and standard deviation image of the training and test data. Then, zero-center your data by subtracting the mean image and normalize by dividing out by the standard deviation image.
 
 ```python
 # Reshape the train and test data to be shape (N, 3072)  (N=50,000 for train, N=10,000 for test)
@@ -111,7 +111,7 @@ x_test /= std_image
 Now, let's construct our model using `MyNN` and define our [accuracy function](https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/Problems/ComputeAccuracy.html).
 
 We can experiment with the sizes of our layers, but try:
- 
+
 - layer-1: size-100
 - layer-2: size-50
 - layer-3: size-? (hint: we don't get to pick this)
@@ -141,7 +141,7 @@ class Model:
         """
         Initializes a model with two hidden layers of size `n1` and `n2`
         respectively.
-        
+
         Parameters
         ----------
         n1 : int
@@ -149,7 +149,7 @@ class Model:
 
         n2 : int
             The number of neurons in the second hidden layer
-        
+
         num_classes : int
             The number of classes predicted by the model"""
         # <COGINST>
@@ -160,17 +160,17 @@ class Model:
 
     def __call__(self, x):
         """ Performs a "forward-pass" of data through the network.
-        
+
         This allows us to conveniently initialize a model `m` and then send data through it
         to be classified by calling `m(x)`.
-        
+
         Parameters
         ----------
         x : Union[numpy.ndarray, mygrad.Tensor], shape=(M, 3072)
             A batch of data consisting of M pieces of data,
             each with a dimentionality of 3072 (the number of
             values among all the pixels in a given image).
-            
+
         Returns
         -------
         mygrad.Tensor, shape-(M, num_class)
@@ -182,11 +182,11 @@ class Model:
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
+
         Returns
         -------
         List[mygrad.Tensor]
-            A list of all of the model's trainable parameters 
+            A list of all of the model's trainable parameters
         """
         return (self.dense1.parameters + self.dense2.parameters + self.dense3.parameters)  # <COGLINE>
 
@@ -195,7 +195,7 @@ class Model:
 def accuracy(predictions, truth):
     """
     Returns the mean classification accuracy for a batch of predictions.
-    
+
     Parameters
     ----------
     predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
@@ -204,7 +204,7 @@ def accuracy(predictions, truth):
     truth : numpy.ndarray, shape=(M,)
         The true labels for each datum in the batch: each label is an
         integer in [0, D)
-    
+
     Returns
     -------
     float
@@ -221,7 +221,7 @@ plotter, fig, ax = create_plot(metrics=["loss", "accuracy"], last_n_batches=int(
 # </COGINST>
 ```
 
-Initialize your model and optimizer, using SGD from MyNN. Specify the parameters, learning rate and weight_decay for your 
+Initialize your model and optimizer, using SGD from MyNN. Specify the parameters, learning rate and weight_decay for your
 optimizer.
 
 A learning rate of $0.1$ and a weight decay of $5\times10^{-4}$ is sensible
@@ -245,7 +245,7 @@ batch_size = 100
 # We will train for 10 epochs; you can change this if you'd like.
 # You will likely want to train for much longer than this
 for epoch_cnt in range(10):
-    
+
     # Create the indices to index into each image of your training data
     # e.g. `array([0, 1, ..., 9999])`, and then shuffle those indices.
     # We will use this to draw random batches of data
@@ -253,7 +253,7 @@ for epoch_cnt in range(10):
     idxs = np.arange(len(x_train))  # -> array([0, 1, ..., 9999])
     np.random.shuffle(idxs)  
     # </COGINST>
-    
+
     for batch_cnt in range(0, len(x_train) // batch_size):
         # Index into `x_train` to get your batch of M images.
         # Make sure that this is a randomly-sampled batch
@@ -261,14 +261,14 @@ for epoch_cnt in range(10):
         batch_indices = idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
         batch = x_train[batch_indices]  # random batch of our training data
         # </COGINST>
-        
+
         # compute the predictions for this batch by calling on model
         prediction = model(batch)  # <COGLINE>
-        
 
-        # compute the true (a.k.a desired) values for this batch: 
+
+        # compute the true (a.k.a desired) values for this batch:
         truth = y_train[batch_indices]  # <COGLINE>
-        
+
 
         # compute the loss associated with our predictions(use softmax_cross_entropy)
         loss = softmax_crossentropy(prediction, truth)  # <COGLINE>
@@ -276,33 +276,33 @@ for epoch_cnt in range(10):
 
         # back-propagate through your computational graph through your loss
         loss.backward()  # <COGLINE>
-        
+
 
         # execute gradient-descent by calling step() of optim
         optim.step()  # <COGLINE>
-        
-        
-        # compute the accuracy between the prediction and the truth 
+
+
+        # compute the accuracy between the prediction and the truth
         acc = accuracy(prediction, truth)  # <COGLINE>
-        
+
 
         plotter.set_train_batch({"loss" : loss.item(),
                                  "accuracy" : acc},
                                  batch_size=batch_size)
-    
+
     # After each epoch we will evaluate how well our model is performing
     # on data from cifar10 *that it has never "seen" before*. This is our
-    # "test" data. The measured accuracy of our model here is our best 
-    # estimate for how our model will perform in the real world 
+    # "test" data. The measured accuracy of our model here is our best
+    # estimate for how our model will perform in the real world
     # (on 32x32 RGB images of things in this class)
     test_idxs = np.arange(len(x_test))
-    
+
     for batch_cnt in range(0, len(x_test)//batch_size):
         batch_indices = test_idxs[batch_cnt*batch_size : (batch_cnt + 1)*batch_size]
-        
+
         batch = x_test[batch_indices]
         truth = y_test[batch_indices]
-        
+
         # We do not want to compute gradients here, so we use the
         # no_autodiff context manager to disable the ability to
         with mg.no_autodiff:
@@ -312,7 +312,7 @@ for epoch_cnt in range(10):
             prediction = model(batch)
             test_accuracy = accuracy(prediction, truth)
             # </COGINST>
-        
+
         # pass your test-accuracy here; we used the name `test_accuracy`
         plotter.set_test_batch({"accuracy" : test_accuracy}, batch_size=batch_size)
     plotter.set_test_epoch()
@@ -321,11 +321,11 @@ for epoch_cnt in range(10):
 ## Evaluating Your Results
 
 
-How well is your model performing? Is there any discrepancy between how well it does on training data vs testing data? 
+How well is your model performing? Is there any discrepancy between how well it does on training data vs testing data?
 
 Below, we provide code to randomly pick an image from the test set, plot it, and print your model's predicted label vs the true label. `datasets.load_cifar10.labels` returns a tuple of the label-names in correspondence with each truth-index.
 
-Since we shifted and normalized our data, we have to re-load the data here, using different names for the arrays. 
+Since we shifted and normalized our data, we have to re-load the data here, using different names for the arrays.
 
 Note that we still need to pass your model the shifted/normalized test images. So the data you use to plot the image is different from the data that you pass to the model. Also note that your model expects a *batch* of images, not a single image. Thus we use a batch of size-1, which has shape-(1, 3072) - your model will produce a shape-(1, 10) tensor of predictions.
 
@@ -342,7 +342,7 @@ true_label_index = label_test[index]
 true_label = labels[true_label_index]
 
 with mg.no_autodiff:
-    prediction = model(x_test[index:index + 1])  # you must pass in a shape-(1, 3072) array 
+    prediction = model(x_test[index:index + 1])  # you must pass in a shape-(1, 3072) array
     predicted_label_index = np.argmax(prediction.data, axis=1).item()  # largest score indicates the prediction
     predicted_label = labels[predicted_label_index]
 
@@ -356,4 +356,4 @@ ax.imshow(img)
 ax.set_title(f"Predicted: {predicted_label}\nTruth: {true_label}");
 ```
 
-Can you understand some of the mistakes that your model is making? Perhaps it sees a white plane over water, and confuses it for a boat. Can *you* figure out what some of these images depict? Some are pretty hard to identify, given the low resolution. 
+Can you understand some of the mistakes that your model is making? Perhaps it sees a white plane over water, and confuses it for a boat. Can *you* figure out what some of these images depict? Some are pretty hard to identify, given the low resolution.

@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Exercises: Exploring A Dataset
+# Exercises: Exploring A Dataset --
 
 A critical first step to tackling any data analysis problem is to familiarize ourselves with the the data that we are using.
 It is all too common for tutorials in the world of "data science" to eagerly leap right into slick methods of analysis without spending even a moment to get a feel for the data being processed.
@@ -33,7 +33,7 @@ Here are some simple questions that we should ask about any data set:
    - Was all of the data collected under comparable circumstances?
    - What are the biases in/limitations to the data? (E.g. pictures of people scraped off of social media could be biased towards selfie-style pictures, where the faces are well-lit and are prominently framed with little clutter; there could also be prominent biases in the distributions of ages and ethnicities of people depicted in such data)
    - Are there measurement errors (either documented or apparent) associated with the data?
-   
+
 - What are the "statistics" of our data?
    - What are the minimum/maximum values of the various quantities in our data?
    - Can we visualize relationships between values in our data as a scatter or surface plot?
@@ -78,7 +78,7 @@ In a Jupyter notebook in should produce an interactive summary of its data, rend
 
 Take some time to study the output of this cell.
 What are the data variables (i.e. measurements) in this dataset?
-What are the coordinates (i.e. identifiers) associated with these measured values? 
+What are the coordinates (i.e. identifiers) associated with these measured values?
 
 ```python
 # Viewing the so-called "repr" of our dataset
@@ -206,11 +206,11 @@ def ordinary_least_squares(x, y):
     Computes the slope and y-intercept for the line that minimizes
     the sum of squared residuals of mx + b and y, for the observed data
     (x, y).
-    
+
     Parameters
     ----------
     x : numpy.ndarray, shape-(N,)
-        The independent data. At least two distinct pieces of data 
+        The independent data. At least two distinct pieces of data
         are required.
 
     y : numpy.ndarray, shape-(N,)
@@ -231,7 +231,7 @@ def ordinary_least_squares(x, y):
 
 Use the function `ordinary_least_squares` to compute the ideal slope and y-intercept for the line of least squares associated with the wingspan versus height (without shoes) data.
 Next, plot this data along with the "best fit" linear model.
-Use `ax.scatter(x, y)` to plot the original data and `ax.plot` to draw the model line; 
+Use `ax.scatter(x, y)` to plot the original data and `ax.plot` to draw the model line;
 you will want to specify a distinct color for your linear model.
 Label your axes.
 

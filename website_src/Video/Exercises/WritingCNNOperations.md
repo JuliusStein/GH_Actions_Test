@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-## Neural Network Operations: Convolution and Pooling
+## Neural Network Operations: Convolution and Pooling --
 
 In our discussions throughout the rest of the course, we will often refer to convolution and pooling operations and use these as the basic building blocks of a substantial portion of our work. In this notebook, you will write your own basic convolution operation and apply it to an image. You'll then compare your implementation to the convolution implementation in MyGrad. Finally, you will implement your own max-pooling operation and compare that implementation against the MyGrad implementation.
 
@@ -35,7 +35,7 @@ fig, ax = plt.subplots()
 ax.imshow(img);
 ```
 
-Let's visualize "windowing" this image using shape-(24, 24) windows, strided along H and W with a step size of 24. (Try changing these parameters). 
+Let's visualize "windowing" this image using shape-(24, 24) windows, strided along H and W with a step size of 24. (Try changing these parameters).
 
 ```python
 from mygrad import sliding_window_view
@@ -44,7 +44,7 @@ windowed_img = sliding_window_view(x, window_shape=(24, 24), step=24)
 windowed_img.shape
 ```
 
-According to the shape of `windowed_img`, we placed each shape-(24, 24) window at 11x11 locations. Let's visualize this, plotting each of the 11x11 window placements. 
+According to the shape of `windowed_img`, we placed each shape-(24, 24) window at 11x11 locations. Let's visualize this, plotting each of the 11x11 window placements.
 
 ```python
 fig,ax = plt.subplots(nrows=windowed_img.shape[0], ncols=windowed_img.shape[1])
@@ -71,18 +71,18 @@ It is important to verify that we get valid dimensions here: we can't have fract
 def get_outshape(x_shape, w_shape, stride):
     ''' Compute the shape of the output tensor given an input shape, convolutional
     filter shape, and stride.
-    
+
     Parameters
     ----------
     x_shape : Tuple[int, int]
         The shape of the input tensor.
-        
+
     w_shape : Tuple[int, int]
         The shape of the convolutional filter.
-        
+
     stride : Tuple[int, int]
         The stride at which to apply the convolutional filter to the input.
-        
+
     Returns
     -------
     numpy.ndarray[int], shape=(2,)
@@ -117,18 +117,18 @@ Now we can define a function that will perform our convolution. We'll expect an 
 ```python
 def convolve(input_image, conv_filter, stride=(1, 1)):
     ''' Convolve `input_image` with `conv_filter` at a stride of `stride`.
-    
+
     Parameters
     ----------
     input_image : numpy.ndarray, shape=(C, H, W)
         The input over which to perform convolution.
-        
+
     conv_filter : numpy.ndarray, shape=(C, Hf, Wf)
         The convolutional filter to slide across the image.
-    
+
     stride : Tuple[int, int], optional (default=(1, 1))
         The stride at which to apply `conv_filter` across `input_image`.
-        
+
     Returns
     -------
     numpy.ndarray, shape=(H', W')
@@ -154,18 +154,18 @@ We now have a convolutional operator defined! However, we need to be able to app
 ```python
 def conv_bank(input_images, conv_filters, stride=(1, 1)):
     ''' Convolve a bank of filters over a stack of images.
-    
+
     Parameters
     ----------
     input_images : numpy.ndarray, shape=(N, C, H, W)
         The images over which to convolve our filters.
-        
+
     conv_filters : numpy.ndarray, shape=(K, C, Hf, Wf)
         The convolutional filters to apply to the images.
-        
+
     stride : Tuple[int, int], optional (default=(1, 1))
         The stride at which to apply each filter to the images.
-        
+
     Returns
     -------
     numpy.ndarray, shape=(N, K, H', W')
@@ -176,7 +176,7 @@ def conv_bank(input_images, conv_filters, stride=(1, 1)):
     img_shape = input_images.shape[2:]
     conv_shape = conv_filters.shape[2:]
     out_shape = get_outshape(img_shape, conv_shape, stride)
-    
+
     out = np.empty((len(input_images), len(conv_filters), *out_shape))
     for i, image in enumerate(input_images):
         for j, conv in enumerate(conv_filters):
@@ -185,7 +185,7 @@ def conv_bank(input_images, conv_filters, stride=(1, 1)):
     # </COGINST>
 ```
 
-Now we can verify the behavior of our function the same way we did before; let's generate a stack of shape-(4, 1, 9, 9) images and a shape-(1, 1, 3, 3) filter bank. Call `convolve` manually for each of the 4 images with this single filter. Check that `conv_bank` indeed applies the same convolution to each of the four images. 
+Now we can verify the behavior of our function the same way we did before; let's generate a stack of shape-(4, 1, 9, 9) images and a shape-(1, 1, 3, 3) filter bank. Call `convolve` manually for each of the 4 images with this single filter. Check that `conv_bank` indeed applies the same convolution to each of the four images.
 
 
 Now with all that work out of the way, let's get a time comparison between using our function and MyGrad's convolution function!
@@ -217,15 +217,15 @@ Now we'll move on to implementing a pooling operation. Max-pooling is very usefu
 ```python
 def max_pool(input_image, pool_shape=(2, 2)):
     ''' Perform max-pooling over a single channel of an image.
-    
+
     Parameters
     ----------
     input_image : numpy.ndarray, shape=(H, W)
         The channel over which to perform max-pooling.
-        
+
     pool_shape : Tuple[int, int], optional (default=(2, 2))
         The shape of the max-pool. `pool_shape[0]` is Hp, and `pool_shape[1]` is Wp.
-        
+
     Returns
     -------
     numpy.ndarray, shape=(H', W')
@@ -258,15 +258,15 @@ Now we can define a function that loops through each image in a stack of images,
 ```python
 def max_pool_stack(input_images, pool_shape=(2, 2)):
     ''' Perform max-pooling over a stack of images.
-    
+
     Parameters
     ----------
     input_images : numpy.ndarray, shape=(N, C, H, W)
         The images over which to perform max-pooling.
-        
+
     pool_shape : Tuple[int, int], optional (default=(2, 2))
         The shape of the max-pool. `pool_shape[0]` is Hp, and `pool_shape[1]` is Wp.
-        
+
     Returns
     -------
     numpy.ndarray, shape=(N, C, H', W')
@@ -321,7 +321,7 @@ Given the right kernel, performing a convolution can be a powerful technique for
 - sharpen an image
 - blur an image
 
-In practice, it is found that neural networks can "organically" learn some of these filter patterns - meaning that it learns to leverage some of these processed image features as it is learning! 
+In practice, it is found that neural networks can "organically" learn some of these filter patterns - meaning that it learns to leverage some of these processed image features as it is learning!
 
 <!-- #region -->
 The following are 3x3 kernels.
@@ -364,7 +364,7 @@ What is the shape of this image-array? Which axis contains the color channels?
 ```python
 def image_process_conv(img, kernel):
     """ This is a convenience function that allows us to use mygrad's nn-style
-    convolution on a single 2D image with a single 2D kernel, without 
+    convolution on a single 2D image with a single 2D kernel, without
     collapsing the color channels.
 
     matplotlib's imshow requires the image axes to be ordered as: (H, W, C),
@@ -380,10 +380,10 @@ def image_process_conv(img, kernel):
     convolved_img : numpy.ndarray, shape=(H', W', C)"""
     # (H, W, C) --> (C, 1, H, W)
     x = img.transpose(2,0,1)[:, np.newaxis, :, :]
-    
+
     # (Hf, Wf) --> (1, 1, Hf, Wf)
     kernel = kernel.reshape(1, 1, *kernel.shape)
-    
+
     # conv: (C, 1, H, W) w/ (1, 1, Hf, Wf) --> (C, 1, H', W')
     # squeeze + transpose: (C, 1, H', W') --> (H', W', C)
     return conv_nd(x, kernel, stride=(1, 1)).data.squeeze().transpose(1, 2, 0)

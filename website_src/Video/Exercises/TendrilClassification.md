@@ -15,6 +15,8 @@ jupyter:
     execute: never
 ---
 
+# DIFF
+
 ```python
 import mygrad as mg
 from mygrad.nnet.initializers.he_normal import he_normal
@@ -27,7 +29,7 @@ import matplotlib.pyplot as plt
 %matplotlib notebook
 ```
 
-In this notebook, we will be training a two-layer neural network to solve a *classification* problem on a toy data set. We will generate a spiral-formation of 2D data points. This spiral will have grouped "tendrils", and we will want our neural network to classify *to which tendril a given point belongs*. 
+In this notebook, we will be training a two-layer neural network to solve a *classification* problem on a toy data set. We will generate a spiral-formation of 2D data points. This spiral will have grouped "tendrils", and we will want our neural network to classify *to which tendril a given point belongs*.
 
 Read the documentation for `ToyData`. Run the following cells to view the spiral data set.
 
@@ -47,7 +49,7 @@ fig, ax = data.plot_spiraldata()
 View the contents of `xtrain` and `ytrain`. What do these arrays correspond to? See that `xtrain` stores the 2D data points in the spiral, and `ytrain` stores the Tendril-ID associated with that point. How many points are in our training data? How are the labels specified for this dataset? Which label corresponds to which tendril? Discuss with your neighbor.
 
 <COGINST>
-    
+
 ##### Solution
 
 - red: label-0
@@ -59,7 +61,7 @@ View the contents of `xtrain` and `ytrain`. What do these arrays correspond to? 
 
 ## Our Model
 
-We will extend the universal function approximation function to make a *classification* prediction. That is, given a 2D point $\vec{x}$, our model will product $\vec{y}_{pred} = [y_0, y_1, y_2]$, where $y_i$ indicates how "confident" our model is that $\vec{x}$ belongs to tendril-$i$. 
+We will extend the universal function approximation function to make a *classification* prediction. That is, given a 2D point $\vec{x}$, our model will product $\vec{y}_{pred} = [y_0, y_1, y_2]$, where $y_i$ indicates how "confident" our model is that $\vec{x}$ belongs to tendril-$i$.
 
 \begin{equation}
 F(\{\vec{v}_i\}, \{\vec{w}_i\}, \{b_i\}; \vec{x}) = \sum_{i=1}^{N} \vec{v}_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i}) = \vec{y}_{pred}
@@ -70,10 +72,10 @@ Notice here that $\vec{v}_i$ is now a *vector*, whereas in the original universa
 What should the dimensionality of each $\vec{v}_i$ be? Discuss with a neighbor.
 
 
-Create a two-layer dense neural network that closely resembles that one that you constructed as the universal approximator for the 1D functions. This time, however, $\vec{x}$ will be a 2D point instead of a single number. Thus a batch of our training data will have a shape $(M, 2)$ instead of $(M, 1)$. 
+Create a two-layer dense neural network that closely resembles that one that you constructed as the universal approximator for the 1D functions. This time, however, $\vec{x}$ will be a 2D point instead of a single number. Thus a batch of our training data will have a shape $(M, 2)$ instead of $(M, 1)$.
 
 
-Because we are classifying which of three tendrils a 2D point belongs to, we now **want our model to predict *three* numbers**, rather than one, as its prediction (that is, it will produce three number per 2D point in the training batch). These three numbers will be the three "scores" that our model predicts for a point: one for each tendril. If score-0 is the largest score, then our model is predicting that the 2D point belongs to tendril 0. And so on. Thus the final layer of our network will have the shape $(M, 3)$ rather than $(M, 1)$. 
+Because we are classifying which of three tendrils a 2D point belongs to, we now **want our model to predict *three* numbers**, rather than one, as its prediction (that is, it will produce three number per 2D point in the training batch). These three numbers will be the three "scores" that our model predicts for a point: one for each tendril. If score-0 is the largest score, then our model is predicting that the 2D point belongs to tendril 0. And so on. Thus the final layer of our network will have the shape $(M, 3)$ rather than $(M, 1)$.
 
 
 ## The "Activation" Function
@@ -81,8 +83,8 @@ Because we are classifying which of three tendrils a 2D point belongs to, we now
 We will be using the so-called "activation function" known as a "rectified linear unit", or ReLU for short:
 
 \begin{equation}
-\varphi_{\text{relu}}(x) = 
-\begin{cases} 
+\varphi_{\text{relu}}(x) =
+\begin{cases}
       0, \quad x < 0 \\
       x, \quad 0 \leq x
 \end{cases}
@@ -90,7 +92,7 @@ We will be using the so-called "activation function" known as a "rectified linea
 
 This is a very popular activation function in the world of deep learning. We will not have time to go into why here, but it is worthwhile to read about. `mygrad` has this function: `mygrad.nnet.activations.relu`.
 
-(The astute reader will note that ReLU does not satisfy the requirements on $\varphi(x)$, as dictated by the universal function theorem. Which requirement does this violate?) 
+(The astute reader will note that ReLU does not satisfy the requirements on $\varphi(x)$, as dictated by the universal function theorem. Which requirement does this violate?)
 
 
 Import the relu function from `mygrad`, and plot it on $x \in [-3, 3]$. What does the derivative of this function look like? Plot it as well.
@@ -124,35 +126,35 @@ class Model:
         ----------
         num_neurons : int
             The number of 'neurons', N, to be included in the model.
-        
+
         num_classes : int
             The number of distinct classes that you want your model to predict.
         """
         # set self.N equal to `num_neurons
         self.N = num_neurons  # <COGINST>
-        
+
         # set self.num_classes equal to the number of distinct
         # classes that you want your model to be able to predict
         self.num_classes = num_tendril  # <COGINST>
-        
+
         # Use `self.initialize_params()` to draw random values for
-        # `self.w`, `self.b`, and `self.v` 
-        
+        # `self.w`, `self.b`, and `self.v`
+
         # <COGINST>
         self.initialize_params()
         # </COGINST>
-    
+
     def __call__(self, x):
         """
         Performs a so-called 'forward pass' through the model
         on the specified data. I.e. uses the linear model to
         make a prediction based on `x`.
-        
+
         Parameters
         ----------
         x : array_like, shape-(M, 2)
             An array of M observations, each a 2D point.
-        
+
         Returns
         -------
         prediction : mygrad.Tensor, shape-(M, num_classes)
@@ -163,21 +165,21 @@ class Model:
         out1 = relu(x @ self.w + self.b)  # matmul[(M,1) w/ (1, N)] + (N,) --> (M, N)
         return out1 @ self.v # matmul[(M, N) w/ (N, 1)] --> (M, 1)
         # </COGINST>
-    
+
     def initialize_params(self):
         """
         Randomly initializes and sets values for  `self.w`,
         `self.b`, and `self.v`.
-        
+
         Uses `mygrad.nnet.initializers.normal to draw tensor
         values w, v from the he-normal distribution, using a gain of 1.
-        
+
         The b-values are all initialized to zero.
-        
+
         self.w : shape-???  ... using he-normal (default params)
         self.b : shape-???  ... as a tensor of zeros
         self.v : shape-???  ... using he-normal (default params)
-        
+
         where `N` is the number of neurons in the model.
         """
         # assign `self.m` and `self.b` each a tensor value drawn from
@@ -188,19 +190,19 @@ class Model:
         self.b = mg.zeros((self.N,), dtype=self.w.dtype)
         self.v = he_normal(self.N, self.num_classes)
         # </COGINST>
-    
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
             A tuple containing all of the learnable parameters for our model"""
         return (self.w, self.b, self.v)  # <COGLINE>
-    
+
     def load_parameters(self, w, b, v):
         self.w = w
         self.b = b
@@ -210,9 +212,9 @@ class Model:
 ## Computing Accuracy
 
 
-Because we are solving a classification problem rather than a regression problem, we can measure the accuracy of our predictions. Write an `accuracy` function which accepts our models predictive scores for a batch of data, shape-(M, 3), and the "truth" labels for that batch, shape-(M,). 
+Because we are solving a classification problem rather than a regression problem, we can measure the accuracy of our predictions. Write an `accuracy` function which accepts our models predictive scores for a batch of data, shape-(M, 3), and the "truth" labels for that batch, shape-(M,).
 
-Thus, if score-0 for some point is the maximum score, and the label for that point is 0, then the prediction for that point is correct. 
+Thus, if score-0 for some point is the maximum score, and the label for that point is 0, then the prediction for that point is correct.
 
 The function should return the mean classification accuracy for that batch of predictions (a single number between 0 and 1). Write a simple test for your function.
 
@@ -220,16 +222,16 @@ The function should return the mean classification accuracy for that batch of pr
 def accuracy(predictions, truth):
     """
     Returns the mean classification accuracy for a batch of predictions.
-    
+
     Parameters
     ----------
     predictions : Union[numpy.ndarray, mg.Tensor], shape=(M, D)
         The scores for D classes, for a batch of M data points
-        
+
     truth : numpy.ndarray, shape=(M,)
         The true labels for each datum in the batch: each label is an
         integer in [0, D)
-    
+
     Returns
     -------
     float
@@ -272,7 +274,7 @@ where $m$ is the number of classes in our classification problem.
 
 So, armed with the softmax function, we can convert our classification scores, $\vec{y}$, to classification probabilities, $\vec{p}$ (or at the very least, numbers that *act* like probabilities. This opens the door for us to utilize the [cross-entropy loss](https://en.wikipedia.org/wiki/Cross_entropy).
 
-Given our prediction probabilities for the $m$ classes in our problem, $\vec{p}$, we have the associated "true" probabilities $\vec{t}$ (since we are solving a supervised learning problem). E.g., 
+Given our prediction probabilities for the $m$ classes in our problem, $\vec{p}$, we have the associated "true" probabilities $\vec{t}$ (since we are solving a supervised learning problem). E.g.,
 
 - if our point $\vec{x}$ resides in tendril-0, then $\vec{t} = [1., 0., 0.]$
 - if our point $\vec{x}$ resides in tendril-1, then $\vec{t} = [0., 1., 0.]$
@@ -312,7 +314,7 @@ from mygrad.nnet.losses import softmax_crossentropy
 ```python
 def grad_descent(params, learning_rate):
     """ Update tensors according to vanilla gradient descent.
-    
+
     Parameters
     ----------
     params : Sequence[mygrad.Tensor]
@@ -339,7 +341,7 @@ Initialize your noggin plotter so that it will track two metrics: loss and accur
 plotter, fig, ax = create_plot(metrics=["loss", "accuracy"])
 ```
 
-Also, initialize your model parameters and batch-size. 
+Also, initialize your model parameters and batch-size.
 - Start off with a small number of neurons in your layer - try $N=3$. Increase number of parameters in your model to improve the quality of your result. You can use the visualization that we provide at the end of this notebook to get a qualitative feel for your notebook
 - A batch-size of 50 is fine, but feel free to experiment.
 <!-- #endregion -->
@@ -365,7 +367,7 @@ Referring to the code that you used to train your universal function approximato
 
 Try training your model for 1000 epochs. A learning rate $\approx 0.1$ is a sensible starting point. Watch the loss and accuracy curves evolve as your model trains.
 
-Below, you will be able to visualize the "decision boundaries" that your neural network learned. Try adjusting the number of neurons in your model, the number of epochs trained, the batch size, and the learning rate. 
+Below, you will be able to visualize the "decision boundaries" that your neural network learned. Try adjusting the number of neurons in your model, the number of epochs trained, the batch size, and the learning rate.
 
 ```python
 # import the loss function from mygrad, as directed above
@@ -382,7 +384,7 @@ for epoch_cnt in range(1000):
     np.random.shuffle(idxs)
 
     for batch_cnt in range(0, len(xtrain) // batch_size):
-        
+
         # get the batch-indices from `idxs` (refer to the universal function approx notebook)
         # <COGINST>
         batch_indices = idxs[
@@ -410,7 +412,7 @@ for epoch_cnt in range(1000):
 
         # Perform gradient descent
         grad_descent(model.parameters, lr) # <COGLINE>
-        
+
         # Compute the accuracy of the predictions
         # The accuracy should just be a floating point number
         acc = accuracy(prediction, truth) # <COGLINE>

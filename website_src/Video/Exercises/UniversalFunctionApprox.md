@@ -24,11 +24,11 @@ import numpy as np
 %matplotlib notebook
 ```
 
-# Training a Universal Function Approximator
+# Training a Universal Function Approximator --
 
 The *universal approximation theorem* states:
 
-Let $ \varphi (\cdot )$ be a nonconstant, bounded, and monotonically-increasing continuous function. Let $ I_m $ denote any compact subset of $ \mathbb {R} ^{m} $. The space of continuous functions $I_m  \mapsto \mathbb {R}$ is denoted by $C(I_{m})$. 
+Let $ \varphi (\cdot )$ be a nonconstant, bounded, and monotonically-increasing continuous function. Let $ I_m $ denote any compact subset of $ \mathbb {R} ^{m} $. The space of continuous functions $I_m  \mapsto \mathbb {R}$ is denoted by $C(I_{m})$.
 
 Then, given any $\varepsilon >0$ and any function $f\in C(I_{m})$, there exist $N$ real constants $v_{i},b_{i}\in \mathbb {R}$ and real vectors $\vec{w}_{i}\in \mathbb {R} ^{m}$, where $i=1,\cdots ,N$, such that we may define:
 
@@ -53,7 +53,7 @@ This theorem was first proven in 1989, using the *sigmoid function* as $\varphi$
 
 
 ## Our problem
-Here, we will try to find values for the parameters $N,v_{i},b_{i},w_{i}$  (where $i=1,\cdots ,N$) such that $F(x)$ approximates 
+Here, we will try to find values for the parameters $N,v_{i},b_{i},w_{i}$  (where $i=1,\cdots ,N$) such that $F(x)$ approximates
 
 \begin{equation}
 f(x) = \cos(x)\\
@@ -75,7 +75,7 @@ The *number* of parameters to use, $N$, is a **hyper parameter**, which we must 
 
 ### Plotting our "activation function"
 
-Import the `sigmoid` from `mygrad.nnet.activations`. Plot this function on the domain $[-10, 10]$. 
+Import the `sigmoid` from `mygrad.nnet.activations`. Plot this function on the domain $[-10, 10]$.
 
 Is this a "nonconstant, bounded, and monotonically-increasing continuous function", as demanded for $\varphi$ by the universal approximation theorem?
 
@@ -92,14 +92,14 @@ ax.grid();
 ```
 
 ### Write a gradient-descent function
-Write a gradient descent function that accepts a tuple of tensors and a **learning rate** ($\delta$). 
+Write a gradient descent function that accepts a tuple of tensors and a **learning rate** ($\delta$).
 
 **For each tensor in a list/tuple**, update the tensor's *underlying numpy array* using to gradient descent. Skip the tensor if its gradient is `None`. Because you are modifying the data of these tensors in-place, this function need not return anything. Write a good docstring for the function.
 
 ```python
 def gradient_step(tensors, learning_rate):
     """
-    Performs gradient-step in-place on each of the provides tensors 
+    Performs gradient-step in-place on each of the provides tensors
     according to the standard formulation of gradient descent.
 
     Parameters
@@ -135,11 +135,11 @@ def gradient_step(tensors, learning_rate):
 
 <!-- #region -->
 ### Working with "Batches" of Data
-It is computationally inefficient to train our model by passing it one datum, $x$, at a time. Rather, we will want to pass in a **batch** of $M$ pieces of input data, $\{x_{j}\}_{j=0}^{M-1}$, and evaluate our model for each of these values independently.  That is, we will pass on a batch of $M$ pieces of data and produce $M$ corresponding predictions from our model. 
+It is computationally inefficient to train our model by passing it one datum, $x$, at a time. Rather, we will want to pass in a **batch** of $M$ pieces of input data, $\{x_{j}\}_{j=0}^{M-1}$, and evaluate our model for each of these values independently.  That is, we will pass on a batch of $M$ pieces of data and produce $M$ corresponding predictions from our model.
 
 Each prediction is made only on its corresponding piece of input data. Thus, prediction $F(\{v_i\}, \{w_i\}, \{b_i\}; x_j )$ depends only on:
 
-- our model's parameters: $\{v_i\}, \{w_i\}, \{b_i\}$ 
+- our model's parameters: $\{v_i\}, \{w_i\}, \{b_i\}$
 - datum $x_j$
 
 it is **not** impacted by any of the other pieces of data in the batch. This is very important to keep in mind!
@@ -178,27 +178,27 @@ out1 = sigmoid(mg.matmul(x, w) + b)  # matmul[(M,1) w/ (1, N)] + (N,) --> (M, N)
 model_out = mg.matmul(out1, v)       # matmul[(M, N) w/ (N, 1)] --> (M, 1)
 ```
 
-Thus `model_out` is a shape-$(M, 1)$ tensor that holds the prediction of our model, corresponding with each datum in our shape-(M, 1) batch. 
+Thus `model_out` is a shape-$(M, 1)$ tensor that holds the prediction of our model, corresponding with each datum in our shape-(M, 1) batch.
 
 Define the `Model.__call__` method such that it accepts a batch of shape-(M, 1), and produces (M, 1) predictions. Include detailed comments about what the input and output shapes are of all the tensors in this so-called forward-pass.
 <!-- #endregion -->
 
 ```python
 class Model:
-    
+
     def initialize_params(self, num_neurons: int):
         """
         Randomly initializes and sets values for  `self.w`,
         `self.b`, and `self.v`.
-        
+
         Uses `mygrad.nnet.initializers.normal to draw tensor
         values w, b, and v from a normal distribution with
         0-mean and std-dev of 1.
-        
+
         self.w : shape-(1, N)
         self.b : shape-(N,)
         self.v : shape-(N, 1)
-        
+
         where `N` is the number of neurons in the model.
         """
         # assign `self.w`, `self.b`, and `self.v` each a tensor value drawn from
@@ -209,7 +209,7 @@ class Model:
         self.b = normal(num_neurons)
         self.v = normal(num_neurons, 1)
         # </COGINST>
-        
+
     def __init__(self, num_neurons: int):
         """
         Parameters
@@ -219,22 +219,22 @@ class Model:
         """
         # set self.N equal to `num_neurons
         self.N = num_neurons  # <COGLINE>
-        
+
         # Use `self.initialize_params()` to draw random values for
-        # `self.w`, `self.b`, and `self.v` 
+        # `self.w`, `self.b`, and `self.v`
         self.initialize_params(num_neurons) # <COGLINE>
-    
+
     def __call__(self, x):
         """
         Performs a so-called 'forward pass' through the model
         on the specified data. I.e. uses the model to
         make a prediction based on `x`.
-        
+
         Parameters
         ----------
         x : array_like, shape-(M, 1)
             An array of M observations.
-        
+
         Returns
         -------
         prediction : mygrad.Tensor, shape-(M, 1)
@@ -245,20 +245,20 @@ class Model:
         out1 = sigmoid(x @ self.w + self.b)  # matmul[(M,1) w/ (1, N)] + (N,) --> (M, N)
         return out1 @ self.v # matmul[(M, N) w/ (N, 1)] --> (M, 1)
         # </COGINST>
-    
-    
+
+
     @property
     def parameters(self):
         """ A convenience function for getting all the parameters of our model.
-        
-        This can be accessed as an attribute, via `model.parameters` 
-        
+
+        This can be accessed as an attribute, via `model.parameters`
+
         Returns
         -------
         Tuple[Tensor, ...]
             A tuple containing all of the learnable parameters for our model"""
         return (self.w, self.b, self.v)  # <COGLINE>
-    
+
     def load_parameters(self, w, b, v):
         self.w = w
         self.b = b
@@ -281,7 +281,7 @@ Note, however, that we want to make predictions size-$M$ batches. Thus we will h
 L(x_{j}) = | F(\{v_i\}, \{w_i\}, \{b_i\}; x_j ) - \cos ( x_{j} ) |
 \end{equation}
 
-for each $j=1,\cdots ,M$. 
+for each $j=1,\cdots ,M$.
 
 That being said, we want to ultimately have a *single scalar loss*. Let's choose to compute our total loss as the *average* over the $M$ values, $L(x_{j})$. (Note that this average-loss is called "risk" in machine learning and game theory literature).
 
@@ -300,7 +300,7 @@ def l1_loss(pred, true):
     ----------
     pred : mygrad.Tensor, shape=(M,)
     true : mygrad.Tensor, shape=(M,)
-    
+
     Returns
     -------
     mygrad.Tensor, shape=()
@@ -315,7 +315,7 @@ You will create a numpy-array or *constant-Tensor* that samples $[-2\pi, 2\pi]$ 
 Why is it important that we use numpy-arrays or constant tensors? Why would it be inefficient to perform back-propagation if our training data were non-constant tensors? Discuss with your neighbors.
 
 
-### Training Our Approximating Function! 
+### Training Our Approximating Function!
 
 <!-- #region -->
 We will use the handy 'noggin' package to keep track of how our loss is evolving during training. The following code will create a plotter that will keep track of "loss", and will refresh itself every 2 seconds, during training:
@@ -347,7 +347,7 @@ ax.set_ylim(0, 1)
 # Create the shape-(1000,1) training data
 train_data = np.linspace(-2*np.pi, 2*np.pi, 1000).reshape(1000, 1) # <COGLINE>
 
-# Initialize your model; 
+# Initialize your model;
 # start off with N=10 neurons
 model = Model(num_neurons=10)  # <COGLINE>
 
@@ -359,9 +359,9 @@ batch_size = 25 # <COGLINE>
 def true_f(x): return np.cos(x)  # <COGLINE>
 
 
-# we will store our model's weights in this list every 10 epochs 
+# we will store our model's weights in this list every 10 epochs
 #so that we can assess what our model's predictions look like mid-training
-params = [] 
+params = []
 ```
 
 ```python
@@ -404,7 +404,7 @@ for epoch_cnt in range(1000):
         # your batch-size dividing into your data evenly - your lase batch might just
         # be a bit smaller than before.
         batch_indices = idxs[batch_cnt * batch_size : (batch_cnt + 1) * batch_size] # <COGLINE>
-        
+
         # Use the resulting batch-indices to get the corrsponding batch
         # of training data
         batch = train_data[batch_indices]  # <COGLINE>
@@ -440,7 +440,7 @@ Remember that we were just updating our model's parameters, $\{v_i\}, \{w_i\}, \
 Thus we should expect to see that $F( \{v_i\}, \{w_i\}, \{b_i\}; x ) \approx \cos ( x )$
 
 
-To evaluate the quality of your model (i.e. your approximating function $F(x)$), plot $f(x)$ (the desired function) and $F(x)$ on the sample plot. Use `train_data` as your `x` values. 
+To evaluate the quality of your model (i.e. your approximating function $F(x)$), plot $f(x)$ (the desired function) and $F(x)$ on the sample plot. Use `train_data` as your `x` values.
 
 ```python
 # <COGINST>
@@ -526,7 +526,7 @@ Finally, let's include the scaling factors, \{v_i\}, each of which multiplies a 
 v_{i}\varphi(\vec{x} \cdot \vec{w}_{i} + b_{i})
 \end{equation}
 
-for each $i$ on $x \in [-2\pi, 2\pi]$. 
+for each $i$ on $x \in [-2\pi, 2\pi]$.
 
 **What will the result look like if you plot the sum of all of these curves? (Hint: look back to the form of the universal function approximation theorem**.
 
@@ -603,7 +603,7 @@ ax.plot(
     label="full model output",
 )
 
-# Using a for-loop, plot the output of each scaled neuron: 
+# Using a for-loop, plot the output of each scaled neuron:
 #     v * sigmoid(w*x + b)
 for V, W, B in zip(model.v.flatten(), model.w.flatten(), model.b.flatten()):
     ax.plot(x, V * sigmoid(x * W + B))
