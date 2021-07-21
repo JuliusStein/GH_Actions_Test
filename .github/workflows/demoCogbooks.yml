@@ -59,7 +59,7 @@ jobs:
       #   done
 
 
-    # ------------ COMMIT AND PUSH TO SOURCE REPO (OLD) ------------
+    # ------------ COMMIT AND PUSH TO SOURCE REPO ------------
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
@@ -73,7 +73,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
 
-    # ------------- COMMIT AND PUSH TO DEST REPO (NEW) -------------
+    # ------------- COMMIT AND PUSH TO DEST REPO -------------
     # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
     - name: Push to student repository
       uses: cpina/github-action-push-to-another-repository@main
@@ -82,8 +82,6 @@ jobs:
       with:
         source-directory: 'test_outputs'
         destination-github-username: 'JuliusStein'
-        user-name: 'JuliusStein'
-        destination-repository-username: 'JuliusStein'
         destination-repository-name: 'GH_Actions_Output'
         user-email: 'juliusastein@gmail.com'
         commit-message: Automated student notebook update
