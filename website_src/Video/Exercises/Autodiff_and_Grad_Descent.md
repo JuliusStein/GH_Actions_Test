@@ -16,7 +16,7 @@ jupyter:
 ---
 
 <!-- #region -->
-## Automatic Differentiation at a Glance
+## Automatic Differentiation at a Glance --
 
 Suppose that we have the function
 
@@ -124,7 +124,7 @@ For this reason, MyGrad was specifically designed to to act and feel just like N
 Thus, if you want to get good at using MyGrad, you should spend most of your time [mastering NumPy!](https://www.pythonlikeyoumeanit.com/module_3.html).
 
 The crux of MyGrad is the `Tensor` object.
-This is analagous to NumPy's `ndarray`, as it: 
+This is analagous to NumPy's `ndarray`, as it:
 
 - can store [N-dimensional array data](https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AccessingDataAlongMultipleDimensions.html), which can be [manipulated (e.g. reshaped, transposed, etc.)](https://mygrad.readthedocs.io/en/latest/tensor_manipulation.html)
 - supports both [basic indexing](https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/BasicIndexing.html#Basic-Indexing) (accessing elements and subsections of tensor), [advanced indexing](https://www.pythonlikeyoumeanit.com/Module3_IntroducingNumpy/AdvancedIndexing.html) (accessing arbitrary collections of elements from the tensor)
@@ -197,7 +197,7 @@ array([1.2, 2.4])
 #### Tensor-Creation Functions
 
 MyGrad provides [a whole suite of tensor-creation functions](https://mygrad.readthedocs.io/en/latest/tensor_creation.html), which exactly mimic their NumPy counterparts.
-These can be used to conveniently create tensors of specific shapes and with specific values as their elements. 
+These can be used to conveniently create tensors of specific shapes and with specific values as their elements.
 <!-- #endregion -->
 
 <!-- #region -->
@@ -213,7 +213,7 @@ Tensor([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
 Tensor([[[0., 0., 0., 0.],
          [0., 0., 0., 0.],
          [0., 0., 0., 0.]],
- 
+
         [[0., 0., 0., 0.],
          [0., 0., 0., 0.],
          [0., 0., 0., 0.]]], dtype=float32)
@@ -403,7 +403,7 @@ See that $\mathscr{L}$ is a function of $f$, $x$, and $y$, and that
 $f$ is a function of $x$ and $y$.
 Thus the "terminal" (final) tensor in this "computational graph" that we have laid out can be thought of as the function $\mathscr{L}(f(x, y), x, y)$.
 
-As described above, calling `ℒ.backward()` instructs MyGrad to compute all of the derivatives of `ℒ`. 
+As described above, calling `ℒ.backward()` instructs MyGrad to compute all of the derivatives of `ℒ`.
 It does this using an algorithm known as "backpropagation", which we will discuss later.
 Suffice it to say that MyGrad **simply uses the chain rule** ([reference](https://rsokl.github.io/CogWeb/Math_Materials/Chain_Rule.html)) to compute these derivatives.
 
@@ -427,7 +427,7 @@ To re-emphasize the point made above: MyGrad was only able to access the necessa
 Note that `x.grad` and `y.grad` together express the gradient of $\mathscr{L}$, $\vec{\nabla}\mathscr{L} = \begin{bmatrix} \frac{d \mathscr{L}}{d x} & \frac{d \mathscr{L}}{dy} \end{bmatrix}$, evaluated at $(x=2, y=3)$.
 These derivatives are now available for use; e.g. we can use these derivatives to perform gradient descent on $\mathscr{L}$.
 
-### Nulling Gradients 
+### Nulling Gradients
 
 Involving any of these tensors in further operations will automatically "null" its derivative (i.e. set it to `None`)
 
@@ -464,7 +464,7 @@ It is important to understand how these gradients get cleared since we will need
 **Reading Comprehension: Some Basic Autodiff Exercises**
 
 Given $x = 2.5$, compute $\frac{d\mathscr{L}}{dx}\big|_{x=2.5}$ for the following $\mathscr{L}(x)$
-    
+
 1. $\mathscr{L}(x) = 2 + 3x - 5x^2$
 2. $\mathscr{L}(x) = \cos{(\sqrt{x})}$
 3. Given $f(x) = x^2$, $\mathscr{L}(x) = (2 x f(x))^2 - f(x)$  ...define `f` as a separate tensor before computing `ℒ`.
@@ -497,7 +497,7 @@ x.grad  # dℒ/dx @ x=2.5 -> array(2338.75)
 ```
 
 Given $x = 2.5$, verify that the following pairs of functions yield the same derivatives in MyGrad.
-    
+
 1. $\mathscr{L}(x) = xx$ and $\mathscr{L}(x) = x^2$
 2. $\mathscr{L}(x) = e^{\ln x}$ and $\mathscr{L}(x) = x$
 
@@ -602,7 +602,7 @@ And calling `.backward()` on a constant tensor will not do anything at all!
 <!-- #endregion -->
 
 It is useful to keep the intimate relationship between a MyGrad tensor and an underlying NumPy array in mind because it reminds us of how similar these libraries are, and it informs our intuition for how tensors behave.
-Furthermore, this will prove to be an important technical detail for when we perform gradient descent, where we will want to update directly the data being held by the tensor. 
+Furthermore, this will prove to be an important technical detail for when we perform gradient descent, where we will want to update directly the data being held by the tensor.
 
 <!-- #region -->
 ## Gradient Descent with MyGrad
@@ -630,7 +630,7 @@ print(w)
 for _ in range(num_steps):
     ℒ = w ** 2    # compute L(w)
     ℒ.backward()  # compute derivative of L
-    
+
     # w_new = w_old - lr * dℒ/dw
     w.data -= learning_rate * w.grad  # update w via gradient-step
     print(w)
@@ -680,16 +680,16 @@ Towards that end, be sure to carefully complete the following exercise...
 
 Complete the following Python function, which is responsible for taking an arbitrary collection (e.g. a list) of MyGrad tensors, **which are assumed to already store their relevant gradients**, and perform a gradient-step on each one of them.
 That is, assume that, outside of this function, `ℒ` has already been computed and `ℒ.backward()` was already invoked so that now all that is left to be done is perform the gradient-based step on each tensor.
-    
+
 This function will be a very useful utility for when you are optimizing a function involving multiple different variables.
-    
+
 (Hint: this should be a very brief function... much shorter than its docstring)
 
 
 ```python
 def gradient_step(tensors, learning_rate):
     """
-    Performs gradient-step in-place on each of the provides tensors 
+    Performs gradient-step in-place on each of the provides tensors
     according to the standard formulation of gradient descent.
 
     Parameters
@@ -805,7 +805,7 @@ That is, given that we think of a single element of a tensor to be a scalar-valu
 \text{tensor}[i_1, \dots, i_N] \rightarrow x_{i_1, \dots, i_N}
 \end{equation}
 
-then the corresponding element of the associated gradient is the derivative involving that variable 
+then the corresponding element of the associated gradient is the derivative involving that variable
 
 \begin{equation}
 \text{tensor.grad}[i_1, \dots, i_N] \rightarrow \frac{\mathrm{d}\mathscr{L}}{\mathrm{d} x_{i_1, \dots, i_N}}\\
@@ -817,14 +817,14 @@ then the corresponding element of the associated gradient is the derivative invo
 Using automatic differentiation with MyGrad, complete the following Python function that implements gradient descent on the skewed paraboloid $\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2$.
 
 Note that you should not need to derive/compute the partial derivatives of $\mathscr{L}$ yourself; we will be using MyGrad to compute the derivatives for us.
-    
+
 Your calculation of $\mathscr{L}(w_1, w_2) = 2 w_1^2 + 3 w_2^2$ should be fully vectorized; i.e. you should use a shape-(2,) tensor `w` to store $[w_1, w_2]$, and perform element-wise operations on it in order to compute $\mathscr{L}$.
 Think about what array you can use do element-wise multiplication, but where you are performing `(2*, 3*)`.
 
 This code should look very similar to the code that was used to perform gradient descent down $\mathscr{L}(w) = w^2$.
 
 Use your `gradient_step` function to make updates to `w`.
-    
+
 Test your function using the inputs `w_start=mg.tensor([2.0, 4.0])`, `learning_rate=0.1`, and `num_steps=10`.
 
 ```python
@@ -832,7 +832,7 @@ import numpy as np
 
 def descent_down_2d_parabola(w_start, learning_rate, num_steps):
     """
-    Performs gradient descent on ℒ(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 , 
+    Performs gradient descent on ℒ(w1, w2) = 2 * w1 ** 2 + 3 * w2 **2 ,
     returning the sequence of w-values: [w_start, ..., w_stop]
 
     Parameters
@@ -849,15 +849,15 @@ def descent_down_2d_parabola(w_start, learning_rate, num_steps):
     Returns
     -------
     Tensor, shape-(2,)
-        The final updated values of (w_1, w_2) 
+        The final updated values of (w_1, w_2)
     """
     # <COGINST>
     # We don't want to mutate our input tensor,
     # so we make a copy
-    w = mg.tensor(w_start) 
-    
+    w = mg.tensor(w_start)
+
     const = np.array([2.0, 3.0])
-    
+
     for _ in range(num_steps):
         ℒ = const * w ** 2
         ℒ.backward()

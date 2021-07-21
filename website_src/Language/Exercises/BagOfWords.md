@@ -15,11 +15,11 @@ jupyter:
     execute: never
 ---
 
-# Encoding Text Documents to Numerical Representations
+# Encoding Text Documents to Numerical Representations -- FORCING DIFF
 
-In this notebook, we will implement methods that allow us to ascribe text documents numerical representations (a.k.a encodings). This will permit us to perform quantitative analysis on text documents and correspond this analysis to qualitative conclusions. E.g. two documents whose encodings have a small distance between them are likely to discuss similar subject matters. 
+In this notebook, we will implement methods that allow us to ascribe text documents numerical representations (a.k.a encodings). This will permit us to perform quantitative analysis on text documents and correspond this analysis to qualitative conclusions. E.g. two documents whose encodings have a small distance between them are likely to discuss similar subject matters.
 
-Arriving at methods for giving text documents numerical encodings will enable us to apply some of the powerful analysis and machine learning techniques that we learned during the Vision portion of the program. 
+Arriving at methods for giving text documents numerical encodings will enable us to apply some of the powerful analysis and machine learning techniques that we learned during the Vision portion of the program.
 
 Central to this encoding process is the observation that simply using **a "bag of words" approach - eschewing word-order and simply accounting for the word-contents of documents -** is often times sufficient for performing quantitative document comparisons.
 
@@ -61,11 +61,11 @@ punc_regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
 
 def strip_punc(corpus):
     """ Removes all punctuation from a string.
-        
+
         Parameters
         ----------
         corpus : str
-        
+
         Returns
         -------
         str
@@ -110,7 +110,7 @@ Document -> remove punctuation and lowercase -> tokenize:
 
 Then, create **the term-frequency descriptor for the document**; this stores how many times each word occurs in the document, using alphabetical ordering for the document. For instance. Given the document "Bad apple seed. Bad apple." The tf-descriptor is a length-3 array (make it be of floats, not ints):
 
-``` 
+```
     index proceeds in alphabetical order
     ------------------------------------
     tf[0] -> count of "apple" = 2
@@ -121,7 +121,7 @@ Then, create **the term-frequency descriptor for the document**; this stores how
 "Bad apple seed. Bad apple." -> array([2., 2., 1.])
 ```
 
-Notice that we're counting the actual number of times each word appears in the document (e.g., "apple" appears 2 times) versus just indicating that "apple" appeared at least once. This is why the overall approach is called **"bag of words"**. The (sorted) **set** of words occuring in the example is {'apple', 'bad', 'seed'}. But the (sorted) **bag** of words is {'apple', 'apple', 'bad', 'bad', 'seed'}, since a mathematical "bag" (or multiset) is a set in which items can be contained more than once. 
+Notice that we're counting the actual number of times each word appears in the document (e.g., "apple" appears 2 times) versus just indicating that "apple" appeared at least once. This is why the overall approach is called **"bag of words"**. The (sorted) **set** of words occuring in the example is {'apple', 'bad', 'seed'}. But the (sorted) **bag** of words is {'apple', 'apple', 'bad', 'bad', 'seed'}, since a mathematical "bag" (or multiset) is a set in which items can be contained more than once.
 <!-- #endregion -->
 
 <!-- #region -->
@@ -172,7 +172,7 @@ If we use the code from the previous section to produce TF descriptors for both 
 
 They would have identical descriptors when they clearly shouldn't! We need to adapt our indexing scheme so that we index (alphabetically) according to the words contained in **all** documents under consideration. I.e.
 
-``` 
+```
     index proceeds in alphabetical order
     ------------------------------------
     tf[0] -> count of "a"
@@ -204,14 +204,14 @@ Make sure to write a good docstring!
 
 ```python
 def to_counter(doc):
-    """ 
+    """
     Produce word-count of document, removing all punctuation
     and making all the characters lower-cased.
-    
+
     Parameters
     ----------
     doc : str
-    
+
     Returns
     -------
     collections.Counter
@@ -239,18 +239,18 @@ Now that we can produce the word-counter for each one of our documents, we want 
 
 ```python
 def to_vocab(counters):
-    """ 
-    Takes in an iterable of multiple counters, and returns a sorted list of unique words 
+    """
+    Takes in an iterable of multiple counters, and returns a sorted list of unique words
     accumulated across all the counters
-    
+
     [word_counter0, word_counter1, ...] -> sorted list of unique words
-    
+
     Parameters
     ----------
     counters : Iterable[collections.Counter]
         An iterable containing {word -> count} counters for respective
         documents.
-    
+
     Returns
     -------
     List[str]
@@ -293,15 +293,15 @@ import numpy as np
 def to_tf(counter, vocab):
     """
     Given a vocabulary and a document's word-count, constructs an array of term-frquencies.
-    
+
     Parameters
     ----------
     counter : Counter
         The word -> count mapping for a document.
-    
+
     vocab : List[str]
         The list of all words that we are including in our vocabulary.
-    
+
     Returns
     -------
     numpy.ndarray, shape-(N_vocab,)
@@ -339,23 +339,23 @@ print(tfs)
 
 ## Refining our bag of words
 
-We see that our vocabulary is what determines the dimensionality of our descriptors. This may grow to be needlessly large; simply because an article uses the word mayonnaise once to convey a metaphor means that all of our descriptors must accommodate yet another feature dimension (dedicated to counting how many times "mayonnaise" occurs in a document). 
+We see that our vocabulary is what determines the dimensionality of our descriptors. This may grow to be needlessly large; simply because an article uses the word mayonnaise once to convey a metaphor means that all of our descriptors must accommodate yet another feature dimension (dedicated to counting how many times "mayonnaise" occurs in a document).
 
 Of course, we are free to restrict our vocabulary as we see fit. Let's modify `to_vocab` such that we can choose to only retain the $k$ most popular terms across all documents. Make this an optional argument, such that the default behavior of `to_vocab` matches what it was before (i.e. to retain all the words). Your code should work even if $k$ is larger than the number of possible words in your vocabulary.
 
 ```python
 def to_vocab(counters, k=None):
-    """ 
-    Convert a collection of counters to a sorted list of the top-k most common words 
-    
+    """
+    Convert a collection of counters to a sorted list of the top-k most common words
+
     Parameters
     ----------
     counters : Sequence[collections.Counter]
         A list of counters; each one is a word tally for a document
-    
+
     k : Optional[int]
         If specified, only the top-k words are returned
-        
+
     Returns
     -------
     List[str]
@@ -383,9 +383,9 @@ assert to_vocab(word_counts, k=6) == to_vocab(word_counts, k=None)
 # </COGINST>
 ```
 
-The most common words aren't very meaningful. In fact this is essentially always the case - [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law) effectively reveals that the "substantial" words in written documents occupy represent a scant fraction of the document's words. 
+The most common words aren't very meaningful. In fact this is essentially always the case - [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law) effectively reveals that the "substantial" words in written documents occupy represent a scant fraction of the document's words.
 
-The following code will open and read the wikipedia text file located in the `Week3/` directory, and assign the resulting string to the variable `wiki`. 
+The following code will open and read the wikipedia text file located in the `Week3/` directory, and assign the resulting string to the variable `wiki`.
 
 Use `wiki` as the sole document to construct the vocabulary (keep in mind that `to_vocab` expects to receive *an iterable*, e.g. a list, of word-counts), using the top-50 most common words. Print the resulting vocabulary. What do you notice about them? Are they very descriptive? Discuss with your neighbors.
 
@@ -408,17 +408,17 @@ Update `to_vocab` to accept an arbitrary sequence (e.g. list) of so-called "stop
 
 ```python
 def to_vocab(counters, k=None, stop_words=tuple()):
-    """ 
+    """
     [word, word, ...] -> sorted list of top-k unique words
     Excludes words included in `stop_words`
-    
+
     Parameters
     ----------
     counters : Iterable[Iterable[str]]
-    
+
     k : Optional[int]
         If specified, only the top-k words are returned
-    
+
     stop_words : Collection[str]
         A collection of words to be ignored when populating the vocabulary
     """
@@ -426,7 +426,7 @@ def to_vocab(counters, k=None, stop_words=tuple()):
     vocab = Counter()
     for counter in counters:
         vocab.update(counter)
-        
+
     for word in set(stop_words):
         vocab.pop(word, None)  # if word not in bag, return None
     return sorted(i for i,j in vocab.most_common(k))
@@ -456,7 +456,7 @@ wik2 = to_vocab([wiki_count], k=50, stop_words=stops)
 We now have the ability to refine our vocabulary such that we ignore certain "stop" words (common "glue" words that don't add meaning to a document), and such that we only consider the top-$k$ most popular words. This will make our TF descriptors both shorter and more discerning.
 
 <!-- #region -->
-Compute the TF descriptors for the 4-documents from above: 
+Compute the TF descriptors for the 4-documents from above:
 
 ```
 doc_1 = "I am a dog."
@@ -488,16 +488,16 @@ We have to keep in mind that our bag of words methodology already eliminates any
 We also could never have distinguished "Ryan is taller than Megan" from "Megan is taller than Ryan"! Clearly there is a coarseness that we must accept as part of the simplicity that is the bag of words.
 
 
-### Providing weights for terms: Computing term-frequency instead of term-count 
+### Providing weights for terms: Computing term-frequency instead of term-count
 Another major issue that we must face how to scale our descriptors - currently, long documents will have much longer higher-magnitude descriptor vectors than will shorter ones, since the longer documents have more words. Documents should not necessarily be weighted more heavily simply because they are longer.
 
-We can easily address this issue by normalizing our term-frequency descriptors such that their components reflect **per-document frequency** of the terms, rather than **per-document count** of the terms. 
+We can easily address this issue by normalizing our term-frequency descriptors such that their components reflect **per-document frequency** of the terms, rather than **per-document count** of the terms.
 
 \begin{equation}
 c_{t,d} \rightarrow f_{t,d} = \frac{c_{t,d}}{\sum_{t' \in \text{vocab}}c_{t',d}}
 \end{equation}
 
-Where $c_{t,d}$ is the count of term $t$ within document $d$, for each $t$ in our vocabulary. Therefore $f_{t,d}$ represents the *frequency* with which term $t$ occurs within document $d$. The denominator 
+Where $c_{t,d}$ is the count of term $t$ within document $d$, for each $t$ in our vocabulary. Therefore $f_{t,d}$ represents the *frequency* with which term $t$ occurs within document $d$. The denominator
 
 \begin{equation}
 \sum_{t'}c_{t',d}
@@ -516,7 +516,7 @@ def to_tf(counter, vocab):
         The word -> count mapping for a document.
     vocab : Sequence[str]
         Ordered list of words that we care about.
-    
+
     Returns
     -------
     numpy.ndarray
@@ -532,8 +532,8 @@ def to_tf(counter, vocab):
 ## Computing Inverse Document Frequency
 
 <!-- #region -->
-The last major consideration we will take in the formulation of this numerical encoding is the "inverse document frequency" of terms. Although we are able to remove stop words from our vocabulary, we would like to express the fact that **a term that appears in all documents, in roughly equal proportions, holds no power to distinguish our documents from one another**. The contrapositive of this statement is that **words that appear infrequently across documents, but frequently in a few documents serve as good markers for those documents - those terms should be weighted heavily in the descriptors.** 
-Towards this end: let $N$ be the number of documents we are working with, in total, and $n_{t}$ be the total number of documents in which the term $t$ appears ($t$ must be in our vocabulary). Then the **inverse document frequency** (IDF) of term $t$ is given by: 
+The last major consideration we will take in the formulation of this numerical encoding is the "inverse document frequency" of terms. Although we are able to remove stop words from our vocabulary, we would like to express the fact that **a term that appears in all documents, in roughly equal proportions, holds no power to distinguish our documents from one another**. The contrapositive of this statement is that **words that appear infrequently across documents, but frequently in a few documents serve as good markers for those documents - those terms should be weighted heavily in the descriptors.**
+Towards this end: let $N$ be the number of documents we are working with, in total, and $n_{t}$ be the total number of documents in which the term $t$ appears ($t$ must be in our vocabulary). Then the **inverse document frequency** (IDF) of term $t$ is given by:
 
 \begin{equation}
 \log_{10}{\frac{N}{n_{t}}}
@@ -543,7 +543,7 @@ We want to compute the IDF for each term in our vocabulary.
 
 Assume we are working with the documents:
 
-``` 
+```
     doc-1: "apple strawberry"
     doc-2: "apple blueberry"
 ```
@@ -562,10 +562,10 @@ Write a function that takes the ordered vocabulary and a list containing the wor
 
 ```python
 def to_idf(vocab, counters):
-    """ 
+    """
     Given the vocabulary, and the word-counts for each document, computes
     the inverse document frequency (IDF) for each term in the vocabulary.
-    
+
     Parameters
     ----------
     vocab : Sequence[str]
@@ -573,14 +573,14 @@ def to_idf(vocab, counters):
 
     counters : Iterable[collections.Counter]
         The word -> count mapping for each document.
-    
+
     Returns
     -------
     numpy.ndarray
         An array whose entries correspond to those in `vocab`, storing
-        the IDF for each term `t`: 
+        the IDF for each term `t`:
                            log10(N / nt)
-        Where `N` is the number of documents, and `nt` is the number of 
+        Where `N` is the number of documents, and `nt` is the number of
         documents in which the term `t` occurs.
     """
     # <COGINST>
@@ -592,7 +592,7 @@ def to_idf(vocab, counters):
 ```
 
 <!-- #region -->
-It is important to realize that the IDF array is the same shape as each of our descriptors - $(N_{t},)$, where $N_{t}$ is the number of terms in our vocabulary. 
+It is important to realize that the IDF array is the same shape as each of our descriptors - $(N_{t},)$, where $N_{t}$ is the number of terms in our vocabulary.
 
 **Thus we can multiply our IDF vector with each of our term-frequency (TF) descriptors.**
 
@@ -653,7 +653,7 @@ print(tf_idfs)
 
 <!-- #region -->
 ### Applying our encoding
-Having adapted our collection of documents into a set of consistent-length descriptor vectors via bag-of-words with TF-IDF weighting, we can begin to apply familiar analysis and machine learning techniques to NLP problems! 
+Having adapted our collection of documents into a set of consistent-length descriptor vectors via bag-of-words with TF-IDF weighting, we can begin to apply familiar analysis and machine learning techniques to NLP problems!
 
 Let's begin by doing a simple distance measurement to assess document similarity. Rather than use Euclidean distance, we will use "cosine-similarity" to measure the distance between our descriptor vectors:
 
@@ -739,7 +739,7 @@ With our vocabulary in-hand, each document, $d$, can be ascribed a **term-freque
 f_{t,d} = \frac{c_{t,d}}{\sum_{t' \in vocab}c_{t',d}}
 \end{equation}
 
-for each term $t$ in our alphabetically-ordered vocabulary. $c_{t,d}$ is the *count* of term $t$ in that document. This gives us a numerical description of the word-content of the document. 
+for each term $t$ in our alphabetically-ordered vocabulary. $c_{t,d}$ is the *count* of term $t$ in that document. This gives us a numerical description of the word-content of the document.
 
 We can weigh more heavily those terms that help us distinguish between documents, by computing the **inverse document-frequency (IDF)** for each term $t$ in our vocabulary:
 
