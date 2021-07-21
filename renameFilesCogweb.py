@@ -25,7 +25,7 @@ labels = {
     "Cifar10MyGrad_STUDENT.ipynb": "06_Cifar10MyGrad.ipynb",
     "Cifar10MyGrad_STUDENT.ipynb": "07_Cifar10MyGrad.ipynb",
     "WritingCNNOperations_STUDENT.ipynb": "08_WritingCNNOperations.ipynb",
-    "MyGradMNIST_STUDENT.ipynb": "09_MyGradMNIST.ipynb",
+    "MyGradMnist_STUDENT.ipynb": "09_MyGradMnist.ipynb",
 
     "LanguageModels_STUDENT.ipynb": "01_LanguageModels.ipynb",
     "BagOfWords_STUDENT.ipynb": "02_BagOfWords.ipynb",

@@ -16,7 +16,7 @@ jupyter:
 ---
 
 <!-- #region -->
-## Automatic Differentiation at a Glance -- FORCING DIFF
+## Automatic Differentiation at a Glance -- FORCING DIFF --
 
 Suppose that we have the function
 
