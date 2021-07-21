@@ -15,11 +15,12 @@ labels = {
     "DFTOfVariousSignals_STUDENT.ipynb": "05_DFTOfVariousSignals.ipynb",
     "ApplicationsOfDFTs_STUDENT.ipynb": "06_.ApplicationsOfDFTsipynb",
     "Spectrogram_STUDENT.ipynb": "07_Spectrogram.ipynb",
+    "spectrogram_STUDENT.ipynb": "07_Spectrogram.ipynb",
     "PeakFinding_STUDENT.ipynb": "08_PeakFinding.ipynb",
 
     "Data_Exploration_STUDENT.ipynb": "01_Data_Exploration.ipynb",
     "Autodiff_and_Grad_Descent_STUDENT.ipynb": "02_Autodiff_and_Grad_Descent.ipynb",
-    "Linear_Regression_Exercises_STUDENT.ipynb": "03_Linear_Regression_Exercises.ipynb",
+    "Linear_Regression_Exercise_STUDENT.ipynb": "03_Linear_Regression_Exercise.ipynb",
     "UniversalFunctionApprox_STUDENT.ipynb": "04_UniversalFunctionApprox.ipynb",
     "TendrilClassification_STUDENT.ipynb": "05_TendrilClassification.ipynb",
     "TendrilClassificationMyNN_STUDENT.ipynb": "05_TendrilClassificationMyNN.ipynb",

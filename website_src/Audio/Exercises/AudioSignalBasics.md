@@ -21,7 +21,7 @@ jupyter:
     :keywords: sound wave, pressure, audio basics, temporal waveform
 <!-- #endraw -->
 
-# Exercises: Basics of Sound Waves
+# Exercises: Basics of Sound Waves --
 
 ```python
 import matplotlib.pyplot as plt
@@ -30,34 +30,34 @@ import numpy as np
 %matplotlib notebook
 ```
 
-(1.1.1) Create a Python function that describes a pressure wave impinging on a microphone. 
+(1.1.1) Create a Python function that describes a pressure wave impinging on a microphone.
 Assume that the sound wave is a sustained, pure tone of frequency $f$ and amplitude $A$, and that $p(0) = 0$.
 Note that this function represents our *temporal waveform*: the function that you create is defined on a continuous domain.
 While this represents a continuous mathematical function, we must work with concrete numbers when plotting and analyzing these functions on a computer.
 Thus we will evaluate this function at a discrete set of times.
 
-Note that the following function signature makes use of [type hints](https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Writing_Good_Code.html#Type-Hinting). 
-Furthermore, the arguments `amp` and `freq` come after the `*` character in the signature, which means that they are keyword-only arguments in our function. 
+Note that the following function signature makes use of [type hints](https://www.pythonlikeyoumeanit.com/Module5_OddsAndEnds/Writing_Good_Code.html#Type-Hinting).
+Furthermore, the arguments `amp` and `freq` come after the `*` character in the signature, which means that they are keyword-only arguments in our function.
 This is to prevent us from accidentally swapping numbers when we pass our numbers into it.
 
 ```python
 def pressure(times: np.ndarray, *, amp: float, freq: float) -> np.ndarray:
-    """Describes the temporal waveform of a pure tone impinging on a 
-    microphone at times `times` (an array of times). The wave has 
-    an amplitude `amp`, measured in Pascals, and a frequency 
+    """Describes the temporal waveform of a pure tone impinging on a
+    microphone at times `times` (an array of times). The wave has
+    an amplitude `amp`, measured in Pascals, and a frequency
     `freq`, measured in Hz.
-    
+
     Parameters
     ----------
     times : numpy.ndarray, shape=(N,)
         The times at which we want to evaluate the sound wave
-    
+
     amp : float
         The wave's amplitude (measured in Pascals - force per unit area)
-    
+
     freq : float
         The wave's frequency (measured in Hz - oscillations per second)
-    
+
     Returns
     -------
     numpy.ndarray, shape=(N,)
@@ -65,8 +65,8 @@ def pressure(times: np.ndarray, *, amp: float, freq: float) -> np.ndarray:
 
     Notes
     -----
-    We only care about the wave at a fixed location, at the microphone, 
-    which is why we do not have any spatial component to our wave. 
+    We only care about the wave at a fixed location, at the microphone,
+    which is why we do not have any spatial component to our wave.
     """
     # <COGINST>
     return amp * np.sin(2 * np.pi * freq * times)
@@ -75,10 +75,10 @@ def pressure(times: np.ndarray, *, amp: float, freq: float) -> np.ndarray:
 
 <!-- #region -->
 (1.1.2) As stated above, the function that you just wrote can be thought of as a representation of the temporal waveform that is recorded by our microphone: it represents the continuous fluctuations in air density associated with a sound wave.
-We can "sample" this function by evaluating the function at specific times. 
+We can "sample" this function by evaluating the function at specific times.
 
 Evaluate the temporal waveform for a $C_{4}$-note ($261.63 \:\mathrm{Hz}$) played for $3$ seconds with an amplitude of $0.06\:\mathrm{Pascals}$ **using the sampling rate 44100 Hz (samples per second)**.
-That is, evaluate your function at evenly-spaced times according to this sampling rate for a time duration of $3$ seconds. 
+That is, evaluate your function at evenly-spaced times according to this sampling rate for a time duration of $3$ seconds.
 
 You can compute the times at which you will evaluate your function using:
 
@@ -145,7 +145,7 @@ ax.set_xlabel("Time [s]");
 
 <COGNOTE>
     The time required for one repetition is $T = \frac{1}{f}$, and the number of samples that we take per second is $f_s$, thus
-    
+
 \begin{equation}
     N_{samples} = T \times f_s = \frac{f_{s}}{f}
 \end{equation}
@@ -177,7 +177,7 @@ ax.set_xlabel("Time [s]");
  - 523.25 Hz (C)
  - 659.25 Hz (E)
  - 783.99 Hz (G)
- 
+
 Use the same sampling rate of $44,100\; \mathrm{Hz}$ to determine the times at which you will evaluate this temporal waveform.
 
 ```python
@@ -225,7 +225,7 @@ Audio(chord, rate=sampling_rate)
 Isn't it beautiful?
 Notice how messy looking the waveform is. It is wholly unintuitive to look at the data in this way, even though it is only comprised of $3$ simple notes.
 In an upcoming section, we will see that we can convert this *amplitude-time* data into *amplitude-frequency* data, which is much more useful for us!
-This conversion process is known as a **Fourier Transform**. 
+This conversion process is known as a **Fourier Transform**.
 
 
 (1.1.5) Lastly, define a function that describes a pressure wave for **noise**.

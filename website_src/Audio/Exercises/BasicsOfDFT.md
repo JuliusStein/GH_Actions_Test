@@ -26,7 +26,7 @@ jupyter:
 
 **Source Material**:
 
-The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/)
+The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/).
 
 </div>
 
@@ -50,9 +50,9 @@ This should produce identical results to `numpy.fft.rfft`.
 
 ```python code_folding=[]
 def py_dft(samples: Sequence[float]) -> np.ndarray:
-    """Performs a Discrete Fourier Transform (type-1) for 
+    """Performs a Discrete Fourier Transform (type-1) for
     real-valued data.
-        
+
     Parameters
     ----------
     samples : Sequence[float]
@@ -137,7 +137,7 @@ print(np.allclose(complex_coeffs, np.fft.rfft(y_samples)))
 ```
 
 (1.4.5) Recall that $k$ takes on integer values $0, 1, ..., \big\lfloor\frac{N}{2}\big\rfloor$.
-Convert each $k$ value into frequency, $\nu_{k}$, with units of Hz. 
+Convert each $k$ value into frequency, $\nu_{k}$, with units of Hz.
 
 Similarly, $n$ takes on integer values: $0, 1, ..., N - 1$.
 Convert $n$ into time, $t_{n}$, with units of seconds.
@@ -162,9 +162,9 @@ freqs = k / T  # units: Hz
 
 (1.4.6) What should the plot of $|a_{k}|$ vs $\nu_{k}$, look like, considering the form of the original signal that we sampled?
 
-- Should there be one peak? Multiple peaks? 
+- Should there be one peak? Multiple peaks?
 - At what value(s) of $k$ should the peak(s) reside?
-- What should the value(s) of $\varphi'_k$ at the peak(s) be? 
+- What should the value(s) of $\varphi'_k$ at the peak(s) be?
 
 > 1.4.6 Solution: <COGINST>Because we are taking the DFT of a pure sinusoid, sampled over a periodic region, we expect the Fourier spectrum to consist of a single peak residing at the same frequency as the sinusoid.
 >
@@ -205,18 +205,18 @@ def fourier_complex_to_real(
     complex_coeffs: np.ndarray, N: int
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Converts complex-valued Fourier coefficients (of 
-    real-valued data) to the associated amplitudes and 
+    Converts complex-valued Fourier coefficients (of
+    real-valued data) to the associated amplitudes and
     phase-shifts of the real-valued sinusoids
-    
+
     Parameters
     ----------
     complex_coeffs : numpy.ndarray, shape-(N//2 + 1,)
         The complex valued Fourier coefficients for k=0, 1, ...
-    
+
     N : int
         The number of samples that the DFT was performed on.
-    
+
     Returns
     -------
     Tuple[numpy.ndarray, numpy.ndarray]
@@ -274,7 +274,7 @@ Given that these two expressions are equal, we have:
 \end{equation}
 
 
-(1.4.7) Given this expression, what should $c_{k_{\text{peak}}}$ be equal to? What should $k_{\text{peak}}$ be equal to? 
+(1.4.7) Given this expression, what should $c_{k_{\text{peak}}}$ be equal to? What should $k_{\text{peak}}$ be equal to?
 
 Verify that the values for $c_{k_{\text{peak}}}$ and $k_{\text{peak}}$ produced by your DFT match the values that you predict.
 <!-- #endregion -->
@@ -305,7 +305,7 @@ np.allclose(np.fft.irfft(complex_coeffs, n=len(y_samples)), y_samples) # <COGLIN
  - $523.25\;\mathrm{Hz}$ (C)
  - $659.25\;\mathrm{Hz}$ (E)
  - $783.99\;\mathrm{Hz}$ (G)
- 
+
 where each pure tone has an amplitude of $1\:\mathrm{Pascal}$.
 
 

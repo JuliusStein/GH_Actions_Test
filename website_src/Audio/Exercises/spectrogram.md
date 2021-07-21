@@ -23,7 +23,7 @@ jupyter:
 
 # Exercise: Creating Our Own Spectrogram
 
-In this notebook we will learn how to create our own *spectrogram*.
+In this notebook we will learn how to create our own *spectrogram*!
 A spectrogram is a visual representation of the frequencies in a signal (such as an audio signal) *as they vary in time*.
 That is, whereas plotting the Fourier components (i.e. the Fourier spectrum) of a signal tells us what frequencies are present in the signal, a spectrogram will tell us what frequencies are present in the signal and *where/when* they occur.
 This is an extremely powerful tool for signal analysis.
@@ -76,7 +76,7 @@ fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8, 4))
 # Compute the times at which each sample was recorded in seconds
 
 # Define the following variable(s)
-# `time`: array storing t_0, t_1, ..., t_{N-1} 
+# `time`: array storing t_0, t_1, ..., t_{N-1}
 time = np.arange(len(recorded_audio)) / sampling_rate  # <COGLINE>
 
 # Plotting the waveform (every 100th datapoint for sake of efficiency)
@@ -172,10 +172,10 @@ This plot reveals that the prominent notes are being played in unison, and susta
 
 (1.7.1) Create the function, `plot_recording`, that:
 
-- Accepts a time-length, in seconds 
+- Accepts a time-length, in seconds
 - Uses `microphone.record_audio` to record audio for that duration of time
 - converts the "frames" of audio data to a numpy array, using `np.hstack([np.frombuffer(i, np.int16) for i in frames])`
-- Uses `mlab.specgram` to plot the spectrogram for that recording 
+- Uses `mlab.specgram` to plot the spectrogram for that recording
 - Returns the matplotlib `Figure` and `Axes` object instances that were produced by the plot
 
 Set the $y$-limit to only plot up to $10,000\;\mathrm{Hz}$.
@@ -183,14 +183,14 @@ Don't change any of the spectrogram settings other than the data that you pass i
 
 ```python
 def plot_recording(time: float) -> Tuple[plt.Figure, plt.Axes]:
-    """ 
+    """
     Record audio and plot its spectrogram.
-    
+
     Parameters
     ----------
     time : float
         The duration (seconds) to record audio for
-    
+
     Returns
     -------
     fig, ax
@@ -218,7 +218,7 @@ def plot_recording(time: float) -> Tuple[plt.Figure, plt.Axes]:
 ```
 
 To continue building our intuition for the spectrogram, use `microphone.record_audio` to record a $5$ second clip of yourself whistling, clapping, etc.
-Try varying the pitch, rhythm, etc. during the clip. Plot the clip as a spectrogram. 
+Try varying the pitch, rhythm, etc. during the clip. Plot the clip as a spectrogram.
 
 ```python
 plot_recording(5); # <COGLINE>
@@ -230,7 +230,7 @@ This is extremely useful! Now how exactly is this working?
 <!-- #region -->
 ## Digging into Spectrograms
 
-A spectrogram is constructed simply by dividing your signal into $M$ temporal windows, each of time-length $\Delta t$ and consisting of $N$ samples: 
+A spectrogram is constructed simply by dividing your signal into $M$ temporal windows, each of time-length $\Delta t$ and consisting of $N$ samples:
 
 \begin{equation}
 (y_{n})_{\text{full recording}} \Longrightarrow
@@ -251,20 +251,20 @@ This produces a frequency spectrum for each time bin of size $\Delta t$; this ma
     \leftarrow   &  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{1}} & \rightarrow \\
     & \vdots  &\\
     \leftarrow   &  \big\{(y_{n})_{n=0}^{N-1}\big\}_{\Delta t_{M-1}} & \rightarrow  \\
-\end{bmatrix} \Longrightarrow 
+\end{bmatrix} \Longrightarrow
 \begin{bmatrix}
     \leftarrow   &  \big\{(|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{0}} & \rightarrow  \\
     \leftarrow   &  \big\{|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{1}}  & \rightarrow \\
     & \vdots  &\\
     \leftarrow   &  \big\{|a_{k}|)_{k=0}^{\lfloor N/2 \rfloor}\big\}_{\Delta t_{M-1}} & \rightarrow  \\
-\end{bmatrix} 
+\end{bmatrix}
 \end{equation}
 
 
 
 If each temporal-window of our digital audio signal contains $N$ samples, then the Fourier transform on each window will produce $\left\lfloor\frac{N}{2}\right\rfloor + 1$ Fourier coefficients $(|a_{k}|)_{k=0}^{\lfloor N/2\rfloor}$.
 Remember that we are interested in the *amplitude* of each Fourier coefficient, not its complex value, for the spectrogram.
-This allows us to know what the frequency distribution is in our signal during each time-interval (a.k.a temporal window). 
+This allows us to know what the frequency distribution is in our signal during each time-interval (a.k.a temporal window).
 The time window starts at $m\Delta t$ and ends at $(m+1)\Delta t$, for $m \in [0, 1, \dots, M-1]$.
 
 **The *transpose* of the depicted array is what we plot in the spectrogram**: each column corresponds to one of $M$ temporal windows, and stores the Fourier spectrum of the audio recording during that time-interval.
@@ -401,7 +401,7 @@ window_dt *= extend_factor
 window_size = int(window_dt * 44100)
 # </COGINST>
 
-# Using the above window size and `sliding_window_view`, create an array 
+# Using the above window size and `sliding_window_view`, create an array
 # of non-overlapping windows of the audio data.
 # What should the step-size be so that the windows are non-overlapping?
 
@@ -452,7 +452,7 @@ Assign this to `T`.
 T = len(recorded_audio) / 44100 # <COGLINE>
 ```
 
-Compute the maximum frequency included in the Fourier spectrum for any of the given temporal windows. 
+Compute the maximum frequency included in the Fourier spectrum for any of the given temporal windows.
 Assign this float value to `F`.
 
 ```python
@@ -497,10 +497,10 @@ Matplotlib's spectrogram looks much cleaner than ours because they use nice tech
 
 At its core though, a spectrogram is as simple as applying a Fourier transform on time-windowed bins of the signal, and plotting the resulting Fourier coefficient amplitudes as the columns of a frequency vs time plot, with each column corresponding to a time window of the signal.
 
-- col-0 : Fourier spectrum of signal during $\Delta t_0$ 
-- col-1 : Fourier spectrum of signal during $\Delta t_1$ 
+- col-0 : Fourier spectrum of signal during $\Delta t_0$
+- col-1 : Fourier spectrum of signal during $\Delta t_1$
 - $\vdots$
 
 
 To improve the quality of your spectrogram, you can try doubling the window size, but keeping the same stride.
-Thus the windows will partially overlap, which will help to mitigate the effects of the artificial boundaries that we introduced in our windowing. 
+Thus the windows will partially overlap, which will help to mitigate the effects of the artificial boundaries that we introduced in our windowing.

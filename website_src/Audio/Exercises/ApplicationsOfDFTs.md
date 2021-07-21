@@ -25,7 +25,7 @@ jupyter:
 
 **Source Material**:
 
-The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/)
+The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/).
 
 </div>
 
@@ -42,14 +42,14 @@ from typing import Tuple
 ```
 
 <!-- #region -->
-### Sunspot Data Analysis 
+### Sunspot Data Analysis
 
 (1.6.1a) Read in the `sunspots.txt` data as a 2-D array.
 This file contains the number of recorded sunspots in a given month over a timespan of hundreds of years.
 
 There are two columns of numbers (separated by tabs) in the data.
 The first column is the number of the recorded month.
-The second column is the number of sunspots recorded in that month. 
+The second column is the number of sunspots recorded in that month.
 
 Use the following code to read in this data:
 
@@ -59,7 +59,7 @@ with open("data/sunspots.txt", "r") as F:
     # column-0: month number
     # column-1: count of sunspots that month
     data = np.array([[float(i) for i in j.split('\t')] for j in F])
-    
+
 ```
 
 Once you read in the data, determine: how many months are accounted for in this dataset?
@@ -102,18 +102,18 @@ def fourier_complex_to_real(
     complex_coeffs: np.ndarray, N: int
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Converts complex-valued Fourier coefficients (of 
-    real-valued data) to the associated amplitudes and 
+    Converts complex-valued Fourier coefficients (of
+    real-valued data) to the associated amplitudes and
     phase-shifts of the real-valued sinusoids
-    
+
     Parameters
     ----------
     complex_coeffs : numpy.ndarray, shape-(N//2 + 1,)
         The complex valued Fourier coefficients for k=0, 1, ...
-    
+
     N : int
         The number of samples that the DFT was performed on.
-    
+
     Returns
     -------
     Tuple[numpy.ndarray, numpy.ndarray]
@@ -257,7 +257,7 @@ fig.tight_layout()
 
 Let's try manipulating this audio signal.
 
-First, make a copy of the complex-valued Fourier coefficients to a new array. 
+First, make a copy of the complex-valued Fourier coefficients to a new array.
 Then find all of the coefficient such that $|a_{k}| > 100$ and **set those complex-valued coefficients to 0**.
 Next, take the inverse Fourier transform (`np.fft.irfft`) of the now-modified set of complex-valued Fourier coefficients, to produce a "mutated" collection of samples $(y^{\text{mutated}}_n)_{n=0}^{N-1}$.
 This is a new set of audio samples, but with those Fourier components missing!
@@ -290,7 +290,7 @@ fig.tight_layout();
 Play the audio from this new sample.
 Consider what filtering you performed on the Fourier coefficients and how this affected the audio sample.
 Does this make sense to you?
-Chat with a neighbor about this. 
+Chat with a neighbor about this.
 
 ```python
 Audio(new_trumpet, rate=44100) # <COGLINE>
@@ -442,8 +442,8 @@ Then repeat this, but with zeroing out the top $98\%$ coefficients.
 In both of these cases, on what scale are the fluctuations being filtered out?
 
 > <COGINST> 1.6.9 Solution: `k[round(.1 * len(k))]` is the frequency after the $10\%$ lowest frequencies.
-It is $\sim 0.05\;\frac{1}{\text{days}}$, which corresponds to fluctuations over the span of $20$ days. 
-This is the lowest frequency that we will filter out. 
+It is $\sim 0.05\;\frac{1}{\text{days}}$, which corresponds to fluctuations over the span of $20$ days.
+This is the lowest frequency that we will filter out.
 Thus, filtering out the top $90\%$ of the coefficients removes all of the day-to-day fluctuations, up to the fluctuations over twenty-day spans.
 Repeating this analysis, filtering the top $98\%$ coefficients extends this up to $100$-day fluctuations.</COGINST>
 

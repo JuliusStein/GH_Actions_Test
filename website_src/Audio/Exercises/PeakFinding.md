@@ -21,7 +21,7 @@ jupyter:
     :keywords: fingerprint, audio matching, local maxima
 <!-- #endraw -->
 
-# Exercises: Finding Local Peaks in a 2-D Array
+# Exercises: Finding Local Peaks in a 2-D Array --
 
 ```python
 import numpy as np
@@ -42,7 +42,7 @@ from typing import Tuple, Callable, List
 
 
 We want to find the primary points of contact made by puppy-paws on a pressure-sensor.
-There are $4$ images that are each $11\times14$ pixels. 
+There are $4$ images that are each $11\times14$ pixels.
 Let's load and visualize this data.
 
 ```python
@@ -150,7 +150,7 @@ from numba import njit
 # compile this function using the "low level virtual machine" (LLVM)
 # compiler. The resulting object is a Python function that, when called,
 # executes optimized machine code instead of the Python code
-# 
+#
 # The code used in _peaks adheres strictly to the subset of Python and
 # NumPy that is supported by Numba's jit. This is a requirement in order
 # for Numba to know how to compile this function to more efficient
@@ -161,7 +161,7 @@ def _peaks(
 ) -> List[Tuple[int, int]]:
     """
     A Numba-optimized 2-D peak-finding algorithm.
-    
+
     Parameters
     ----------
     data_2d : numpy.ndarray, shape-(H, W)
@@ -169,18 +169,18 @@ def _peaks(
 
     rows : numpy.ndarray, shape-(N,)
         The 0-centered row indices of the local neighborhood mask
-    
+
     cols : numpy.ndarray, shape-(N,)
         The 0-centered column indices of the local neighborhood mask
-        
+
     amp_min : float
-        All amplitudes at and below this value are excluded from being local 
+        All amplitudes at and below this value are excluded from being local
         peaks.
-    
+
     Returns
     -------
     List[Tuple[int, int]]
-        (row, col) index pair for each local peak location. 
+        (row, col) index pair for each local peak location.
     """
     peaks = []  # stores the (row, col) locations of all the local peaks
 
@@ -192,7 +192,7 @@ def _peaks(
             # The amplitude falls beneath the minimum threshold
             # thus this can't be a peak.
             continue
-        
+
         # Iterating over the neighborhood centered on (r, c)
         # dr: displacement from r
         # dc: discplacement from c
@@ -220,7 +220,7 @@ def _peaks(
     return peaks
 
 # `local_peak_locations` is responsible for taking in the boolean mask `neighborhood`
-# and converting it to a form that can be used by `_peaks`. This "outer" code is 
+# and converting it to a form that can be used by `_peaks`. This "outer" code is
 # not compatible with Numba which is why we end up using two functions:
 # `local_peak_locations` does some initial pre-processing that is not compatible with
 # Numba, and then it calls `_peaks` which contains all of the jit-compatible code
@@ -228,30 +228,30 @@ def local_peak_locations(data_2d: np.ndarray, neighborhood: np.ndarray, amp_min:
     """
     Defines a local neighborhood and finds the local peaks
     in the spectrogram, which must be larger than the specified `amp_min`.
-    
+
     Parameters
     ----------
     data_2d : numpy.ndarray, shape-(H, W)
         The 2D array of data in which local peaks will be detected
-    
+
     neighborhood : numpy.ndarray, shape-(h, w)
         A boolean mask indicating the "neighborhood" in which each
         datum will be assessed to determine whether or not it is
         a local peak. h and w must be odd-valued numbers
-        
+
     amp_min : float
-        All amplitudes at and below this value are excluded from being local 
+        All amplitudes at and below this value are excluded from being local
         peaks.
-    
+
     Returns
     -------
     List[Tuple[int, int]]
         (row, col) index pair for each local peak location.
-    
+
     Notes
     -----
     Neighborhoods that overlap with the boundary are mirrored across the boundary.
-    
+
     The local peaks are returned in column-major order.
     """
     rows, cols = np.where(neighborhood)
@@ -322,7 +322,7 @@ def plot_compare(
 
     cutoff : float, optional (default=-np.inf)
          A threshold value that distinguishes background from foreground
-         
+
     Returns
     -------
     Tuple[matplotlib.Figure, matplotlib.Axes]
@@ -341,8 +341,8 @@ def plot_compare(
 plot_compare(paws, local_peaks_mask); # <COGLINE>
 ```
 
-What do you see in these right-column images? 
-Are these precisely the results we are looking for? 
+What do you see in these right-column images?
+Are these precisely the results we are looking for?
 What seems to be off?
 
 > <COGINST>1.8.5 Solution: No, the regions of the image that are blanketed in background (== 0) are also considered to be local peaks, since there are no smaller or larger points in their vicinity.
@@ -366,7 +366,7 @@ To summarize this process, we:
  - Determined a neighborhood that was appropriate for measuring local peaks.
  - Created a max-filtered version of our data.
  - Demanded that our local peaks be in the "foreground" of our data.
- 
+
 This will be very useful to help us find the "fingerprint features" of a song, given its spectrogram (frequency vs time) data.
 
 
@@ -414,11 +414,11 @@ import numpy as np
 def ecdf(data):
     """Returns (x) the sorted data and (y) the empirical cumulative-proportion
     of each datum.
-    
+
     Parameters
     ----------
     data : numpy.ndarray, size-N
-    
+
     Returns
     -------
     Tuple[numpy.ndarray shape-(N,), numpy.ndarray shape-(N,)]
@@ -463,6 +463,6 @@ cutoff_log_amplitude
 ```
 
 We see that $90\%$ of all the log-amplitudes in the spectrogram fall below $-0.346$.
-Thus $90\%$ of all of the Fourier coefficient amplitudes in this audio clip, $|a_{k}|$, fall beneath $e^{-0.346} \approx 0.71$. 
+Thus $90\%$ of all of the Fourier coefficient amplitudes in this audio clip, $|a_{k}|$, fall beneath $e^{-0.346} \approx 0.71$.
 
 We could use $-0.346$ as a cutoff value for distinguishing foreground from background when finding peaks in the log-amplitude spectrogram for our trumpet audio clip!

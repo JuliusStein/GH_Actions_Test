@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Exercises: Fitting a Linear Model with Gradient Descent --
+# Exercises: Fitting a Linear Model with Gradient Descent
 
 This notebook is a very important one.
 We will return to our favorite problem: modeling the relationship between an NBA player's height and his wingspan using a linear model.

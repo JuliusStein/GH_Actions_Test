@@ -21,7 +21,7 @@ jupyter:
     :keywords: analog, digital, microphone
 <!-- #endraw -->
 
-# Exercises: Working with the Microphone
+# Exercises: Working with the Microphone --
 
 
 In this notebook, we will learn how to access the digitized audio recording our microphones, and access the audio samples as a numpy array of data that we can analyze and manipulate.
@@ -37,8 +37,8 @@ from typing import Tuple
 ```
 
 <!-- #region -->
-As discussed in the [preceding section](https://rsokl.github.io/CogWeb/Audio/digitizing_signals.html), a microphone is responsible for converting the information carried by sound waves into an analog electrical signal, which it then digitizes through a process comparable to pulse code modulation (PCM). 
-Let's take some time to understand how we can access the digital audio samples that are recorded by your microphone. 
+As discussed in the [preceding section](https://rsokl.github.io/CogWeb/Audio/digitizing_signals.html), a microphone is responsible for converting the information carried by sound waves into an analog electrical signal, which it then digitizes through a process comparable to pulse code modulation (PCM).
+Let's take some time to understand how we can access the digital audio samples that are recorded by your microphone.
 
 Your microphone stores the audio on buffer frames, which is just an area of RAM made for temporary storage.
 Buffers are typically used when there is a difference between the rate at which data is received and the rate at which it can be processed.
@@ -46,9 +46,9 @@ The details of buffer frames are not especially important though.
 We only need to know that our digital signal will be stored as a collection of bytes in memory across a number of frames.
 
 ## Using the Microphone Python Package
-The `microphone.record_audio` package records and digitizes an analog signal and returns a tuple containing 
+The `microphone.record_audio` package records and digitizes an analog signal and returns a tuple containing
 
-1. a list of bytes in memory corresponding to the digital signal 
+1. a list of bytes in memory corresponding to the digital signal
 2. the sampling rate.
 
 (Remember that, in a Jupyter Notebook, you can check this by inspecting the function's docstring with `SHIFT-TAB`)
@@ -107,7 +107,7 @@ samples = np.hstack([np.frombuffer(i, np.int16) for i in frames])
 You can listen to the audio samples are stored in the resulting NumPy array (_not_ the memory frames) using
 
 ```python
-# Listen to your recording 
+# Listen to your recording
 Audio(samples, rate=sample_rate)
 ```
 
@@ -123,23 +123,23 @@ Remember that we will also want to save the sampling rate of the digital signal,
 In other words, `array_to_save[0] == sample_rate` and `array_to_save[1] == samples[0]`.
 This additional information that we save are saving to the beginning of our array, to provide context for interpreting the rest of the data in the array, is often referred to as a "file header".
 
-An important note: we converted the bytes in the buffer frames into signed $16$-bit integers. However, the standard sampling rate of $44,100\:\mathrm{Hz}$ cannot be stored as a signed $16$-bit integer (the largest signed 16-bit integer is $\pm 32,768$), meaning that in order to store `sample_rate` alongside `samples`, `array_to_save` must store $32$-bit integers instead of $16$-bit integers. 
+An important note: we converted the bytes in the buffer frames into signed $16$-bit integers. However, the standard sampling rate of $44,100\:\mathrm{Hz}$ cannot be stored as a signed $16$-bit integer (the largest signed 16-bit integer is $\pm 32,768$), meaning that in order to store `sample_rate` alongside `samples`, `array_to_save` must store $32$-bit integers instead of $16$-bit integers.
 
 ```python
 def record_and_save(listen_time: float, file_path: str):
     """
-    Uses microphone to record and digitize an analog signal 
+    Uses microphone to record and digitize an analog signal
     and save the resulting digital signal and sampling rate to npy file.
-    
+
     The first element in the saved array should store the the sample-rate;
     the remaining elements in the array should store the sampled data itself.
-    
-    
+
+
     Parameters
     ----------
     listen_time : float
         Length of recording in seconds.
-        
+
     file_path : Union[str, pathlib.Path]
         Path to the file destination. E.g. "my_audio.npy" will save an audio
         file called "my_audio.npy" to the current working directory.
@@ -166,12 +166,12 @@ The function [numpy.load](https://numpy.org/doc/1.18/reference/generated/numpy.l
 def load_and_parse(file_path: str) -> Tuple[np.ndarray, int]:
     """
     Loads a saved digital signal from an npy file and returns the signal and the sampling rate.
-    
+
     Parameters
     ----------
     file_path : Union[str, pathlib.Path]
         Path to the numpy-based audio file (.npy) to be loaded
-        
+
     Returns
     -------
     Tuple[np.ndarray, int]
@@ -179,10 +179,10 @@ def load_and_parse(file_path: str) -> Tuple[np.ndarray, int]:
     """
     # <COGINST>
     loaded_array = np.load(file_path)
-    
+
     sample_rate = loaded_array[0]
     signal = loaded_array[1:]
-    
+
     return signal, sample_rate
     # </COGINST>
 ```
@@ -198,7 +198,7 @@ samples, sample_rate = load_and_parse(file_path="digital_signal.npy")
 ```
 
 ```python
-# Listen to your recording 
+# Listen to your recording
 
 Audio(samples, rate=sample_rate) # <COGLINE>
 ```

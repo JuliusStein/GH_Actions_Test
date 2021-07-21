@@ -25,7 +25,7 @@ jupyter:
 
 **Source Material**:
 
-The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/)
+The following exercises are adapted from Chapter 7 of [Mark Newman's book, "Computational Physics"](http://www-personal.umich.edu/~mejn/cp/).
 
 </div>
 
@@ -73,18 +73,18 @@ def fourier_complex_to_real(
     complex_coeffs: np.ndarray, N: int
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Converts complex-valued Fourier coefficients (of 
-    real-valued data) to the associated amplitudes and 
+    Converts complex-valued Fourier coefficients (of
+    real-valued data) to the associated amplitudes and
     phase-shifts of the real-valued sinusoids
-    
+
     Parameters
     ----------
     complex_coeffs : numpy.ndarray, shape-(N//2 + 1,)
         The complex valued Fourier coefficients for k=0, 1, ...
-    
+
     N : int
         The number of samples that the DFT was performed on.
-    
+
     Returns
     -------
     Tuple[numpy.ndarray, numpy.ndarray]
@@ -159,7 +159,7 @@ fig.tight_layout()
 (1.5.3) Perform a DFT for the modulated wave $\sin\!\big(\frac{\pi t}{Q}\big) \sin\!\big(\frac{20 \pi t}{Q}\big)$, where $Q=5\:\mathrm{seconds}$.
 Sample this signal **over two periods of the lower-frequency term (a.k.a the modulating term)**.
 
-- What are the frequencies of the respective terms in our modulated wave? 
+- What are the frequencies of the respective terms in our modulated wave?
 - Do you expect that these two frequencies present in the Fourier spectrum? Why might we expect for different frequencies to be prominent in our series (hint: compare the functional form of this waveform to that of a Fourier series)?
 - Use the relationship $\sin{(a)}\sin{(b)}=\frac{1}{2}(\cos{(a-b)} - \cos{(a+b)})$ to rewrite this modulated wave as a sum of cosines.
 From this, predict the number, locations, and heights of the peaks in your Fourier spectrum.
@@ -170,7 +170,7 @@ Be sure to zoom in on your peaks.
 >    
 > - The frequencies of the terms in the waveform are $\frac{1}{10}\:\mathrm{Hz}$ and $2\:\mathrm{Hz}$, respectively
 > - The modulated waveform consists of a **product** of sine-waves, whereas our Fourier series represents a **sum** of waves.
-> We shouldn't expect that a product of waves should be reproduced by a sum of waves of the same frequencies. 
+> We shouldn't expect that a product of waves should be reproduced by a sum of waves of the same frequencies.
 > - By the given identity, $\sin\!\big(\frac{\pi t}{5}\big) \sin\big(\frac{20 \pi t}{5}\big)=\frac{1}{2}\big(\cos{\big(2\pi\frac{19}{10}t\big)} - \cos{\big(2\pi\frac{21}{10}t\big)}\big)$.
 > Thus we should see two distinct peaks, one at $1.9\;\mathrm{Hz}$ and one at $2.1\;\mathrm{Hz}$.
 > Both peaks should have a height of $0.5$. </COGINST>
