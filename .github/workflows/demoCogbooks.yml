@@ -42,13 +42,13 @@ jobs:
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
           if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Audio
-              python renameFilesCogwewb.py ${changed_file}
+              python renameFilesCogweb.py ${changed_file}
           elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Video
-              python renameFilesCogwewb.py ${changed_file}
+              python renameFilesCogweb.py ${changed_file}
           elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
               cogbooks ${changed_file} --force --dir test_outputs/Language
-              python renameFilesCogwewb.py ${changed_file}
+              python renameFilesCogweb.py ${changed_file}
           fi
         done
 
