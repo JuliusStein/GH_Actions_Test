@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# MyNN Implementation for Tendril Classification --
+# MyNN Implementation for Tendril Classification 
 
 ```python
 import mygrad as mg

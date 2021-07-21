@@ -1,7 +1,5 @@
 import os
 import sys
-from collections import defaultdict
-
 
 #USAGE 'python renameFilesCogweb.py FILENAME' will rename using dictionary below
 #Expects the .md files that were changed as command line arguments
@@ -23,7 +21,7 @@ labels = {
     "Linear_Regression_Exercise_STUDENT.ipynb": "03_Linear_Regression_Exercise.ipynb",
     "UniversalFunctionApprox_STUDENT.ipynb": "04_UniversalFunctionApprox.ipynb",
     "TendrilClassification_STUDENT.ipynb": "05_TendrilClassification.ipynb",
-    "TendrilClassificationMyNN_STUDENT.ipynb": "05_TendrilClassificationMyNN.ipynb",
+    "TendrilClassificationMyNN_STUDENT.ipynb": "06_TendrilClassificationMyNN.ipynb",
     "Cifar10MyGrad_STUDENT.ipynb": "07_Cifar10MyGrad.ipynb",
     "WritingCNNOperations_STUDENT.ipynb": "08_WritingCNNOperations.ipynb",
     "MyGradMnist_STUDENT.ipynb": "09_MyGradMnist.ipynb",
