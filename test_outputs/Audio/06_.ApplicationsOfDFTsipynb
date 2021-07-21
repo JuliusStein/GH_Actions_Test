@@ -1,0 +1,520 @@
+{
+ "cells": [
+  {
+   "cell_type": "raw",
+   "id": "021b6d26",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. meta::\n",
+    "   :description: Topic: Discrete Fourier Transforms, Category: Exercises\n",
+    "   :keywords: applications, examples, dft, Fourier spectrum"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6290d150",
+   "metadata": {},
+   "source": [
+    "<div class=\"alert alert-warning\">\n",
+    "\n",
+    "**Source Material**:\n",
+    "\n",
+    "The following exercises are adapted from Chapter 7 of [Mark Newman's book, \"Computational Physics\"](http://www-personal.umich.edu/~mejn/cp/).\n",
+    "\n",
+    "</div>\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d3e6eea8",
+   "metadata": {},
+   "source": [
+    "# Exercises: Applications of DFTs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "72a3bfdc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "from typing import Tuple\n",
+    "\n",
+    "%matplotlib notebook"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "31403055",
+   "metadata": {},
+   "source": [
+    "### Sunspot Data Analysis\n",
+    "\n",
+    "(1.6.1a) Read in the `sunspots.txt` data as a 2-D array.\n",
+    "This file contains the number of recorded sunspots in a given month over a timespan of hundreds of years.\n",
+    "\n",
+    "There are two columns of numbers (separated by tabs) in the data.\n",
+    "The first column is the number of the recorded month.\n",
+    "The second column is the number of sunspots recorded in that month.\n",
+    "\n",
+    "Use the following code to read in this data:\n",
+    "\n",
+    "```python\n",
+    "with open(\"data/sunspots.txt\", \"r\") as F:\n",
+    "    # Produces a shape-(N, 2) array\n",
+    "    # column-0: month number\n",
+    "    # column-1: count of sunspots that month\n",
+    "    data = np.array([[float(i) for i in j.split('\\t')] for j in F])\n",
+    "\n",
+    "```\n",
+    "\n",
+    "Once you read in the data, determine: how many months are accounted for in this dataset?\n",
+    "What are the range (minimum and maximum) of number of sunspots per month recorded in this dataset?\n",
+    "\n",
+    "Plot this data with labeled axes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ce6c49ea",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "36c1f742",
+   "metadata": {},
+   "source": [
+    "(1.6.1b) Estimate the frequency of the slowly-oscillating pattern in the data that manifests between the major peaks that we see in the plot.\n",
+    "Do this by visual inspection (you can click on the box button in the bottom-left of the plot to do a box-zoom); determine roughly the number of months that separate consecutive peaks, and then convert this into a frequency (with units of 1/month).\n",
+    "\n",
+    "> 1.6.1b Solution: *SOLUTION HERE*"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e1d3df9d",
+   "metadata": {},
+   "source": [
+    "(1.6.2) Take a DFT of this real-valued data and consult the power spectrum, $|a_{k}|$ vs $\\nu_{k}$, to evaluate the periodicity of the data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d46521f9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7ae1d67b",
+   "metadata": {},
+   "source": [
+    "(1.6.3) What is the cause of the large peak at $k = 0$?\n",
+    "Study the form of the equation for the discrete Fourier transform, specifically for $c_{k=0}$.\n",
+    "What is the simple relationship between $c_{k=0}$ and the data $({y_{n}})_{n=0}^{N-1}$?\n",
+    "Uniformly adjust the sunspot data so that $c_{k=0} \\approx 0$ when you take the Fourier transform of this updated data, and plot the Fourier spectrum of the new data.\n",
+    "\n",
+    "> *SOLUTION HERE*"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "86132e36",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9316d40b",
+   "metadata": {},
+   "source": [
+    "### Analyzing Audio Signals from Instruments"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8d7dab01",
+   "metadata": {},
+   "source": [
+    "(1.6.4) Read in the digital audio signal for a trumpet, from `data/trumpet.txt`, as an array of integers.\n",
+    "This signal was recorded at a rate of $44.1\\;\\mathrm{kHz}$, which is the defacto standard for audio sampling (as implemented by Sony).\n",
+    "\n",
+    "You can read in the digital samples with the code:\n",
+    "\n",
+    "```python\n",
+    "with open(\"data/trumpet.txt\", 'r') as R:\n",
+    "    # each sample is written to a single line in the text file\n",
+    "    # this reads them in as a single integer-valued numpy array\n",
+    "    data = np.asarray([int(i) for i in R])\n",
+    "```\n",
+    "\n",
+    "Plot the signal on an $x$-axis labeled `\"Time (sec)\"` - be sure that the axis is scaled appropriately such that it reflects units of seconds.\n",
+    "**There is too much data to be plotted, so plot only every** $100\\text{th}$ **datapoint**.\n",
+    "Then, play the audio using\n",
+    "\n",
+    "```python\n",
+    "from IPython.display import Audio\n",
+    "Audio(data, rate=???)\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bc98be04",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# plot signal\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a585c24e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# playing audio signal\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d33bfe6d",
+   "metadata": {},
+   "source": [
+    "(1.6.5) Plot the frequency spectrum, $|a_{k}|$ vs $\\nu_{k}$, for the first $10,000$ $k$-values.\n",
+    "Be sure to use a FFT (not the plain DFT) for real-valued data - we are working with a lot of data.\n",
+    "[What notes are being played](http://www.phy.mtu.edu/~suits/notefreqs.html)?\n",
+    "Make sure that the $k$-axis of your spectrum is scaled to be in units of $\\mathrm{Hz}$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8d481f1f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f7517e36",
+   "metadata": {},
+   "source": [
+    "Let's try manipulating this audio signal.\n",
+    "\n",
+    "First, make a copy of the complex-valued Fourier coefficients to a new array.\n",
+    "Then find all of the coefficient such that $|a_{k}| > 100$ and **set those complex-valued coefficients to 0**.\n",
+    "Next, take the inverse Fourier transform (`np.fft.irfft`) of the now-modified set of complex-valued Fourier coefficients, to produce a \"mutated\" collection of samples $(y^{\\text{mutated}}_n)_{n=0}^{N-1}$.\n",
+    "This is a new set of audio samples, but with those Fourier components missing!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b6cf6b5e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4db7f444",
+   "metadata": {},
+   "source": [
+    "The result of this is a mutated version of the digital trumpet signal.\n",
+    "Plot the wave form of this mutated signal against time (seconds).\n",
+    "Only plot every $100^\\text{th}$ point!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "17b6ec36",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1e281f22",
+   "metadata": {},
+   "source": [
+    "Play the audio from this new sample.\n",
+    "Consider what filtering you performed on the Fourier coefficients and how this affected the audio sample.\n",
+    "Does this make sense to you?\n",
+    "Chat with a neighbor about this."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c4fa1fe3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6dc993bf",
+   "metadata": {},
+   "source": [
+    "(1.6.6) Repeat this work for the piano audio signal, but be creative with how you mutate its audio.\n",
+    "\n",
+    "Consider plotting the Fourier spectrum on a log-scale, with\n",
+    "\n",
+    "```python\n",
+    "ax.set_yscale('log')\n",
+    "ax.set_ylim(1, None)\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a175ec04",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# plot signal\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "33a90a65",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# play audio signal\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "484a2838",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# fourier transform\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "50782cd4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# mutate signal\n",
+    "# STUDENT CODE HERE\n",
+    "\n",
+    "# play audio signal\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d362fcd",
+   "metadata": {},
+   "source": [
+    "### Smoothing Stock Market Data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f76ddd6e",
+   "metadata": {},
+   "source": [
+    "(1.6.7) Read in the stock market data from `data/dow.txt`.\n",
+    "Each data point corresponds to the daily closing value of the Dow Jones Industrial Average (starting in late 2006 and ending in late 2010).\n",
+    "Use the following code to read in the data:\n",
+    "\n",
+    "```python\n",
+    "with open(\"data/dow.txt\", 'r') as R:\n",
+    "    # Each row of the txt file contains the closing value of the market\n",
+    "    # This data is read in as a numpy array of floating point values\n",
+    "    data = np.asarray([float(i) for i in R])\n",
+    "```\n",
+    "\n",
+    "Plot the data on labeled axes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "283687fc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6b841357",
+   "metadata": {},
+   "source": [
+    "(1.6.8a) Note that this data looks roughly like a single period of a sine-wave.\n",
+    "What, roughly, are the frequency and amplitude of this sine wave?\n",
+    "Answer with appropriate units."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7eec5e95",
+   "metadata": {},
+   "source": [
+    "> 1.6.8a Solution: *SOLUTION HERE*"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9a99b011",
+   "metadata": {},
+   "source": [
+    "(1.6.8b) Perform an FFT on this real-valued data, and plot the Fourier spectrum for this data.\n",
+    "The $\\nu_{k}$-axis should be scaled to be in units of $\\frac{1}{\\text{days}}$.\n",
+    "Label your axes.\n",
+    "\n",
+    "Some tips:\n",
+    "\n",
+    "- Zero-center your data (such that its mean-value is $0$) so that $|a_0|$ doesn't dominate your Fourier spectrum\n",
+    "- Plot on the domain $[0, 0.04]$ (units 1 / days)\n",
+    "\n",
+    "Do you see a peak in correspondence to the sinusoidal form discussed in 1.6.8a?\n",
+    "Does the frequency and amplitude of this prominent peak make sense?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "25d3079b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "81d2c6a6",
+   "metadata": {},
+   "source": [
+    "(1.6.9) We want to smooth this stock market data.\n",
+    "We can do this by \"removing\" the high-frequency coefficients of its Fourier spectrum.\n",
+    "Try zeroing-out the top $90\\%$ high-frequency coefficients, and then perform an inverse FFT using these altered coefficients.\n",
+    "Plot the \"recovered\" signal on top of a semi-transparent version of the original data (use the plot parameter `alpha=0.5`).\n",
+    "Then repeat this, but with zeroing out the top $98\\%$ coefficients.\n",
+    "In both of these cases, on what scale are the fluctuations being filtered out?\n",
+    "\n",
+    "> *SOLUTION HERE*"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c5ae48c1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# filter top 90% high frequencies\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8a9ab03e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# filter top 98% high frequencies\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "71e569c1",
+   "metadata": {},
+   "source": [
+    "(1.6.10) Now repeat this process but zero-out the bottom $10\\%$ **low-frequency** coefficients.\n",
+    "What do you see?\n",
+    "Why is there a huge down-shift in the recovered data? (Hint: recall the role of $c_{k=0}$).\n",
+    "What would happen if you filtered out the bottom $10\\%$ low-frequency coefficients **except** for $c_{0}$?\n",
+    "Try this.\n",
+    "\n",
+    ">  *SOLUTION HERE*"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "55774150",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# filter bottom 10% low frequencies\n",
+    "# STUDENT CODE HERE"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "135d3159",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# filter bottom 10% low frequencies, except c0\n",
+    "# STUDENT CODE HERE"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "notebook_metadata_filter": "nbsphinx"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "nbsphinx": {
+   "execute": "never"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
