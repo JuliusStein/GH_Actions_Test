@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Climbing Down Mountains with MyGrad --- FORCING DIFF
+# Climbing Down Mountains with MyGrad --- FORCING DIFF --
 
 ```python
 import mygrad as mg
