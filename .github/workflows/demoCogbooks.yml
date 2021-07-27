@@ -30,13 +30,6 @@ jobs:
         fetch-depth: 0
 
     - name: Run cogbooks on changed files
-      # ------------ TOGGLE THIS TO ONLY ECHO FILENAMES ------------
-      # run: |
-      #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-      #     echo "${changed_file} was updated.";
-      #   done
-      #
-
       # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
@@ -74,7 +67,7 @@ jobs:
         branch: main
 
     # ------------- COMMIT AND PUSH TO DEST REPO -------------
-    # WWARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
+    # WARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
     - name: Push to student repository
       uses: cpina/github-action-push-to-another-repository@main
       env:
