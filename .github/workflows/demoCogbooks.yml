@@ -3,8 +3,8 @@ name: Demo Cogbooks
 on:
   push:
     branches: [ main ]
-    # paths:
-    # - 'website_src'
+    paths:
+    - 'website_src'
 
 jobs:
   build:

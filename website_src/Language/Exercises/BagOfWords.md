@@ -15,7 +15,7 @@ jupyter:
     execute: never
 ---
 
-# Encoding Text Documents to Numerical Representations - CAUSING DIFF
+# Encoding Text Documents to Numerical Representations - CAUSING DIFF --
 
 In this notebook, we will implement methods that allow us to ascribe text documents numerical representations (a.k.a encodings). This will permit us to perform quantitative analysis on text documents and correspond this analysis to qualitative conclusions. E.g. two documents whose encodings have a small distance between them are likely to discuss similar subject matters.
 
