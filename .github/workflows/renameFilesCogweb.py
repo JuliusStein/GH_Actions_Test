@@ -62,7 +62,7 @@ def rename_cogfile(filepath):
 
     inputPath = "/home/runner/_temp/"
     print("IN: "+inputPath+filename+"\nOUT: "+outputPath+newName)
-    os.rename(inputPath+filename, outputPath+newName)
+    os.renames(inputPath+filename, outputPath+newName)
 
 if __name__ == "__main__":
     f = str(sys.argv[1])
