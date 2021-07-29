@@ -1,9 +1,10 @@
 import os
 import sys
 
-#USAGE 'python renameFilesCogweb.py FILENAME' will rename using dictionary below
-#Expects the .md files that were changed as command line arguments
-#For use in Github Actions Workflow
+# USAGE 'python renameFilesCogweb.py FILENAME' will rename using dictionary below
+# Expects the .md files that were changed as command line arguments
+# Outputs labeled file in cloned Student repository
+# For use in Github Actions Workflow
 
 labels = {
     "AudioSignalBasics_STUDENT.ipynb": "01_AudioSignalBasics.ipynb",
@@ -38,28 +39,30 @@ labels = {
 }
 
 
-
-def rename_cogfile(filename):
-    if "Audio" in filename:
-        path = "test_outputs/Audio/"
-    elif "Video" in filename:
-        path = "test_outputs/Video/"
-    elif "Language" in filename:
-        path = "test_outputs/Language/"
+# filepath is passed in from git diff as the full path to the updated markdown file
+def rename_cogfile(filepath):
+    if "Audio" in filepath:
+        outputPath = "./GH_Actions_Output/Audio/"
+    elif "Video" in filepath:
+        outputPath = "./GH_Actions_Output/Video/"
+    elif "Language" in filepath:
+        outputPath = "./GH_Actions_Output/Language/"
     else:
         return
 
     #Could take path to student ipynb file, but checks for .md and renames to match cogbooks
-    file = (filename.rsplit('/',1))[1]
-    if ".md" in file:
-        file = file[:-3]+"_STUDENT.ipynb"
+    filename = (filepath.rsplit('/',1))[1]
+    if ".md" in filename:
+        filename = filename[:-3]+"_STUDENT.ipynb"
 
     try:
-        newFile = labels[file]
+        newName = labels[filename]
     except:
-        newFile = file[:-14] + ".ipynb"
+        newName = filename[:-14] + ".ipynb"
 
-    os.rename(path+file, path+newFile)
+    inputPath = "/home/runner/_temp/"
+    print("IN: "+inputPath+filename+"\nOUT: "+outputPath+newName)
+    os.rename(inputPath+filename, outputPath+newName)
 
 if __name__ == "__main__":
     f = str(sys.argv[1])

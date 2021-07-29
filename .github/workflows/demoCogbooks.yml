@@ -52,22 +52,18 @@ jobs:
         token: ${{ secrets.API_TOKEN_GITHUB }}
         path: ./GH_Actions_Output
 
-    - name: TEMP Testing if repo cloned to correct location
-      run: |
-        cd ./GH_Actions_Output
-        ls
 
-    # - name: Run rename script on cogbooks files
-    #   run: |
-    #     for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-    #       if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
-    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Audio"
-    #       elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
-    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Video"
-    #       elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
-    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Language"
-    #       fi
-    #     done
+    - name: Run rename script on cogbooks files
+      run: |
+        for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+          if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
+              python .github/workflows/renameFilesCogweb.py ${changed_file}
+          elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
+              python .github/workflows/renameFilesCogweb.py ${changed_file}
+          elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
+              python .github/workflows/renameFilesCogweb.py ${changed_file}
+          fi
+        done
 
 
       # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
