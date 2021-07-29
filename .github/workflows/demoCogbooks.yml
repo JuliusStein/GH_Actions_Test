@@ -115,7 +115,6 @@ jobs:
     - name: Commit files to student repo
       run: |
         cd ./GH_Actions_Output
-        git status
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
@@ -126,3 +125,4 @@ jobs:
       with:
         github_token: ${{ secrets.API_TOKEN_GITHUB }}
         branch: main
+        directory: ./GH_Actions_Output
