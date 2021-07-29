@@ -16,7 +16,7 @@ jupyter:
 ---
 
 <!-- #region -->
-## Automatic Differentiation at a Glance - CAUSING DIFF
+## Automatic Differentiation at a Glance -- CAUSING DIFF
 
 Suppose that we have the function
 
