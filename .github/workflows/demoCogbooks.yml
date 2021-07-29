@@ -31,7 +31,6 @@ jobs:
 
     - name: Run cogbooks on changed files
       # ------------ TOGGLE THIS TO RUN COGBOOKS AND OUTPUT TO RUNNER ------------
-
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
           if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
@@ -42,8 +41,33 @@ jobs:
               cogbooks ${changed_file} --force --dir /home/runner/work/_temp
           fi
         done
+
         cd /home/runner/work/_temp
         ls
+
+    - name: Get student repository
+      uses: actions/checkout@master
+      with:
+        repository: JuliusStein/GH_Actions_Output
+        token: ${{ secrets.API_TOKEN_GITHUB }}
+        path: ./GH_Actions_Output
+
+    - name: TEMP Testing if repo cloned to correct location
+      run: |
+        cd ./GH_Actions_Output
+        ls
+
+    # - name: Run rename script on cogbooks files
+    #   run: |
+    #     for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+    #       if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
+    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Audio"
+    #       elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
+    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Video"
+    #       elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
+    #           python .github/workflows/renameFilesCogweb.py ${changed_file} "Language"
+    #       fi
+    #     done
 
 
       # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
@@ -61,14 +85,9 @@ jobs:
       #     fi
       #   done
 
-      # ------------ TOGGLE THIS TO RUN COGBOOKS ON ALL ------------
-      # run: |
-      #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
-      #     cogbooks ${changed_file} --force;
-      #   done
 
 
-    # ------------ COMMIT AND PUSH TO SOURCE REPO ------------
+    # ------------ COMMIT AND PUSH TO SOURCE REPO (OLD)------------
     # - name: Commit files
     #   run: |
     #     git config --local user.email "action@github.com"
@@ -82,7 +101,7 @@ jobs:
     #     github_token: ${{ secrets.GITHUB_TOKEN }}
     #     branch: main
 
-    # ------------- COMMIT AND PUSH TO DEST REPO -------------
+    # ------------- COMMIT AND PUSH TO DEST REPO (OLD)-------------
     # WARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
     # - name: Push to student repository
     #   uses: cpina/github-action-push-to-another-repository@main
@@ -95,3 +114,17 @@ jobs:
     #     user-email: 'juliusastein@gmail.com'
     #     commit-message: Automated student notebook update
     #     target-branch: main
+
+    # ------------- COMMIT AND PUSH TO DEST REPO (NEW)-------------
+    # - name: Commit files to student repo
+    #   run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git add -A
+    #     git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
+    #
+    # - name: Push changed files
+    #   uses: ad-m/github-push-action@v0.6.0
+    #   with:
+    #     github_token: ${{ secrets.API_TOKEN_GITHUB }}
+    #     branch: main
