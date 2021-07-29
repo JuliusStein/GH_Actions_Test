@@ -121,8 +121,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
 
     - name: Push changed files
-      uses: ad-m/github-push-action@v0.6.0
+      uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.API_TOKEN_GITHUB }}
         branch: main
         directory: ./GH_Actions_Output
+        repository: GH_Actions_Output
