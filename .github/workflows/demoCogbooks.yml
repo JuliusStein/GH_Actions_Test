@@ -30,20 +30,36 @@ jobs:
         fetch-depth: 0
 
     - name: Run cogbooks on changed files
-      # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
+      # ------------ TOGGLE THIS TO RUN COGBOOKS AND OUTPUT TO RUNNER ------------
+
       run: |
         for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
           if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
-              cogbooks ${changed_file} --force --dir test_outputs/Audio
-              python .github/workflows/renameFilesCogweb.py ${changed_file}
+              cogbooks ${changed_file} --force --dir /home/runner/work/_temp
           elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
-              cogbooks ${changed_file} --force --dir test_outputs/Video
-              python .github/workflows/renameFilesCogweb.py ${changed_file}
+              cogbooks ${changed_file} --force --dir /home/runner/work/_temp
           elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
-              cogbooks ${changed_file} --force --dir test_outputs/Language
-              python .github/workflows/renameFilesCogweb.py ${changed_file}
+              cogbooks ${changed_file} --force --dir /home/runner/work/_temp
           fi
         done
+        cd /home/runner/work/_temp
+        ls
+
+
+      # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
+      # run: |
+      #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
+      #     if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
+      #         cogbooks ${changed_file} --force --dir test_outputs/Audio
+      #         python .github/workflows/renameFilesCogweb.py ${changed_file}
+      #     elif [[ ${changed_file} == *"/Video/Exercises"* ]]; then
+      #         cogbooks ${changed_file} --force --dir test_outputs/Video
+      #         python .github/workflows/renameFilesCogweb.py ${changed_file}
+      #     elif [[ ${changed_file} == *"/Language/Exercises"* ]]; then
+      #         cogbooks ${changed_file} --force --dir test_outputs/Language
+      #         python .github/workflows/renameFilesCogweb.py ${changed_file}
+      #     fi
+      #   done
 
       # ------------ TOGGLE THIS TO RUN COGBOOKS ON ALL ------------
       # run: |
@@ -53,29 +69,29 @@ jobs:
 
 
     # ------------ COMMIT AND PUSH TO SOURCE REPO ------------
-    - name: Commit files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add -A
-        git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
-
-    - name: Push changed files
-      uses: ad-m/github-push-action@v0.6.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
+    # - name: Commit files
+    #   run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git add -A
+    #     git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
+    #
+    # - name: Push changed files
+    #   uses: ad-m/github-push-action@v0.6.0
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: main
 
     # ------------- COMMIT AND PUSH TO DEST REPO -------------
     # WARNING - DELETES EVERYTHING IN DEST REPO AND REPLACES WITH SOURCE-DIR
-    - name: Push to student repository
-      uses: cpina/github-action-push-to-another-repository@main
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-      with:
-        source-directory: 'test_outputs'
-        destination-github-username: 'JuliusStein'
-        destination-repository-name: 'GH_Actions_Output'
-        user-email: 'juliusastein@gmail.com'
-        commit-message: Automated student notebook update
-        target-branch: main
+    # - name: Push to student repository
+    #   uses: cpina/github-action-push-to-another-repository@main
+    #   env:
+    #     API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+    #   with:
+    #     source-directory: 'test_outputs'
+    #     destination-github-username: 'JuliusStein'
+    #     destination-repository-name: 'GH_Actions_Output'
+    #     user-email: 'juliusastein@gmail.com'
+    #     commit-message: Automated student notebook update
+    #     target-branch: main
