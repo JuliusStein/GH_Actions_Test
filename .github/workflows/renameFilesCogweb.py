@@ -28,16 +28,13 @@ labels = {
 
     "LanguageModels_STUDENT.ipynb": "01_LanguageModels.ipynb",
     "BagOfWords_STUDENT.ipynb": "02_BagOfWords.ipynb",
-    "LanguageIdentification_STUDENT.ipynb": "03_LanguageIdentification.ipynb",
-    "FunWithWordEmbeddings_STUDENT.ipynb": "04_FunWithWordEmbeddings.ipynb",
-    "LinearAutoencoder_STUDENT.ipynb": "05_LinearAutoencoder.ipynb",
-    "AutoencoderWordEmbeddings_STUDENT.ipynb": "06_AutoencoderWordEmbeddings.ipynb",
-    "IMDB_Sentiment_STUDENT.ipynb": "07_IMDB_Sentiment.ipynb",
-    "CNNSentimentAnalysis_STUDENT.ipynb": "08_CNNSentimentAnalysis.ipynb",
-    "NotebookOfFailure_STUDENT.ipynb": "09_NotebookOfFailure.ipynb",
-    "ManuallyTrainingSimpleRNN_STUDENT.ipynb": "10_ManuallyTrainingSimpleRNN.ipynb",
-    "MyGradSimpleCellRNN_STUDENT.ipynb": "11_MyGradSimpleCellRNN.ipynb",
-    "RNN_simple_gating_pytorch_STUDENT.ipynb": "12_RNN_simple_gating_pytorch.ipynb",
+    "FunWithWordEmbeddings_STUDENT.ipynb": "03_FunWithWordEmbeddings.ipynb",
+    "LinearAutoencoder_STUDENT.ipynb": "04_LinearAutoencoder.ipynb",
+    "AutoencoderWordEmbeddings_STUDENT.ipynb": "05_AutoencoderWordEmbeddings.ipynb",
+    "MyGradSimpleCellRNN_STUDENT.ipynb": "06_MyGradSimpleCellRNN.ipynb",
+    "NotebookOfFailure_STUDENT.ipynb": "07_NotebookOfFailure.ipynb",
+    "Seq2SeqModels_STUDENT.ipynb": "08_Seq2SeqModels.ipynb",
+    "Transformers_STUDENT.ipynb": "09_Transformers.ipynb",
 }
 
 
@@ -63,7 +60,6 @@ def rename_cogfile(filename):
         newFile = file[:-14] + ".ipynb"
 
     os.rename(path+file, path+newFile)
-    #print(path + newFile)
 
 if __name__ == "__main__":
     f = str(sys.argv[1])
