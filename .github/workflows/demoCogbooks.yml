@@ -126,4 +126,4 @@ jobs:
         github_token: ${{ secrets.API_TOKEN_GITHUB }}
         branch: main
         directory: ./GH_Actions_Output
-        repository: GH_Actions_Output
+        repository: JuliusStein/GH_Actions_Output
