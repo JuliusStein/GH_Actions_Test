@@ -61,7 +61,6 @@ def rename_cogfile(filepath):
         newName = filename[:-14] + ".ipynb"
 
     inputPath = "/home/runner/work/_temp/"
-    print("IN: "+inputPath+filename+"\nOUT: "+outputPath+newName)
     os.rename(inputPath+filename, outputPath+newName)
 
 if __name__ == "__main__":

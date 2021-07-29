@@ -66,7 +66,7 @@ jobs:
         done
 
 
-      # ------------ TOGGLE THIS TO RUN COGBOOKS BY DIR ------------
+      # ------------ TOGGLE THIS TO RUN COGBOOKS AND OUTPUT TO SOURCE ------------
       # run: |
       #   for changed_file in $(git diff --name-only ${{ github.event.before }}..${{ github.event.after }}); do
       #     if [[ ${changed_file} == *"/Audio/Exercises"* ]]; then
@@ -112,15 +112,17 @@ jobs:
     #     target-branch: main
 
     # ------------- COMMIT AND PUSH TO DEST REPO (NEW)-------------
-    # - name: Commit files to student repo
-    #   run: |
-    #     git config --local user.email "action@github.com"
-    #     git config --local user.name "GitHub Action"
-    #     git add -A
-    #     git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
-    #
-    # - name: Push changed files
-    #   uses: ad-m/github-push-action@v0.6.0
-    #   with:
-    #     github_token: ${{ secrets.API_TOKEN_GITHUB }}
-    #     branch: main
+    - name: Commit files to student repo
+      run: |
+        cd ./GH_Actions_Output
+        git status
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "Updated student notebooks" -a
+
+    - name: Push changed files
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.API_TOKEN_GITHUB }}
+        branch: main
